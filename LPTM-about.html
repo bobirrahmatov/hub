@@ -139,8 +139,8 @@
         <!-- Hero Section with Video -->
         <div class="hero-section animate-fade-in" style="animation-delay: 0.1s;">
             <div class="video-holder">
-                <video autoplay muted playsinline id="heroVideo">
-                    <source src="abstract-art-03 (1).webm" type="video/webm">
+                <video autoplay muted loop playsinline id="heroVideo">
+                    <source src="/LPTM-Hub/Animations/lptm-about.webm" type="video/webm">
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -760,51 +760,13 @@
     </div>
 
     <script>
-        // Seamless reverse loop - video plays forward then backward
+        // Simple seamless video loop
         document.addEventListener('DOMContentLoaded', function () {
             const video = document.getElementById('heroVideo');
             if (video) {
-                let direction = 1; // 1 for forward, -1 for backward
-                let animationId;
-                const speed = 0.033; // Adjust for smoother/faster playback
-
-                // Start playing the video
+                video.loop = true;
                 video.play().catch(error => {
                     console.log('Video autoplay failed:', error);
-                });
-
-                function updateVideoTime() {
-                    if (direction === 1) {
-                        // Playing forward
-                        if (video.currentTime >= video.duration - 0.05) {
-                            direction = -1; // Switch to reverse
-                            video.pause();
-                            reverseVideo();
-                        }
-                    } else {
-                        // Playing backward
-                        video.currentTime -= speed;
-                        if (video.currentTime <= 0.05) {
-                            direction = 1; // Switch to forward
-                            video.play();
-                            cancelAnimationFrame(animationId);
-                        } else {
-                            animationId = requestAnimationFrame(updateVideoTime);
-                        }
-                    }
-                }
-
-                function reverseVideo() {
-                    animationId = requestAnimationFrame(updateVideoTime);
-                }
-
-                // Detect when video reaches the end
-                video.addEventListener('timeupdate', function () {
-                    if (direction === 1 && video.currentTime >= video.duration - 0.05) {
-                        direction = -1;
-                        video.pause();
-                        reverseVideo();
-                    }
                 });
             }
         });
@@ -863,25 +825,6 @@
                 }
             });
         });
-
-        // ============================================
-        // NOTIFICATIONS
-        // ============================================
-        // Toast notifications are provided by global-notifications.html (included as Confluence macro)
-        // Available functions: showSuccessToast(), showErrorToast(), showWarningToast(), showInfoToast()
-        // 
-        // Legacy compatibility wrapper for showNotification()
-        // ============================================
-        function showNotification(message, type = 'success') {
-            const typeMap = {
-                'success': showSuccessToast,
-                'error': showErrorToast,
-                'warning': showWarningToast,
-                'info': showInfoToast
-            };
-            const toastFn = typeMap[type] || showInfoToast;
-            toastFn(message);
-        }
     </script>
 
 </body>
