@@ -312,11 +312,6 @@
                                 </div>
 
                                 <div class="w-full px-2.5">
-                                    <input type="url" id="requestDownloadLink" placeholder="Download Link URL" required
-                                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-600 dark:!text-white dark:placeholder:!text-gray-500">
-                                </div>
-
-                                <div class="w-full px-2.5">
                                     <button type="submit" class="w-full p-3 !text-lg font-medium !text-white transition-colors rounded-lg bg-blue-500 hover:bg-blue-800">
                                         Add Request
                                     </button>
@@ -480,55 +475,50 @@
             filterByCategory('all');
         }
 
-        // Function to fetch Excel data from Confluence
+        // Function to fetch JSON data from Confluence
         async function fetchDataFromConfluence() {
+            const pageId = '2740868871'; // Your Confluence page ID
+            const attachmentName = 'marketplace_requests.json';
+
             try {
-                // Fetch the marketplace_requests.xlsx file from Confluence
-                const excelResponse = await fetch('https://cedt-confluence.net/confluence/download/attachments/2740868871/marketplace_requests.xlsx?api=v2', {
+                // First, check if attachment exists and get its ID
+                const attachmentsResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment?filename=${attachmentName}`, {
                     headers: {
                         'X-Atlassian-Token': 'no-check'
                     }
                 });
 
-                if (!excelResponse.ok) {
-                    throw new Error('Failed to fetch marketplace_requests.xlsx file');
+                if (!attachmentsResponse.ok) {
+                    console.log('No existing marketplace_requests.json found');
+                    return [];
                 }
 
-                const excelBlob = await excelResponse.blob();
-                
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        try {
-                            const data = new Uint8Array(e.target.result);
-                            const workbook = XLSX.read(data, { type: 'array' });
-                            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                            const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                const attachmentsData = await attachmentsResponse.json();
 
-                            // Transform Excel data to marketplace request format
-                            const transformedData = jsonData.map(row => ({
-                                id: row.id || Math.random().toString(36).substr(2, 9),
-                                name: row.name,
-                                description: row.description,
-                                category: row.category,
-                                region: row.region,
-                                copyLink: row.copyLink,
-                                shopLink: row.shopLink,
-                                downloadLink: row.downloadLink
-                            }));
+                if (attachmentsData.results && attachmentsData.results.length > 0) {
+                    // Attachment exists, fetch its content
+                    const attachmentId = attachmentsData.results[0].id;
+                    const downloadUrl = `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`;
 
-                            resolve(transformedData);
-                        } catch (error) {
-                            reject(error);
+                    const dataResponse = await fetch(downloadUrl, {
+                        headers: {
+                            'X-Atlassian-Token': 'no-check'
                         }
-                    };
-                    reader.onerror = () => reject(new Error('Failed to read Excel file'));
-                    reader.readAsArrayBuffer(excelBlob);
-                });
+                    });
 
+                    if (!dataResponse.ok) {
+                        throw new Error('Failed to fetch marketplace_requests.json file');
+                    }
+
+                    const jsonData = await dataResponse.json();
+                    return jsonData || [];
+                } else {
+                    console.log('Attachment does not exist, will create a new one.');
+                    return [];
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
-                return null;
+                return [];
             }
         }
 
@@ -690,15 +680,6 @@
                                 </span>
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                </svg>
-                            </a>
-                            <a href="${item.downloadLink}" download class="group relative rounded-lg bg-purple-100 p-2 !text-purple-600 hover:bg-purple-200 transition-all duration-200 ease-in-out hover:scale-105">
-                                <span class="invisible absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-purple-600 px-2 py-1 !text-lg !text-white opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
-                                    Download file
-                                    <span class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-purple-600"></span>
-                                </span>
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                                 </svg>
                             </a>
                         </div>
@@ -918,142 +899,93 @@
         async function submitNewRequest(event) {
             event.preventDefault();
             
+            const pageId = '2740868871';
+            const attachmentName = 'marketplace_requests.json';
+            
             const newRequest = {
+                id: Math.random().toString(36).substr(2, 9),
                 name: document.getElementById('requestName').value,
                 description: document.getElementById('requestDescription').value,
                 category: document.getElementById('requestCategory').value,
                 region: document.getElementById('requestRegion').value,
                 copyLink: document.getElementById('requestCopyLink').value,
-                shopLink: document.getElementById('requestShopLink').value,
-                downloadLink: document.getElementById('requestDownloadLink').value
+                shopLink: document.getElementById('requestShopLink').value
             };
 
             // Close the form immediately
             closeAddRequestModal();
+            
+            if (typeof showInfoToast === 'function') {
+                showInfoToast('Saving request...');
+            }
 
             try {
-                // First, get the attachment ID for marketplace_requests.xlsx
-                const attachmentsResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment?filename=marketplace_requests.xlsx');
-                const attachmentsData = await attachmentsResponse.json();
-                
-                let attachmentId;
+                // First, check if attachment exists and get its ID
+                const attachmentsResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment?filename=${attachmentName}`, {
+                    headers: {
+                        'X-Atlassian-Token': 'no-check'
+                    }
+                });
+
+                let attachmentId = null;
                 let existingRequests = [];
 
-                if (attachmentsData.results && attachmentsData.results.length > 0) {
-                    // If marketplace_requests.xlsx exists, get its content and attachment ID
-                    attachmentId = attachmentsData.results[0].id;
-                    
-                    const excelResponse = await fetch(`https://cedt-confluence.net/confluence/download/attachments/2740868871/marketplace_requests.xlsx?api=v2`, {
-                        headers: {
-                            'X-Atlassian-Token': 'no-check'
-                        }
-                    });
-
-                    if (excelResponse.ok) {
-                        const excelBlob = await excelResponse.blob();
-                        const reader = new FileReader();
-
-                        reader.onload = async function(e) {
-                            const data = new Uint8Array(e.target.result);
-                            const workbook = XLSX.read(data, { type: 'array' });
-                            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                            existingRequests = XLSX.utils.sheet_to_json(firstSheet);
-
-                            // Add new request to the existing data
-                            existingRequests.push(newRequest);
-
-                            // Add the new row to the existing sheet (preserving headers and formatting)
-                            const range = XLSX.utils.decode_range(firstSheet['!ref']);
-                            const newRowIndex = range.e.r + 1; // Next row after the last data row
-                            
-                            // Generate ID for the new request
-                            const requestId = Math.random().toString(36).substr(2, 9);
-                            newRequest.id = requestId;
-                            
-                            // Add each field of the new request to the sheet
-                            const headers = ['id', 'name', 'description', 'category', 'region', 'copyLink', 'shopLink', 'downloadLink'];
-                            headers.forEach((header, colIndex) => {
-                                const cellAddress = XLSX.utils.encode_cell({ r: newRowIndex, c: colIndex });
-                                firstSheet[cellAddress] = { v: newRequest[header], t: 's' };
-                            });
-                            
-                            // Update the sheet range to include the new row
-                            firstSheet['!ref'] = XLSX.utils.encode_range({
-                                s: { r: range.s.r, c: range.s.c },
-                                e: { r: newRowIndex, c: range.e.c }
-                            });
-
-                            // Convert to blob using the original workbook (preserving structure)
-                            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-                            const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-                            // Upload the updated Excel file using the attachment ID
-                            const formData = new FormData();
-                            formData.append('file', blob, 'marketplace_requests.xlsx');
-
-                            const uploadResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment/${attachmentId}`, {
-                                method: 'POST',
-                                headers: {
-                                    'X-Atlassian-Token': 'no-check'
-                                },
-                                body: formData
-                            });
-
-                            if (!uploadResponse.ok) {
-                                throw new Error(`Failed to update Excel file: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                if (attachmentsResponse.ok) {
+                    const attachmentsData = await attachmentsResponse.json();
+                    if (attachmentsData.results && attachmentsData.results.length > 0) {
+                        attachmentId = attachmentsData.results[0].id;
+                        
+                        // Fetch existing data
+                        const dataResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`, {
+                            headers: {
+                                'X-Atlassian-Token': 'no-check'
                             }
-                            
-                            // Add the new request to the current tableData array and update the table immediately
-                            const transformedRequest = {
-                                id: requestId,
-                                name: newRequest.name,
-                                description: newRequest.description,
-                                category: newRequest.category,
-                                region: newRequest.region,
-                                copyLink: newRequest.copyLink,
-                                shopLink: newRequest.shopLink,
-                                downloadLink: newRequest.downloadLink
-                            };
-                            
-                            tableData.push(transformedRequest);
-                            filteredData = [...tableData];
-                            updateTable();
-                        };
+                        });
 
-                        reader.readAsArrayBuffer(excelBlob);
-                    } else {
-                        throw new Error('Failed to fetch existing marketplace_requests.xlsx file');
+                        if (dataResponse.ok) {
+                            existingRequests = await dataResponse.json();
+                        }
                     }
-                } else {
-                    // If marketplace_requests.xlsx doesn't exist, create a new one
-                    const newWorkbook = XLSX.utils.book_new();
-                    const newWorksheet = XLSX.utils.json_to_sheet([newRequest]);
-                    XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, 'Requests');
+                }
 
-                    // Convert to blob
-                    const excelBuffer = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
-                    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                // Add new request to existing data
+                existingRequests.push(newRequest);
 
-                    // Upload the new Excel file
-                    const formData = new FormData();
-                    formData.append('file', blob, 'marketplace_requests.xlsx');
+                // Create blob with updated data
+                const blob = new Blob([JSON.stringify(existingRequests, null, 2)], { type: 'application/json' });
+                const formData = new FormData();
+                formData.append('file', blob, attachmentName);
 
-                    const uploadResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment', {
-                        method: 'POST',
-                        headers: {
-                            'X-Atlassian-Token': 'no-check'
-                        },
-                        body: formData
-                    });
+                // Upload to Confluence (create or update)
+                const uploadUrl = attachmentId 
+                    ? `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`
+                    : `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment`;
 
-                    if (!uploadResponse.ok) {
-                        throw new Error(`Failed to create Excel file: ${uploadResponse.status} ${uploadResponse.statusText}`);
-                    }
+                const uploadResponse = await fetch(uploadUrl, {
+                    method: 'POST',
+                    headers: {
+                        'X-Atlassian-Token': 'no-check'
+                    },
+                    body: formData
+                });
 
-                    refreshData(); // Refresh the request list
+                if (!uploadResponse.ok) {
+                    throw new Error(`Failed to save request: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                }
+
+                // Add to local data and update table
+                tableData.push(newRequest);
+                filteredData = [...tableData];
+                updateTable();
+                
+                if (typeof showSuccessToast === 'function') {
+                    showSuccessToast('Request added successfully!');
                 }
             } catch (error) {
                 console.error('Error adding marketplace request:', error);
+                if (typeof showErrorToast === 'function') {
+                    showErrorToast('Failed to add request. Please try again.');
+                }
             }
         }
 
@@ -1139,8 +1071,5 @@
             toastFn(message);
         }
     </script>
-
-    <!-- Add SheetJS library for Excel parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
 </html>
