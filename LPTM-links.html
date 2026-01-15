@@ -140,6 +140,16 @@
                     </div>
                 </div>
 
+                <!-- Active Filters Badge Container -->
+                <div id="activeFiltersContainer" class="hidden mb-6">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-sm font-medium text-gray-600">Active Filters:</span>
+                        <div id="filterBadges" class="flex flex-wrap gap-2">
+                            <!-- Filter badges will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Loading Overlay -->
                 <div id="loadingOverlay" class="hidden items-center justify-center py-16 mb-6">
                     <div class="text-center">
@@ -542,6 +552,7 @@
                 }
             });
 
+            updateFilterBadges();
             filterLinks();
         }
 
@@ -561,7 +572,69 @@
             });
 
             currentPage = 1;
+            updateFilterBadges();
             updateCards();
+        }
+
+        // Update filter badges display
+        function updateFilterBadges() {
+            const container = document.getElementById('activeFiltersContainer');
+            const badgesContainer = document.getElementById('filterBadges');
+            const searchTerm = document.getElementById('simple-search').value;
+            
+            let badges = [];
+            
+            // Add category filter badge
+            if (selectedCategory !== 'all') {
+                badges.push({
+                    type: 'category',
+                    label: `Category: ${selectedCategory}`,
+                    value: selectedCategory
+                });
+            }
+            
+            // Add search filter badge
+            if (searchTerm.trim()) {
+                badges.push({
+                    type: 'search',
+                    label: `Search: "${searchTerm}"`,
+                    value: searchTerm
+                });
+            }
+            
+            // Show/hide container
+            if (badges.length > 0) {
+                container.classList.remove('hidden');
+                badgesContainer.innerHTML = badges.map(badge => `
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 border border-blue-200">
+                        ${badge.label}
+                        <button onclick="removeFilter('${badge.type}')" class="hover:bg-blue-200 rounded-full p-0.5 transition-colors">
+                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </span>
+                `).join('');
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+        
+        // Remove individual filter
+        function removeFilter(type) {
+            if (type === 'category') {
+                filterByCategory('all');
+            } else if (type === 'search') {
+                document.getElementById('simple-search').value = '';
+                filterLinks();
+            }
+        }
+        
+        // Clear all filters
+        function clearAllFilters() {
+            selectedCategory = 'all';
+            document.getElementById('simple-search').value = '';
+            filterByCategory('all');
         }
 
         // Action functions
@@ -637,6 +710,9 @@
             
             // Disable button
             refreshButton.disabled = true;
+            
+            // Clear all filters
+            clearAllFilters();
             
             // Hide content container, show only loading overlay
             contentContainer.classList.add('hidden');
