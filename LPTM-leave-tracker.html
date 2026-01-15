@@ -994,11 +994,11 @@
                             <!-- Filter Toggle -->
                             <div
                               class="inline-flex gap-2 rounded-lg border border-gray-200 bg-gray-50/50 p-1 dark:border-gray-700 dark:bg-gray-800/50">
-                              <button onclick="setLeaveFilter('top10')" id="leaveFilterTop10"
+                              <button id="leaveFilterTop10"
                                 class="leave-filter-btn rounded-md px-4 py-2 !text-base font-medium text-white bg-brand-500 shadow-sm transition-all">
                                 Top 10
                               </button>
-                              <button onclick="setLeaveFilter('all')" id="leaveFilterAll"
+                              <button id="leaveFilterAll"
                                 class="leave-filter-btn rounded-md px-4 py-2 !text-base font-medium text-gray-600 hover:bg-white hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-white transition-all">
                                 All
                               </button>
@@ -1066,7 +1066,7 @@
                           </div>
 
                           <div class="flex items-center gap-2">
-                            <button onclick="previousLeavePage()"
+                            <button id="previousLeavePageBtn"
                               class="!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
                               <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -1085,7 +1085,7 @@
                               <!-- Pagination will be dynamically added here -->
                             </ul>
 
-                            <button onclick="nextLeavePage()"
+                            <button id="nextLeavePageBtn"
                               class="!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
                               <span class="hidden sm:inline">Next</span>
                               <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -1168,7 +1168,7 @@
                           </div>
 
                           <div class="flex items-center gap-2">
-                            <button onclick="previousHolidayPage()"
+                            <button id="previousHolidayPageBtn"
                               class="!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
                               <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -1187,7 +1187,7 @@
                               <!-- Pagination will be dynamically added here -->
                             </ul>
 
-                            <button onclick="nextHolidayPage()"
+                            <button id="nextHolidayPageBtn"
                               class="!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
                               <span class="hidden sm:inline">Next</span>
                               <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -1436,7 +1436,7 @@
           </div>
 
           <div class="mb-6">
-            <button onclick="openAddTeamMemberForm()"
+            <button id="openAddTeamMemberBtn"
               class="flex items-center gap-2 rounded-lg border border-blue-500 bg-blue-500 px-4 py-2.5 !text-base font-medium text-white hover:bg-blue-600 transition-all duration-200">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -1532,7 +1532,7 @@
                 </p>
               </div>
               <div class="flex items-center gap-3 mt-8 pt-2">
-                <button type="button" onclick="closeTeamMemberModal()"
+                <button type="button" id="closeTeamMemberModalBtn"
                   class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-50 sm:w-auto dark:border-gray-700 dark:text-gray-400"
                   style="background-color: var(--input-bg, white); border-color: var(--input-bg, #e4e7ec);">
                   Cancel
@@ -1592,12 +1592,12 @@
           </div>
 
           <div class="flex items-center gap-3 mt-2">
-            <button type="button" onclick="closeDeleteConfirmationModal()"
+            <button type="button" id="closeDeleteConfirmationBtn"
               class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
               style="background-color: var(--input-bg, white); border-color: var(--input-bg, #e4e7ec);">
               Cancel
             </button>
-            <button type="button" onclick="confirmDeleteTeamMember()"
+            <button type="button" id="confirmDeleteTeamMemberBtn"
               class="bg-error-500 hover:bg-error-600 dark:bg-error-600 dark:hover:bg-error-700 flex w-full justify-center rounded-lg px-4 py-2.5 !text-base font-medium text-white transition-colors">
               Delete Member
             </button>
@@ -1648,12 +1648,12 @@
           </div>
 
           <div class="flex items-center gap-3 mt-2">
-            <button type="button" onclick="closeFetchHolidaysModal()"
+            <button type="button" id="closeFetchHolidaysBtn"
               class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
               style="background-color: var(--input-bg, white); border-color: var(--input-bg, #e4e7ec);">
               Cancel
             </button>
-            <button type="button" onclick="confirmFetchHolidays()"
+            <button type="button" id="confirmFetchHolidaysBtn"
               class="bg-brand-500 hover:bg-brand-600 dark:bg-brand-600 dark:hover:bg-brand-700 flex w-full justify-center rounded-lg px-4 py-2.5 !text-base font-medium text-white transition-colors">
               Fetch Holidays
             </button>
@@ -1971,12 +1971,12 @@
               </td>
               <td class="px-6 py-4">
                 <div class="flex items-center justify-center gap-2">
-                  <button onclick="editTeamMember('${member.id}')" class="text-brand-500 hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300 transition-colors">
+                  <button data-action="edit" data-member-id="${member.id}" class="edit-team-member-btn text-brand-500 hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                     </svg>
                   </button>
-                  <button onclick="deleteTeamMember('${member.id}')" class="text-gray-400 hover:text-error-500 dark:text-gray-500 dark:hover:text-error-400 transition-colors">
+                  <button data-action="delete" data-member-id="${member.id}" class="delete-team-member-btn text-gray-400 hover:text-error-500 dark:text-gray-500 dark:hover:text-error-400 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                     </svg>
@@ -2259,13 +2259,11 @@
         const openModal = () => {
           document.getElementById("eventModal").style.display = "flex";
         };
-        window.openModal = openModal;
 
         const closeModal = () => {
           document.getElementById("eventModal").style.display = "none";
           resetModalFields();
         };
-        window.closeModal = closeModal;
 
         // Close modal when clicking outside of it
         window.onclick = function (event) {
@@ -2293,7 +2291,6 @@
           getModalEndDateEl.value = endDateStr;
           document.getElementById('event-team-member').value = "";
         };
-        window.calendarSelect = calendarSelect;
 
         /*=====================*/
         // Calendar AddEvent fn.
@@ -2321,7 +2318,6 @@
           document.getElementById('event-team-member').value = "";
           document.getElementById('event-delegate').value = "";
         };
-        window.calendarAddEvent = calendarAddEvent;
 
         /*=====================*/
         // Calender Event Function
@@ -2367,7 +2363,6 @@
             openModal();
           }
         };
-        window.calendarEventClick = calendarEventClick;
 
         /*=====================*/
         // Fetch Public Holidays from API
@@ -2444,14 +2439,12 @@
           document.getElementById('fetch-countries-list').textContent = countryCodes.join(', ');
           document.getElementById('fetchHolidaysConfirmModal').style.display = 'flex';
         };
-        window.fetchPublicHolidays = fetchPublicHolidays;
 
         // Close fetch holidays modal
         function closeFetchHolidaysModal() {
           document.getElementById('fetchHolidaysConfirmModal').style.display = 'none';
           pendingCountryCodes = [];
         }
-        window.closeFetchHolidaysModal = closeFetchHolidaysModal;
 
         // Confirm and execute holiday fetching
         async function confirmFetchHolidays() {
@@ -2552,7 +2545,6 @@
             showErrorToast('Failed to fetch holidays. Please try again.');
           }
         };
-        window.confirmFetchHolidays = confirmFetchHolidays;
 
         /*=====================*/
         // Download to Outlook (ICS format)
@@ -2615,7 +2607,6 @@
           // Show success message
           showSuccessToast(`Calendar downloaded successfully (${events.length} events)`);
         };
-        window.downloadOutlookCalendar = downloadOutlookCalendar;
 
         /*=====================*/
         // Active Calender
@@ -2774,7 +2765,6 @@
             getModalIfCheckedRadioBtnEl.checked = false;
           }
         }
-        window.resetModalFields = resetModalFields;
 
         document
           .getElementById("eventModal")
@@ -2963,6 +2953,64 @@
           }
         }, 500);
       }
+    });
+
+    // ============================================
+    // Event Listeners (outside DOMContentLoaded for better Confluence compatibility)
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
+      // Leave Requests Filter Buttons
+      const leaveFilterTop10 = document.getElementById('leaveFilterTop10');
+      const leaveFilterAll = document.getElementById('leaveFilterAll');
+      if (leaveFilterTop10) leaveFilterTop10.addEventListener('click', () => setLeaveFilter('top10'));
+      if (leaveFilterAll) leaveFilterAll.addEventListener('click', () => setLeaveFilter('all'));
+
+      // Leave Requests Pagination
+      const previousLeaveBtn = document.getElementById('previousLeavePageBtn');
+      const nextLeaveBtn = document.getElementById('nextLeavePageBtn');
+      if (previousLeaveBtn) previousLeaveBtn.addEventListener('click', previousLeavePage);
+      if (nextLeaveBtn) nextLeaveBtn.addEventListener('click', nextLeavePage);
+
+      // Public Holidays Pagination
+      const previousHolidayBtn = document.getElementById('previousHolidayPageBtn');
+      const nextHolidayBtn = document.getElementById('nextHolidayPageBtn');
+      if (previousHolidayBtn) previousHolidayBtn.addEventListener('click', previousHolidayPage);
+      if (nextHolidayBtn) nextHolidayBtn.addEventListener('click', nextHolidayPage);
+
+      // Team Member Management Buttons
+      const openTeamMemberBtn = document.getElementById('openAddTeamMemberBtn');
+      const closeTeamMemberBtn = document.getElementById('closeTeamMemberModalBtn');
+      if (openTeamMemberBtn) openTeamMemberBtn.addEventListener('click', openAddTeamMemberForm);
+      if (closeTeamMemberBtn) closeTeamMemberBtn.addEventListener('click', closeTeamMemberModal);
+
+      // Delete Confirmation Modal Buttons
+      const closeDeleteBtn = document.getElementById('closeDeleteConfirmationBtn');
+      const confirmDeleteBtn = document.getElementById('confirmDeleteTeamMemberBtn');
+      if (closeDeleteBtn) closeDeleteBtn.addEventListener('click', closeDeleteConfirmationModal);
+      if (confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', confirmDeleteTeamMember);
+
+      // Fetch Holidays Modal Buttons
+      const closeFetchHolidaysBtn = document.getElementById('closeFetchHolidaysBtn');
+      const confirmFetchHolidaysBtn = document.getElementById('confirmFetchHolidaysBtn');
+      if (closeFetchHolidaysBtn) closeFetchHolidaysBtn.addEventListener('click', closeFetchHolidaysModal);
+      if (confirmFetchHolidaysBtn) confirmFetchHolidaysBtn.addEventListener('click', confirmFetchHolidays);
+
+      // Event delegation for dynamically generated team member buttons
+      document.addEventListener('click', function(e) {
+        // Edit team member button
+        if (e.target.closest('.edit-team-member-btn')) {
+          const memberId = e.target.closest('.edit-team-member-btn').dataset.memberId;
+          if (memberId) editTeamMember(memberId);
+        }
+        
+        // Delete team member button
+        if (e.target.closest('.delete-team-member-btn')) {
+          const memberId = e.target.closest('.delete-team-member-btn').dataset.memberId;
+          if (memberId) deleteTeamMember(memberId);
+        }
+      });
+
+      console.log('✅ All event listeners attached successfully');
     });
 
     /*=====================================================*/
@@ -3883,70 +3931,10 @@
     });
 
     // ============================================================================
-    // EXPOSE FUNCTIONS TO GLOBAL SCOPE (Required for Confluence HTML Macros)
+    // NOTE: All event handlers are attached using addEventListener
+    // See the event listeners section above for button click handlers
+    // This approach works better with Confluence HTML Macros when files are split
     // ============================================================================
-    // This makes all functions accessible to onclick attributes in the HTML
-    // when the JavaScript is loaded in a separate file via <script src="...">
-
-    // Leave Requests Table Functions
-    window.setLeaveFilter = setLeaveFilter;
-    window.previousLeavePage = previousLeavePage;
-    window.nextLeavePage = nextLeavePage;
-    window.filterLeaveRequests = filterLeaveRequests;
-    window.updateLeaveRequestsTable = updateLeaveRequestsTable;
-
-    // Public Holidays Table Functions
-    window.previousHolidayPage = previousHolidayPage;
-    window.nextHolidayPage = nextHolidayPage;
-    window.filterHolidays = filterHolidays;
-    window.updateHolidaysTable = updateHolidaysTable;
-
-    // Team Member Management Functions
-    window.openAddTeamMemberForm = openAddTeamMemberForm;
-    window.closeTeamMemberModal = closeTeamMemberModal;
-    window.editTeamMember = editTeamMember;
-    window.submitTeamMember = submitTeamMember;
-    window.deleteTeamMember = deleteTeamMember;
-    window.closeDeleteConfirmationModal = closeDeleteConfirmationModal;
-    window.confirmDeleteTeamMember = confirmDeleteTeamMember;
-    window.fetchTeamMembers = fetchTeamMembers;
-    window.loadTeamMembers = loadTeamMembers;
-    window.updateTeamMembersTable = updateTeamMembersTable;
-
-    // Holiday Management Functions (exposed inside DOMContentLoaded)
-    // window.closeFetchHolidaysModal - exposed at definition
-    // window.confirmFetchHolidays - exposed at definition
-    // window.downloadOutlookCalendar - exposed at definition
-    // window.fetchPublicHolidays - exposed at definition
-
-    // Calendar Functions (exposed inside DOMContentLoaded)
-    // window.openModal - exposed at definition
-    // window.closeModal - exposed at definition
-    // window.calendarSelect - exposed at definition
-    // window.calendarAddEvent - exposed at definition
-    // window.calendarEventClick - exposed at definition
-    // window.resetModalFields - exposed at definition
-
-    // These are exposed outside DOMContentLoaded
-    window.fetchCalendarEvents = fetchCalendarEvents;
-    window.loadCalendarEvents = loadCalendarEvents;
-    window.saveCalendarEvents = saveCalendarEvents;
-
-    // Analytics Functions
-    window.initializeAnalytics = initializeAnalytics;
-    window.refreshAnalytics = refreshAnalytics;
-    window.initializeLeaveTrendsChart = initializeLeaveTrendsChart;
-    window.initializeLeaveBreakdownChart = initializeLeaveBreakdownChart;
-    window.populateRecentLeavesTable = populateRecentLeavesTable;
-    window.populateHolidaysTable = populateHolidaysTable;
-
-    // Utility Functions
-    window.updateTeamMembersFile = updateTeamMembersFile;
-    window.updateCalendarEventsFile = updateCalendarEventsFile;
-    window.updateTeamMemberDropdown = updateTeamMemberDropdown;
-    window.updateDelegateOptions = updateDelegateOptions;
-
-    console.log('✅ All functions exposed to global scope for Confluence HTML Macros');
   </script>
 </body>
 
