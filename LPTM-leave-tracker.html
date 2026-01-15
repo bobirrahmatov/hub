@@ -3869,6 +3869,70 @@
         });
       }
     });
+
+    // ============================================================================
+    // EXPOSE FUNCTIONS TO GLOBAL SCOPE (Required for Confluence HTML Macros)
+    // ============================================================================
+    // This makes all functions accessible to onclick attributes in the HTML
+    // when the JavaScript is loaded in a separate file via <script src="...">
+
+    // Leave Requests Table Functions
+    window.setLeaveFilter = setLeaveFilter;
+    window.previousLeavePage = previousLeavePage;
+    window.nextLeavePage = nextLeavePage;
+    window.filterLeaveRequests = filterLeaveRequests;
+    window.updateLeaveRequestsTable = updateLeaveRequestsTable;
+
+    // Public Holidays Table Functions
+    window.previousHolidayPage = previousHolidayPage;
+    window.nextHolidayPage = nextHolidayPage;
+    window.filterHolidays = filterHolidays;
+    window.updateHolidaysTable = updateHolidaysTable;
+
+    // Team Member Management Functions
+    window.openAddTeamMemberForm = openAddTeamMemberForm;
+    window.closeTeamMemberModal = closeTeamMemberModal;
+    window.editTeamMember = editTeamMember;
+    window.submitTeamMember = submitTeamMember;
+    window.deleteTeamMember = deleteTeamMember;
+    window.closeDeleteConfirmationModal = closeDeleteConfirmationModal;
+    window.confirmDeleteTeamMember = confirmDeleteTeamMember;
+    window.fetchTeamMembers = fetchTeamMembers;
+    window.loadTeamMembers = loadTeamMembers;
+    window.updateTeamMembersTable = updateTeamMembersTable;
+
+    // Holiday Management Functions
+    window.closeFetchHolidaysModal = closeFetchHolidaysModal;
+    window.confirmFetchHolidays = confirmFetchHolidays;
+    window.downloadOutlookCalendar = downloadOutlookCalendar;
+    window.fetchPublicHolidays = fetchPublicHolidays;
+
+    // Calendar Functions
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.calendarSelect = calendarSelect;
+    window.calendarAddEvent = calendarAddEvent;
+    window.calendarEventClick = calendarEventClick;
+    window.resetModalFields = resetModalFields;
+    window.fetchCalendarEvents = fetchCalendarEvents;
+    window.loadCalendarEvents = loadCalendarEvents;
+    window.saveCalendarEvents = saveCalendarEvents;
+
+    // Analytics Functions
+    window.initializeAnalytics = initializeAnalytics;
+    window.refreshAnalytics = refreshAnalytics;
+    window.initializeLeaveTrendsChart = initializeLeaveTrendsChart;
+    window.initializeLeaveBreakdownChart = initializeLeaveBreakdownChart;
+    window.populateRecentLeavesTable = populateRecentLeavesTable;
+    window.populateHolidaysTable = populateHolidaysTable;
+
+    // Utility Functions
+    window.updateTeamMembersFile = updateTeamMembersFile;
+    window.updateCalendarEventsFile = updateCalendarEventsFile;
+    window.updateTeamMemberDropdown = updateTeamMemberDropdown;
+    window.updateDelegateOptions = updateDelegateOptions;
+
+    console.log('✅ All functions exposed to global scope for Confluence HTML Macros');
   </script>
 </body>
 
