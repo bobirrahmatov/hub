@@ -667,7 +667,7 @@
             <h3 class="text-2xl font-medium text-gray-800 dark:text-white/90">
               Leave & Holidays Tracker
             </h3>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">
               Manage team leave requests and track holidays across your organization
             </p>
           </div>
@@ -678,7 +678,7 @@
               <div class="border-b border-gray-200 dark:border-gray-800">
                 <nav class="-mb-px flex space-x-2 overflow-x-auto px-6 pt-4 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 dark:[&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5">
                   <button
-                    class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 text-sm font-medium transition-colors duration-200 ease-in-out"
+                    class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out"
                     x-bind:class="activeTab === 'calendar' ? ' text-brand-500 border-brand-500  dark:text-brand-400 dark:border-brand-400' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
                     x-on:click="activeTab = 'calendar'"
                   >
@@ -688,7 +688,7 @@
                     Calendar
                   </button>
                   <button
-                    class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 text-sm font-medium transition-colors duration-200 ease-in-out"
+                    class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out"
                     x-bind:class="activeTab === 'summary' ? ' text-brand-500 border-brand-500  dark:border-brand-400  dark:text-brand-400' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
                     x-on:click="activeTab = 'summary'"
                   >
@@ -732,7 +732,7 @@
                             </div>
                             <div>
                               <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Total Leaves</h3>
-                              <span class="block text-xs text-gray-500 dark:text-gray-400">This year</span>
+                              <span class="block !text-base text-gray-500 dark:text-gray-400">This year</span>
                             </div>
                           </div>
                           <div class="flex items-end justify-between">
@@ -752,7 +752,7 @@
                             </div>
                             <div>
                               <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Annual</h3>
-                              <span class="block text-xs text-gray-500 dark:text-gray-400">Vacation days</span>
+                              <span class="block !text-base text-gray-500 dark:text-gray-400">Vacation days</span>
                             </div>
                           </div>
                           <div class="flex items-end justify-between gap-3">
@@ -775,7 +775,7 @@
                             </div>
                             <div>
                               <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Sick</h3>
-                              <span class="block text-xs text-gray-500 dark:text-gray-400">Medical leave</span>
+                              <span class="block !text-base text-gray-500 dark:text-gray-400">Medical leave</span>
                             </div>
                           </div>
                           <div class="flex items-end justify-between gap-3">
@@ -798,7 +798,7 @@
                             </div>
                             <div>
                               <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Public</h3>
-                              <span class="block text-xs text-gray-500 dark:text-gray-400">Holidays</span>
+                              <span class="block !text-base text-gray-500 dark:text-gray-400">Holidays</span>
                             </div>
                           </div>
                           <div class="flex items-end justify-between gap-3">
@@ -814,22 +814,22 @@
                         <!-- Team Summary -->
                         <div class="rounded-2xl border border-gray-200 bg-white px-6 pb-5 pt-6 dark:border-gray-800" style="background-color: var(--card-bg, white); max-width: 320px;">
                           <div class="mb-6 flex items-center gap-2">
-                            <svg class="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             </svg>
-                            <span class="text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">Team Summary</span>
+                            <span class="!text-base font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">Team Summary</span>
                           </div>
                           <div class="grid grid-cols-3 gap-4 items-end">
                             <div class="flex flex-col items-center">
-                              <div class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Members</div>
+                              <div class="!text-base font-medium text-gray-500 dark:text-gray-400 mb-2">Members</div>
                               <div id="team-count" class="text-3xl font-bold text-gray-900 dark:text-white leading-none">0</div>
                             </div>
                             <div class="flex flex-col items-center border-x border-gray-200 dark:border-gray-700">
-                              <div class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">On Leave</div>
+                              <div class="!text-base font-medium text-gray-500 dark:text-gray-400 mb-2">On Leave</div>
                               <div id="current-leave-count" class="text-3xl font-bold text-red-600 dark:text-red-400 leading-none">0</div>
                             </div>
                             <div class="flex flex-col items-center">
-                              <div class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Upcoming</div>
+                              <div class="!text-base font-medium text-gray-500 dark:text-gray-400 mb-2">Upcoming</div>
                               <div id="upcoming-leave-count" class="text-3xl font-bold text-blue-600 dark:text-blue-400 leading-none">0</div>
                             </div>
                           </div>
@@ -846,7 +846,7 @@
                         <div class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                           <div>
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Leave Trends</h3>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Monthly leave distribution across the year</p>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Monthly leave distribution across the year</p>
                           </div>
                         </div>
                         <div class="max-w-full overflow-x-auto">
@@ -859,7 +859,7 @@
                         <div class="mb-6 flex items-center justify-between">
                           <div>
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Leave Breakdown</h3>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Distribution by leave type</p>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Distribution by leave type</p>
                           </div>
                         </div>
                         <div>
@@ -877,7 +877,7 @@
                           <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <div>
                               <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Recent Leave Requests (Top 10)</h3>
-                              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Comprehensive details for recent leave submissions</p>
+                              <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Comprehensive details for recent leave submissions</p>
                             </div>
                             <!-- Search Input -->
                             <div class="relative w-full sm:w-64">
@@ -886,7 +886,7 @@
                                   <path fill-rule="evenodd" clip-rule="evenodd" d="M3.04199 9.37381C3.04199 5.87712 5.87735 3.04218 9.37533 3.04218C12.8733 3.04218 15.7087 5.87712 15.7087 9.37381C15.7087 12.8705 12.8733 15.7055 9.37533 15.7055C5.87735 15.7055 3.04199 12.8705 3.04199 9.37381ZM9.37533 1.54218C5.04926 1.54218 1.54199 5.04835 1.54199 9.37381C1.54199 13.6993 5.04926 17.2055 9.37533 17.2055C11.2676 17.2055 13.0032 16.5346 14.3572 15.4178L17.1773 18.2381C17.4702 18.531 17.945 18.5311 18.2379 18.2382C18.5308 17.9453 18.5309 17.4704 18.238 17.1775L15.4182 14.3575C16.5367 13.0035 17.2087 11.2671 17.2087 9.37381C17.2087 5.04835 13.7014 1.54218 9.37533 1.54218Z" fill="" />
                                 </svg>
                               </span>
-                              <input type="text" id="leaveSearchInput" placeholder="Search by name, type, delegate..." class="h-9 w-full rounded-lg border border-gray-300 bg-white py-2 pr-3 pl-9 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500" />
+                              <input type="text" id="leaveSearchInput" placeholder="Search by name, type, delegate..." class="h-9 w-full rounded-lg border border-gray-300 bg-white py-2 pr-3 pl-9 !text-base text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500" />
                             </div>
                           </div>
                         </div>
@@ -895,12 +895,12 @@
                           <table class="min-w-full">
                             <thead>
                               <tr class="bg-gray-50 dark:bg-gray-800/50">
-                                <th class="px-6 py-4 text-center text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Team Member</th>
-                                <th class="px-6 py-4 text-center text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Leave Type</th>
-                                <th class="px-6 py-4 text-center text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Start Date</th>
-                                <th class="px-6 py-4 text-center text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">End Date</th>
-                                <th class="px-6 py-4 text-center text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Days</th>
-                                <th class="px-6 py-4 text-center text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Delegate</th>
+                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Team Member</th>
+                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Leave Type</th>
+                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Start Date</th>
+                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">End Date</th>
+                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Days</th>
+                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Delegate</th>
                               </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="recentLeavesTableBody">
@@ -964,7 +964,7 @@
             >
                       Add / Edit Leave Request
             </h5>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                    <p class="!text-base text-gray-500 dark:text-gray-400">
                       Submit or update leave/holiday requests for team members
             </p>
           </div>
@@ -973,14 +973,14 @@
               <!-- Team Member Field -->
                 <div>
                   <label
-                  class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                  class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400"
                   >
                   Team Member
                   </label>
                 <select
                   id="event-team-member"
                   required
-                  class="dark:bg-gray-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:outline-none dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
+                  class="dark:bg-gray-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:outline-none dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
                 >
                   <option value="">Select Team Member</option>
                 </select>
@@ -989,7 +989,7 @@
               <!-- Leave Type -->
               <div class="mt-6">
                   <label
-                  class="block mb-4 text-sm font-medium text-gray-700 dark:text-gray-400"
+                  class="block mb-4 !text-base font-medium text-gray-700 dark:text-gray-400"
                   >
                   Leave Type
                   </label>
@@ -997,7 +997,7 @@
                   <div class="n-chk">
                             <div class="form-check form-check-primary form-check-inline">
                       <label
-                                class="flex items-center text-sm text-gray-700 form-check-label dark:text-gray-400"
+                                class="flex items-center !text-base text-gray-700 form-check-label dark:text-gray-400"
                                 for="modalAnnual"
                       >
                         <span class="relative">
@@ -1024,7 +1024,7 @@
                   <div class="n-chk">
                     <div class="form-check form-check-warning form-check-inline">
                       <label
-                                class="flex items-center text-sm text-gray-700 form-check-label dark:text-gray-400"
+                                class="flex items-center !text-base text-gray-700 form-check-label dark:text-gray-400"
                                 for="modalSick"
                       >
                         <span class="relative">
@@ -1051,7 +1051,7 @@
                   <div class="n-chk">
                     <div class="form-check form-check-success form-check-inline">
                       <label
-                                class="flex items-center text-sm text-gray-700 form-check-label dark:text-gray-400"
+                                class="flex items-center !text-base text-gray-700 form-check-label dark:text-gray-400"
                                 for="modalPublic"
                       >
                         <span class="relative">
@@ -1078,7 +1078,7 @@
                   <div class="n-chk">
                             <div class="form-check form-check-danger form-check-inline">
                       <label
-                                class="flex items-center text-sm text-gray-700 form-check-label dark:text-gray-400"
+                                class="flex items-center !text-base text-gray-700 form-check-label dark:text-gray-400"
                                 for="modalOther"
                       >
                         <span class="relative">
@@ -1109,7 +1109,7 @@
               <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label
-                    class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                    class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400"
                   >
                     Start Date
                   </label>
@@ -1117,7 +1117,7 @@
                     <input
                       id="event-start-date"
                       type="date"
-                      class="dark:bg-gray-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:outline-none dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
+                      class="dark:bg-gray-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:outline-none dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
                       onclick="this.showPicker()"
                     />
                     <span class="absolute top-1/2 right-3.5 -translate-y-1/2 pointer-events-none">
@@ -1142,7 +1142,7 @@
 
                 <div>
                   <label
-                    class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                    class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400"
                   >
                     End Date
                   </label>
@@ -1150,7 +1150,7 @@
                     <input
                       id="event-end-date"
                       type="date"
-                      class="dark:bg-gray-900 datepickerTwo shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:outline-none dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
+                      class="dark:bg-gray-900 datepickerTwo shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:outline-none dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
                       onclick="this.showPicker()"
                     />
                     <span class="absolute top-1/2 right-3.5 -translate-y-1/2 pointer-events-none">
@@ -1177,17 +1177,17 @@
               <!-- Delegate Field -->
               <div class="mt-6">
                 <label
-                  class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                  class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400"
                 >
                   Delegate (Optional)
                 </label>
                 <select
                   id="event-delegate"
-                  class="dark:bg-gray-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:outline-none dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
+                  class="dark:bg-gray-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:outline-none dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
                 >
                   <option value="">No Delegate</option>
                 </select>
-                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
+                <p class="mt-1.5 !text-base text-gray-500 dark:text-gray-400">
                   Select a team member to handle responsibilities while on leave
                 </p>
               </div>
@@ -1196,7 +1196,7 @@
           <div class="flex items-center gap-3 mt-6 modal-footer sm:justify-end">
             <button
               type="button"
-                      class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 sm:w-auto dark:border-gray-700 dark:text-gray-400"
+                      class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-50 sm:w-auto dark:border-gray-700 dark:text-gray-400"
                       style="background-color: var(--input-bg, white); border-color: var(--input-bg, #e4e7ec);"
               data-bs-dismiss="modal"
             >
@@ -1204,14 +1204,14 @@
             </button>
             <button
               type="button"
-              class="btn btn-success btn-update-event bg-brand-500 hover:bg-brand-600 flex w-full justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white sm:w-auto"
+              class="btn btn-success btn-update-event bg-brand-500 hover:bg-brand-600 flex w-full justify-center rounded-lg px-4 py-2.5 !text-base font-medium text-white sm:w-auto"
               data-fc-event-public-id=""
             >
                       Update Leave
             </button>
             <button
               type="button"
-              class="btn btn-primary btn-add-event bg-brand-500 hover:bg-brand-600 flex w-full justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white sm:w-auto"
+              class="btn btn-primary btn-add-event bg-brand-500 hover:bg-brand-600 flex w-full justify-center rounded-lg px-4 py-2.5 !text-base font-medium text-white sm:w-auto"
             >
                       Add Leave Request
             </button>
@@ -1261,7 +1261,7 @@
                     >
                       Manage Team Members
                     </h5>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                    <p class="!text-base text-gray-500 dark:text-gray-400">
                       Add, edit, or remove team members from your organization
                     </p>
                             </div>
@@ -1269,7 +1269,7 @@
                   <div class="mb-6">
                     <button
                       onclick="openAddTeamMemberForm()"
-                      class="flex items-center gap-2 rounded-lg border border-blue-500 bg-blue-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-600 transition-all duration-200"
+                      class="flex items-center gap-2 rounded-lg border border-blue-500 bg-blue-500 px-4 py-2.5 !text-base font-medium text-white hover:bg-blue-600 transition-all duration-200"
                     >
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -1284,16 +1284,16 @@
                       <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
                         Team Members
                       </h3>
-                      <p class="text-sm font-medium text-gray-500 mt-1 dark:text-gray-400">Manage your team roster</p>
+                      <p class="!text-base font-medium text-gray-500 mt-1 dark:text-gray-400">Manage your team roster</p>
                     </div>
 
                     <div class="custom-scrollbar overflow-x-auto">
                       <table class="min-w-full">
                         <thead>
                           <tr class="bg-gray-50 dark:bg-gray-800/50">
-                            <th class="px-6 py-4 text-center text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Full Name</th>
-                            <th class="px-6 py-4 text-center text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Country</th>
-                            <th class="px-6 py-4 text-center text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Actions</th>
+                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Full Name</th>
+                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Country</th>
+                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Actions</th>
                           </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="teamMembersTableBody">
@@ -1348,7 +1348,7 @@
                     >
                       Add Team Member
                     </h5>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                    <p class="!text-base text-gray-500 dark:text-gray-400">
                       Enter team member details below
                     </p>
                             </div>
@@ -1357,7 +1357,7 @@
                     <input type="hidden" id="team-member-id" />
                     <div class="space-y-5">
                       <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                           Full Name
                                 </label>
                         <input
@@ -1365,11 +1365,11 @@
                           id="team-member-name"
                           required
                           placeholder="Enter full name"
-                          class="dark:bg-gray-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:outline-none dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
+                          class="dark:bg-gray-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:outline-none dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
                         />
                             </div>
                       <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                     Country
                                 </label>
                         <input
@@ -1377,9 +1377,9 @@
                           id="team-member-country"
                           required
                           placeholder="e.g., Austria, Germany, USA, UK, Singapore"
-                          class="dark:bg-gray-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:outline-none dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
+                          class="dark:bg-gray-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:outline-none dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
                         />
-                        <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
+                        <p class="mt-1.5 !text-base text-gray-500 dark:text-gray-400">
                           Use standard country names for public holiday fetching (e.g., Austria, Germany, USA, UK, Canada, Australia, Singapore)
                         </p>
                             </div>
@@ -1387,14 +1387,14 @@
                         <button
                           type="button"
                           onclick="closeTeamMemberModal()"
-                          class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 sm:w-auto dark:border-gray-700 dark:text-gray-400"
+                          class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-50 sm:w-auto dark:border-gray-700 dark:text-gray-400"
                           style="background-color: var(--input-bg, white); border-color: var(--input-bg, #e4e7ec);"
                         >
                           Cancel
                         </button>
                         <button
                           type="submit"
-                          class="bg-brand-500 hover:bg-brand-600 flex w-full justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white sm:w-auto"
+                          class="bg-brand-500 hover:bg-brand-600 flex w-full justify-center rounded-lg px-4 py-2.5 !text-base font-medium text-white sm:w-auto"
                         >
                                     Save Team Member
                                 </button>
@@ -1452,10 +1452,10 @@
                     >
                       Delete Team Member
                     </h5>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                    <p class="!text-base text-gray-500 dark:text-gray-400">
                       Are you sure you want to delete <span id="delete-member-name" class="font-semibold text-gray-800 dark:text-white/90"></span>?
                     </p>
-                    <p class="text-sm text-gray-500 mt-2 dark:text-gray-400">
+                    <p class="!text-base text-gray-500 mt-2 dark:text-gray-400">
                       This action cannot be undone. All leave records associated with this team member will remain in the calendar.
                     </p>
                   </div>
@@ -1464,7 +1464,7 @@
                     <button
                       type="button"
                       onclick="closeDeleteConfirmationModal()"
-                      class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                      class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
                       style="background-color: var(--input-bg, white); border-color: var(--input-bg, #e4e7ec);"
                     >
                       Cancel
@@ -1472,7 +1472,7 @@
                     <button
                       type="button"
                       onclick="confirmDeleteTeamMember()"
-                      class="bg-error-500 hover:bg-error-600 dark:bg-error-600 dark:hover:bg-error-700 flex w-full justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-colors"
+                      class="bg-error-500 hover:bg-error-600 dark:bg-error-600 dark:hover:bg-error-700 flex w-full justify-center rounded-lg px-4 py-2.5 !text-base font-medium text-white transition-colors"
                     >
                       Delete Member
                     </button>
@@ -1528,10 +1528,10 @@
                     >
                       Fetch Public Holidays
                     </h5>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                    <p class="!text-base text-gray-500 dark:text-gray-400">
                       Fetch public holidays for <span id="fetch-countries-list" class="font-semibold text-gray-800 dark:text-white/90"></span>?
                     </p>
-                    <p class="text-sm text-warning-600 dark:text-warning-500 mt-2 font-medium">
+                    <p class="!text-base text-warning-600 dark:text-warning-500 mt-2 font-medium">
                       ⚠️ This will replace all existing public holidays in the calendar.
                     </p>
                   </div>
@@ -1540,7 +1540,7 @@
                     <button
                       type="button"
                       onclick="closeFetchHolidaysModal()"
-                      class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                      class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
                       style="background-color: var(--input-bg, white); border-color: var(--input-bg, #e4e7ec);"
                     >
                       Cancel
@@ -1548,7 +1548,7 @@
                     <button
                       type="button"
                       onclick="confirmFetchHolidays()"
-                      class="bg-brand-500 hover:bg-brand-600 dark:bg-brand-600 dark:hover:bg-brand-700 flex w-full justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-colors"
+                      class="bg-brand-500 hover:bg-brand-600 dark:bg-brand-600 dark:hover:bg-brand-700 flex w-full justify-center rounded-lg px-4 py-2.5 !text-base font-medium text-white transition-colors"
                     >
                       Fetch Holidays
                     </button>
@@ -1815,8 +1815,8 @@
                   <svg class="h-12 w-12 text-gray-400 dark:text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                   </svg>
-                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">No team members yet</p>
-                  <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Add your first team member above to get started</p>
+                  <p class="!text-base font-medium text-gray-500 dark:text-gray-400">No team members yet</p>
+                  <p class="!text-base text-gray-400 dark:text-gray-500 mt-1">Add your first team member above to get started</p>
                 </div>
               </td>
             </tr>
@@ -1850,15 +1850,15 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center justify-center gap-3">
                   <div class="flex items-center justify-center w-10 h-10 rounded-full ${color.bg}">
-                    <span class="text-xs font-semibold ${color.text}">${initials}</span>
+                    <span class="!text-base font-semibold ${color.text}">${initials}</span>
                   </div>
-                  <span class="text-sm font-medium text-gray-900 dark:text-white">
+                  <span class="!text-base font-medium text-gray-900 dark:text-white">
                     ${member.name}
                   </span>
                 </div>
               </td>
               <td class="px-6 py-4 text-center">
-                <span class="${countryColor} rounded-full px-2 py-0.5 text-xs font-medium">
+                <span class="${countryColor} rounded-full px-2 py-0.5 !text-base font-medium">
                   ${member.country}
                 </span>
               </td>
@@ -2084,7 +2084,7 @@
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
               <p class="text-lg font-semibold text-gray-800 dark:text-white">Deleting Team Member</p>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Please wait...</p>
+              <p class="!text-base text-gray-500 dark:text-gray-400 mt-1">Please wait...</p>
             </div>
           </div>
         `;
@@ -2373,7 +2373,7 @@
                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
                 <p class="text-lg font-semibold text-gray-800 dark:text-white">Fetching Public Holidays</p>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Loading holidays for ${countryCodes.join(', ')}...</p>
+                <p class="!text-base text-gray-500 dark:text-gray-400 mt-1">Loading holidays for ${countryCodes.join(', ')}...</p>
               </div>
             `;
             
@@ -2959,8 +2959,8 @@
                 <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                 </svg>
-                <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">No leave data available</p>
-                <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">Add leave requests to see trends</p>
+                <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No leave data available</p>
+                <p class="mt-1 !text-base text-gray-400 dark:text-gray-500">Add leave requests to see trends</p>
               </div>
             </div>
           `;
@@ -3071,8 +3071,8 @@
                 <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                 </svg>
-                <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">No leave data available</p>
-                <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">Add leave requests to see breakdown</p>
+                <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No leave data available</p>
+                <p class="mt-1 !text-base text-gray-400 dark:text-gray-500">Add leave requests to see breakdown</p>
               </div>
             </div>
           `;
@@ -3222,16 +3222,16 @@
           let leaveTypeBadge = '';
           switch(leaveType) {
             case 'Annual':
-              leaveTypeBadge = '<span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green-700 dark:bg-green-900/20 dark:text-green-400">Annual</span>';
+              leaveTypeBadge = '<span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 !text-base font-medium text-green-700 dark:bg-green-900/20 dark:text-green-400">Annual</span>';
               break;
             case 'Sick':
-              leaveTypeBadge = '<span class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-sm font-medium text-red-700 dark:bg-red-900/20 dark:text-red-400">Sick</span>';
+              leaveTypeBadge = '<span class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 !text-base font-medium text-red-700 dark:bg-red-900/20 dark:text-red-400">Sick</span>';
               break;
             case 'Public':
-              leaveTypeBadge = '<span class="inline-flex items-center rounded-full bg-purple-100 px-2.5 py-0.5 text-sm font-medium text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">Public</span>';
+              leaveTypeBadge = '<span class="inline-flex items-center rounded-full bg-purple-100 px-2.5 py-0.5 !text-base font-medium text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">Public</span>';
               break;
             case 'Other':
-              leaveTypeBadge = '<span class="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-sm font-medium text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">Other</span>';
+              leaveTypeBadge = '<span class="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 !text-base font-medium text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">Other</span>';
               break;
           }
           
@@ -3244,22 +3244,22 @@
           row.className = 'hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors';
           row.innerHTML = `
             <td class="px-6 py-4 text-center whitespace-nowrap">
-              <span class="text-sm font-medium text-gray-900 dark:text-white">${memberName}</span>
+              <span class="!text-base font-medium text-gray-900 dark:text-white">${memberName}</span>
             </td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
               ${leaveTypeBadge}
             </td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
-              <span class="text-sm text-gray-700 dark:text-gray-300">${startDate}</span>
+              <span class="!text-base text-gray-700 dark:text-gray-300">${startDate}</span>
             </td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
-              <span class="text-sm text-gray-700 dark:text-gray-300">${endDate}</span>
+              <span class="!text-base text-gray-700 dark:text-gray-300">${endDate}</span>
             </td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
-              <span class="text-sm font-semibold text-gray-900 dark:text-white">${diffDays}</span>
+              <span class="!text-base font-semibold text-gray-900 dark:text-white">${diffDays}</span>
             </td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
-              <span class="text-sm ${delegateId ? 'font-medium text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500'}">${delegateName}</span>
+              <span class="!text-base ${delegateId ? 'font-medium text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500'}">${delegateName}</span>
             </td>
           `;
           tbody.appendChild(row);
