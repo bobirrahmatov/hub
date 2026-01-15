@@ -506,7 +506,15 @@
                     }
 
                     const jsonData = await dataResponse.json();
-                    return jsonData || [];
+                    // Handle both formats: { requests: [] } or direct array
+                    if (jsonData.requests && Array.isArray(jsonData.requests)) {
+                        return jsonData.requests;
+                    } else if (Array.isArray(jsonData)) {
+                        return jsonData;
+                    } else {
+                        console.warn('Unexpected data format:', jsonData);
+                        return [];
+                    }
                 } else {
                     console.log('Attachment does not exist, will create a new one.');
                     return [];
@@ -902,37 +910,68 @@
                 });
 
                 let attachmentId = null;
-                let existingRequests = [];
+                let existingData = { requests: [], metadata: { lastUpdated: '', totalRequests: 0, categories: {} } };
 
                 if (attachmentsResponse.ok) {
                     const attachmentsData = await attachmentsResponse.json();
                     if (attachmentsData.results && attachmentsData.results.length > 0) {
                         attachmentId = attachmentsData.results[0].id;
+                        console.log('Found existing attachment with ID:', attachmentId);
                         
                         // Fetch existing data
-                        const dataResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`, {
-                            headers: {
-                                'X-Atlassian-Token': 'no-check'
-                            }
-                        });
+                        try {
+                            const dataResponse = await fetch(`https://cedt-confluence.net/confluence/download/attachments/${pageId}/${attachmentName}?api=v2`, {
+                                headers: {
+                                    'X-Atlassian-Token': 'no-check'
+                                }
+                            });
 
-                        if (dataResponse.ok) {
-                            existingRequests = await dataResponse.json();
+                            if (dataResponse.ok) {
+                                const data = await dataResponse.json();
+                                // Handle both formats: { requests: [] } or direct array
+                                if (data.requests && Array.isArray(data.requests)) {
+                                    existingData = data;
+                                } else if (Array.isArray(data)) {
+                                    existingData.requests = data;
+                                }
+                            }
+                        } catch (err) {
+                            console.warn('Could not fetch existing requests, starting fresh:', err);
                         }
                     }
+                } else {
+                    console.log('No existing attachment found, will create new one');
                 }
 
-                // Add new request to existing data
-                existingRequests.push(newRequest);
+                // Add new request to the beginning
+                if (!Array.isArray(existingData.requests)) {
+                    existingData.requests = [];
+                }
+                existingData.requests.unshift(newRequest);
+
+                // Update metadata
+                existingData.metadata = {
+                    lastUpdated: new Date().toISOString(),
+                    totalRequests: existingData.requests.length,
+                    categories: existingData.requests.reduce((acc, req) => {
+                        acc[req.category] = (acc[req.category] || 0) + 1;
+                        return acc;
+                    }, {})
+                };
 
                 // Create blob with updated data
-                const blob = new Blob([JSON.stringify(existingRequests, null, 2)], { type: 'application/json' });
+                const blob = new Blob([JSON.stringify(existingData, null, 2)], { type: 'application/json' });
                 const formData = new FormData();
                 formData.append('file', blob, attachmentName);
 
                 // Upload to Confluence (create or update)
-                // Note: /data is only for reading, not for writing
+                // Use the correct endpoint - always POST to base endpoint
+                // If attachmentId exists, it will update; otherwise it creates new
                 const uploadUrl = `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment${attachmentId ? `/${attachmentId}` : ''}`;
+                
+                console.log('Uploading to:', uploadUrl);
+                console.log('Method: POST');
+                console.log('Attachment ID:', attachmentId || 'creating new');
 
                 const uploadResponse = await fetch(uploadUrl, {
                     method: 'POST',
@@ -943,13 +982,18 @@
                 });
 
                 if (!uploadResponse.ok) {
+                    const errorText = await uploadResponse.text();
+                    console.error('Upload failed:', errorText);
                     throw new Error(`Failed to save request: ${uploadResponse.status} ${uploadResponse.statusText}`);
                 }
 
+                const result = await uploadResponse.json();
+                console.log('Request saved successfully!', result);
+
                 // Add to local data and update table
-                tableData.push(newRequest);
-                filteredData = [...tableData];
-                updateTable();
+                tableData.unshift(newRequest);
+                currentPage = 1;
+                filterData();
                 
                 if (typeof showSuccessToast === 'function') {
                     showSuccessToast('Request added successfully!');
