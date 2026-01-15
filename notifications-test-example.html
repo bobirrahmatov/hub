@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LPTM Notifications Test Page</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config for LPTM Colors -->
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#ecf3ff',
+                100: '#dde9ff',
+                200: '#c2d6ff',
+                300: '#9cb9ff',
+                400: '#7592ff',
+                500: '#465fff',
+                600: '#3641f5',
+                700: '#2a31d8',
+                800: '#252dae',
+                900: '#262e89',
+              },
+              success: {
+                50: '#ecfdf3',
+                500: '#12b76a',
+                600: '#039855',
+              },
+              error: {
+                50: '#fef3f2',
+                500: '#f04438',
+                600: '#d92d20',
+              },
+              warning: {
+                50: '#fffaeb',
+                500: '#f79009',
+                600: '#dc6803',
+              },
+            },
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto p-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="mb-8 text-center">
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">LPTM Notifications Test</h1>
+                <p class="text-gray-600">Test the global notification system</p>
+            </div>
+
+            <!-- Test Buttons -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Success Tests -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Success Notifications
+                    </h2>
+                    <div class="space-y-3">
+                        <button onclick="showSuccessToast('Operation completed successfully!')" 
+                                class="w-full bg-success-500 hover:bg-success-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Basic Success
+                        </button>
+                        <button onclick="showSuccessToast('Team member added successfully', 2000)" 
+                                class="w-full bg-success-500 hover:bg-success-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Quick Success (2s)
+                        </button>
+                        <button onclick="showSuccessToast('Long success message that will take more time to read and understand', 8000)" 
+                                class="w-full bg-success-500 hover:bg-success-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Long Success (8s)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error Tests -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-error-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Error Notifications
+                    </h2>
+                    <div class="space-y-3">
+                        <button onclick="showErrorToast('Failed to save changes')" 
+                                class="w-full bg-error-500 hover:bg-error-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Basic Error
+                        </button>
+                        <button onclick="showErrorToast('Network connection failed. Please check your internet.', 6000)" 
+                                class="w-full bg-error-500 hover:bg-error-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Network Error
+                        </button>
+                        <button onclick="showErrorToast('Critical error occurred!')" 
+                                class="w-full bg-error-500 hover:bg-error-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Critical Error
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Warning Tests -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-warning-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        Warning Notifications
+                    </h2>
+                    <div class="space-y-3">
+                        <button onclick="showWarningToast('Please select a team member')" 
+                                class="w-full bg-warning-500 hover:bg-warning-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Validation Warning
+                        </button>
+                        <button onclick="showWarningToast('No team members with countries assigned')" 
+                                class="w-full bg-warning-500 hover:bg-warning-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Data Warning
+                        </button>
+                        <button onclick="showWarningToast('Action cannot be undone!', 5000)" 
+                                class="w-full bg-warning-500 hover:bg-warning-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Critical Warning
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info Tests -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Info Notifications
+                    </h2>
+                    <div class="space-y-3">
+                        <button onclick="showInfoToast('Processing your request...')" 
+                                class="w-full bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Processing Info
+                        </button>
+                        <button onclick="showInfoToast('New features available in the latest update')" 
+                                class="w-full bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Feature Info
+                        </button>
+                        <button onclick="showInfoToast('Tip: You can use keyboard shortcuts')" 
+                                class="w-full bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            Tip Info
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multiple Toasts Test -->
+            <div class="bg-white rounded-2xl border border-gray-200 p-6 mt-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Multiple Toast Tests</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <button onclick="fireMultipleToasts()" 
+                            class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        Fire 5 Toasts
+                    </button>
+                    <button onclick="fireSequentialToasts()" 
+                            class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        Sequential Toasts
+                    </button>
+                    <button onclick="fireMixedToasts()" 
+                            class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        Mixed Types
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dark Mode Toggle -->
+            <div class="bg-white rounded-2xl border border-gray-200 p-6 mt-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Appearance</h2>
+                <button onclick="toggleDarkMode()" 
+                        class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-lg transition-colors">
+                    Toggle Dark Mode
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- GLOBAL NOTIFICATIONS SYSTEM (INLINED) -->
+    <!-- ============================================ -->
+    
+    <!-- Notification Container -->
+    <div id="lptm-notification-container" class="fixed top-20 right-4 z-[10000] flex flex-col gap-3 max-w-md pointer-events-none"></div>
+
+    <style>
+      /* Toast animations */
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      @keyframes slideOutRight {
+        from {
+          opacity: 1;
+          transform: translateX(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+      }
+      
+      .toast-slide-in {
+        animation: slideInRight 0.3s ease-out;
+      }
+      
+      .toast-slide-out {
+        animation: slideOutRight 0.3s ease-out;
+      }
+      
+      /* Make toasts clickable */
+      .lptm-toast {
+        pointer-events: auto;
+      }
+    </style>
+
+    <script>
+      /**
+       * LPTM Global Notification System (Inlined for Testing)
+       */
+      (function() {
+        'use strict';
+        
+        // Ensure container exists
+        function getNotificationContainer() {
+          let container = document.getElementById('lptm-notification-container');
+          if (!container) {
+            container = document.createElement('div');
+            container.id = 'lptm-notification-container';
+            container.className = 'fixed top-20 right-4 z-[10000] flex flex-col gap-3 max-w-md pointer-events-none';
+            document.body.appendChild(container);
+          }
+          return container;
+        }
+        
+        /**
+         * Create and show a toast notification
+         */
+        function showToast(message, type, duration = 4000) {
+          const container = getNotificationContainer();
+          
+          // Toast configurations
+          const configs = {
+            success: {
+              bgColor: 'bg-success-50 dark:bg-success-500/15',
+              borderColor: 'border-success-200 dark:border-success-500/30',
+              iconColor: 'text-success-600 dark:text-success-500',
+              textColor: 'text-gray-800 dark:text-white/90',
+              icon: `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>`
+            },
+            error: {
+              bgColor: 'bg-error-50 dark:bg-error-500/15',
+              borderColor: 'border-error-200 dark:border-error-500/30',
+              iconColor: 'text-error-600 dark:text-error-500',
+              textColor: 'text-gray-800 dark:text-white/90',
+              icon: `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>`
+            },
+            warning: {
+              bgColor: 'bg-warning-50 dark:bg-warning-500/15',
+              borderColor: 'border-warning-200 dark:border-warning-500/30',
+              iconColor: 'text-warning-600 dark:text-warning-500',
+              textColor: 'text-gray-800 dark:text-white/90',
+              icon: `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+              </svg>`
+            },
+            info: {
+              bgColor: 'bg-brand-50 dark:bg-brand-500/15',
+              borderColor: 'border-brand-200 dark:border-brand-500/30',
+              iconColor: 'text-brand-600 dark:text-brand-500',
+              textColor: 'text-gray-800 dark:text-white/90',
+              icon: `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>`
+            }
+          };
+          
+          const config = configs[type] || configs.info;
+          
+          // Create toast element
+          const toast = document.createElement('div');
+          toast.className = `lptm-toast flex items-start gap-3 rounded-lg border p-4 shadow-lg toast-slide-in ${config.bgColor} ${config.borderColor}`;
+          
+          toast.innerHTML = `
+            <div class="flex-shrink-0 ${config.iconColor}">
+              ${config.icon}
+            </div>
+            <div class="flex-1 text-left">
+              <p class="text-sm font-medium ${config.textColor}">${message}</p>
+            </div>
+            <button class="lptm-toast-close flex-shrink-0 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400 transition-colors">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          `;
+          
+          // Add close button functionality
+          const closeBtn = toast.querySelector('.lptm-toast-close');
+          closeBtn.addEventListener('click', () => removeToast(toast));
+          
+          // Add to container
+          container.appendChild(toast);
+          
+          // Auto remove after duration
+          setTimeout(() => {
+            if (toast.parentElement) {
+              removeToast(toast);
+            }
+          }, duration);
+        }
+        
+        /**
+         * Remove a toast with animation
+         */
+        function removeToast(toast) {
+          toast.classList.remove('toast-slide-in');
+          toast.classList.add('toast-slide-out');
+          setTimeout(() => {
+            if (toast.parentElement) {
+              toast.remove();
+            }
+          }, 300);
+        }
+        
+        /**
+         * Public API - Expose functions to global scope
+         */
+        window.showSuccessToast = function(message, duration) {
+          showToast(message, 'success', duration);
+        };
+        
+        window.showErrorToast = function(message, duration) {
+          showToast(message, 'error', duration);
+        };
+        
+        window.showWarningToast = function(message, duration) {
+          showToast(message, 'warning', duration);
+        };
+        
+        window.showInfoToast = function(message, duration) {
+          showToast(message, 'info', duration);
+        };
+        
+        console.log('✅ LPTM Global Notifications System loaded');
+      })();
+    </script>
+
+    <!-- ============================================ -->
+    <!-- TEST PAGE SCRIPTS -->
+    <!-- ============================================ -->
+    
+    <script>
+        function fireMultipleToasts() {
+            showSuccessToast('Toast 1');
+            setTimeout(() => showInfoToast('Toast 2'), 200);
+            setTimeout(() => showWarningToast('Toast 3'), 400);
+            setTimeout(() => showErrorToast('Toast 4'), 600);
+            setTimeout(() => showSuccessToast('Toast 5'), 800);
+        }
+
+        function fireSequentialToasts() {
+            showInfoToast('Step 1: Starting process...');
+            setTimeout(() => showInfoToast('Step 2: Loading data...'), 1500);
+            setTimeout(() => showInfoToast('Step 3: Processing...'), 3000);
+            setTimeout(() => showSuccessToast('Complete!'), 4500);
+        }
+
+        function fireMixedToasts() {
+            showSuccessToast('Success message');
+            showErrorToast('Error message');
+            showWarningToast('Warning message');
+            showInfoToast('Info message');
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                document.body.classList.add('bg-gray-900');
+                document.body.classList.remove('bg-gray-50');
+                showInfoToast('Dark mode enabled');
+            } else {
+                document.body.classList.add('bg-gray-50');
+                document.body.classList.remove('bg-gray-900');
+                showInfoToast('Light mode enabled');
+            }
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,195 @@
+<!-- 
+  LPTM Global Notifications System
+  Include this file in Confluence as a macro on each page
+  Usage: Simply call showSuccessToast(), showErrorToast(), showWarningToast(), or showInfoToast()
+-->
+
+<!-- Notification Container -->
+<div id="lptm-notification-container" class="fixed top-20 right-4 z-[10000] flex flex-col gap-3 max-w-md pointer-events-none"></div>
+
+<style>
+  /* Toast animations */
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slideOutRight {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+  }
+  
+  .toast-slide-in {
+    animation: slideInRight 0.3s ease-out;
+  }
+  
+  .toast-slide-out {
+    animation: slideOutRight 0.3s ease-out;
+  }
+  
+  /* Make toasts clickable */
+  .lptm-toast {
+    pointer-events: auto;
+  }
+</style>
+
+<script>
+  /**
+   * LPTM Global Notification System
+   * Provides consistent toast notifications across all LPTM pages
+   */
+  (function() {
+    'use strict';
+    
+    // Ensure container exists
+    function getNotificationContainer() {
+      let container = document.getElementById('lptm-notification-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'lptm-notification-container';
+        container.className = 'fixed top-20 right-4 z-[10000] flex flex-col gap-3 max-w-md pointer-events-none';
+        document.body.appendChild(container);
+      }
+      return container;
+    }
+    
+    /**
+     * Create and show a toast notification
+     * @param {string} message - The message to display
+     * @param {string} type - Type of toast: 'success', 'error', 'warning', 'info'
+     * @param {number} duration - How long to show the toast in milliseconds (default: 4000)
+     */
+    function showToast(message, type, duration = 4000) {
+      const container = getNotificationContainer();
+      
+      // Toast configurations
+      const configs = {
+        success: {
+          bgColor: 'bg-success-50 dark:bg-success-500/15',
+          borderColor: 'border-success-200 dark:border-success-500/30',
+          iconColor: 'text-success-600 dark:text-success-500',
+          textColor: 'text-gray-800 dark:text-white/90',
+          icon: `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>`
+        },
+        error: {
+          bgColor: 'bg-error-50 dark:bg-error-500/15',
+          borderColor: 'border-error-200 dark:border-error-500/30',
+          iconColor: 'text-error-600 dark:text-error-500',
+          textColor: 'text-gray-800 dark:text-white/90',
+          icon: `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>`
+        },
+        warning: {
+          bgColor: 'bg-warning-50 dark:bg-warning-500/15',
+          borderColor: 'border-warning-200 dark:border-warning-500/30',
+          iconColor: 'text-warning-600 dark:text-warning-500',
+          textColor: 'text-gray-800 dark:text-white/90',
+          icon: `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+          </svg>`
+        },
+        info: {
+          bgColor: 'bg-brand-50 dark:bg-brand-500/15',
+          borderColor: 'border-brand-200 dark:border-brand-500/30',
+          iconColor: 'text-brand-600 dark:text-brand-500',
+          textColor: 'text-gray-800 dark:text-white/90',
+          icon: `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>`
+        }
+      };
+      
+      const config = configs[type] || configs.info;
+      
+      // Create toast element
+      const toast = document.createElement('div');
+      toast.className = `lptm-toast flex items-start gap-3 rounded-lg border p-4 shadow-lg toast-slide-in ${config.bgColor} ${config.borderColor}`;
+      
+      toast.innerHTML = `
+        <div class="flex-shrink-0 ${config.iconColor}">
+          ${config.icon}
+        </div>
+        <div class="flex-1 text-left">
+          <p class="text-sm font-medium ${config.textColor}">${message}</p>
+        </div>
+        <button class="lptm-toast-close flex-shrink-0 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400 transition-colors">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      `;
+      
+      // Add close button functionality
+      const closeBtn = toast.querySelector('.lptm-toast-close');
+      closeBtn.addEventListener('click', () => removeToast(toast));
+      
+      // Add to container
+      container.appendChild(toast);
+      
+      // Auto remove after duration
+      setTimeout(() => {
+        if (toast.parentElement) {
+          removeToast(toast);
+        }
+      }, duration);
+    }
+    
+    /**
+     * Remove a toast with animation
+     */
+    function removeToast(toast) {
+      toast.classList.remove('toast-slide-in');
+      toast.classList.add('toast-slide-out');
+      setTimeout(() => {
+        if (toast.parentElement) {
+          toast.remove();
+        }
+      }, 300);
+    }
+    
+    /**
+     * Public API - Expose functions to global scope
+     */
+    window.showSuccessToast = function(message, duration) {
+      showToast(message, 'success', duration);
+    };
+    
+    window.showErrorToast = function(message, duration) {
+      showToast(message, 'error', duration);
+    };
+    
+    window.showWarningToast = function(message, duration) {
+      showToast(message, 'warning', duration);
+    };
+    
+    window.showInfoToast = function(message, duration) {
+      showToast(message, 'info', duration);
+    };
+    
+    // Legacy support - map old function names if they exist
+    window.LPTMNotifications = {
+      success: window.showSuccessToast,
+      error: window.showErrorToast,
+      warning: window.showWarningToast,
+      info: window.showInfoToast
+    };
+    
+    console.log('✅ LPTM Global Notifications System loaded');
+  })();
+</script>
+
