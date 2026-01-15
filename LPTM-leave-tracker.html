@@ -2465,6 +2465,7 @@
           document.getElementById('fetchHolidaysConfirmModal').style.display = 'none';
           pendingCountryCodes = [];
         }
+        window.closeFetchHolidaysModal = closeFetchHolidaysModal;
 
         // Confirm and execute holiday fetching
         async function confirmFetchHolidays() {
@@ -2565,6 +2566,7 @@
             showErrorToast('Failed to fetch holidays. Please try again.');
           }
         };
+        window.confirmFetchHolidays = confirmFetchHolidays;
 
         /*=====================*/
         // Download to Outlook (ICS format)
@@ -2978,6 +2980,8 @@
         console.log('   - window.openModal:', typeof window.openModal);
         console.log('   - window.calendarAddEvent:', typeof window.calendarAddEvent);
         console.log('   - window.openTeamManagementModal:', typeof window.openTeamManagementModal);
+        console.log('   - window.closeFetchHolidaysModal:', typeof window.closeFetchHolidaysModal);
+        console.log('   - window.confirmFetchHolidays:', typeof window.confirmFetchHolidays);
       }
     });
 
