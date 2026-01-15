@@ -100,25 +100,25 @@
                 <!-- Filter Section -->
                 <div class="mb-6">
                         <div class="flex flex-wrap items-center gap-2">
-                            <button onclick="filterByCategory('all')" class="inline-flex items-center justify-center gap-1.5 rounded-full bg-gray-600 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-gray-700 transition-all duration-200">
+                            <button onclick="filterByCategory('all')" class="inline-flex items-center justify-center gap-1.5 rounded-full bg-gray-600 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-gray-700 transition-all duration-200">
                                 <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M2 4C2 3.44772 2.44772 3 3 3H13C13.5523 3 14 3.44772 14 4C14 4.55228 13.5523 5 13 5H3C2.44772 5 2 4.55228 2 4ZM2 8C2 7.44772 2.44772 7 3 7H13C13.5523 7 14 7.44772 14 8C14 8.55228 13.5523 9 13 9H3C2.44772 9 2 8.55228 2 8ZM3 11C2.44772 11 2 11.4477 2 12C2 12.5523 2.44772 13 3 13H13C13.5523 13 14 12.5523 14 12C14 11.4477 13.5523 11 13 11H3Z" fill=""/>
                                 </svg>
                                 All
                             </button>
-                            <button onclick="filterByCategory('Drive')" class="inline-flex items-center justify-center gap-1.5 rounded-full bg-emerald-600 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-emerald-700 transition-all duration-200">
+                            <button onclick="filterByCategory('Drive')" class="inline-flex items-center justify-center gap-1.5 rounded-full bg-emerald-600 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-emerald-700 transition-all duration-200">
                                 <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2 4.66667C2 4.29848 2.29848 4 2.66667 4H8L10 6H13.3333C13.7015 6 14 6.29848 14 6.66667V11.3333C14 11.7015 13.7015 12 13.3333 12H2.66667C2.29848 12 2 11.7015 2 11.3333V4.66667Z" fill=""/>
                                 </svg>
                                 Drive
                             </button>
-                            <button onclick="filterByCategory('Apps')" class="inline-flex items-center justify-center gap-1.5 rounded-full bg-rose-600 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-rose-700 transition-all duration-200">
+                            <button onclick="filterByCategory('Apps')" class="inline-flex items-center justify-center gap-1.5 rounded-full bg-rose-600 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-rose-700 transition-all duration-200">
                                 <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3 3H7V7H3V3ZM9 3H13V7H9V3ZM9 9H13V13H9V9ZM3 9H7V13H3V9Z" fill=""/>
                                 </svg>
                                 Apps
                             </button>
-                            <button onclick="filterByCategory('Learning')" class="inline-flex items-center justify-center gap-1.5 rounded-full bg-purple-600 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-purple-700 transition-all duration-200">
+                            <button onclick="filterByCategory('Learning')" class="inline-flex items-center justify-center gap-1.5 rounded-full bg-purple-600 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-purple-700 transition-all duration-200">
                                 <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2 4.66667C2 4.29848 2.29848 4 2.66667 4H4C4.36819 4 4.66667 4.29848 4.66667 4.66667V12.6667C4.66667 13.0349 4.36819 13.3333 4 13.3333H2.66667C2.29848 13.3333 2 13.0349 2 12.6667V4.66667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                                     <path d="M4.66667 4.66667C4.66667 3.19391 5.86058 2 7.33333 2C8.80609 2 10 3.19391 10 4.66667V12.6667C10 13.0349 9.70152 13.3333 9.33333 13.3333H5.33333C4.96514 13.3333 4.66667 13.0349 4.66667 12.6667V4.66667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
@@ -126,13 +126,13 @@
                                 </svg>
                                 Learning
                             </button>
-                            <button onclick="filterByCategory('HR')" class="inline-flex items-center justify-center gap-1.5 rounded-full bg-blue-600 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-blue-700 transition-all duration-200">
+                            <button onclick="filterByCategory('HR')" class="inline-flex items-center justify-center gap-1.5 rounded-full bg-blue-600 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-blue-700 transition-all duration-200">
                                 <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M8 2C6.34315 2 5 3.34315 5 5C5 6.65685 6.34315 8 8 8C9.65685 8 11 6.65685 11 5C11 3.34315 9.65685 2 8 2ZM4 11C2.89543 11 2 11.8954 2 13V14H14V13C14 11.8954 13.1046 11 12 11H4Z" fill=""/>
                                 </svg>
                                 HR
                             </button>
-                            <button onclick="filterByCategory('Dev')" class="inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-600 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-amber-700 transition-all duration-200">
+                            <button onclick="filterByCategory('Dev')" class="inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-600 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-amber-700 transition-all duration-200">
                                 <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5.33333 11.3333L2 8L5.33333 4.66667M10.6667 4.66667L14 8L10.6667 11.3333M9.33333 2.66667L6.66667 13.3333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                                 </svg>
@@ -144,7 +144,7 @@
                 <!-- Active Filters Badge Container -->
                 <div id="activeFiltersContainer" class="hidden mb-6">
                     <div class="flex flex-wrap items-center gap-2">
-                        <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Active Filters:</span>
+                        <span class="!text-base font-medium text-gray-600 dark:text-gray-400">Active Filters:</span>
                         <div id="filterBadges" class="flex flex-wrap gap-2">
                             <!-- Filter badges will be dynamically added here -->
                         </div>
@@ -302,11 +302,6 @@
                                 </div>
 
                                 <div class="w-full px-2.5">
-                                    <input type="url" id="requestCopyLink" placeholder="Copy Link URL" required
-                                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-600 dark:!text-white dark:placeholder:!text-gray-500">
-                                </div>
-
-                                <div class="w-full px-2.5">
                                     <input type="url" id="requestShopLink" placeholder="Shop Link URL" required
                                         class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-600 dark:!text-white dark:placeholder:!text-gray-500">
                                 </div>
@@ -358,34 +353,34 @@
             document.querySelectorAll('button[onclick^="filterByCategory"]').forEach(btn => {
                 const btnCategory = btn.textContent.trim();
                 if (btnCategory === 'All' && category === 'all') {
-                    btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-gray-700 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-gray-800 transition-all duration-200';
+                    btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-gray-700 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-gray-800 transition-all duration-200';
                 } else if (btnCategory === category) {
                     // Keep current category color but make it darker
                     if (category === 'Drive') {
-                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-emerald-700 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-emerald-800 transition-all duration-200';
+                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-emerald-700 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-emerald-800 transition-all duration-200';
                     } else if (category === 'Apps') {
-                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-rose-700 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-rose-800 transition-all duration-200';
+                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-rose-700 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-rose-800 transition-all duration-200';
                     } else if (category === 'Learning') {
-                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-purple-700 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-purple-800 transition-all duration-200';
+                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-purple-700 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-purple-800 transition-all duration-200';
                     } else if (category === 'HR') {
-                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-blue-700 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-blue-800 transition-all duration-200';
+                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-blue-700 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-blue-800 transition-all duration-200';
                     } else if (category === 'Dev') {
-                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-700 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-amber-800 transition-all duration-200';
+                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-700 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-amber-800 transition-all duration-200';
                     }
                 } else {
                     // Reset to original color
                     if (btnCategory === 'All') {
-                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-gray-600 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-gray-700 transition-all duration-200';
+                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-gray-600 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-gray-700 transition-all duration-200';
                     } else if (btnCategory === 'Drive') {
-                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-emerald-600 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-emerald-700 transition-all duration-200';
+                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-emerald-600 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-emerald-700 transition-all duration-200';
                     } else if (btnCategory === 'Apps') {
-                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-rose-600 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-rose-700 transition-all duration-200';
+                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-rose-600 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-rose-700 transition-all duration-200';
                     } else if (btnCategory === 'Learning') {
-                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-purple-600 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-purple-700 transition-all duration-200';
+                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-purple-600 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-purple-700 transition-all duration-200';
                     } else if (btnCategory === 'HR') {
-                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-blue-600 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-blue-700 transition-all duration-200';
+                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-blue-600 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-blue-700 transition-all duration-200';
                     } else if (btnCategory === 'Dev') {
-                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-600 py-1.5 pl-2.5 pr-3 text-sm font-medium text-white hover:bg-amber-700 transition-all duration-200';
+                        btn.className = 'inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-600 py-1.5 pl-2.5 pr-3 !text-base font-medium text-white hover:bg-amber-700 transition-all duration-200';
                     }
                 }
             });
@@ -444,7 +439,7 @@
             if (badges.length > 0) {
                 container.classList.remove('hidden');
                 badgesContainer.innerHTML = badges.map(badge => `
-                    <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 border border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800">
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 !text-base font-medium text-blue-800 border border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800">
                         ${badge.label}
                         <button onclick="removeFilter('${badge.type}')" class="hover:bg-blue-200 dark:hover:bg-blue-800 rounded-full p-0.5 transition-colors">
                             <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -664,15 +659,6 @@
                     </td>
                     <td class="py-3 whitespace-nowrap">
                         <div class="flex items-center gap-2">
-                            <button onclick="copyItem('${item.copyLink}')" class="group relative rounded-lg bg-blue-100 p-2 !text-blue-600 hover:bg-blue-200 transition-all duration-200 ease-in-out hover:scale-105">
-                                <span class="invisible absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-blue-600 px-2 py-1 !text-lg !text-white opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
-                                    Copy to clipboard
-                                    <span class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-blue-600"></span>
-                                </span>
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
-                                </svg>
-                            </button>
                             <a href="${item.shopLink}" target="_blank" class="group relative rounded-lg bg-green-100 p-2 !text-green-600 hover:bg-green-200 transition-all duration-200 ease-in-out hover:scale-105">
                                 <span class="invisible absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-green-600 px-2 py-1 !text-lg !text-white opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
                                     Order the marketplace request
@@ -788,17 +774,6 @@
             }
         }
 
-        // Action functions
-        function copyItem(link) {
-            const button = event.currentTarget;
-            button.classList.add('animate-pulse');
-            navigator.clipboard.writeText(link).then(() => {
-                setTimeout(() => {
-                    button.classList.remove('animate-pulse');
-                }, 300);
-            });
-        }
-
         // Add loading state
         function showLoadingState() {
             const tableBody = document.getElementById('tableBody');
@@ -908,7 +883,6 @@
                 description: document.getElementById('requestDescription').value,
                 category: document.getElementById('requestCategory').value,
                 region: document.getElementById('requestRegion').value,
-                copyLink: document.getElementById('requestCopyLink').value,
                 shopLink: document.getElementById('requestShopLink').value
             };
 
@@ -957,9 +931,8 @@
                 formData.append('file', blob, attachmentName);
 
                 // Upload to Confluence (create or update)
-                const uploadUrl = attachmentId 
-                    ? `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`
-                    : `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment`;
+                // Note: /data is only for reading, not for writing
+                const uploadUrl = `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment${attachmentId ? `/${attachmentId}` : ''}`;
 
                 const uploadResponse = await fetch(uploadUrl, {
                     method: 'POST',
