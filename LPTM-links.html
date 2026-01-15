@@ -669,38 +669,34 @@
             }
 
             try {
-                // First, check if the attachment exists
-                let attachmentId = null;
+                // Check if the attachment exists
+                const attachmentsResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment?filename=useful_links.json');
+                const attachmentsData = await attachmentsResponse.json();
+                
+                let attachmentId;
                 let existingLinks = { links: [], metadata: { lastUpdated: '', totalLinks: 0, categories: {} } };
-
-                try {
-                    const attachmentsResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment?filename=useful_links.json');
+                
+                if (attachmentsData.results && attachmentsData.results.length > 0) {
+                    // File exists, get its content
+                    attachmentId = attachmentsData.results[0].id;
+                    console.log('Found existing attachment with ID:', attachmentId);
                     
-                    if (attachmentsResponse.ok) {
-                        const attachmentsData = await attachmentsResponse.json();
-                        
-                        if (attachmentsData.results && attachmentsData.results.length > 0) {
-                            // If useful_links.json exists, get its content
-                            attachmentId = attachmentsData.results[0].id;
-                            
-                            try {
-                                const linksResponse = await fetch(`https://cedt-confluence.net/confluence/download/attachments/2740868871/useful_links.json?api=v2`);
-                                if (linksResponse.ok) {
-                                    const data = await linksResponse.json();
-                                    // Handle both formats: { links: [] } or direct array
-                                    if (data.links && Array.isArray(data.links)) {
-                                        existingLinks = data;
-                                    } else if (Array.isArray(data)) {
-                                        existingLinks.links = data;
-                                    }
-                                }
-                            } catch (err) {
-                                console.warn('Could not fetch existing links, starting fresh:', err);
+                    try {
+                        const linksResponse = await fetch(`https://cedt-confluence.net/confluence/download/attachments/2740868871/useful_links.json?api=v2`);
+                        if (linksResponse.ok) {
+                            const data = await linksResponse.json();
+                            // Handle both formats: { links: [] } or direct array
+                            if (data.links && Array.isArray(data.links)) {
+                                existingLinks = data;
+                            } else if (Array.isArray(data)) {
+                                existingLinks.links = data;
                             }
                         }
+                    } catch (err) {
+                        console.warn('Could not fetch existing links, starting fresh:', err);
                     }
-                } catch (err) {
-                    console.info('Attachment does not exist, will create new one:', err);
+                } else {
+                    console.log('No existing attachment found, will create new one');
                 }
 
                 // Add new link to the beginning
@@ -719,18 +715,17 @@
                     }, {})
                 };
 
-                // Create or update the attachment
+                // Prepare the form data
                 const formData = new FormData();
                 const blob = new Blob([JSON.stringify(existingLinks, null, 2)], { type: 'application/json' });
                 formData.append('file', blob, 'useful_links.json');
 
-                // If attachmentId exists, update; otherwise, create new
-                const uploadUrl = attachmentId 
-                    ? `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment/${attachmentId}/data`
-                    : `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment`;
-
+                // Use the correct endpoint - always POST to base endpoint
+                // If attachmentId exists, it will update; otherwise it creates new
+                const uploadUrl = `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment${attachmentId ? `/${attachmentId}` : ''}`;
+                
                 console.log('Uploading to:', uploadUrl);
-                console.log('Attachment ID:', attachmentId || 'Creating new');
+                console.log('Method: POST');
 
                 const response = await fetch(uploadUrl, {
                     method: 'POST',
