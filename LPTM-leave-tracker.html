@@ -1482,7 +1482,7 @@
     <!-- END TEAM MANAGEMENT MODAL -->
 
     <!-- BEGIN ADD/EDIT TEAM MEMBER MODAL -->
-    <div class="fixed inset-0 items-center justify-center hidden p-5 overflow-y-auto modal z-[99999]"
+    <div class="fixed inset-0 items-center justify-center hidden p-5 overflow-y-auto modal z-[9999]"
       id="teamMemberModal">
       <div class="modal-close-member-btn fixed inset-0 h-full w-full bg-gray-900/70 backdrop-blur-[32px]"></div>
       <div class="modal-dialog relative flex w-full max-w-[500px] flex-col overflow-y-auto rounded-3xl p-6 lg:p-8"
@@ -1550,7 +1550,7 @@
     <!-- END ADD/EDIT TEAM MEMBER MODAL -->
 
     <!-- BEGIN DELETE CONFIRMATION MODAL -->
-    <div class="fixed inset-0 items-center justify-center hidden p-5 overflow-y-auto modal z-[99999]"
+    <div class="fixed inset-0 items-center justify-center hidden p-5 overflow-y-auto modal z-[9999]"
       id="deleteConfirmationModal">
       <div class="modal-close-delete-btn fixed inset-0 h-full w-full bg-gray-900/70 backdrop-blur-[32px]"></div>
       <div class="modal-dialog relative flex w-full max-w-[450px] flex-col overflow-y-auto rounded-3xl p-6 lg:p-8"
@@ -1608,7 +1608,7 @@
     <!-- END DELETE CONFIRMATION MODAL -->
 
     <!-- BEGIN FETCH HOLIDAYS CONFIRMATION MODAL -->
-    <div class="fixed inset-0 items-center justify-center hidden p-5 overflow-y-auto modal z-[99999]"
+    <div class="fixed inset-0 items-center justify-center hidden p-5 overflow-y-auto modal z-[9999]"
       id="fetchHolidaysConfirmModal">
       <div class="modal-close-fetch-btn fixed inset-0 h-full w-full bg-gray-900/70 backdrop-blur-[32px]"></div>
       <div class="modal-dialog relative flex w-full max-w-[450px] flex-col overflow-y-auto rounded-3xl p-6 lg:p-8"
@@ -1673,6 +1673,7 @@
     let calendar = null;
     let leaveTrendsChart = null;
     let leaveBreakdownChart = null;
+    let pendingCountryCodes = [];
     let teamSummaryChart = null;
 
     // Team Management Functions (Global scope for onclick handlers)
@@ -1725,7 +1726,7 @@
           return [];
         }
       } catch (error) {
-        console.error('Error fetching calendar events:', error);
+        console.warn('Calendar events file not found or error fetching (this is normal for first-time setup):', error.message);
         return [];
       }
     }
@@ -2181,7 +2182,7 @@
     function showDeletionLoadingOverlay() {
       const overlay = document.createElement('div');
       overlay.id = 'deletion-loading-overlay';
-      overlay.className = 'fixed inset-0 z-[99999] flex items-center justify-center bg-gray-900/70 backdrop-blur-sm';
+      overlay.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-gray-900/70 backdrop-blur-sm';
       overlay.innerHTML = `
           <div class="rounded-2xl bg-white dark:bg-gray-800 p-6 shadow-xl" style="background-color: var(--card-bg, white);">
             <div class="text-center">
@@ -2258,11 +2259,13 @@
         const openModal = () => {
           document.getElementById("eventModal").style.display = "flex";
         };
+        window.openModal = openModal;
 
         const closeModal = () => {
           document.getElementById("eventModal").style.display = "none";
           resetModalFields();
         };
+        window.closeModal = closeModal;
 
         // Close modal when clicking outside of it
         window.onclick = function (event) {
@@ -2290,6 +2293,7 @@
           getModalEndDateEl.value = endDateStr;
           document.getElementById('event-team-member').value = "";
         };
+        window.calendarSelect = calendarSelect;
 
         /*=====================*/
         // Calendar AddEvent fn.
@@ -2317,6 +2321,7 @@
           document.getElementById('event-team-member').value = "";
           document.getElementById('event-delegate').value = "";
         };
+        window.calendarAddEvent = calendarAddEvent;
 
         /*=====================*/
         // Calender Event Function
@@ -2362,12 +2367,11 @@
             openModal();
           }
         };
+        window.calendarEventClick = calendarEventClick;
 
         /*=====================*/
         // Fetch Public Holidays from API
         /*=====================*/
-        let pendingCountryCodes = [];
-
         const fetchPublicHolidays = async () => {
           if (!calendar) return;
 
@@ -2440,12 +2444,14 @@
           document.getElementById('fetch-countries-list').textContent = countryCodes.join(', ');
           document.getElementById('fetchHolidaysConfirmModal').style.display = 'flex';
         };
+        window.fetchPublicHolidays = fetchPublicHolidays;
 
         // Close fetch holidays modal
         function closeFetchHolidaysModal() {
           document.getElementById('fetchHolidaysConfirmModal').style.display = 'none';
           pendingCountryCodes = [];
         }
+        window.closeFetchHolidaysModal = closeFetchHolidaysModal;
 
         // Confirm and execute holiday fetching
         async function confirmFetchHolidays() {
@@ -2546,6 +2552,7 @@
             showErrorToast('Failed to fetch holidays. Please try again.');
           }
         };
+        window.confirmFetchHolidays = confirmFetchHolidays;
 
         /*=====================*/
         // Download to Outlook (ICS format)
@@ -2608,6 +2615,7 @@
           // Show success message
           showSuccessToast(`Calendar downloaded successfully (${events.length} events)`);
         };
+        window.downloadOutlookCalendar = downloadOutlookCalendar;
 
         /*=====================*/
         // Active Calender
@@ -2766,6 +2774,7 @@
             getModalIfCheckedRadioBtnEl.checked = false;
           }
         }
+        window.resetModalFields = resetModalFields;
 
         document
           .getElementById("eventModal")
@@ -3466,7 +3475,10 @@
               </td>
             </tr>
           `;
-        document.getElementById('recent-leaves-count').textContent = '0';
+        const countElement = document.getElementById('recent-leaves-count');
+        if (countElement) {
+          countElement.textContent = '0';
+        }
         return;
       }
 
@@ -3901,19 +3913,21 @@
     window.loadTeamMembers = loadTeamMembers;
     window.updateTeamMembersTable = updateTeamMembersTable;
 
-    // Holiday Management Functions
-    window.closeFetchHolidaysModal = closeFetchHolidaysModal;
-    window.confirmFetchHolidays = confirmFetchHolidays;
-    window.downloadOutlookCalendar = downloadOutlookCalendar;
-    window.fetchPublicHolidays = fetchPublicHolidays;
+    // Holiday Management Functions (exposed inside DOMContentLoaded)
+    // window.closeFetchHolidaysModal - exposed at definition
+    // window.confirmFetchHolidays - exposed at definition
+    // window.downloadOutlookCalendar - exposed at definition
+    // window.fetchPublicHolidays - exposed at definition
 
-    // Calendar Functions
-    window.openModal = openModal;
-    window.closeModal = closeModal;
-    window.calendarSelect = calendarSelect;
-    window.calendarAddEvent = calendarAddEvent;
-    window.calendarEventClick = calendarEventClick;
-    window.resetModalFields = resetModalFields;
+    // Calendar Functions (exposed inside DOMContentLoaded)
+    // window.openModal - exposed at definition
+    // window.closeModal - exposed at definition
+    // window.calendarSelect - exposed at definition
+    // window.calendarAddEvent - exposed at definition
+    // window.calendarEventClick - exposed at definition
+    // window.resetModalFields - exposed at definition
+
+    // These are exposed outside DOMContentLoaded
     window.fetchCalendarEvents = fetchCalendarEvents;
     window.loadCalendarEvents = loadCalendarEvents;
     window.saveCalendarEvents = saveCalendarEvents;
