@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Useful Links</title>
+
+    <!-- 
+      CONFLUENCE MACRO REQUIRED: Include global-notifications.html as a macro
+      This provides showSuccessToast(), showErrorToast(), showWarningToast(), showInfoToast()
+    -->
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -657,6 +663,11 @@
             document.getElementById('addLinkForm').reset();
             closeAddLinkModal();
 
+            // Show info toast that we're saving
+            if (typeof showInfoToast === 'function') {
+                showInfoToast('Saving link...', 2000);
+            }
+
             try {
                 // First, check if the attachment exists
                 let attachmentId = null;
@@ -684,12 +695,12 @@
                                     }
                                 }
                             } catch (err) {
-                                console.log('Could not fetch existing links, starting fresh:', err);
+                                console.warn('Could not fetch existing links, starting fresh:', err);
                             }
                         }
                     }
                 } catch (err) {
-                    console.log('Attachment does not exist, will create new one:', err);
+                    console.info('Attachment does not exist, will create new one:', err);
                 }
 
                 // Add new link to the beginning
@@ -718,6 +729,9 @@
                     ? `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment/${attachmentId}/data`
                     : `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment`;
 
+                console.log('Uploading to:', uploadUrl);
+                console.log('Attachment ID:', attachmentId || 'Creating new');
+
                 const response = await fetch(uploadUrl, {
                     method: 'POST',
                     headers: {
@@ -728,18 +742,33 @@
 
                 if (!response.ok) {
                     const errorText = await response.text();
-                    throw new Error(`Failed to save link: ${response.status} ${response.statusText} - ${errorText}`);
+                    console.error('Upload failed:', errorText);
+                    throw new Error(`Failed to save link: ${response.status} ${response.statusText}`);
                 }
 
-                console.log('Link saved successfully!');
+                const result = await response.json();
+                console.log('Link saved successfully!', result);
 
                 // Add to local data and refresh
                 tableData.unshift(newLink);
                 currentPage = 1;
                 filterLinks();
+
+                // Show success toast
+                if (typeof showSuccessToast === 'function') {
+                    showSuccessToast(`Link "${newLink.title}" added successfully!`);
+                } else {
+                    console.log('✅ Link added successfully!');
+                }
             } catch (error) {
                 console.error('Error saving link:', error);
-                alert('Failed to save link. Please check the console for details and try again.');
+                
+                // Show error toast
+                if (typeof showErrorToast === 'function') {
+                    showErrorToast(`Failed to save link: ${error.message}`);
+                } else {
+                    alert(`Failed to save link: ${error.message}\n\nPlease check the console for details.`);
+                }
             }
         }
 
