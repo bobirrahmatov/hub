@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources - LPTM Hub</title>
+
+    <!-- 
+      CONFLUENCE MACRO REQUIRED: Include global-notifications.html as a macro
+      This provides showSuccessToast(), showErrorToast(), showWarningToast(), showInfoToast()
+    -->
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .dark ::-webkit-scrollbar-track {
+            background: #374151;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #6b7280;
+        }
+
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+
+<body class="mx-auto max-w-screen-2xl bg-gray-50 dark:bg-gray-950">
+    <!-- Main Container -->
+    <div class="px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Hero Section -->
+        <div class="text-center py-12 mb-8 animate-fade-in" style="animation-delay: 0.1s;">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white">
+                LPTM Resources Hub
+            </h1>
+        </div>
+
+        <!-- Main Content Area -->
+        <section class="py-8">
+            <div class="px-6">
+                <!-- Introduction -->
+                <div class="text-center mb-16 animate-fade-in" style="animation-delay: 0.2s;">
+                    <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
+                        Welcome to the LPTM Resources Hub. Explore our comprehensive collection of tools and resources available in the Confluence sidebar to support your daily workflows.
+                    </p>
+                </div>
+
+                <!-- Resources Grid -->
+                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 animate-fade-in" style="animation-delay: 0.3s;">
+
+                    <!-- Useful Links Card -->
+                    <div class="relative group overflow-hidden rounded-2xl border border-gray-200 hover:border-blue-500 hover:ring-2 hover:ring-blue-500/20 bg-white p-8 flex flex-col transition-all duration-300 cursor-pointer dark:border-gray-700 dark:bg-gray-800">
+                        <div aria-hidden="true" class="inset-0 absolute aspect-video border rounded-full -translate-y-1/2 group-hover:-translate-y-1/4 duration-300 bg-gradient-to-b from-blue-500 to-white blur-2xl opacity-25"></div>
+                        <div class="relative flex flex-col flex-1">
+                            <div class="flex items-center justify-center w-16 h-16 rounded-full border border-gray-200 bg-blue-50 mx-auto mb-6 dark:border-gray-600 dark:bg-blue-900/30">
+                                <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white text-center mb-3">Useful Links</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-center text-sm leading-relaxed">
+                                Access a curated collection of essential links without cluttering your browser bookmarks. Find frequently used external tools, internal portals, and support resources all in one place.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Marketplace Requests Card -->
+                    <div class="relative group overflow-hidden rounded-2xl border border-gray-200 hover:border-blue-500 hover:ring-2 hover:ring-blue-500/20 bg-white p-8 flex flex-col transition-all duration-300 cursor-pointer dark:border-gray-700 dark:bg-gray-800">
+                        <div aria-hidden="true" class="inset-0 absolute aspect-video border rounded-full -translate-y-1/2 group-hover:-translate-y-1/4 duration-300 bg-gradient-to-b from-green-500 to-white blur-2xl opacity-25"></div>
+                        <div class="relative flex flex-col flex-1">
+                            <div class="flex items-center justify-center w-16 h-16 rounded-full border border-gray-200 bg-green-50 mx-auto mb-6 dark:border-gray-600 dark:bg-green-900/30">
+                                <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white text-center mb-3">Marketplace Requests</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-center text-sm leading-relaxed">
+                                Streamline your workflow with automated request forms for loan processing, credit approvals, and document retrieval. Smart forms that reduce errors and speed up processing.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Holiday Trackers Card -->
+                    <div class="relative group overflow-hidden rounded-2xl border border-gray-200 hover:border-blue-500 hover:ring-2 hover:ring-blue-500/20 bg-white p-8 flex flex-col transition-all duration-300 cursor-pointer dark:border-gray-700 dark:bg-gray-800">
+                        <div aria-hidden="true" class="inset-0 absolute aspect-video border rounded-full -translate-y-1/2 group-hover:-translate-y-1/4 duration-300 bg-gradient-to-b from-indigo-500 to-white blur-2xl opacity-25"></div>
+                        <div class="relative flex flex-col flex-1">
+                            <div class="flex items-center justify-center w-16 h-16 rounded-full border border-gray-200 bg-indigo-50 mx-auto mb-6 dark:border-gray-600 dark:bg-indigo-900/30">
+                                <svg class="w-8 h-8 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white text-center mb-3">Holiday Trackers</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-center text-sm leading-relaxed">
+                                Manage team leave and track holiday schedules across all regions. View team availability, submit leave requests, and sync with public holidays for seamless coordination.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Chart Creators Card -->
+                    <div class="relative group overflow-hidden rounded-2xl border border-gray-200 hover:border-blue-500 hover:ring-2 hover:ring-blue-500/20 bg-white p-8 flex flex-col transition-all duration-300 cursor-pointer dark:border-gray-700 dark:bg-gray-800">
+                        <div aria-hidden="true" class="inset-0 absolute aspect-video border rounded-full -translate-y-1/2 group-hover:-translate-y-1/4 duration-300 bg-gradient-to-b from-purple-500 to-white blur-2xl opacity-25"></div>
+                        <div class="relative flex flex-col flex-1">
+                            <div class="flex items-center justify-center w-16 h-16 rounded-full border border-gray-200 bg-purple-50 mx-auto mb-6 dark:border-gray-600 dark:bg-purple-900/30">
+                                <svg class="w-8 h-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white text-center mb-3">Chart Creators</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-center text-sm leading-relaxed">
+                                Transform raw data into compelling visual stories. Create customized dashboards, generate professional reports, and build presentations with real-time data visualization.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Document Libraries Card -->
+                    <div class="relative group overflow-hidden rounded-2xl border border-gray-200 hover:border-blue-500 hover:ring-2 hover:ring-blue-500/20 bg-white p-8 flex flex-col transition-all duration-300 cursor-pointer dark:border-gray-700 dark:bg-gray-800">
+                        <div aria-hidden="true" class="inset-0 absolute aspect-video border rounded-full -translate-y-1/2 group-hover:-translate-y-1/4 duration-300 bg-gradient-to-b from-orange-500 to-white blur-2xl opacity-25"></div>
+                        <div class="relative flex flex-col flex-1">
+                            <div class="flex items-center justify-center w-16 h-16 rounded-full border border-gray-200 bg-orange-50 mx-auto mb-6 dark:border-gray-600 dark:bg-orange-900/30">
+                                <svg class="w-8 h-8 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white text-center mb-3">Document Libraries</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-center text-sm leading-relaxed">
+                                Access comprehensive collections of templates, policies, procedures, and guides. Pre-built templates for common workflows and detailed documentation—all organized and searchable.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Learning Videos Card -->
+                    <div class="relative group overflow-hidden rounded-2xl border border-gray-200 hover:border-blue-500 hover:ring-2 hover:ring-blue-500/20 bg-white p-8 flex flex-col transition-all duration-300 cursor-pointer dark:border-gray-700 dark:bg-gray-800">
+                        <div aria-hidden="true" class="inset-0 absolute aspect-video border rounded-full -translate-y-1/2 group-hover:-translate-y-1/4 duration-300 bg-gradient-to-b from-pink-500 to-white blur-2xl opacity-25"></div>
+                        <div class="relative flex flex-col flex-1">
+                            <div class="flex items-center justify-center w-16 h-16 rounded-full border border-gray-200 bg-pink-50 mx-auto mb-6 dark:border-gray-600 dark:bg-pink-900/30">
+                                <svg class="w-8 h-8 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white text-center mb-3">Learning Videos</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-center text-sm leading-relaxed">
+                                Build your expertise with on-demand video tutorials and training content. Watch process walkthroughs, system demonstrations, and best practice guides at your own pace.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Training Programs Card -->
+                    <div class="relative group overflow-hidden rounded-2xl border border-gray-200 hover:border-blue-500 hover:ring-2 hover:ring-blue-500/20 bg-white p-8 flex flex-col transition-all duration-300 cursor-pointer dark:border-gray-700 dark:bg-gray-800">
+                        <div aria-hidden="true" class="inset-0 absolute aspect-video border rounded-full -translate-y-1/2 group-hover:-translate-y-1/4 duration-300 bg-gradient-to-b from-teal-500 to-white blur-2xl opacity-25"></div>
+                        <div class="relative flex flex-col flex-1">
+                            <div class="flex items-center justify-center w-16 h-16 rounded-full border border-gray-200 bg-teal-50 mx-auto mb-6 dark:border-gray-600 dark:bg-teal-900/30">
+                                <svg class="w-8 h-8 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white text-center mb-3">Training Programs</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-center text-sm leading-relaxed">
+                                Register for live training sessions, workshops, and certification programs. Browse upcoming events and sign up for instructor-led training covering LPTM fundamentals and advanced topics.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+</body>
+
+</html>
+
