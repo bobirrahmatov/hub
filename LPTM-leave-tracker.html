@@ -1895,9 +1895,15 @@
 
     // Open team management modal
     function openTeamManagementModal() {
-      document.getElementById("teamManagementModal").style.display = "flex";
-      loadTeamMembers();
+      const modal = document.getElementById("teamManagementModal");
+      if (modal) {
+        modal.style.display = "flex";
+        loadTeamMembers();
+      } else {
+        console.error("Team Management modal not found");
+      }
     }
+    window.openTeamManagementModal = openTeamManagementModal;
 
     // Close team management modal
     function closeTeamManagementModal() {
@@ -2257,13 +2263,23 @@
         // Modal Functions
         /*=====================*/
         const openModal = () => {
-          document.getElementById("eventModal").style.display = "flex";
+          const modal = document.getElementById("eventModal");
+          if (modal) {
+            modal.style.display = "flex";
+          } else {
+            console.error("Event modal not found");
+          }
         };
+        window.openModal = openModal;
 
         const closeModal = () => {
-          document.getElementById("eventModal").style.display = "none";
-          resetModalFields();
+          const modal = document.getElementById("eventModal");
+          if (modal) {
+            modal.style.display = "none";
+            resetModalFields();
+          }
         };
+        window.closeModal = closeModal;
 
         // Close modal when clicking outside of it
         window.onclick = function (event) {
@@ -2291,6 +2307,7 @@
           getModalEndDateEl.value = endDateStr;
           document.getElementById('event-team-member').value = "";
         };
+        window.calendarSelect = calendarSelect;
 
         /*=====================*/
         // Calendar AddEvent fn.
@@ -2318,6 +2335,7 @@
           document.getElementById('event-team-member').value = "";
           document.getElementById('event-delegate').value = "";
         };
+        window.calendarAddEvent = calendarAddEvent;
 
         /*=====================*/
         // Calender Event Function
@@ -2363,6 +2381,7 @@
             openModal();
           }
         };
+        window.calendarEventClick = calendarEventClick;
 
         /*=====================*/
         // Fetch Public Holidays from API
@@ -2439,6 +2458,7 @@
           document.getElementById('fetch-countries-list').textContent = countryCodes.join(', ');
           document.getElementById('fetchHolidaysConfirmModal').style.display = 'flex';
         };
+        window.fetchPublicHolidays = fetchPublicHolidays;
 
         // Close fetch holidays modal
         function closeFetchHolidaysModal() {
@@ -2607,6 +2627,7 @@
           // Show success message
           showSuccessToast(`Calendar downloaded successfully (${events.length} events)`);
         };
+        window.downloadOutlookCalendar = downloadOutlookCalendar;
 
         /*=====================*/
         // Active Calender
@@ -2952,6 +2973,11 @@
             initializeAnalytics();
           }
         }, 500);
+
+        console.log('✅ Calendar and all handlers initialized and exposed to global scope');
+        console.log('   - window.openModal:', typeof window.openModal);
+        console.log('   - window.calendarAddEvent:', typeof window.calendarAddEvent);
+        console.log('   - window.openTeamManagementModal:', typeof window.openTeamManagementModal);
       }
     });
 
