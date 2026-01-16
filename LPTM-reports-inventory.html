@@ -117,18 +117,38 @@
       }
       
       .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
+        width: 8px !important;
+        height: 8px !important;
+        display: block !important;
       }
       .custom-scrollbar::-webkit-scrollbar-track {
-        border-radius: 9999px;
+        border-radius: 9999px !important;
+        background-color: #f3f4f6 !important;
       }
       .custom-scrollbar::-webkit-scrollbar-thumb {
-        border-radius: 9999px;
-        background-color: #e4e7ec;
+        border-radius: 9999px !important;
+        background-color: #9ca3af !important;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: #6b7280 !important;
+      }
+      .dark .custom-scrollbar::-webkit-scrollbar-track {
+        background-color: #1f2937 !important;
       }
       .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #344054;
+        background-color: #4b5563 !important;
+      }
+      .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: #6b7280 !important;
+      }
+      
+      /* Force scrollbar visibility */
+      .custom-scrollbar {
+        scrollbar-width: thin !important;
+        scrollbar-color: #9ca3af #f3f4f6 !important;
+      }
+      .dark .custom-scrollbar {
+        scrollbar-color: #4b5563 #1f2937 !important;
       }
       
       /* Dark mode */
@@ -475,27 +495,27 @@
                 </div>
               </div>
               
-              <div class="custom-scrollbar overflow-x-auto" id="tableContent">
+              <div class="custom-scrollbar overflow-x-auto" id="tableContent" style="overflow-x: auto !important; overflow-y: hidden !important;">
                 <table class="min-w-full" id="reportsTable">
                   <thead>
                     <tr class="bg-gray-50 dark:bg-gray-800/50">
-                      <th class="px-6 py-4 text-left !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">ID</th>
-                      <th class="px-6 py-4 text-left !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Report Name</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Description</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Report Type</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Category</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Sub Category</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Critical Report</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Report Region</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Frequency</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Prepared By</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Prepare Region</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Active Status</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Time (Avg Per Run)</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Include PII?</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">EUC</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Audience</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Actions</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">ID</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Report Name</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Description</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Report Type</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Category</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Sub Category</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Critical Report</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Report Region</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Frequency</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Prepared By</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Prepare Region</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Active Status</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Time (Avg Per Run)</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Include PII?</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">EUC</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Audience</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Actions</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="reportsTableBody">
