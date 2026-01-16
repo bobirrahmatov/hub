@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership Team - LPTM Hub</title>
+
+    <!-- 
+      CONFLUENCE MACRO REQUIRED: Include global-notifications.html as a macro
+      This provides showSuccessToast(), showErrorToast(), showWarningToast(), showInfoToast()
+    -->
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .dark ::-webkit-scrollbar-track {
+            background: #374151;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #6b7280;
+        }
+
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Image wrapper styling */
+        .image-wrapper {
+            position: relative;
+            width: 140px;
+            height: 180px;
+            overflow: hidden;
+            border-radius: 12px 0 0 12px;
+            flex-shrink: 0;
+        }
+
+        .image-wrapper img {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            inset: 0;
+            object-fit: cover;
+            color: transparent;
+        }
+
+        /* People card styling */
+        .people-card {
+            transition: all 0.3s ease;
+            background: transparent;
+            border: none;
+            overflow: hidden;
+        }
+
+        .card-content {
+            display: flex;
+            align-items: stretch;
+            min-height: 180px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+        }
+
+        .card-text-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 1.25rem 1.5rem;
+            background: #ffffff;
+            border-radius: 0 12px 12px 0;
+            transition: all 0.3s ease;
+        }
+
+        .dark .card-text-area {
+            background: #1f2937;
+        }
+
+        /* Hover effect - only on right side */
+        .people-card:hover .card-text-area {
+            background: #3b82f6;
+            transform: scale(1.02);
+        }
+
+        .dark .people-card:hover .card-text-area {
+            background: #2563eb;
+        }
+
+        .people-card:hover .people-name,
+        .people-card:hover .people-title,
+        .people-card:hover .people-location {
+            color: #ffffff !important;
+        }
+
+        .people-name {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+            color: #111827;
+            transition: color 0.3s ease;
+        }
+
+        .dark .people-name {
+            color: #f9fafb;
+        }
+
+        .people-title {
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: #4b5563;
+            margin-bottom: 0.25rem;
+            transition: color 0.3s ease;
+        }
+
+        .dark .people-title {
+            color: #d1d5db;
+        }
+
+        .people-location {
+            font-size: 0.8rem;
+            color: #6b7280;
+            transition: color 0.3s ease;
+        }
+
+        .dark .people-location {
+            color: #9ca3af;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .image-wrapper {
+                width: 120px;
+                height: 160px;
+            }
+            .card-content {
+                min-height: 160px;
+            }
+            .card-text-area {
+                padding: 1rem 1.25rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .card-content {
+                flex-direction: column;
+                min-height: auto;
+            }
+            .image-wrapper {
+                width: 100%;
+                height: 200px;
+                border-radius: 12px 12px 0 0;
+            }
+            .card-text-area {
+                padding: 1.25rem;
+                border-radius: 0 0 12px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body class="mx-auto max-w-screen-2xl bg-gray-50 dark:bg-gray-950">
+    <!-- Main Container -->
+    <div class="px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Hero Section -->
+        <div class="text-center py-8 mb-8 animate-fade-in" style="animation-delay: 0.1s;">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4">
+                LPTM Leadership Team
+            </h1>
+            <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
+                Meet the dedicated leaders driving innovation and excellence in our LPTM organization.
+            </p>
+        </div>
+
+        <!-- Leadership Section -->
+        <section class="py-4">
+            <div class="px-6">
+
+                <!-- Executive Leadership -->
+                <div class="mb-12 animate-fade-in" style="animation-delay: 0.2s;">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">Executive Management Team</h2>
+
+                    <!-- People Grid -->
+                    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
+                        <!-- Person Card 1 -->
+                        <div class="people-card rounded-2xl cursor-pointer" role="button" tabindex="0">
+                            <div class="card-content">
+                                <div class="image-wrapper">
+                                    <img 
+                                        src="YOUR_CONFLUENCE_ATTACHMENT_URL_HERE" 
+                                        alt="Jane Doe"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="card-text-area">
+                                    <h3 class="people-name">Jane Doe</h3>
+                                    <p class="people-title">
+                                        Chief Executive Officer
+                                    </p>
+                                    <p class="people-location">
+                                        New York, NY
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person Card 2 -->
+                        <div class="people-card rounded-2xl cursor-pointer" role="button" tabindex="0">
+                            <div class="card-content">
+                                <div class="image-wrapper">
+                                    <img 
+                                        src="YOUR_CONFLUENCE_ATTACHMENT_URL_HERE" 
+                                        alt="John Smith"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="card-text-area">
+                                    <h3 class="people-name">John Smith</h3>
+                                    <p class="people-title">
+                                        Chief Operating Officer
+                                    </p>
+                                    <p class="people-location">
+                                        London, UK
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person Card 3 -->
+                        <div class="people-card rounded-2xl cursor-pointer" role="button" tabindex="0">
+                            <div class="card-content">
+                                <div class="image-wrapper">
+                                    <img 
+                                        src="YOUR_CONFLUENCE_ATTACHMENT_URL_HERE" 
+                                        alt="Sarah Johnson"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="card-text-area">
+                                    <h3 class="people-name">Sarah Johnson</h3>
+                                    <p class="people-title">
+                                        Chief Technology Officer
+                                    </p>
+                                    <p class="people-location">
+                                        San Francisco, CA
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person Card 4 -->
+                        <div class="people-card rounded-2xl cursor-pointer" role="button" tabindex="0">
+                            <div class="card-content">
+                                <div class="image-wrapper">
+                                    <img 
+                                        src="YOUR_CONFLUENCE_ATTACHMENT_URL_HERE" 
+                                        alt="Michael Chen"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="card-text-area">
+                                    <h3 class="people-name">Michael Chen</h3>
+                                    <p class="people-title">
+                                        Chief Financial Officer
+                                    </p>
+                                    <p class="people-location">
+                                        Hong Kong
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person Card 5 -->
+                        <div class="people-card rounded-2xl cursor-pointer" role="button" tabindex="0">
+                            <div class="card-content">
+                                <div class="image-wrapper">
+                                    <img 
+                                        src="YOUR_CONFLUENCE_ATTACHMENT_URL_HERE" 
+                                        alt="Emily Davis"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="card-text-area">
+                                    <h3 class="people-name">Emily Davis</h3>
+                                    <p class="people-title">
+                                        Chief Human Resources Officer
+                                    </p>
+                                    <p class="people-location">
+                                        Chicago, IL
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person Card 6 -->
+                        <div class="people-card rounded-2xl cursor-pointer" role="button" tabindex="0">
+                            <div class="card-content">
+                                <div class="image-wrapper">
+                                    <img 
+                                        src="YOUR_CONFLUENCE_ATTACHMENT_URL_HERE" 
+                                        alt="Robert Martinez"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="card-text-area">
+                                    <h3 class="people-name">Robert Martinez</h3>
+                                    <p class="people-title">
+                                        Chief Risk Officer
+                                    </p>
+                                    <p class="people-location">
+                                        Singapore
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person Card 7 -->
+                        <div class="people-card rounded-2xl cursor-pointer" role="button" tabindex="0">
+                            <div class="card-content">
+                                <div class="image-wrapper">
+                                    <img 
+                                        src="YOUR_CONFLUENCE_ATTACHMENT_URL_HERE" 
+                                        alt="Lisa Anderson"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="card-text-area">
+                                    <h3 class="people-name">Lisa Anderson</h3>
+                                    <p class="people-title">
+                                        Chief Marketing Officer
+                                    </p>
+                                    <p class="people-location">
+                                        Los Angeles, CA
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person Card 8 -->
+                        <div class="people-card rounded-2xl cursor-pointer" role="button" tabindex="0">
+                            <div class="card-content">
+                                <div class="image-wrapper">
+                                    <img 
+                                        src="YOUR_CONFLUENCE_ATTACHMENT_URL_HERE" 
+                                        alt="David Wilson"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="card-text-area">
+                                    <h3 class="people-name">David Wilson</h3>
+                                    <p class="people-title">
+                                        Chief Legal Officer
+                                    </p>
+                                    <p class="people-location">
+                                        Washington, DC
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person Card 9 -->
+                        <div class="people-card rounded-2xl cursor-pointer" role="button" tabindex="0">
+                            <div class="card-content">
+                                <div class="image-wrapper">
+                                    <img 
+                                        src="YOUR_CONFLUENCE_ATTACHMENT_URL_HERE" 
+                                        alt="Jennifer Lee"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="card-text-area">
+                                    <h3 class="people-name">Jennifer Lee</h3>
+                                    <p class="people-title">
+                                        Chief Strategy Officer
+                                    </p>
+                                    <p class="people-location">
+                                        Boston, MA
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person Card 10 -->
+                        <div class="people-card rounded-2xl cursor-pointer" role="button" tabindex="0">
+                            <div class="card-content">
+                                <div class="image-wrapper">
+                                    <img 
+                                        src="YOUR_CONFLUENCE_ATTACHMENT_URL_HERE" 
+                                        alt="Thomas Brown"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="card-text-area">
+                                    <h3 class="people-name">Thomas Brown</h3>
+                                    <p class="people-title">
+                                        Chief Compliance Officer
+                                    </p>
+                                    <p class="people-location">
+                                        Tokyo, Japan
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person Card 11 -->
+                        <div class="people-card rounded-2xl cursor-pointer" role="button" tabindex="0">
+                            <div class="card-content">
+                                <div class="image-wrapper">
+                                    <img 
+                                        src="YOUR_CONFLUENCE_ATTACHMENT_URL_HERE" 
+                                        alt="Patricia Garcia"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="card-text-area">
+                                    <h3 class="people-name">Patricia Garcia</h3>
+                                    <p class="people-title">
+                                        Chief Auditor
+                                    </p>
+                                    <p class="people-location">
+                                        Frankfurt, Germany
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Person Card 12 -->
+                        <div class="people-card rounded-2xl cursor-pointer" role="button" tabindex="0">
+                            <div class="card-content">
+                                <div class="image-wrapper">
+                                    <img 
+                                        src="YOUR_CONFLUENCE_ATTACHMENT_URL_HERE" 
+                                        alt="Christopher Taylor"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="card-text-area">
+                                    <h3 class="people-name">Christopher Taylor</h3>
+                                    <p class="people-title">
+                                        Head of Global Operations
+                                    </p>
+                                    <p class="people-location">
+                                        Dubai, UAE
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Optional: Add click functionality to cards
+        document.querySelectorAll('.people-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // You can add functionality here, e.g., open a modal with more details
+                console.log('Card clicked');
+            });
+
+            // Add keyboard accessibility
+            card.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    this.click();
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
+
