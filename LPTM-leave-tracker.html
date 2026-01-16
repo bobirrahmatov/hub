@@ -333,7 +333,7 @@
       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800"
         style="background-color: var(--card-bg, white);">
           <div class="px-5 py-4 sm:px-6 sm:py-5">
-            <h3 class="text-2xl font-medium text-gray-800 dark:text-white/90">
+            <h3 class="!text-2xl font-medium text-gray-800 dark:text-white/90">
               Leave & Holidays Tracker
             </h3>
           <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">
@@ -381,7 +381,7 @@
               <div class="mb-6 flex flex-col gap-4" style="overflow: visible;">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Team Leave Timeline</h3>
+                    <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Team Leave Timeline</h3>
                     <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">View and manage leave across your team</p>
                   </div>
                   <div class="flex flex-wrap items-center gap-4" style="position: relative; z-index: 50;">
@@ -408,9 +408,9 @@
                     <div class="flex flex-col gap-1.5">
                       <span class="!text-base font-medium text-gray-700 text-center dark:text-gray-300 tracking-wide">Custom Range</span>
                       <div class="flex items-center gap-2" style="position: relative;">
-                        <input type="date" id="timelineStartDate" class="h-9 rounded-lg border border-gray-300 bg-white px-3 py-1.5 !text-sm text-gray-800 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white" style="position: relative; z-index: 100;" />
+                        <input type="date" id="timelineStartDate" class="h-9 rounded-lg border border-gray-300 bg-white px-3 py-1.5 !text-base text-gray-800 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white" style="position: relative; z-index: 100;" />
                         <span class="text-gray-500 dark:text-gray-400">to</span>
-                        <input type="date" id="timelineEndDate" class="h-9 rounded-lg border border-gray-300 bg-white px-3 py-1.5 !text-sm text-gray-800 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white" style="position: relative; z-index: 100;" />
+                        <input type="date" id="timelineEndDate" class="h-9 rounded-lg border border-gray-300 bg-white px-3 py-1.5 !text-base text-gray-800 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white" style="position: relative; z-index: 100;" />
                       </div>
                     </div>
                   </div>
@@ -423,7 +423,7 @@
                   <thead>
                     <tr>
                       <th class="sticky left-0 z-20 border-r border-b border-gray-200 bg-gray-50 px-4 py-3 text-left dark:border-gray-700 dark:bg-gray-800">
-                        <span class="!text-sm font-medium text-gray-700 dark:text-gray-300">Team Member</span>
+                        <span class="!text-base font-medium text-gray-700 dark:text-gray-300">Team Member</span>
                       </th>
                       <!-- Date columns will be generated here -->
                     </tr>
@@ -436,26 +436,26 @@
 
               <!-- Legend -->
               <div class="mt-4 flex flex-wrap items-center gap-4">
-                <span class="!text-sm font-medium text-gray-700 dark:text-gray-300">Legend:</span>
+                <span class="!text-base font-medium text-gray-700 dark:text-gray-300">Legend:</span>
                 <div class="flex items-center gap-2">
                   <span class="inline-block h-6 w-12 rounded bg-green-100 border border-gray-200 dark:bg-gray-800/50 dark:border-gray-700"></span>
-                  <span class="!text-sm text-gray-600 dark:text-gray-400">Annual</span>
+                  <span class="!text-base text-gray-600 dark:text-gray-400">Annual</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <span class="inline-block h-6 w-12 rounded bg-red-100 border border-gray-200 dark:bg-gray-800/50 dark:border-gray-700"></span>
-                  <span class="!text-sm text-gray-600 dark:text-gray-400">Sick</span>
+                  <span class="!text-base text-gray-600 dark:text-gray-400">Sick</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <span class="inline-block h-6 w-12 rounded bg-purple-100 border border-gray-200 dark:bg-gray-800/50 dark:border-gray-700"></span>
-                  <span class="!text-sm text-gray-600 dark:text-gray-400">Public</span>
+                  <span class="!text-base text-gray-600 dark:text-gray-400">Public</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <span class="inline-block h-6 w-12 rounded bg-amber-100 border border-gray-200 dark:bg-gray-800/50 dark:border-gray-700"></span>
-                  <span class="!text-sm text-gray-600 dark:text-gray-400">Other</span>
+                  <span class="!text-base text-gray-600 dark:text-gray-400">Other</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <span class="inline-block h-6 w-12 rounded bg-gray-50 border border-gray-200 dark:bg-gray-800/50 dark:border-gray-700"></span>
-                  <span class="!text-sm text-gray-600 dark:text-gray-400">Weekend</span>
+                  <span class="!text-base text-gray-600 dark:text-gray-400">Weekend</span>
                 </div>
               </div>
                 </div>
@@ -489,7 +489,7 @@
                           <div class="flex items-end justify-between">
                             <div>
                             <h4 id="total-leaves-count"
-                              class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                              class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             </div>
                           </div>
                         </div>
@@ -514,10 +514,10 @@
                           <div class="flex items-end justify-between gap-3">
                             <div>
                             <h4 id="annual-leave-count"
-                              class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                              class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             </div>
                           <span
-                            class="flex items-center gap-1 rounded-full bg-success-50 px-3 py-1 text-xl font-bold text-success-600 leading-none dark:bg-success-500/15 dark:text-success-500"
+                            class="flex items-center gap-1 rounded-full bg-success-50 px-3 py-1 !text-xl font-bold text-success-600 leading-none dark:bg-success-500/15 dark:text-success-500"
                             id="annual-percentage">
                               0%
                             </span>
@@ -545,10 +545,10 @@
                           <div class="flex items-end justify-between gap-3">
                             <div>
                             <h4 id="sick-leave-count"
-                              class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                              class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             </div>
                           <span
-                            class="flex items-center gap-1 rounded-full bg-error-50 px-3 py-1 text-xl font-bold text-error-600 leading-none dark:bg-error-500/15 dark:text-error-500"
+                            class="flex items-center gap-1 rounded-full bg-error-50 px-3 py-1 !text-xl font-bold text-error-600 leading-none dark:bg-error-500/15 dark:text-error-500"
                             id="sick-percentage">
                               0%
                             </span>
@@ -575,10 +575,10 @@
                           <div class="flex items-end justify-between gap-3">
                             <div>
                             <h4 id="public-leave-count"
-                              class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                              class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             </div>
                           <span
-                            class="flex items-center gap-1 rounded-full bg-success-50 px-3 py-1 text-xl font-bold text-success-600 leading-none dark:bg-success-500/15 dark:text-success-500"
+                            class="flex items-center gap-1 rounded-full bg-success-50 px-3 py-1 !text-xl font-bold text-success-600 leading-none dark:bg-success-500/15 dark:text-success-500"
                             id="public-percentage">
                               0%
                             </span>
@@ -597,7 +597,7 @@
                       style="background-color: var(--card-bg, white);">
                         <div class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                           <div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Leave Trends</h3>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Leave Trends</h3>
                           <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Monthly leave distribution across
                             the year</p>
                           </div>
@@ -612,7 +612,7 @@
                       style="background-color: var(--card-bg, white);">
                         <div class="mb-6 flex items-center justify-between">
                           <div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Leave Breakdown</h3>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Leave Breakdown</h3>
                           <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Distribution by leave type</p>
                           </div>
                         </div>
@@ -632,7 +632,7 @@
                         <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                           <!-- Title -->
                           <div class="flex-shrink-0">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Recent Leave Requests
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Recent Leave Requests
                             </h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Comprehensive details for recent
                               leave submissions</p>
@@ -641,7 +641,6 @@
                           <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                             <!-- Filter Toggle -->
                             <div class="flex flex-col gap-1.5" x-data="{selectedFilter: 'top10'}">
-                              <span class="!text-base font-medium text-gray-700 dark:text-gray-300 tracking-wide text-center">Filter</span>
                               <div class="flex items-center gap-0.5 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900">
                                 <button @click="selectedFilter = 'top10'" x-on:click="setLeaveFilter('top10')" :class="selectedFilter === 'top10' ? 'shadow-theme-xs text-gray-900 dark:text-white bg-white dark:bg-gray-800' : 'text-gray-500 dark:text-gray-400'" class="hover:text-gray-900 dark:hover:text-white rounded-md px-3.5 py-2.5 !text-base font-medium transition-colors">
                                   Top 10
@@ -702,20 +701,20 @@
                         class="border-t border-gray-200 px-6 py-4 dark:border-gray-800 hidden">
                         <div class="flex items-center justify-between">
                           <div class="flex items-center gap-2">
-                            <span class="!text-lg !text-gray-700 dark:!text-gray-400">Show</span>
+                            <span class="!!text-lg !text-gray-700 dark:!text-gray-400">Show</span>
                             <select id="leavesPerPage"
-                              class="rounded-lg border border-gray-300 bg-white px-2 py-1 !text-lg !text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:!text-white/90">
+                              class="rounded-lg border border-gray-300 bg-white px-2 py-1 !!text-lg !text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:!text-white/90">
                               <option value="10" selected>10</option>
                               <option value="20">20</option>
                               <option value="50">50</option>
                               <option value="100">100</option>
                             </select>
-                            <span class="!text-lg !text-gray-700 dark:!text-gray-400">items per page</span>
+                            <span class="!!text-lg !text-gray-700 dark:!text-gray-400">items per page</span>
                           </div>
 
                           <div class="flex items-center gap-2">
                             <button id="previousLeavePageBtn"
-                              class="!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
+                              class="!!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
                               <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -725,7 +724,7 @@
                               <span class="hidden sm:inline">Previous</span>
                             </button>
 
-                            <span class="block !text-lg font-medium !text-gray-700 sm:hidden dark:!text-gray-400">
+                            <span class="block !!text-lg font-medium !text-gray-700 sm:hidden dark:!text-gray-400">
                               Page <span id="leaveCurrentPage">1</span> of <span id="leaveTotalPages">1</span>
                             </span>
 
@@ -734,7 +733,7 @@
                             </ul>
 
                             <button id="nextLeavePageBtn"
-                              class="!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
+                              class="!!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
                               <span class="hidden sm:inline">Next</span>
                               <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -757,7 +756,7 @@
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
                           <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Public Holidays</h3>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Public Holidays</h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Complete list of public holidays
                               across all regions</p>
                             </div>
@@ -804,20 +803,20 @@
                       <div class="border-t border-gray-200 px-6 py-4 dark:border-gray-800">
                         <div class="flex items-center justify-between">
                           <div class="flex items-center gap-2">
-                            <span class="!text-lg !text-gray-700 dark:!text-gray-400">Show</span>
+                            <span class="!!text-lg !text-gray-700 dark:!text-gray-400">Show</span>
                             <select id="holidaysPerPage"
-                              class="rounded-lg border border-gray-300 bg-white px-2 py-1 !text-lg !text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:!text-white/90">
+                              class="rounded-lg border border-gray-300 bg-white px-2 py-1 !!text-lg !text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:!text-white/90">
                               <option value="10" selected>10</option>
                               <option value="20">20</option>
                               <option value="50">50</option>
                               <option value="100">100</option>
                             </select>
-                            <span class="!text-lg !text-gray-700 dark:!text-gray-400">items per page</span>
+                            <span class="!!text-lg !text-gray-700 dark:!text-gray-400">items per page</span>
                           </div>
 
                           <div class="flex items-center gap-2">
                             <button id="previousHolidayPageBtn"
-                              class="!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
+                              class="!!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
                               <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -827,7 +826,7 @@
                               <span class="hidden sm:inline">Previous</span>
                             </button>
 
-                            <span class="block !text-lg font-medium !text-gray-700 sm:hidden dark:!text-gray-400">
+                            <span class="block !!text-lg font-medium !text-gray-700 sm:hidden dark:!text-gray-400">
                               Page <span id="holidayCurrentPage">1</span> of <span id="holidayTotalPages">1</span>
                             </span>
 
@@ -836,7 +835,7 @@
                             </ul>
 
                             <button id="nextHolidayPageBtn"
-                              class="!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
+                              class="!!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
                               <span class="hidden sm:inline">Next</span>
                               <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -881,7 +880,7 @@
 
         <div class="flex flex-col px-2 overflow-y-auto modal-content custom-scrollbar">
           <div class="modal-header">
-            <h5 class="mb-2 font-semibold text-gray-800 modal-title text-xl lg:text-2xl dark:text-white/90"
+            <h5 class="mb-2 font-semibold text-gray-800 modal-title !text-xl lg:!text-2xl dark:text-white/90"
               id="eventModalLabel">
                       Add / Edit Leave Request
             </h5>
@@ -1076,7 +1075,7 @@
 
                 <div class="flex flex-col px-2 overflow-y-auto modal-content custom-scrollbar">
                   <div class="modal-header mb-6">
-            <h5 class="mb-2 font-semibold text-gray-800 modal-title text-xl lg:text-2xl dark:text-white/90">
+            <h5 class="mb-2 font-semibold text-gray-800 modal-title !text-xl lg:!text-2xl dark:text-white/90">
                       Manage Team Members
                     </h5>
             <p class="!text-base text-gray-500 dark:text-gray-400">
@@ -1098,7 +1097,7 @@
           <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800"
             style="background-color: var(--card-bg, white);">
                     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-                      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+                      <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">
                         Team Members
                       </h3>
               <p class="!text-base font-medium text-gray-500 mt-1 dark:text-gray-400">Manage your team roster</p>
@@ -1149,7 +1148,7 @@
 
                 <div class="flex flex-col overflow-y-auto modal-content custom-scrollbar">
                   <div class="modal-header mb-6">
-            <h5 class="mb-2 font-semibold text-gray-800 modal-title text-xl lg:text-2xl dark:text-white/90"
+            <h5 class="mb-2 font-semibold text-gray-800 modal-title !text-xl lg:!text-2xl dark:text-white/90"
               id="teamMemberModalTitle">
                       Add Team Member
                     </h5>
@@ -1227,7 +1226,7 @@
                 </path>
                       </svg>
                     </div>
-            <h5 class="mb-2 font-semibold text-gray-800 modal-title text-xl lg:text-2xl dark:text-white/90">
+            <h5 class="mb-2 font-semibold text-gray-800 modal-title !text-xl lg:!text-2xl dark:text-white/90">
                       Delete Team Member
                     </h5>
             <p class="!text-base text-gray-500 dark:text-gray-400">
@@ -1284,7 +1283,7 @@
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                       </svg>
                     </div>
-            <h5 class="mb-2 font-semibold text-gray-800 modal-title text-xl lg:text-2xl dark:text-white/90">
+            <h5 class="mb-2 font-semibold text-gray-800 modal-title !text-xl lg:!text-2xl dark:text-white/90">
                       Fetch Public Holidays
                     </h5>
             <p class="!text-base text-gray-500 dark:text-gray-400">
@@ -1335,14 +1334,8 @@
           const response = await fetch('https://cedt-confluence.net/confluence/download/attachments/2740868871/team_members.json?api=v2');
           
           if (!response.ok) {
-            console.warn('Team members file not found, using dummy data');
-            return [
-              { id: 'tm-1', name: 'John Smith', role: 'Senior Developer', country: 'USA' },
-              { id: 'tm-2', name: 'Sarah Johnson', role: 'Product Manager', country: 'UK' },
-              { id: 'tm-3', name: 'Mike Chen', role: 'UX Designer', country: 'Singapore' },
-              { id: 'tm-4', name: 'Emily Davis', role: 'QA Engineer', country: 'Australia' },
-              { id: 'tm-5', name: 'Alex Rodriguez', role: 'DevOps Engineer', country: 'Canada' }
-            ];
+            console.warn('Team members file not found (this is normal for first-time setup)');
+            return [];
           }
 
           const data = await response.json();
@@ -1353,23 +1346,11 @@
             return data;
           } else {
             console.warn('Unexpected data format:', data);
-            return [
-              { id: 'tm-1', name: 'John Smith', role: 'Senior Developer', country: 'USA' },
-              { id: 'tm-2', name: 'Sarah Johnson', role: 'Product Manager', country: 'UK' },
-              { id: 'tm-3', name: 'Mike Chen', role: 'UX Designer', country: 'Singapore' },
-              { id: 'tm-4', name: 'Emily Davis', role: 'QA Engineer', country: 'Australia' },
-              { id: 'tm-5', name: 'Alex Rodriguez', role: 'DevOps Engineer', country: 'Canada' }
-            ];
+            return [];
           }
         } catch (error) {
-          console.error('Error fetching team members:', error);
-          return [
-            { id: 'tm-1', name: 'John Smith', role: 'Senior Developer', country: 'USA' },
-            { id: 'tm-2', name: 'Sarah Johnson', role: 'Product Manager', country: 'UK' },
-            { id: 'tm-3', name: 'Mike Chen', role: 'UX Designer', country: 'Singapore' },
-            { id: 'tm-4', name: 'Emily Davis', role: 'QA Engineer', country: 'Australia' },
-            { id: 'tm-5', name: 'Alex Rodriguez', role: 'DevOps Engineer', country: 'Canada' }
-          ];
+          console.warn('Could not fetch team members (this is normal for first-time setup):', error.message);
+          return [];
         }
       }
 
@@ -1435,9 +1416,7 @@
         const blob = new Blob([JSON.stringify(dataToSave, null, 2)], { type: 'application/json' });
         formData.append('file', blob, 'calendar_events.json');
 
-        const endpoint = attachmentId
-          ? `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment/${attachmentId}/data`
-          : `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment`;
+        const endpoint = `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment${attachmentId ? `/${attachmentId}` : ''}`;
 
         const response = await fetch(endpoint, {
           method: 'POST',
@@ -1453,7 +1432,7 @@
 
         return true;
       } catch (error) {
-        console.error('Error updating calendar events file:', error);
+        console.warn('Could not save to Confluence:', error.message);
         throw error;
       }
     }
@@ -1473,7 +1452,7 @@
         await updateCalendarEventsFile(eventsData);
         return true;
       } catch (error) {
-        console.error('Failed to save calendar events:', error);
+        console.warn('Could not save to Confluence (this is normal when running locally):', error.message);
         return false;
       }
     }
@@ -1525,9 +1504,7 @@
           const blob = new Blob([JSON.stringify(dataToSave, null, 2)], { type: 'application/json' });
           formData.append('file', blob, 'team_members.json');
 
-        const endpoint = attachmentId
-          ? `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment/${attachmentId}/data`
-          : `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment`;
+        const endpoint = `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment${attachmentId ? `/${attachmentId}` : ''}`;
 
         const response = await fetch(endpoint, {
             method: 'POST',
@@ -1868,7 +1845,7 @@
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <p class="text-lg font-semibold text-gray-800 dark:text-white">Deleting Team Member</p>
+              <p class="!text-lg font-semibold text-gray-800 dark:text-white">Deleting Team Member</p>
               <p class="!text-base text-gray-500 dark:text-gray-400 mt-1">Please wait...</p>
             </div>
           </div>
@@ -1912,92 +1889,6 @@
                 /*=====================*/
                 // Calendar Events Data
                 /*=====================*/
-          // Dummy calendar events for demonstration
-          const calendarEventsList = [
-            {
-              id: 'evt-1',
-              title: 'John Smith - Annual Leave',
-              start: '2026-01-13',
-              end: '2026-01-17',
-              extendedProps: {
-                calendar: 'Annual',
-                teamMember: 'tm-1',
-                delegate: 'tm-2'
-              }
-            },
-            {
-              id: 'evt-2',
-              title: 'Sarah Johnson - Sick Leave',
-              start: '2026-01-14',
-              end: '2026-01-15',
-              extendedProps: {
-                calendar: 'Sick',
-                teamMember: 'tm-2',
-                delegate: 'tm-3'
-              }
-            },
-            {
-              id: 'evt-3',
-              title: 'Mike Chen - Annual Leave',
-              start: '2026-01-20',
-              end: '2026-01-24',
-              extendedProps: {
-                calendar: 'Annual',
-                teamMember: 'tm-3',
-                delegate: 'tm-1'
-              }
-            },
-            {
-              id: 'evt-4',
-              title: 'New Year\'s Day',
-              start: '2026-01-01',
-              end: '2026-01-01',
-              extendedProps: {
-                calendar: 'Public',
-                teamMember: null,
-                delegate: null,
-                country: 'United States',
-                countryCode: 'US',
-                localName: 'New Year\'s Day'
-              }
-            },
-            {
-              id: 'evt-5',
-              title: 'Martin Luther King Jr. Day',
-              start: '2026-01-19',
-              end: '2026-01-19',
-              extendedProps: {
-                calendar: 'Public',
-                teamMember: null,
-                delegate: null,
-                country: 'United States',
-                countryCode: 'US',
-                localName: 'Martin Luther King Jr. Day'
-              }
-            },
-            {
-              id: 'evt-6',
-              title: 'Emily Davis - Other Leave',
-              start: '2026-01-16',
-              end: '2026-01-16',
-              extendedProps: {
-                calendar: 'Other',
-                teamMember: 'tm-4',
-                delegate: 'tm-1'
-              }
-            },
-            {
-              id: 'evt-7',
-              title: 'Alex Rodriguez - Annual Leave',
-              start: '2026-01-27',
-              end: '2026-01-30',
-              extendedProps: {
-                calendar: 'Annual',
-                teamMember: 'tm-5',
-                delegate: 'tm-2'
-              }
-            }
-          ];
 
                 /*=====================*/
                 // Modal Functions
@@ -2241,23 +2132,22 @@
             // Get current year
             const currentYear = new Date().getFullYear();
             
-            // Show loading overlay on calendar
-            const calendarWrapper = document.getElementById('calendar-wrapper');
+            // Show loading overlay
             const loadingOverlay = document.createElement('div');
             loadingOverlay.id = 'calendar-loading-overlay';
-            loadingOverlay.className = 'absolute inset-0 z-[999] flex items-center justify-center bg-white/90 dark:bg-gray-950/90 backdrop-blur-sm rounded-2xl';
+            loadingOverlay.className = 'fixed inset-0 z-[999] flex items-center justify-center bg-white/90 dark:bg-gray-950/90 backdrop-blur-sm';
             loadingOverlay.innerHTML = `
               <div class="text-center">
                 <svg class="animate-spin h-16 w-16 text-brand-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <p class="text-lg font-semibold text-gray-800 dark:text-white">Fetching Public Holidays</p>
+                <p class="!text-lg font-semibold text-gray-800 dark:text-white">Fetching Public Holidays</p>
                 <p class="!text-base text-gray-500 dark:text-gray-400 mt-1">Loading holidays for ${countryCodes.join(', ')}...</p>
               </div>
             `;
             
-            calendarWrapper.appendChild(loadingOverlay);
+            document.body.appendChild(loadingOverlay);
             
             try {
               // Fetch holidays for each country
@@ -2295,19 +2185,20 @@
               if (overlay) {
                 overlay.remove();
               }
-
-            // Save calendar events to Confluence
-            try {
-              await saveCalendarEvents();
-            } catch (saveError) {
-              console.error('Failed to save calendar events:', saveError);
-              }
               
               // Show success message
+              console.log(`✅ Successfully fetched ${totalHolidays} public holidays`);
               showSuccessToast(`Added ${totalHolidays} public holidays for ${currentYear}`);
               
-              // Refresh analytics
+              // Refresh analytics and timeline
+              console.log('🔄 Refreshing timeline and charts...');
               refreshAnalytics();
+              console.log('✅ Timeline and charts updated');
+              
+            // Save calendar events to Confluence (in background)
+            saveCalendarEvents().catch(saveError => {
+              console.warn('Could not save to Confluence (this is normal when running locally):', saveError.message);
+            });
               
             } catch (error) {
               console.error('Error fetching holidays:', error);
@@ -2388,9 +2279,9 @@
                 /*=====================*/
                 // Initialize Calendar Events Array
                 /*=====================*/
-          // Initialize with dummy data (will be overwritten if Confluence data exists)
-          calendarEvents = calendarEventsList;
-          console.log('✅ calendarEvents initialized with dummy data:', calendarEvents.length, 'events');
+          // Calendar events will be loaded from Confluence
+          calendarEvents = [];
+          console.log('✅ calendarEvents initialized (empty - will load from Confluence)');
 
                 /*=====================*/
                 // Update Calender Event
@@ -2537,119 +2428,6 @@
 
           // Initialize calendar events array (already done above)
           // No render needed - using simple array instead of FullCalendar
-          
-          // ============================================
-          // DUMMY DATA - REMOVE AFTER TESTING
-          // ============================================
-          setTimeout(() => {
-            // Add dummy team members if none exist
-            if (teamMembers.length === 0) {
-              teamMembers = [
-                { id: 'tm-001', name: 'John Smith', country: 'USA' },
-                { id: 'tm-002', name: 'Sarah Johnson', country: 'UK' },
-                { id: 'tm-003', name: 'Michael Chen', country: 'Singapore' },
-                { id: 'tm-004', name: 'Emma Williams', country: 'Australia' },
-                { id: 'tm-005', name: 'David Brown', country: 'Canada' }
-              ];
-              updateTeamMembersTable();
-              updateTeamMemberDropdown();
-            }
-
-          // Only add dummy leave data if no events exist in calendar
-          const existingEvents = calendarEvents;
-          if (existingEvents.length > 0) {
-            return;
-            }
-            
-            // Dummy leave data for 2026
-            const dummyLeaves = [
-              // January
-              { member: 'tm-001', type: 'Annual', start: '2026-01-06', end: '2026-01-10', title: 'John Smith - Annual Leave' },
-              { member: 'tm-002', type: 'Sick', start: '2026-01-15', end: '2026-01-16', title: 'Sarah Johnson - Sick Leave' },
-              
-              // February
-              { member: 'tm-003', type: 'Annual', start: '2026-02-03', end: '2026-02-07', title: 'Michael Chen - Annual Leave' },
-              { member: 'tm-004', type: 'Public', start: '2026-02-14', end: '2026-02-14', title: 'Emma Williams - Public Leave' },
-              
-              // March
-              { member: 'tm-005', type: 'Annual', start: '2026-03-09', end: '2026-03-13', title: 'David Brown - Annual Leave' },
-              { member: 'tm-001', type: 'Sick', start: '2026-03-20', end: '2026-03-21', title: 'John Smith - Sick Leave' },
-              { member: 'tm-002', type: 'Annual', start: '2026-03-25', end: '2026-03-27', title: 'Sarah Johnson - Annual Leave' },
-              
-              // April
-              { member: 'tm-003', type: 'Sick', start: '2026-04-05', end: '2026-04-05', title: 'Michael Chen - Sick Leave' },
-              { member: 'tm-004', type: 'Annual', start: '2026-04-15', end: '2026-04-22', title: 'Emma Williams - Annual Leave' },
-              
-              // May
-              { member: 'tm-005', type: 'Public', start: '2026-05-01', end: '2026-05-01', title: 'David Brown - Public Leave' },
-              { member: 'tm-001', type: 'Annual', start: '2026-05-11', end: '2026-05-15', title: 'John Smith - Annual Leave' },
-              { member: 'tm-002', type: 'Other', start: '2026-05-20', end: '2026-05-21', title: 'Sarah Johnson - Other Leave' },
-              
-              // June
-              { member: 'tm-003', type: 'Annual', start: '2026-06-08', end: '2026-06-12', title: 'Michael Chen - Annual Leave' },
-              { member: 'tm-004', type: 'Sick', start: '2026-06-18', end: '2026-06-19', title: 'Emma Williams - Sick Leave' },
-              
-              // July
-              { member: 'tm-005', type: 'Annual', start: '2026-07-06', end: '2026-07-17', title: 'David Brown - Annual Leave' },
-              { member: 'tm-001', type: 'Public', start: '2026-07-04', end: '2026-07-04', title: 'John Smith - Public Leave' },
-              
-              // August
-              { member: 'tm-002', type: 'Annual', start: '2026-08-03', end: '2026-08-14', title: 'Sarah Johnson - Annual Leave' },
-              { member: 'tm-003', type: 'Sick', start: '2026-08-20', end: '2026-08-21', title: 'Michael Chen - Sick Leave' },
-              
-              // September
-              { member: 'tm-004', type: 'Annual', start: '2026-09-07', end: '2026-09-11', title: 'Emma Williams - Annual Leave' },
-              { member: 'tm-005', type: 'Other', start: '2026-09-15', end: '2026-09-16', title: 'David Brown - Other Leave' },
-              
-              // October
-              { member: 'tm-001', type: 'Annual', start: '2026-10-05', end: '2026-10-09', title: 'John Smith - Annual Leave' },
-              { member: 'tm-002', type: 'Sick', start: '2026-10-22', end: '2026-10-23', title: 'Sarah Johnson - Sick Leave' },
-              
-              // November
-              { member: 'tm-003', type: 'Annual', start: '2026-11-02', end: '2026-11-06', title: 'Michael Chen - Annual Leave' },
-              { member: 'tm-004', type: 'Public', start: '2026-11-26', end: '2026-11-26', title: 'Emma Williams - Public Leave' },
-              
-              // December
-              { member: 'tm-005', type: 'Annual', start: '2026-12-21', end: '2026-12-31', title: 'David Brown - Annual Leave' },
-              { member: 'tm-001', type: 'Other', start: '2026-12-28', end: '2026-12-30', title: 'John Smith - Other Leave' }
-            ];
-            
-            // Add events to calendar
-            const leaveColors = {
-              'Annual': '#10B981',
-              'Sick': '#EF4444',
-              'Public': '#8B5CF6',
-              'Other': '#F59E0B'
-            };
-            
-            dummyLeaves.forEach(leave => {
-              calendarEvents.push({
-                id: 'leave-' + Math.random().toString(36).substr(2, 9),
-                title: leave.title,
-                start: leave.start,
-                end: leave.end,
-                allDay: true,
-                extendedProps: {
-                  calendar: leave.type,
-                  teamMember: leave.member
-                }
-              });
-            });
-            
-            // Refresh analytics and timeline after adding dummy data
-            setTimeout(() => {
-              if (typeof initializeAnalytics === 'function') {
-                initializeAnalytics();
-              }
-              if (typeof renderTimelineGrid === 'function') {
-                renderTimelineGrid();
-              }
-            }, 100);
-            
-          }, 1000);
-          // ============================================
-          // END DUMMY DATA
-          // ============================================
           
           // Close team modal on button click
           document.querySelectorAll(".modal-close-team-btn").forEach((btn) => {
@@ -3444,8 +3222,8 @@
       const a = document.createElement('a');
       a.href = '#';
       a.className = pageNum === leaveCurrentPage
-        ? 'bg-brand-500/[0.08] !text-lg text-brand-500 hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium'
-        : '!text-lg hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium !text-gray-700 dark:!text-gray-400';
+        ? 'bg-brand-500/[0.08] !!text-lg text-brand-500 hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium'
+        : '!!text-lg hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium !text-gray-700 dark:!text-gray-400';
       a.textContent = pageNum;
       a.onclick = (e) => {
         e.preventDefault();
@@ -3459,7 +3237,7 @@
     function addLeaveEllipsis() {
       const pagination = document.getElementById('leavePagination');
       const li = document.createElement('li');
-      li.className = '!text-lg flex h-10 w-10 items-center justify-center text-gray-700 dark:!text-gray-400';
+      li.className = '!!text-lg flex h-10 w-10 items-center justify-center text-gray-700 dark:!text-gray-400';
       li.textContent = '...';
       pagination.appendChild(li);
     }
@@ -3710,7 +3488,7 @@
       console.log(`Team Member column width: ${dynamicWidth}px (longest name: "${longestName}", ${maxNameLength} chars)`);
       
       // Build header row with dates
-      let headerHTML = `<th class="sticky left-0 z-20 border-r border-b border-gray-200 bg-gray-50 px-6 py-3 text-left dark:border-gray-700 dark:bg-gray-800 whitespace-nowrap" style="width: ${dynamicWidth}px; min-width: ${dynamicWidth}px; max-width: ${dynamicWidth}px;"><span class="!text-sm font-medium text-gray-700 dark:text-gray-300">Team Member</span></th>`;
+      let headerHTML = `<th class="sticky left-0 z-20 border-r border-b border-gray-200 bg-gray-50 px-6 py-3 text-left dark:border-gray-700 dark:bg-gray-800 whitespace-nowrap" style="width: ${dynamicWidth}px; min-width: ${dynamicWidth}px; max-width: ${dynamicWidth}px;"><span class="!text-base font-medium text-gray-700 dark:text-gray-300">Team Member</span></th>`;
       
       dates.forEach(date => {
         const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
@@ -3720,9 +3498,9 @@
         const isToday = date.toDateString() === new Date().toDateString();
         
         headerHTML += `<th class="border-r border-b border-gray-200 dark:border-gray-700 px-2 py-2 text-center min-w-[80px] align-middle ${isWeekend ? 'bg-gray-100 dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-800/50'} ${isToday ? '!bg-brand-50 dark:!bg-brand-900/20' : ''}">`;
-        headerHTML += `<div class="!text-xs font-medium text-gray-500 dark:text-gray-400">${dayName}</div>`;
-        headerHTML += `<div class="!text-sm font-semibold text-gray-800 dark:text-gray-200">${dayNum}</div>`;
-        headerHTML += `<div class="!text-xs text-gray-500 dark:text-gray-400">${monthName}</div>`;
+        headerHTML += `<div class="!text-base font-medium text-gray-500 dark:text-gray-400">${dayName}</div>`;
+        headerHTML += `<div class="!text-base font-semibold text-gray-800 dark:text-gray-200">${dayNum}</div>`;
+        headerHTML += `<div class="!text-base text-gray-500 dark:text-gray-400">${monthName}</div>`;
         headerHTML += '</th>';
       });
       
@@ -3735,7 +3513,7 @@
       teamMembers.forEach(member => {
         bodyHTML += '<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">';
         bodyHTML += `<td class="sticky left-0 z-10 bg-white dark:bg-gray-900 border-r border-b border-gray-200 dark:border-gray-700 px-6 py-4 whitespace-nowrap" style="width: ${dynamicWidth}px; min-width: ${dynamicWidth}px; max-width: ${dynamicWidth}px;">`;
-        bodyHTML += `<span class="!text-sm font-medium text-gray-800 dark:text-white whitespace-nowrap">${member.name}</span>`;
+        bodyHTML += `<span class="!text-base font-medium text-gray-800 dark:text-white whitespace-nowrap">${member.name}</span>`;
         bodyHTML += '</td>';
         
         dates.forEach(date => {
@@ -3817,7 +3595,7 @@
               // For public holidays, show country/region below
               const country = leaveEvent.extendedProps.country || leaveEvent.extendedProps.region || '';
               if (country) {
-                additionalInfo = `<div class="mt-1 !text-xs text-gray-600 dark:text-gray-400">${country}</div>`;
+                additionalInfo = `<div class="mt-1 !text-base text-gray-600 dark:text-gray-400">${country}</div>`;
               }
               } else {
               // For member leaves, show delegate below
@@ -3825,15 +3603,15 @@
               if (delegateId) {
                 const delegate = teamMembers.find(m => m.id === delegateId);
                 if (delegate) {
-                  additionalInfo = `<div class="mt-1 !text-xs text-gray-600 dark:text-gray-400">Delegate: ${delegate.name}</div>`;
+                  additionalInfo = `<div class="mt-1 !text-base text-gray-600 dark:text-gray-400">Delegate: ${delegate.name}</div>`;
                 }
               }
             }
             
-            cellContent = `<div class="flex flex-col items-center justify-center"><span class="inline-flex items-center rounded-full px-2 py-0.5 !text-xs font-medium ${badgeClass}">${leaveType === 'Public' ? 'Public' : leaveType}</span>${additionalInfo}</div>`;
+            cellContent = `<div class="flex flex-col items-center justify-center"><span class="inline-flex items-center rounded-full px-2 py-0.5 !text-base font-medium ${badgeClass}">${leaveType === 'Public' ? 'Public' : leaveType}</span>${additionalInfo}</div>`;
           } else if (isWeekend) {
             cellClass += ' bg-gray-50 dark:bg-gray-800/50 cursor-default';
-            cellContent = '<span class="!text-xs text-gray-400 dark:text-gray-600">Weekend</span>';
+            cellContent = '<span class="!text-base text-gray-400 dark:text-gray-600">Weekend</span>';
               } else {
             cellClass += ' cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 bg-white dark:bg-gray-900';
             if (isToday) {
@@ -4072,8 +3850,8 @@
       const a = document.createElement('a');
       a.href = '#';
       a.className = pageNum === holidayCurrentPage
-        ? 'bg-brand-500/[0.08] !text-lg text-brand-500 hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium'
-        : '!text-lg hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium !text-gray-700 dark:!text-gray-400';
+        ? 'bg-brand-500/[0.08] !!text-lg text-brand-500 hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium'
+        : '!!text-lg hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium !text-gray-700 dark:!text-gray-400';
       a.textContent = pageNum;
       a.onclick = (e) => {
         e.preventDefault();
@@ -4087,7 +3865,7 @@
     function addHolidayEllipsis() {
       const pagination = document.getElementById('holidayPagination');
       const li = document.createElement('li');
-      li.className = '!text-lg flex h-10 w-10 items-center justify-center text-gray-700 dark:!text-gray-400';
+      li.className = '!!text-lg flex h-10 w-10 items-center justify-center text-gray-700 dark:!text-gray-400';
       li.textContent = '...';
       pagination.appendChild(li);
     }
