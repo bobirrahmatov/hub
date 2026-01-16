@@ -683,76 +683,81 @@
 
         // Function to update training course file
         async function updateTrainingCourseFile(updatedCourse) {
+            const pageId = '2740868871';
+            const attachmentName = 'training_courses.json';
+            
             try {
-                console.log('Updating Excel file for course:', updatedCourse.name);
+                console.log('Updating JSON file for course:', updatedCourse.name);
                 console.log('Course registrations:', updatedCourse.registrations);
 
-                // First, get the attachment ID for training_courses.xlsx
-                const attachmentsResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment?filename=training_courses.xlsx');
-                const attachmentsData = await attachmentsResponse.json();
-                
-                if (attachmentsData.results && attachmentsData.results.length > 0) {
-                    const attachmentId = attachmentsData.results[0].id;
-                    
-                    // Update the course in tableData
-                    const courseIndex = tableData.findIndex(c => c.id === updatedCourse.id);
-                    if (courseIndex !== -1) {
-                        tableData[courseIndex] = updatedCourse;
+                // First, check if attachment exists and get its ID
+                const attachmentsResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment?filename=${attachmentName}`, {
+                    headers: {
+                        'X-Atlassian-Token': 'no-check'
                     }
+                });
 
-                    // Prepare data for Excel with proper formatting
-                    const excelData = tableData.map(course => ({
-                        id: course.id,
-                        name: course.name,
-                        description: course.description,
-                        category: course.category,
-                        instructor: course.instructor,
-                        startDate: course.startDate,
-                        endDate: course.endDate,
-                        maxStudents: course.maxStudents,
-                        enrolledStudents: course.enrolledStudents,
-                        location: course.location,
-                        registrations: Array.isArray(course.registrations) 
-                            ? JSON.stringify(course.registrations) 
-                            : course.registrations || '[]',
-                        outline: Array.isArray(course.outline) 
-                            ? JSON.stringify(course.outline) 
-                            : course.outline || '[]'
-                    }));
+                let attachmentId = null;
+                let existingCourses = [];
 
-                    console.log('Prepared Excel data:', excelData);
+                if (attachmentsResponse.ok) {
+                    const attachmentsData = await attachmentsResponse.json();
+                    if (attachmentsData.results && attachmentsData.results.length > 0) {
+                        attachmentId = attachmentsData.results[0].id;
+                        
+                        // Fetch existing data
+                        const dataResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`, {
+                            headers: {
+                                'X-Atlassian-Token': 'no-check'
+                            }
+                        });
 
-                    // Create updated Excel file
-                    const workbook = XLSX.utils.book_new();
-                    const worksheet = XLSX.utils.json_to_sheet(excelData);
-                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Courses');
-
-                    // Convert to blob
-                    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-                    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-                    // Upload the updated Excel file
-                    const formData = new FormData();
-                    formData.append('file', blob, 'training_courses.xlsx');
-
-                    const uploadResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment/${attachmentId}`, {
-                        method: 'POST',
-                        headers: {
-                            'X-Atlassian-Token': 'no-check'
-                        },
-                        body: formData
-                    });
-
-                    if (!uploadResponse.ok) {
-                        const errorText = await uploadResponse.text();
-                        console.error('Upload response error:', errorText);
-                        throw new Error(`Failed to update training courses file: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                        if (dataResponse.ok) {
+                            const data = await dataResponse.json();
+                            existingCourses = Array.isArray(data) ? data : (data.courses || []);
+                        }
                     }
-
-                    console.log('Excel file updated successfully');
-                } else {
-                    throw new Error('Training courses file not found');
                 }
+
+                // Update the course in the array
+                const courseIndex = existingCourses.findIndex(c => c.id === updatedCourse.id);
+                if (courseIndex !== -1) {
+                    existingCourses[courseIndex] = updatedCourse;
+                } else {
+                    existingCourses.push(updatedCourse);
+                }
+
+                // Also update in tableData
+                const tableIndex = tableData.findIndex(c => c.id === updatedCourse.id);
+                if (tableIndex !== -1) {
+                    tableData[tableIndex] = updatedCourse;
+                }
+
+                // Create blob with updated data
+                const blob = new Blob([JSON.stringify(existingCourses, null, 2)], { type: 'application/json' });
+                const formData = new FormData();
+                formData.append('file', blob, attachmentName);
+
+                // Upload to Confluence (create or update)
+                const uploadUrl = attachmentId 
+                    ? `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`
+                    : `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment`;
+
+                const uploadResponse = await fetch(uploadUrl, {
+                    method: 'POST',
+                    headers: {
+                        'X-Atlassian-Token': 'no-check'
+                    },
+                    body: formData
+                });
+
+                if (!uploadResponse.ok) {
+                    const errorText = await uploadResponse.text();
+                    console.error('Upload response error:', errorText);
+                    throw new Error(`Failed to update training courses file: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                }
+
+                console.log('JSON file updated successfully');
             } catch (error) {
                 console.error('Error updating training courses file:', error);
                 throw error;
@@ -982,108 +987,58 @@
             filterByCategory('all');
         }
 
-        // Function to fetch Excel data from Confluence
+        // Function to fetch JSON data from Confluence
         async function fetchDataFromConfluence() {
+            const pageId = '2740868871';
+            const attachmentName = 'training_courses.json';
+
             try {
-                // Fetch the training_courses.xlsx file from Confluence
-                const excelResponse = await fetch('https://cedt-confluence.net/confluence/download/attachments/2740868871/training_courses.xlsx?api=v2', {
+                // First, check if attachment exists and get its ID
+                const attachmentsResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment?filename=${attachmentName}`, {
                     headers: {
                         'X-Atlassian-Token': 'no-check'
                     }
                 });
 
-                if (!excelResponse.ok) {
-                    throw new Error('Failed to fetch training_courses.xlsx file');
+                if (!attachmentsResponse.ok) {
+                    console.log('No existing training_courses.json found');
+                    return [];
                 }
 
-                const excelBlob = await excelResponse.blob();
-                
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        try {
-                            const data = new Uint8Array(e.target.result);
-                            const workbook = XLSX.read(data, { type: 'array' });
-                            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                            const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                const attachmentsData = await attachmentsResponse.json();
 
-                            // Transform Excel data to training course format
-                            const transformedData = jsonData.map(row => {
-                                // Ensure registrations is always an array
-                                let registrations = [];
-                                if (row.registrations) {
-                                    if (Array.isArray(row.registrations)) {
-                                        registrations = row.registrations;
-                                    } else if (typeof row.registrations === 'string') {
-                                        // If it's a string, try to parse it as JSON first
-                                        try {
-                                            const parsed = JSON.parse(row.registrations);
-                                            registrations = Array.isArray(parsed) ? parsed : [];
-                                        } catch (e) {
-                                            // If JSON parsing fails, try splitting by comma
-                                            if (row.registrations.trim() !== '' && row.registrations !== '[]') {
-                                                registrations = row.registrations.split(',')
-                                                    .map(s => s.trim())
-                                                    .filter(s => s.length > 0);
-                                            }
-                                        }
-                                    }
-                                }
+                if (attachmentsData.results && attachmentsData.results.length > 0) {
+                    // Attachment exists, fetch its content
+                    const attachmentId = attachmentsData.results[0].id;
+                    const downloadUrl = `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`;
 
-                                // Parse course outline
-                                let outline = [];
-                                if (row.outline) {
-                                    if (Array.isArray(row.outline)) {
-                                        outline = row.outline;
-                                    } else if (typeof row.outline === 'string') {
-                                        // If it's a string, try to parse it as JSON first
-                                        try {
-                                            const parsed = JSON.parse(row.outline);
-                                            outline = Array.isArray(parsed) ? parsed : [];
-                                        } catch (e) {
-                                            // If JSON parsing fails, try splitting by comma
-                                            if (row.outline.trim() !== '' && row.outline !== '[]') {
-                                                outline = row.outline.split(',')
-                                                    .map(s => s.trim())
-                                                    .filter(s => s.length > 0);
-                                            }
-                                        }
-                                    }
-                                }
-
-                                // Calculate enrolled students based on registrations array length
-                                const enrolledStudents = registrations.length;
-                                
-                                console.log(`Course ${row.name}: registrations=${JSON.stringify(registrations)}, outline=${JSON.stringify(outline)}, enrolledStudents=${enrolledStudents}`);
-                                
-                                return {
-                                    id: row.id || Math.random().toString(36).substr(2, 9),
-                                    name: row.name,
-                                    description: row.description,
-                                    category: row.category,
-                                    instructor: row.instructor,
-                                    startDate: row.startDate,
-                                    endDate: row.endDate,
-                                    maxStudents: row.maxStudents || 10,
-                                    enrolledStudents: enrolledStudents,
-                                    location: row.location,
-                                    registrations: registrations,
-                                    outline: outline.length > 0 ? outline : [] // Ensure outline is always an array
-                                };
-                            });
-
-                            resolve(transformedData);
-                        } catch (error) {
-                            reject(error);
+                    const dataResponse = await fetch(downloadUrl, {
+                        headers: {
+                            'X-Atlassian-Token': 'no-check'
                         }
-                    };
-                    reader.onerror = () => reject(new Error('Failed to read Excel file'));
-                    reader.readAsArrayBuffer(excelBlob);
-                });
+                    });
 
+                    if (!dataResponse.ok) {
+                        throw new Error('Failed to fetch training_courses.json file');
+                    }
+
+                    const jsonData = await dataResponse.json();
+                    
+                    // Handle both formats: direct array or object with courses property
+                    if (Array.isArray(jsonData)) {
+                        return jsonData;
+                    } else if (jsonData.courses && Array.isArray(jsonData.courses)) {
+                        return jsonData.courses;
+                    } else {
+                        return [];
+                    }
+                } else {
+                    console.log('Attachment does not exist, will create a new one.');
+                    return [];
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
-                throw error;
+                return [];
             }
         }
 
@@ -1788,6 +1743,9 @@
         async function submitNewCourse(event) {
             event.preventDefault();
             
+            const pageId = '2740868871';
+            const attachmentName = 'training_courses.json';
+            
             // Get course outline from form
             const courseOutline = getCourseOutlineFromForm();
             
@@ -1808,113 +1766,81 @@
 
             // Close the form immediately
             closeAddCourseModal();
+            
+            if (typeof showInfoToast === 'function') {
+                showInfoToast('Saving course...');
+            }
 
             try {
-                // First, get the attachment ID for training_courses.xlsx
-                const attachmentsResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment?filename=training_courses.xlsx');
-                const attachmentsData = await attachmentsResponse.json();
-                
-                let attachmentId;
+                // First, check if attachment exists and get its ID
+                const attachmentsResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment?filename=${attachmentName}`, {
+                    headers: {
+                        'X-Atlassian-Token': 'no-check'
+                    }
+                });
+
+                let attachmentId = null;
                 let existingCourses = [];
 
-                if (attachmentsData.results && attachmentsData.results.length > 0) {
-                    // If training_courses.xlsx exists, get its content and attachment ID
-                    attachmentId = attachmentsData.results[0].id;
-                    
-                    const excelResponse = await fetch(`https://cedt-confluence.net/confluence/download/attachments/2740868871/training_courses.xlsx?api=v2`, {
-                        headers: {
-                            'X-Atlassian-Token': 'no-check'
-                        }
-                    });
-
-                    if (excelResponse.ok) {
-                        const excelBlob = await excelResponse.blob();
-                        const reader = new FileReader();
-
-                        reader.onload = async function(e) {
-                            const data = new Uint8Array(e.target.result);
-                            const workbook = XLSX.read(data, { type: 'array' });
-                            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                            existingCourses = XLSX.utils.sheet_to_json(firstSheet);
-
-                            // Add new course to the existing data
-                            existingCourses.push(newCourse);
-                            
-                            console.log('Adding new course with outline:', newCourse.outline);
-
-                            // Create updated Excel file
-                            const newWorkbook = XLSX.utils.book_new();
-                            const newWorksheet = XLSX.utils.json_to_sheet(existingCourses);
-                            XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, 'Courses');
-
-                            // Convert to blob
-                            const excelBuffer = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
-                            const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-                            // Upload the updated Excel file using the attachment ID
-                            const formData = new FormData();
-                            formData.append('file', blob, 'training_courses.xlsx');
-
-                            const uploadResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment/${attachmentId}`, {
-                                method: 'POST',
-                                headers: {
-                                    'X-Atlassian-Token': 'no-check'
-                                },
-                                body: formData
-                            });
-
-                            if (!uploadResponse.ok) {
-                                throw new Error(`Failed to update Excel file: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                if (attachmentsResponse.ok) {
+                    const attachmentsData = await attachmentsResponse.json();
+                    if (attachmentsData.results && attachmentsData.results.length > 0) {
+                        attachmentId = attachmentsData.results[0].id;
+                        
+                        // Fetch existing data
+                        const dataResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`, {
+                            headers: {
+                                'X-Atlassian-Token': 'no-check'
                             }
+                        });
 
-                            showNotification('Success', 'Training course added successfully!', 'notification');
-                            
-                            // Add the new course to the current tableData array and update the table immediately
-                            tableData.push(newCourse);
-                            filteredData = [...tableData];
-                            updateTable();
-                        };
-
-                        reader.readAsArrayBuffer(excelBlob);
-                    } else {
-                        throw new Error('Failed to fetch existing training_courses.xlsx file');
+                        if (dataResponse.ok) {
+                            const data = await dataResponse.json();
+                            existingCourses = Array.isArray(data) ? data : (data.courses || []);
+                        }
                     }
-                } else {
-                    // If training_courses.xlsx doesn't exist, create a new one
-                    const newWorkbook = XLSX.utils.book_new();
-                    const newWorksheet = XLSX.utils.json_to_sheet([newCourse]);
-                    XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, 'Courses');
+                }
 
-                    // Convert to blob
-                    const excelBuffer = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
-                    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                // Add new course to existing data
+                existingCourses.push(newCourse);
 
-                    // Upload the new Excel file
-                    const formData = new FormData();
-                    formData.append('file', blob, 'training_courses.xlsx');
+                // Create blob with updated data
+                const blob = new Blob([JSON.stringify(existingCourses, null, 2)], { type: 'application/json' });
+                const formData = new FormData();
+                formData.append('file', blob, attachmentName);
 
-                    const uploadResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment', {
-                        method: 'POST',
-                        headers: {
-                            'X-Atlassian-Token': 'no-check'
-                        },
-                        body: formData
-                    });
+                // Upload to Confluence (create or update)
+                const uploadUrl = attachmentId 
+                    ? `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`
+                    : `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment`;
 
-                    if (!uploadResponse.ok) {
-                        throw new Error(`Failed to create Excel file: ${uploadResponse.status} ${uploadResponse.statusText}`);
-                    }
+                const uploadResponse = await fetch(uploadUrl, {
+                    method: 'POST',
+                    headers: {
+                        'X-Atlassian-Token': 'no-check'
+                    },
+                    body: formData
+                });
 
-                    showNotification('Success', 'Training course added successfully!', 'notification');
-                    refreshData(); // Refresh the course list
+                if (!uploadResponse.ok) {
+                    throw new Error(`Failed to save course: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                }
+
+                // Add to local data and update table
+                tableData.push(newCourse);
+                filteredData = [...tableData];
+                updateTable();
+                
+                if (typeof showSuccessToast === 'function') {
+                    showSuccessToast('Training course added successfully!');
                 }
             } catch (error) {
                 console.error('Error adding training course:', error);
-                showNotification('Failed to add training course. Please try again.', 'error');
+                if (typeof showErrorToast === 'function') {
+                    showErrorToast('Failed to add training course. Please try again.');
+                }
             }
         }
     </script>
-    <!-- Add SheetJS library for Excel parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
 </html>
