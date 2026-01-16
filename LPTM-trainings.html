@@ -196,8 +196,8 @@
                         
                         <!-- Content Container -->
                         <div id="contentContainer">
-                            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-fr" id="courseCardsContainer">
-                                <!-- Course cards will be dynamically added here -->
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-fr" id="courseCardsContainer">
+                            <!-- Course cards will be dynamically added here -->
                             </div>
                         </div>
                     </div>
@@ -701,10 +701,10 @@
                 let existingCourses = [];
 
                 if (attachmentsResponse.ok) {
-                    const attachmentsData = await attachmentsResponse.json();
-                    if (attachmentsData.results && attachmentsData.results.length > 0) {
+                const attachmentsData = await attachmentsResponse.json();
+                if (attachmentsData.results && attachmentsData.results.length > 0) {
                         attachmentId = attachmentsData.results[0].id;
-                        
+                    
                         // Fetch existing data
                         const dataResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`, {
                             headers: {
@@ -735,7 +735,7 @@
 
                 // Create blob with updated data
                 const blob = new Blob([JSON.stringify(existingCourses, null, 2)], { type: 'application/json' });
-                const formData = new FormData();
+                    const formData = new FormData();
                 formData.append('file', blob, attachmentName);
 
                 // Upload to Confluence (create or update)
@@ -744,18 +744,18 @@
                     : `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment`;
 
                 const uploadResponse = await fetch(uploadUrl, {
-                    method: 'POST',
-                    headers: {
-                        'X-Atlassian-Token': 'no-check'
-                    },
-                    body: formData
-                });
+                        method: 'POST',
+                        headers: {
+                            'X-Atlassian-Token': 'no-check'
+                        },
+                        body: formData
+                    });
 
-                if (!uploadResponse.ok) {
-                    const errorText = await uploadResponse.text();
-                    console.error('Upload response error:', errorText);
-                    throw new Error(`Failed to update training courses file: ${uploadResponse.status} ${uploadResponse.statusText}`);
-                }
+                    if (!uploadResponse.ok) {
+                        const errorText = await uploadResponse.text();
+                        console.error('Upload response error:', errorText);
+                        throw new Error(`Failed to update training courses file: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                    }
 
                 console.log('JSON file updated successfully');
             } catch (error) {
@@ -925,7 +925,7 @@
             updateFilterBadges();
             updateTable();
         }
-        
+
         // Update filter badges display
         function updateFilterBadges() {
             const container = document.getElementById('activeFiltersContainer');
@@ -950,8 +950,8 @@
                     label: `Search: "${searchTerm}"`,
                     value: searchTerm
                 });
-            }
-            
+                }
+
             // Show/hide container
             if (badges.length > 0) {
                 container.classList.remove('hidden');
@@ -985,7 +985,7 @@
             selectedCategory = 'all';
             document.getElementById('simple-search').value = '';
             filterByCategory('all');
-        }
+                                }
 
         // Function to fetch JSON data from Confluence
         async function fetchDataFromConfluence() {
@@ -1031,7 +1031,7 @@
                         return jsonData.courses;
                     } else {
                         return [];
-                    }
+                        }
                 } else {
                     console.log('Attachment does not exist, will create a new one.');
                     return [];
@@ -1766,7 +1766,7 @@
 
             // Close the form immediately
             closeAddCourseModal();
-            
+
             if (typeof showInfoToast === 'function') {
                 showInfoToast('Saving course...');
             }
@@ -1778,21 +1778,21 @@
                         'X-Atlassian-Token': 'no-check'
                     }
                 });
-
+                
                 let attachmentId = null;
                 let existingCourses = [];
 
                 if (attachmentsResponse.ok) {
                     const attachmentsData = await attachmentsResponse.json();
-                    if (attachmentsData.results && attachmentsData.results.length > 0) {
-                        attachmentId = attachmentsData.results[0].id;
-                        
+                if (attachmentsData.results && attachmentsData.results.length > 0) {
+                    attachmentId = attachmentsData.results[0].id;
+                    
                         // Fetch existing data
                         const dataResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`, {
-                            headers: {
-                                'X-Atlassian-Token': 'no-check'
-                            }
-                        });
+                        headers: {
+                            'X-Atlassian-Token': 'no-check'
+                        }
+                    });
 
                         if (dataResponse.ok) {
                             const data = await dataResponse.json();
@@ -1802,11 +1802,11 @@
                 }
 
                 // Add new course to existing data
-                existingCourses.push(newCourse);
-
+                            existingCourses.push(newCourse);
+                            
                 // Create blob with updated data
                 const blob = new Blob([JSON.stringify(existingCourses, null, 2)], { type: 'application/json' });
-                const formData = new FormData();
+                            const formData = new FormData();
                 formData.append('file', blob, attachmentName);
 
                 // Upload to Confluence (create or update)
@@ -1815,21 +1815,21 @@
                     : `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment`;
 
                 const uploadResponse = await fetch(uploadUrl, {
-                    method: 'POST',
-                    headers: {
-                        'X-Atlassian-Token': 'no-check'
-                    },
-                    body: formData
-                });
+                                method: 'POST',
+                                headers: {
+                                    'X-Atlassian-Token': 'no-check'
+                                },
+                                body: formData
+                            });
 
-                if (!uploadResponse.ok) {
+                            if (!uploadResponse.ok) {
                     throw new Error(`Failed to save course: ${uploadResponse.status} ${uploadResponse.statusText}`);
-                }
+                            }
 
                 // Add to local data and update table
-                tableData.push(newCourse);
-                filteredData = [...tableData];
-                updateTable();
+                            tableData.push(newCourse);
+                            filteredData = [...tableData];
+                            updateTable();
                 
                 if (typeof showSuccessToast === 'function') {
                     showSuccessToast('Training course added successfully!');
