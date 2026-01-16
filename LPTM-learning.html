@@ -98,6 +98,13 @@
                                     <input type="text" id="searchInput" placeholder="Search videos..." class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-[42px] !text-lg !text-gray-800 placeholder:!!text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:!text-white/90 dark:placeholder:!text-white/30">
                                 </div>
                             </div>
+                            <button onclick="refreshVideos()" id="refreshButton" class="flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 !text-lg font-medium text-gray-700 hover:bg-gray-200 transition-all duration-200 dark:bg-gray-800 dark:text-white/90 dark:hover:bg-gray-700">
+                                <svg id="refreshIcon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 10C21 10 18.995 7.26822 17.3662 5.63824C15.7373 4.00827 13.4864 3 11 3C6.02944 3 2 7.02944 2 12C2 16.9706 6.02944 21 11 21C15.1031 21 18.5649 18.2543 19.6482 14.5M21 10V4M21 10H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Refresh
+                            </button>
+                            
                             <button onclick="openAddVideoModal()" class="flex items-center gap-2 rounded-lg border border-blue-500 bg-blue-500 px-3 py-2 !text-lg font-medium !text-white hover:bg-blue-700 transition-all duration-200 ease-in-out hover:scale-105">
                                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -147,6 +154,31 @@
                     </div>
                 </div>
 
+                <!-- Active Filters Badge Container -->
+                <div id="activeFiltersContainer" class="hidden mb-6">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Active Filters:</span>
+                        <div id="filterBadges" class="flex flex-wrap gap-2">
+                            <!-- Filter badges will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Overlay -->
+                <div id="loadingOverlay" class="hidden items-center justify-center py-16 mb-6">
+                    <div class="text-center">
+                        <svg class="animate-spin h-12 w-12 text-blue-600 dark:text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <p class="mt-3 text-lg font-medium !text-gray-700 dark:!text-white/90">Refreshing videos...</p>
+                    </div>
+                </div>
+                
+                <div class="rounded-2xl border border-gray-200 bg-white pt-4 dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                    <div class="px-5 sm:px-6">
+                        <!-- Content Container -->
+                        <div id="contentContainer">
                 <!-- Video Grid -->
                 <div id="videoGrid" class="grid gap-6" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
                     <!-- Video cards will be dynamically added here -->
@@ -160,20 +192,21 @@
                         </svg>
                         <h3 class="mb-2 !text-lg font-medium !text-gray-900 dark:!text-white/90">No videos found</h3>
                         <p class="!text-gray-500 dark:!text-gray-400">Try adjusting your search or filter criteria</p>
+                                </div>
+                            </div>
                     </div>
                 </div>
 
                 <!-- Pagination -->
-                <div id="paginationContainer" class="rounded-2xl border border-gray-200 bg-white mt-6 dark:border-gray-800" style="background-color: var(--card-bg, white);">
                     <div class="border-t border-gray-200 px-6 py-4 dark:border-gray-800">
                         <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <span class="!text-lg !text-gray-700 dark:!text-gray-400">Show</span>
                             <select id="itemsPerPage" class="rounded-lg border border-gray-300 bg-white px-2 py-1 !text-lg !text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:!text-white/90">
-                                <option value="4">4</option>
-                                <option value="8" selected>8</option>
-                                <option value="12">12</option>
-                                <option value="16">16</option>
+                                    <option value="6">6</option>
+                                    <option value="12" selected>12</option>
+                                    <option value="24">24</option>
+                                    <option value="48">48</option>
                             </select>
                             <span class="!text-lg !text-gray-700 dark:!text-gray-400">items per page</span>
                         </div>
@@ -200,6 +233,7 @@
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M17.4175 9.9986C17.4178 10.1909 17.3446 10.3832 17.198 10.53L12.2013 15.5301C11.9085 15.8231 11.4337 15.8233 11.1407 15.5305C10.8477 15.2377 10.8475 14.7629 11.1403 14.4699L14.8604 10.7472L3.33301 10.7472C2.91879 10.7472 2.58301 10.4114 2.58301 9.99715C2.58301 9.58294 2.91879 9.24715 3.33301 9.24715L14.8549 9.24715L11.1403 5.53016C10.8475 5.23717 10.8477 4.7623 11.1407 4.4695C11.4336 4.1767 11.9085 4.17685 12.2013 4.46984L17.1588 9.43049C17.3173 9.568 17.4175 9.77087 17.4175 9.99715C17.4175 9.99763 17.4175 9.99812 17.4175 9.9986Z" fill=""></path>
                                 </svg>
                             </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -233,24 +267,24 @@
                             <div class="-mx-2.5 flex flex-wrap gap-y-5">
                                 <div class="w-full px-2.5">
                                     <input type="text" id="videoTitle" placeholder="Video Title" required
-                                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:!text-white/90 dark:placeholder:!text-white/30">
+                                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:!text-white/90 dark:placeholder:!text-white/30">
                                 </div>
 
                                 <div class="w-full px-2.5">
                                     <textarea id="videoDescription" placeholder="Video Description" required rows="3"
-                                        class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:!text-white/90 dark:placeholder:!text-white/30"></textarea>
+                                        class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:!text-white/90 dark:placeholder:!text-white/30"></textarea>
                                 </div>
 
                                 <div class="w-full px-2.5">
                                     <textarea id="videoUrl" placeholder="SharePoint Video Embed Code (e.g., &lt;iframe src='...' width='640' height='360'&gt;&lt;/iframe&gt;) or Video URL" required rows="4"
-                                        class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:!text-white/90 dark:placeholder:!text-white/30"></textarea>
-                                    <p class="mt-1 !text-lg !text-gray-500 dark:!text-gray-400">Paste the SharePoint embed code for direct video embedding. The video will display automatically.</p>
-                                    <p class="mt-1 !text-lg !text-blue-600 dark:!text-blue-400">💡 To get SharePoint embed code: Open your video → Click "..." → Select "Embed" → Copy the iframe code</p>
+                                        class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:!text-white/90 dark:placeholder:!text-white/30"></textarea>
+                                    <p class="mt-1 !text-base !text-gray-500 dark:!text-gray-400">Paste the SharePoint embed code for direct video embedding. The video will display automatically.</p>
+                                    <p class="mt-1 !text-base !text-blue-600 dark:!text-blue-400">💡 To get SharePoint embed code: Open your video → Click "..." → Select "Embed" → Copy the iframe code</p>
                                 </div>
 
                                 <div class="w-full px-2.5">
                                     <select id="videoCategory" required
-                                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-800 dark:!text-white/90 dark:placeholder:!text-white/30">
+                                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-800 dark:!text-white/90 dark:placeholder:!text-white/30">
                                         <option value="">Select Category</option>
                                         <option value="learning">Learning</option>
                                         <option value="development">Development</option>
@@ -261,7 +295,7 @@
 
                                 <div class="w-full px-2.5">
                                     <input type="url" id="procedureLink" placeholder="Procedure Document URL" required
-                                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:!text-white/90 dark:placeholder:!text-white/30">
+                                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-lg !text-gray-800 shadow-theme-xs placeholder:!text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:!text-white/90 dark:placeholder:!text-white/30">
                                 </div>
 
                                 <div class="w-full px-2.5">
@@ -298,54 +332,125 @@
         }
 
         let videos = [];
+        
+        // Refresh videos function
+        async function refreshVideos() {
+            const refreshButton = document.getElementById('refreshButton');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const contentContainer = document.getElementById('contentContainer');
+            
+            // Disable button
+            refreshButton.disabled = true;
+            
+            // Clear all filters
+            clearAllFilters();
+            
+            // Hide content container, show only loading overlay
+            contentContainer.classList.add('hidden');
+            loadingOverlay.classList.remove('hidden');
+            loadingOverlay.classList.add('flex');
+            
+            try {
+                // Fetch fresh data
+                await fetchVideoData();
+                
+                // Show success toast
+                if (typeof showSuccessToast === 'function') {
+                    showSuccessToast('Videos refreshed successfully');
+                }
+                
+                // Wait a bit to ensure render completes
+                setTimeout(() => {
+                    loadingOverlay.classList.add('hidden');
+                    loadingOverlay.classList.remove('flex');
+                    contentContainer.classList.remove('hidden');
+                }, 500);
+            } catch (error) {
+                console.error('Error refreshing videos:', error);
+                
+                // Hide overlay and show content on error
+                loadingOverlay.classList.add('hidden');
+                loadingOverlay.classList.remove('flex');
+                contentContainer.classList.remove('hidden');
+                
+                if (typeof showErrorToast === 'function') {
+                    showErrorToast('Failed to refresh videos');
+                }
+            } finally {
+                // Re-enable button
+                setTimeout(() => {
+                    refreshButton.disabled = false;
+                }, 500);
+            }
+        }
         let filteredVideos = [];
         let currentPage = 1;
-        let itemsPerPage = 8;
+        let itemsPerPage = 12;
         let selectedCategory = 'all';
 
-        // Fetch video data from Confluence Excel attachment
+        // Fetch video data from Confluence JSON attachment
         async function fetchVideoData() {
+            const pageId = '2740868871';
+            const attachmentName = 'videos.json';
+
             try {
                 showLoadingState();
-                document.getElementById('noResultsState').classList.add('hidden');
-                document.getElementById('paginationContainer').classList.add('hidden');
 
-                const excelResponse = await fetch('https://cedt-confluence.net/confluence/download/attachments/2740868871/videos.xlsx?api=v2', {
+                // Check if attachment exists and get its ID
+                const attachmentsResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment?filename=${attachmentName}`, {
                     headers: {
                         'X-Atlassian-Token': 'no-check'
                     }
                 });
 
-                if (!excelResponse.ok) {
-                    throw new Error('Failed to fetch videos.xlsx file');
+                if (!attachmentsResponse.ok) {
+                    console.log('No existing videos.json found');
+                    videos = [];
+                    filteredVideos = [];
+                    showNoDataState();
+                    return;
                 }
 
-                const excelBlob = await excelResponse.blob();
-                const reader = new FileReader();
+                const attachmentsData = await attachmentsResponse.json();
 
-                reader.onload = function(e) {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                if (attachmentsData.results && attachmentsData.results.length > 0) {
+                    const attachmentId = attachmentsData.results[0].id;
+                    const downloadUrl = `https://cedt-confluence.net/confluence/download/attachments/${pageId}/${attachmentName}?api=v2`;
 
-                    // Transform Excel data to video format
-                    videos = jsonData.map(row => ({
-                        id: row.id || Math.random().toString(36).substr(2, 9),
-                        title: row.title,
-                        description: row.description,
-                        videoUrl: row.videoUrl,
-                        category: (row.category || '').toLowerCase(),
-                        procedureLink: row.procedureLink
-                    }));
+                    const dataResponse = await fetch(downloadUrl, {
+                        headers: {
+                            'X-Atlassian-Token': 'no-check'
+                        }
+                    });
+
+                    if (!dataResponse.ok) {
+                        throw new Error('Failed to fetch videos.json file');
+                    }
+
+                    const jsonData = await dataResponse.json();
+                    
+                    // Handle both formats: { videos: [] } or direct array
+                    if (jsonData.videos && Array.isArray(jsonData.videos)) {
+                        videos = jsonData.videos;
+                    } else if (Array.isArray(jsonData)) {
+                        videos = jsonData;
+                    } else {
+                        console.warn('Unexpected data format:', jsonData);
+                        videos = [];
+                    }
 
                     filteredVideos = [...videos];
                     updateVideoGrid();
-                };
-
-                reader.readAsArrayBuffer(excelBlob);
+                } else {
+                    console.log('Attachment does not exist');
+                    videos = [];
+                    filteredVideos = [];
+                    showNoDataState();
+                }
             } catch (error) {
                 console.error('Error fetching video data:', error);
+                videos = [];
+                filteredVideos = [];
                 showNoDataState();
             }
         }
@@ -462,7 +567,70 @@
                 return matchesSearch && matchesCategory;
             });
             currentPage = 1; // Reset to first page when filtering
+            updateFilterBadges();
             updateVideoGrid();
+        }
+        
+        // Update filter badges display
+        function updateFilterBadges() {
+            const container = document.getElementById('activeFiltersContainer');
+            const badgesContainer = document.getElementById('filterBadges');
+            const searchTerm = document.getElementById('searchInput').value;
+            
+            let badges = [];
+            
+            // Add category filter badge
+            if (selectedCategory !== 'all') {
+                const categoryName = selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1);
+                badges.push({
+                    type: 'category',
+                    label: `Category: ${categoryName}`,
+                    value: selectedCategory
+                });
+            }
+            
+            // Add search filter badge
+            if (searchTerm.trim()) {
+                badges.push({
+                    type: 'search',
+                    label: `Search: "${searchTerm}"`,
+                    value: searchTerm
+                });
+            }
+            
+            // Show/hide container
+            if (badges.length > 0) {
+                container.classList.remove('hidden');
+                badgesContainer.innerHTML = badges.map(badge => `
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 border border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800">
+                        ${badge.label}
+                        <button onclick="removeFilter('${badge.type}')" class="hover:bg-blue-200 dark:hover:bg-blue-800 rounded-full p-0.5 transition-colors">
+                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </span>
+                `).join('');
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+        
+        // Remove individual filter
+        function removeFilter(type) {
+            if (type === 'category') {
+                filterByCategory('all');
+            } else if (type === 'search') {
+                document.getElementById('searchInput').value = '';
+                filterVideos();
+            }
+        }
+        
+        // Clear all filters
+        function clearAllFilters() {
+            selectedCategory = 'all';
+            document.getElementById('searchInput').value = '';
+            filterByCategory('all');
         }
 
         // Pagination
@@ -532,14 +700,12 @@
         function updateVideoGrid() {
             const videoGrid = document.getElementById('videoGrid');
             const noResultsState = document.getElementById('noResultsState');
-            const paginationContainer = document.getElementById('paginationContainer');
             
             if (filteredVideos.length === 0) {
                 showNoDataState();
             } else {
                 videoGrid.classList.remove('hidden');
                 noResultsState.classList.add('hidden');
-                paginationContainer.classList.remove('hidden');
                 
                 const start = (currentPage - 1) * itemsPerPage;
                 const end = start + itemsPerPage;
@@ -553,19 +719,19 @@
         // Loading/No-data states like trainings.html
         function showLoadingState() {
             const videoGrid = document.getElementById('videoGrid');
-            const paginationContainer = document.getElementById('paginationContainer');
-            if (paginationContainer) paginationContainer.classList.add('hidden');
+            const noResultsState = document.getElementById('noResultsState');
+            if (noResultsState) noResultsState.classList.add('hidden');
             if (videoGrid) {
                 videoGrid.classList.remove('hidden');
                 videoGrid.innerHTML = `
                     <div class="col-span-full py-16">
                         <div class="flex flex-col items-center justify-center">
                             <div class="relative">
-                                <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-200"></div>
+                                <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 dark:border-blue-800"></div>
                                 <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent absolute top-0 left-0"></div>
                             </div>
                             <div class="mt-6 text-center">
-                                <span class="text-lg font-medium !text-gray-700">Loading videos...</span>
+                                <span class="text-lg font-medium !text-gray-700 dark:!text-white/90">Loading videos...</span>
                             </div>
                         </div>
                     </div>
@@ -576,8 +742,6 @@
         function showNoDataState() {
             const videoGrid = document.getElementById('videoGrid');
             const noResultsState = document.getElementById('noResultsState');
-            const paginationContainer = document.getElementById('paginationContainer');
-            if (paginationContainer) paginationContainer.classList.add('hidden');
             if (videoGrid) videoGrid.classList.add('hidden');
             if (noResultsState) noResultsState.classList.remove('hidden');
         }
@@ -618,6 +782,7 @@
                 }
             });
             
+            updateFilterBadges();
             filterVideos();
         }
 
@@ -638,125 +803,125 @@
         async function submitNewVideo(event) {
             event.preventDefault();
             
-            const videoUrl = document.getElementById('videoUrl').value;
-            const isEmbedCode = (videoUrl || '').includes('<iframe') || (videoUrl || '').includes('embed');
+            const pageId = '2740868871';
+            const attachmentName = 'videos.json';
             
             const newVideo = {
+                id: Math.random().toString(36).substr(2, 9),
                 title: document.getElementById('videoTitle').value,
                 description: document.getElementById('videoDescription').value,
-                videoUrl: videoUrl,
-                category: document.getElementById('videoCategory').value,
+                videoUrl: document.getElementById('videoUrl').value,
+                category: document.getElementById('videoCategory').value.toLowerCase(),
                 procedureLink: document.getElementById('procedureLink').value
             };
 
+            // Close the form immediately
             closeAddVideoModal();
+            
+            if (typeof showInfoToast === 'function') {
+                showInfoToast('Saving video...');
+            }
 
             try {
-                const attachmentsResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment?filename=videos.xlsx');
-                const attachmentsData = await attachmentsResponse.json();
+                // Check if attachment exists and get its ID
+                const attachmentsResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment?filename=${attachmentName}`, {
+                    headers: {
+                        'X-Atlassian-Token': 'no-check'
+                    }
+                });
                 
-                let attachmentId;
-                let existingVideos = [];
+                let attachmentId = null;
+                let existingData = { videos: [], metadata: { lastUpdated: '', totalVideos: 0, categories: {} } };
 
-                if (attachmentsData.results && attachmentsData.results.length > 0) {
-                    attachmentId = attachmentsData.results[0].id;
-                    
-                    const excelResponse = await fetch(`https://cedt-confluence.net/confluence/download/attachments/2740868871/videos.xlsx?api=v2`, {
-                        headers: {
-                            'X-Atlassian-Token': 'no-check'
-                        }
-                    });
-
-                    if (excelResponse.ok) {
-                        const excelBlob = await excelResponse.blob();
-                        const reader = new FileReader();
-
-                        reader.onload = async function(e) {
-                            const data = new Uint8Array(e.target.result);
-                            const workbook = XLSX.read(data, { type: 'array' });
-                            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                            existingVideos = XLSX.utils.sheet_to_json(firstSheet);
-
-                            existingVideos.push(newVideo);
-
-                            const range = XLSX.utils.decode_range(firstSheet['!ref']);
-                            const newRowIndex = range.e.r + 1;
-                            
-                            const videoId = Math.random().toString(36).substr(2, 9);
-                            newVideo.id = videoId;
-                            
-                            const headers = ['id', 'title', 'description', 'videoUrl', 'category', 'procedureLink'];
-                            headers.forEach((header, colIndex) => {
-                                const cellAddress = XLSX.utils.encode_cell({ r: newRowIndex, c: colIndex });
-                                firstSheet[cellAddress] = { v: newVideo[header], t: 's' };
-                            });
-                            
-                            firstSheet['!ref'] = XLSX.utils.encode_range({
-                                s: { r: range.s.r, c: range.s.c },
-                                e: { r: newRowIndex, c: range.e.c }
-                            });
-
-                            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-                            const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-                            const formData = new FormData();
-                            formData.append('file', blob, 'videos.xlsx');
-
-                            const uploadResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment/${attachmentId}`, {
-                                method: 'POST',
+                if (attachmentsResponse.ok) {
+                    const attachmentsData = await attachmentsResponse.json();
+                    if (attachmentsData.results && attachmentsData.results.length > 0) {
+                        attachmentId = attachmentsData.results[0].id;
+                        console.log('Found existing attachment with ID:', attachmentId);
+                        
+                        // Fetch existing data
+                        try {
+                            const dataResponse = await fetch(`https://cedt-confluence.net/confluence/download/attachments/${pageId}/${attachmentName}?api=v2`, {
                                 headers: {
                                     'X-Atlassian-Token': 'no-check'
-                                },
-                                body: formData
+                                }
                             });
 
-                            if (!uploadResponse.ok) {
-                                throw new Error(`Failed to update Excel file: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                            if (dataResponse.ok) {
+                                const data = await dataResponse.json();
+                                // Handle both formats: { videos: [] } or direct array
+                                if (data.videos && Array.isArray(data.videos)) {
+                                    existingData = data;
+                                } else if (Array.isArray(data)) {
+                                    existingData.videos = data;
+                                }
                             }
-                            
-                            const transformedVideo = {
-                                id: Math.random().toString(36).substr(2, 9),
-                                title: newVideo.title,
-                                description: newVideo.description,
-                                videoUrl: newVideo.videoUrl,
-                                category: newVideo.category.toLowerCase(),
-                                procedureLink: newVideo.procedureLink
-                            };
-                            
-                            videos.push(transformedVideo);
-                            filteredVideos = [...videos];
-                            updateVideoGrid();
-                        };
-
-                        reader.readAsArrayBuffer(excelBlob);
-                    } else {
-                        throw new Error('Failed to fetch existing videos.xlsx file');
+                        } catch (err) {
+                            console.warn('Could not fetch existing videos, starting fresh:', err);
+                        }
                     }
                 } else {
-                    const newWorkbook = XLSX.utils.book_new();
-                    const newWorksheet = XLSX.utils.json_to_sheet([newVideo]);
-                    XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, 'Videos');
+                    console.log('No existing attachment found, will create new one');
+                }
 
-                    const excelBuffer = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
-                    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                // Add new video to the beginning
+                if (!Array.isArray(existingData.videos)) {
+                    existingData.videos = [];
+                }
+                existingData.videos.unshift(newVideo);
 
-                    const formData = new FormData();
-                    formData.append('file', blob, 'videos.xlsx');
+                // Update metadata
+                existingData.metadata = {
+                    lastUpdated: new Date().toISOString(),
+                    totalVideos: existingData.videos.length,
+                    categories: existingData.videos.reduce((acc, video) => {
+                        acc[video.category] = (acc[video.category] || 0) + 1;
+                        return acc;
+                    }, {})
+                };
 
-                    const uploadResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment', {
-                        method: 'POST',
-                        headers: { 'X-Atlassian-Token': 'no-check' },
-                        body: formData
-                    });
+                // Create blob with updated data
+                const blob = new Blob([JSON.stringify(existingData, null, 2)], { type: 'application/json' });
+                const formData = new FormData();
+                formData.append('file', blob, attachmentName);
 
-                    if (!uploadResponse.ok) {
-                        throw new Error(`Failed to create Excel file: ${uploadResponse.status} ${uploadResponse.statusText}`);
-                    }
+                // Upload to Confluence (create or update)
+                const uploadUrl = `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment${attachmentId ? `/${attachmentId}` : ''}`;
+                
+                console.log('Uploading to:', uploadUrl);
+                console.log('Method: POST');
+                console.log('Attachment ID:', attachmentId || 'creating new');
 
-                    fetchVideoData(false);
+                const uploadResponse = await fetch(uploadUrl, {
+                    method: 'POST',
+                    headers: {
+                        'X-Atlassian-Token': 'no-check'
+                    },
+                    body: formData
+                });
+
+                if (!uploadResponse.ok) {
+                    const errorText = await uploadResponse.text();
+                    console.error('Upload failed:', errorText);
+                    throw new Error(`Failed to save video: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                }
+
+                const result = await uploadResponse.json();
+                console.log('Video saved successfully!', result);
+
+                // Add to local data and update grid
+                videos.unshift(newVideo);
+                currentPage = 1;
+                filterVideos();
+                
+                if (typeof showSuccessToast === 'function') {
+                    showSuccessToast('Video added successfully!');
                 }
             } catch (error) {
                 console.error('Error adding video:', error);
+                if (typeof showErrorToast === 'function') {
+                    showErrorToast('Failed to add video. Please try again.');
+                }
             }
         }
 
@@ -773,7 +938,5 @@
             await fetchVideoData();
         });
     </script>
-    <!-- Add SheetJS library for Excel parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
 </html>
