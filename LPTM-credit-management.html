@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Management Reporting Team - LPTM Hub</title>
+
+    <!-- 
+      CONFLUENCE MACRO REQUIRED: Include global-notifications.html as a macro
+      This provides showSuccessToast(), showErrorToast(), showWarningToast(), showInfoToast()
+    -->
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                25: '#f2f7ff',
+                50: '#ecf3ff',
+                100: '#dde9ff',
+                200: '#c2d6ff',
+                300: '#9cb9ff',
+                400: '#7592ff',
+                500: '#465fff',
+                600: '#3641f5',
+                700: '#2a31d8',
+                800: '#252dae',
+                900: '#262e89',
+                950: '#161950',
+              },
+            },
+          },
+        },
+      }
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Hero section styling */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 2.6vh;
+            margin-bottom: 3rem;
+        }
+
+        .video-holder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-holder video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 2.6vh;
+        }
+
+        .hero-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 0 20px 20px 20px;
+            z-index: 10;
+        }
+
+        .hero-info h1 {
+            color: #fff;
+            font-size: 55px;
+            line-height: 1.2;
+            margin: 0;
+            font-weight: 300;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 400px;
+            }
+
+            .hero-info h1 {
+                font-size: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section {
+                height: 350px;
+            }
+
+            .hero-info h1 {
+                font-size: 32px;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px !important;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1 !important;
+        }
+
+        .dark ::-webkit-scrollbar-track {
+            background: #374151 !important;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db !important;
+            border-radius: 5px !important;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af !important;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #6b7280 !important;
+        }
+
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af !important;
+        }
+    </style>
+</head>
+
+<body class="mx-auto max-w-screen-2xl">
+    <!-- Main Container -->
+    <div class="px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Hero Section with Video -->
+        <div class="hero-section animate-fade-in" style="animation-delay: 0.1s;">
+            <div class="video-holder">
+                <video autoplay muted loop playsinline id="heroVideo">
+                    <source src="/LPTM-Hub/Animations/lptm-about.webm" type="video/webm">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="hero-info">
+                <h1>Analyze.<br>Report.<br>Transform.</h1>
+            </div>
+        </div>
+
+        <!-- Overview Section -->
+        <section class="py-16">
+            <div class="px-6">
+                <div class="text-center animate-fade-in" style="animation-delay: 0.2s;">
+                    <h2 class="!text-3xl md:!text-4xl text-gray-900 font-semibold dark:text-white">Credit Management Reporting Team</h2>
+                    <p class="mt-6 !text-lg text-gray-900 font-medium dark:text-gray-200">Delivering comprehensive credit insights through advanced analytics, strategic reporting, and data-driven decision support</p>
+                    <p class="mt-4 text-gray-600 dark:text-gray-400 max-w-4xl mx-auto">The Credit Management Reporting Team serves as the central hub for credit portfolio analytics, risk monitoring, and management reporting. We transform complex credit data into actionable insights that drive strategic decision-making across the organization.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Credit Reporting 4 Functions Section -->
+        <section class="py-24">
+            <div class="px-6 animate-fade-in" style="animation-delay: 0.4s;">
+                <div class="max-w-7xl mx-auto">
+                    <!-- Header -->
+                    <div class="text-center mb-16">
+                        <p class="text-sm font-medium tracking-wider text-gray-500 dark:text-gray-400 uppercase mb-4">
+                            OUR CORE CAPABILITIES
+                        </p>
+                        <h2 class="!text-4xl md:!text-5xl font-normal text-gray-900 dark:text-white leading-tight mb-4">
+                            Credit Reporting Consists of 4<br />Essential Functions
+                        </h2>
+                        <p class="!text-base md:!text-lg text-gray-600 dark:text-gray-400 max-w-4xl mx-auto leading-relaxed">
+                            Our team delivers comprehensive credit intelligence through advanced analytics, robust monitoring, regulatory excellence, and strategic reporting — transforming complex data into actionable insights for confident decision-making.
+                        </p>
+                    </div>
+
+                    <!-- Functions Cards Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Card 1: Portfolio Analytics & Insights -->
+                        <div class="bg-blue-600 dark:bg-gray-950 rounded-2xl p-8 flex flex-col justify-between min-h-[420px] relative overflow-hidden group hover:shadow-2xl transition-all duration-300">
+                            <div class="relative z-10">
+                                <h3 class="!text-2xl font-semibold text-white mb-4 leading-tight">
+                                    Portfolio Analytics & Insights
+                                </h3>
+                                <p class="!text-base text-white/80 leading-relaxed">
+                                    Delivers comprehensive credit portfolio analysis including exposure metrics, concentration analysis, performance trends, and credit quality indicators. Transforms complex credit data into clear, actionable insights supporting strategic decision-making across the organization.
+                                </p>
+                            </div>
+                            <div class="mt-auto pt-8 relative z-10">
+                                <span class="!text-8xl font-light text-white/20 group-hover:text-white transition-colors duration-300">01</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Risk Monitoring & Analysis -->
+                        <div class="bg-blue-600 dark:bg-gray-950 rounded-2xl p-8 flex flex-col justify-between min-h-[420px] relative overflow-hidden group hover:shadow-2xl transition-all duration-300">
+                            <div class="relative z-10">
+                                <h3 class="!text-2xl font-semibold text-white mb-4 leading-tight">
+                                    Risk Monitoring & Analysis
+                                </h3>
+                                <p class="!text-base text-white/80 leading-relaxed">
+                                    Provides real-time monitoring of credit exposures with automated alerting for threshold breaches, concentration limits, and emerging risk patterns. Conducts stress testing, scenario analysis, and forward-looking risk assessments to identify potential issues before they materialize.
+                                </p>
+                            </div>
+                            <div class="mt-auto pt-8 relative z-10">
+                                <span class="!text-8xl font-light text-white/20 group-hover:text-white transition-colors duration-300">02</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Regulatory Reporting & Compliance -->
+                        <div class="bg-blue-600 dark:bg-gray-950 rounded-2xl p-8 flex flex-col justify-between min-h-[420px] relative overflow-hidden group hover:shadow-2xl transition-all duration-300">
+                            <div class="relative z-10">
+                                <h3 class="!text-2xl font-semibold text-white mb-4 leading-tight">
+                                    Regulatory Reporting & Compliance
+                                </h3>
+                                <p class="!text-base text-white/80 leading-relaxed">
+                                    Ensures accurate and timely submission of all regulatory reports including credit risk exposures, capital adequacy, and supervisory reporting. Maintains rigorous quality controls, comprehensive audit trails, and full transparency to meet all regulatory requirements with confidence.
+                                </p>
+                            </div>
+                            <div class="mt-auto pt-8 relative z-10">
+                                <span class="!text-8xl font-light text-white/20 group-hover:text-white transition-colors duration-300">03</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Management Information & Dashboards -->
+                        <div class="bg-blue-600 dark:bg-gray-950 rounded-2xl p-8 flex flex-col justify-between min-h-[420px] relative overflow-hidden group hover:shadow-2xl transition-all duration-300">
+                            <div class="relative z-10">
+                                <h3 class="!text-2xl font-semibold text-white mb-4 leading-tight">
+                                    Management Information & Dashboards
+                                </h3>
+                                <p class="!text-base text-white/80 leading-relaxed">
+                                    Produces executive dashboards, weekly summaries, monthly reports, and quarterly reviews tailored to stakeholder needs. Provides customized analytical support for strategic initiatives, deep-dive investigations, and special projects requiring bespoke credit analysis and insights.
+                                </p>
+                            </div>
+                            <div class="mt-auto pt-8 relative z-10">
+                                <span class="!text-8xl font-light text-white/20 group-hover:text-white transition-colors duration-300">04</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Simple seamless video loop
+        document.addEventListener('DOMContentLoaded', function () {
+            const video = document.getElementById('heroVideo');
+            if (video) {
+                video.loop = true;
+                video.play().catch(error => {
+                    console.log('Video autoplay failed:', error);
+                });
+            }
+        });
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
