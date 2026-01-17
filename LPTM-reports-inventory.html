@@ -1601,7 +1601,7 @@
       // Export to Excel
       function exportToExcel() {
         try {
-          // Define headers
+          // Define headers in exact order
           const headers = [
             'ID',
             'Report Name',
@@ -1628,7 +1628,7 @@
             ws = XLSX.utils.aoa_to_sheet([headers]);
             showInfoToast('Exported template with headers. You can fill in the data and upload it back.');
           } else {
-            // If there is data, export normally
+            // If there is data, export normally with proper column order
             const exportData = filteredReports.map(report => ({
               'ID': report.id,
               'Report Name': report.reportName,
@@ -1648,7 +1648,8 @@
               'Audience': report.audience || ''
             }));
             
-            ws = XLSX.utils.json_to_sheet(exportData);
+            // Use header parameter to ensure correct column order
+            ws = XLSX.utils.json_to_sheet(exportData, { header: headers });
             showSuccessToast(`Exported ${exportData.length} reports`);
           }
           
@@ -1816,3 +1817,4 @@
     </script>
 </body>
 </html>
+
