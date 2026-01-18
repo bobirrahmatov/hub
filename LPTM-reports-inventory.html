@@ -654,6 +654,7 @@
       >
         <!-- Close button -->
         <button
+          onclick="closeReportModal()"
           class="modal-close-btn group absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-200 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-500 dark:bg-gray-800 dark:hover:bg-gray-700 sm:right-6 sm:top-6 sm:h-11 sm:w-11"
         >
           <svg class="fill-current transition-colors group-hover:text-gray-600 dark:group-hover:text-gray-200" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1270,12 +1271,13 @@
           
           const data = await response.json();
           
+          // Check if data has a reports array or is directly an array
           if (data.reports && Array.isArray(data.reports)) {
             return data.reports;
           } else if (Array.isArray(data)) {
             return data;
           } else {
-            console.warn('⚠️ Unexpected data format in reports_inventory.json');
+            console.warn('⚠️ Unexpected data format in reports_inventory.json:', data);
             return [];
           }
         } catch (error) {
