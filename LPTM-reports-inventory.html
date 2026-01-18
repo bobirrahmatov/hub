@@ -1399,7 +1399,7 @@
         
         pageReports.forEach(report => {
           const reportId = report.id || '';
-          const escapedId = reportId.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          const escapedId = String(reportId).replace(/'/g, "\\'").replace(/"/g, '&quot;');
           html += `
             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer" data-report-id="${escapedId}">
               <td class="px-6 py-4 whitespace-nowrap">
