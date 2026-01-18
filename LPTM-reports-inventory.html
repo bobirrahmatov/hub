@@ -654,8 +654,9 @@
       >
         <!-- Close button -->
         <button
+          type="button"
           onclick="closeReportModal()"
-          class="modal-close-btn group absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-200 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-500 dark:bg-gray-800 dark:hover:bg-gray-700 sm:right-6 sm:top-6 sm:h-11 sm:w-11"
+          class="modal-close-btn group absolute right-3 top-3 z-[99999] flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-200 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-500 dark:bg-gray-800 dark:hover:bg-gray-700 sm:right-6 sm:top-6 sm:h-11 sm:w-11"
         >
           <svg class="fill-current transition-colors group-hover:text-gray-600 dark:group-hover:text-gray-200" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z" fill=""/>
@@ -1262,39 +1263,11 @@
           const response = await fetch('https://cedt-confluence.net/confluence/download/attachments/2740868871/reports_inventory.json?api=v2');
           
           if (!response.ok) {
-            if (response.status === 404) {
-              console.info('ℹ️ Reports file not found. Starting with empty inventory.');
-            } else {
-              console.warn('⚠️ Could not fetch reports file:', response.status, response.statusText);
-            }
-            return [];
+            throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
           }
-          
-          // Check if response has content
-          const contentType = response.headers.get('content-type');
-          if (!contentType || !contentType.includes('application/json')) {
-            console.warn('⚠️ Response is not JSON. Content-Type:', contentType);
-            return [];
-          }
-          
-          // Get response text first to check if it's empty
-          const text = await response.text();
-          
-          // If empty, return empty array
-          if (!text || text.trim() === '') {
-            console.info('ℹ️ Reports file is empty. Starting with empty inventory.');
-            return [];
-          }
-          
-          // Try to parse as JSON
-          let data;
-          try {
-            data = JSON.parse(text);
-          } catch (parseError) {
-            console.error('❌ Failed to parse JSON:', parseError);
-            console.error('Response text (first 200 chars):', text.substring(0, 200));
-            return [];
-          }
+
+          // Parse the response as JSON
+          const data = await response.json();
           
           // Check if data has a reports array or is directly an array
           if (data.reports && Array.isArray(data.reports)) {
@@ -1302,12 +1275,13 @@
           } else if (Array.isArray(data)) {
             return data;
           } else {
-            console.warn('⚠️ Unexpected data format in reports_inventory.json:', data);
+            console.warn('Unexpected data format:', data);
             return [];
           }
+
         } catch (error) {
-          console.error('❌ Error fetching reports:', error);
-          return [];
+          console.error('Error fetching data:', error);
+          return null;
         }
       }
       
@@ -1315,60 +1289,81 @@
       async function updateReportsFile(reportsData) {
         try {
           let attachmentId = null;
-          let fileExists = false;
+          let existingReports = { reports: [], metadata: { lastUpdated: '', totalReports: 0, version: '1.0' } };
           
-          // Check if file exists
+          // Check if the attachment exists
           try {
             const attachmentsResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment?filename=reports_inventory.json');
+            const attachmentsData = await attachmentsResponse.json();
             
-            if (attachmentsResponse.ok) {
-              const attachmentsData = await attachmentsResponse.json();
+            if (attachmentsData.results && attachmentsData.results.length > 0) {
+              // File exists, get its content
+              attachmentId = attachmentsData.results[0].id;
+              console.log('Found existing attachment with ID:', attachmentId);
               
-              if (attachmentsData.results && attachmentsData.results.length > 0) {
-                attachmentId = attachmentsData.results[0].id;
-                fileExists = true;
+              try {
+                const reportsResponse = await fetch(`https://cedt-confluence.net/confluence/download/attachments/2740868871/reports_inventory.json?api=v2`);
+                if (reportsResponse.ok) {
+                  const data = await reportsResponse.json();
+                  // Handle both formats: { reports: [] } or direct array
+                  if (data.reports && Array.isArray(data.reports)) {
+                    existingReports = data;
+                  } else if (Array.isArray(data)) {
+                    existingReports.reports = data;
+                  }
+                }
+              } catch (err) {
+                console.warn('Could not fetch existing reports, starting fresh:', err);
               }
+            } else {
+              console.log('No existing attachment found, will create new one');
             }
           } catch (checkError) {
-            console.warn('⚠️ Could not check for existing file:', checkError);
+            console.warn('Could not check for existing file:', checkError);
           }
-          
-          const dataToSave = {
-            reports: reportsData,
-            metadata: {
-              lastUpdated: new Date().toISOString(),
-              totalReports: reportsData.length,
-              version: '1.0'
-            }
+
+          // Update reports
+          existingReports.reports = reportsData;
+
+          // Update metadata
+          existingReports.metadata = {
+            lastUpdated: new Date().toISOString(),
+            totalReports: reportsData.length,
+            version: '1.0'
           };
-          
+
+          // Prepare the form data
           const formData = new FormData();
-          const blob = new Blob([JSON.stringify(dataToSave, null, 2)], { type: 'application/json' });
+          const blob = new Blob([JSON.stringify(existingReports, null, 2)], { type: 'application/json' });
           formData.append('file', blob, 'reports_inventory.json');
+
+          // Use the correct endpoint - always POST to base endpoint
+          // If attachmentId exists, it will update; otherwise it creates new
+          const uploadUrl = `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment${attachmentId ? `/${attachmentId}` : ''}`;
           
-          const endpoint = attachmentId 
-            ? `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment/${attachmentId}/data`
-            : `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment`;
-          
-          const response = await fetch(endpoint, {
+          console.log('Uploading to:', uploadUrl);
+          console.log('Method: POST');
+
+          const response = await fetch(uploadUrl, {
             method: 'POST',
             headers: {
               'X-Atlassian-Token': 'no-check'
             },
             body: formData
           });
-          
+
           if (!response.ok) {
-            throw new Error(`Failed to ${fileExists ? 'update' : 'create'} reports file: ${response.status}`);
+            const errorText = await response.text();
+            console.error('Upload failed:', errorText);
+            throw new Error(`Failed to save reports: ${response.status} ${response.statusText}`);
           }
+
+          const result = await response.json();
+          console.log('Reports saved successfully!', result);
           
           return true;
         } catch (error) {
-          console.error('❌ Error updating reports file:', error);
-          if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            console.warn('⚠️ Running in local dev mode. File update skipped.');
-            return true;
-          }
+          console.error('Error updating reports file:', error);
           throw error;
         }
       }
@@ -2000,12 +1995,33 @@
       }
       
       // Modal close event listeners
-      document.querySelectorAll('.modal-close-btn').forEach(btn => {
-        btn.addEventListener('click', closeReportModal);
+      document.addEventListener('DOMContentLoaded', function() {
+        // Set up close button listeners
+        document.querySelectorAll('.modal-close-btn').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            closeReportModal();
+          });
+        });
+        
+        // Close modal when clicking on backdrop (the overlay div)
+        const modal = document.getElementById('reportModal');
+        if (modal) {
+          const backdrop = modal.querySelector('.modal-close-btn.fixed');
+          if (backdrop) {
+            backdrop.addEventListener('click', function(e) {
+              if (e.target === backdrop) {
+                closeReportModal();
+              }
+            });
+          }
+        }
       });
       
+      // Also handle window click for modal backdrop
       window.addEventListener('click', (event) => {
-        if (event.target === document.getElementById('reportModal')) {
+        const modal = document.getElementById('reportModal');
+        if (modal && event.target === modal && !modal.classList.contains('hidden')) {
           closeReportModal();
         }
       });
@@ -2499,17 +2515,21 @@
       // Initialize on page load
       document.addEventListener('DOMContentLoaded', async function() {
         try {
-          reports = await fetchReports();
-          filteredReports = [...reports];
-          
-          renderReportsTable();
-          
-          if (reports.length > 0) {
-            showInfoToast(`Loaded ${reports.length} reports`);
+          const data = await fetchReports();
+          if (data && data.length > 0) {
+            reports = data;
+            filteredReports = [...reports];
+            renderReportsTable();
+          } else {
+            reports = [];
+            filteredReports = [];
+            renderReportsTable();
           }
         } catch (error) {
-          console.error('❌ Error initializing:', error);
-          showErrorToast('Failed to load data. Please refresh the page.');
+          console.error('Error initializing:', error);
+          reports = [];
+          filteredReports = [];
+          renderReportsTable();
         }
       });
     </script>
