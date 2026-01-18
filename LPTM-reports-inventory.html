@@ -363,7 +363,76 @@
             <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
               <!-- Filters on the Left -->
               <div class="flex flex-wrap items-center gap-3">
-              <div x-data="{ open: false, selected: 'All Statuses' }" class="relative">
+              <!-- Clear All Filters Button -->
+              <button
+                onclick="clearAllFilters()"
+                class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              >
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Clear all
+              </button>
+              
+              <!-- Advanced Filter Button -->
+              <div class="relative">
+                <button
+                  id="advancedFilterToggle"
+                  onclick="toggleAdvancedFilter()"
+                  class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800"
+                >
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                  </svg>
+                  Filter
+                  <span id="activeFilterCount" class="hidden ml-1 rounded-full bg-brand-500 px-2 py-0.5 text-xs font-medium text-white"></span>
+                </button>
+                
+                <!-- Advanced Filter Popover -->
+                <div
+                  id="advancedFilterPopover"
+                  class="hidden absolute left-0 top-full mt-2 w-[900px] rounded-2xl border border-gray-200 bg-white p-6 shadow-theme-xl dark:border-gray-800 dark:bg-gray-900"
+                  style="z-index: 99999 !important;"
+                >
+                  <div class="flex items-center justify-between mb-4">
+                    <h4 class="!text-lg font-medium text-gray-800 dark:text-white/90">Filters</h4>
+                    <button
+                      onclick="toggleAdvancedFilter()"
+                      class="group flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700"
+                    >
+                      <svg class="fill-current transition-colors" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z" fill=""/>
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  <!-- Scrollable Content Area -->
+                  <div class="max-h-[400px] pr-2" style="overflow-y: auto; overflow-x: visible;">
+                    <!-- Filter Rows Container -->
+                    <div id="filterRowsContainer" class="space-y-3 pb-60" style="overflow: visible;">
+                      <!-- Filter rows will be dynamically added here -->
+                    </div>
+                  </div>
+                  
+                  <!-- Action Buttons -->
+                  <div class="mt-6 flex items-center gap-3">
+                    <button
+                      onclick="addFilterRow()"
+                      class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2.5 !text-base font-medium text-white hover:bg-gray-800 transition-colors dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+                    >
+                      Add filter
+                    </button>
+                    <button
+                      onclick="applyAdvancedFilters()"
+                      class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 !text-base font-medium text-white hover:bg-brand-600 transition-colors"
+                    >
+                      Apply filter
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div x-data="{ open: false, selected: 'All Statuses' }" class="relative" id="statusFilterDropdown">
                   <button @click="open = !open" type="button"
                     class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                     <span x-text="selected"></span>
@@ -393,7 +462,7 @@
                 </div>
                 
                 <!-- Report Type Filter -->
-                <div x-data="{ open: false, selected: 'All Types' }" class="relative">
+                <div x-data="{ open: false, selected: 'All Types' }" class="relative" id="reportTypeFilterDropdown">
                   <button @click="open = !open" type="button"
                     class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                     <span x-text="selected"></span>
@@ -427,7 +496,7 @@
                 </div>
                 
                 <!-- Region Filter -->
-                <div x-data="{ open: false, selected: 'All Regions' }" class="relative">
+                <div x-data="{ open: false, selected: 'All Regions' }" class="relative" id="regionFilterDropdown">
                   <button @click="open = !open" type="button"
                     class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                     <span x-text="selected"></span>
@@ -1848,6 +1917,409 @@
           setTimeout(() => {
             refreshButton.disabled = false;
           }, 500); // Keep disabled for at least 500ms
+        }
+      }
+      
+      // Advanced Filter System
+      let advancedFilters = [];
+      let filterIdCounter = 0;
+      
+      // Available columns for filtering
+      const filterableColumns = [
+        { value: 'id', label: 'ID' },
+        { value: 'reportName', label: 'Report Name' },
+        { value: 'description', label: 'Description' },
+        { value: 'reportType', label: 'Report Type' },
+        { value: 'category', label: 'Category' },
+        { value: 'subCategory', label: 'Sub Category' },
+        { value: 'criticalReport', label: 'Critical Report' },
+        { value: 'reportComplexity', label: 'Report Complexity' },
+        { value: 'reportRegion', label: 'Report Region' },
+        { value: 'frequency', label: 'Frequency' },
+        { value: 'preparedBy', label: 'Prepared By' },
+        { value: 'prepareRegion', label: 'Prepare Region' },
+        { value: 'activeStatus', label: 'Active Status' },
+        { value: 'timeAvgPerRun', label: 'Time (Avg Per Run)' },
+        { value: 'includePII', label: 'Include PII?' },
+        { value: 'euc', label: 'EUC' },
+        { value: 'audience', label: 'Audience' }
+      ];
+      
+      // Filter operators
+      const filterOperators = [
+        { value: 'contains', label: 'contains' },
+        { value: 'notContains', label: 'does not contain' },
+        { value: 'is', label: 'is' },
+        { value: 'isNot', label: 'is not' },
+        { value: 'isEmpty', label: 'is empty' },
+        { value: 'isNotEmpty', label: 'is not empty' }
+      ];
+      
+      function toggleAdvancedFilter() {
+        const popover = document.getElementById('advancedFilterPopover');
+        const isHidden = popover.classList.contains('hidden');
+        
+        if (isHidden) {
+          popover.classList.remove('hidden');
+          // Add initial filter row if none exists
+          if (advancedFilters.length === 0) {
+            addFilterRow();
+          }
+          
+          // Close popover when clicking outside
+          setTimeout(() => {
+            document.addEventListener('click', closePopoverOnClickOutside);
+          }, 0);
+        } else {
+          popover.classList.add('hidden');
+          document.removeEventListener('click', closePopoverOnClickOutside);
+        }
+      }
+      
+      function closePopoverOnClickOutside(event) {
+        const popover = document.getElementById('advancedFilterPopover');
+        const toggleButton = document.getElementById('advancedFilterToggle');
+        
+        if (!popover.contains(event.target) && !toggleButton.contains(event.target)) {
+          popover.classList.add('hidden');
+          document.removeEventListener('click', closePopoverOnClickOutside);
+        }
+      }
+      
+      function addFilterRow() {
+        const filterId = filterIdCounter++;
+        const isFirstRow = advancedFilters.length === 0;
+        
+        const filterRow = {
+          id: filterId,
+          logicOperator: 'and',
+          column: 'reportName',
+          operator: 'contains',
+          value: ''
+        };
+        
+        advancedFilters.push(filterRow);
+        renderFilterRows();
+      }
+      
+      function removeFilterRow(filterId) {
+        advancedFilters = advancedFilters.filter(f => f.id !== filterId);
+        renderFilterRows();
+        updateFilterCount();
+      }
+      
+      function updateFilterRow(filterId, field, value) {
+        const filter = advancedFilters.find(f => f.id === filterId);
+        if (filter) {
+          filter[field] = value;
+          
+          // If operator is isEmpty or isNotEmpty, clear the value
+          if (field === 'operator' && (value === 'isEmpty' || value === 'isNotEmpty')) {
+            filter.value = '';
+          }
+          
+          // Update filter count without applying
+          updateFilterCount();
+        }
+      }
+      
+      function renderFilterRows() {
+        const container = document.getElementById('filterRowsContainer');
+        
+        if (advancedFilters.length === 0) {
+          container.innerHTML = '';
+          return;
+        }
+        
+        container.innerHTML = advancedFilters.map((filter, index) => {
+          const isFirstRow = index === 0;
+          const needsValue = filter.operator !== 'isEmpty' && filter.operator !== 'isNotEmpty';
+          
+          return `
+            <div class="flex items-start gap-3 w-full">
+              <!-- Logic Operator or "Where" Label -->
+              <div class="flex items-center" style="min-width: 80px;">
+                ${isFirstRow ? `
+                  <span class="!text-base font-medium text-gray-700 dark:text-gray-300">Where</span>
+                ` : `
+                  <div class="relative" x-data="{ open: false, selected: '${filter.logicOperator}' }">
+                    <button @click="open = !open" type="button"
+                      class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800 w-20">
+                      <span x-text="selected"></span>
+                      <svg class="h-3 w-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    <div x-show="open" @click.outside="open = false" x-cloak
+                      class="absolute left-0 top-full mt-2 w-20 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800" style="z-index: 100000 !important;">
+                      <button type="button" @click="selected = 'and'; open = false; updateFilterRow(${filter.id}, 'logicOperator', 'and')"
+                        class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                        and
+                      </button>
+                      <button type="button" @click="selected = 'or'; open = false; updateFilterRow(${filter.id}, 'logicOperator', 'or')"
+                        class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                        or
+                      </button>
+                    </div>
+                  </div>
+                `}
+              </div>
+              
+              <!-- Column Selector -->
+              <div class="relative flex-1" x-data="{ open: false, selected: '${filterableColumns.find(c => c.value === filter.column)?.label || 'Report Name'}' }">
+                <button @click="open = !open" type="button"
+                  class="inline-flex items-center justify-between w-full gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
+                  <span x-text="selected"></span>
+                  <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div x-show="open" @click.outside="open = false" x-cloak
+                  class="absolute left-0 top-full mt-2 w-full max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800" style="z-index: 100000 !important;">
+                  ${filterableColumns.map(col => `
+                    <button type="button" @click="selected = '${col.label}'; open = false; updateFilterRow(${filter.id}, 'column', '${col.value}')"
+                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                      ${col.label}
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+              
+              <!-- Operator Selector -->
+              <div class="relative flex-1" x-data="{ open: false, selected: '${filterOperators.find(o => o.value === filter.operator)?.label || 'contains'}' }">
+                <button @click="open = !open" type="button"
+                  class="inline-flex items-center justify-between w-full gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
+                  <span x-text="selected"></span>
+                  <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div x-show="open" @click.outside="open = false" x-cloak
+                  class="absolute left-0 top-full mt-2 w-full max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800" style="z-index: 100000 !important;">
+                  ${filterOperators.map(op => `
+                    <button type="button" @click="selected = '${op.label}'; open = false; updateFilterRow(${filter.id}, 'operator', '${op.value}')"
+                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                      ${op.label}
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+              
+              <!-- Search Input -->
+              ${needsValue ? `
+                <input
+                  type="text"
+                  placeholder="Search ${filterableColumns.find(c => c.value === filter.column)?.label.toLowerCase()}..."
+                  value="${filter.value}"
+                  oninput="updateFilterRow(${filter.id}, 'value', this.value)"
+                  class="flex-1 h-11 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500"
+                />
+              ` : `
+                <div class="flex-1 h-11 flex items-center px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50">
+                  <span class="!text-base text-gray-400 dark:text-gray-500">No value needed</span>
+                </div>
+              `}
+              
+              <!-- Delete Button -->
+              <button
+                onclick="event.stopPropagation(); removeFilterRow(${filter.id})"
+                class="flex items-center justify-center h-11 w-11 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
+              >
+                <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+          `;
+        }).join('');
+        
+        updateFilterCount();
+        
+        // Reinitialize Alpine.js for the new elements
+        if (typeof Alpine !== 'undefined') {
+          setTimeout(() => {
+            const elements = container.querySelectorAll('[x-data]');
+            elements.forEach(el => {
+              if (!el._x_dataStack) {
+                Alpine.initTree(el);
+              }
+            });
+          }, 50);
+        }
+      }
+      
+      function applyAdvancedFilters() {
+        if (advancedFilters.length === 0) {
+          filterReports();
+          return;
+        }
+        
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        
+        filteredReports = reports.filter(report => {
+          // First apply search term if exists
+          if (searchTerm) {
+            const matchesSearch = 
+              report.reportName.toLowerCase().includes(searchTerm) ||
+              report.id.toLowerCase().includes(searchTerm) ||
+              (report.description && report.description.toLowerCase().includes(searchTerm));
+            
+            if (!matchesSearch) return false;
+          }
+          
+          // Then apply advanced filters with proper boolean precedence
+          // AND has higher precedence than OR (standard boolean logic)
+          let result = true;
+
+          // First, group consecutive AND operations together
+          let andGroups = [];
+          let currentAndGroup = [];
+
+          for (let i = 0; i < advancedFilters.length; i++) {
+            const filter = advancedFilters[i];
+
+            // Evaluate the filter condition
+            const fieldValue = String(report[filter.column] || '').toLowerCase();
+            const filterValue = filter.value.toLowerCase();
+
+            let matches = false;
+
+            switch (filter.operator) {
+              case 'contains':
+                matches = fieldValue.includes(filterValue);
+                break;
+              case 'notContains':
+                matches = !fieldValue.includes(filterValue);
+                break;
+              case 'is':
+                matches = fieldValue === filterValue;
+                break;
+              case 'isNot':
+                matches = fieldValue !== filterValue;
+                break;
+              case 'isEmpty':
+                matches = fieldValue === '';
+                break;
+              case 'isNotEmpty':
+                matches = fieldValue !== '';
+                break;
+            }
+
+            // Add filter result to current AND group
+            currentAndGroup.push(matches);
+
+            // If next filter is OR or this is the last filter, evaluate the AND group
+            if (i === advancedFilters.length - 1 || advancedFilters[i + 1].logicOperator === 'or') {
+              // Evaluate AND group (all conditions in group must be true)
+              const andResult = currentAndGroup.every(match => match);
+              andGroups.push(andResult);
+              currentAndGroup = [];
+            }
+          }
+
+          // Combine AND groups with OR (at least one group must be true)
+          result = andGroups.some(groupResult => groupResult);
+          
+          return result;
+        });
+        
+        currentPage = 1;
+        renderReportsTable();
+        updatePaginationInfo();
+        
+        // Close the popover after applying filters
+        toggleAdvancedFilter();
+      }
+      
+      function clearAllFilters() {
+        // Clear search input
+        document.getElementById('searchInput').value = '';
+
+        // Reset basic filters
+        currentStatusFilter = 'All';
+        currentReportTypeFilter = 'All';
+        currentRegionFilter = 'All';
+
+        // Reset Alpine.js dropdown displays using a more reliable approach
+        // Force re-initialization of Alpine components by recreating the x-data
+        const statusDropdown = document.getElementById('statusFilterDropdown');
+        const typeDropdown = document.getElementById('reportTypeFilterDropdown');
+        const regionDropdown = document.getElementById('regionFilterDropdown');
+
+        // For status dropdown
+        if (statusDropdown) {
+          const statusAlpineData = statusDropdown.__x;
+          if (statusAlpineData && statusAlpineData.$data) {
+            statusAlpineData.$data.selected = 'All Statuses';
+            statusAlpineData.$data.open = false;
+          }
+          // Also update the button text directly as fallback
+          const statusButton = statusDropdown.querySelector('button span');
+          if (statusButton) {
+            statusButton.textContent = 'All Statuses';
+          }
+        }
+
+        // For report type dropdown
+        if (typeDropdown) {
+          const typeAlpineData = typeDropdown.__x;
+          if (typeAlpineData && typeAlpineData.$data) {
+            typeAlpineData.$data.selected = 'All Types';
+            typeAlpineData.$data.open = false;
+          }
+          // Also update the button text directly as fallback
+          const typeButton = typeDropdown.querySelector('button span');
+          if (typeButton) {
+            typeButton.textContent = 'All Types';
+          }
+        }
+
+        // For region dropdown
+        if (regionDropdown) {
+          const regionAlpineData = regionDropdown.__x;
+          if (regionAlpineData && regionAlpineData.$data) {
+            regionAlpineData.$data.selected = 'All Regions';
+            regionAlpineData.$data.open = false;
+          }
+          // Also update the button text directly as fallback
+          const regionButton = regionDropdown.querySelector('button span');
+          if (regionButton) {
+            regionButton.textContent = 'All Regions';
+          }
+        }
+
+        // Clear advanced filters
+        advancedFilters = [];
+        filterIdCounter = 0;
+        renderFilterRows();
+
+        // Reset all reports to show everything
+        filteredReports = [...reports];
+        currentPage = 1;
+        renderReportsTable();
+        updatePaginationInfo();
+        updateFilterCount();
+      }
+      
+      function resetAdvancedFilters() {
+        advancedFilters = [];
+        filterIdCounter = 0;
+        renderFilterRows();
+        filterReports();
+        
+        // Close the modal
+        toggleAdvancedFilter();
+      }
+      
+      function updateFilterCount() {
+        const countBadge = document.getElementById('activeFilterCount');
+        const activeCount = advancedFilters.filter(f => f.value || f.operator === 'isEmpty' || f.operator === 'isNotEmpty').length;
+        
+        if (activeCount > 0) {
+          countBadge.textContent = activeCount;
+          countBadge.classList.remove('hidden');
+        } else {
+          countBadge.classList.add('hidden');
         }
       }
       
