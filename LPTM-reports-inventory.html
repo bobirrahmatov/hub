@@ -1666,8 +1666,15 @@
       }
       
       function editReport(reportId) {
-        const report = reports.find(r => r.id === reportId);
-        if (!report) return;
+        console.log('editReport called with reportId:', reportId);
+        // Unescape the ID if it was escaped for HTML
+        const unescapedId = reportId.replace(/\\'/g, "'").replace(/&quot;/g, '"');
+        const report = reports.find(r => String(r.id) === String(reportId) || String(r.id) === String(unescapedId));
+        if (!report) {
+          console.warn('Report not found for ID:', reportId, 'Available IDs:', reports.map(r => r.id));
+          return;
+        }
+        console.log('Found report:', report);
         
         document.getElementById('reportModalTitle').textContent = 'Edit Report';
         document.getElementById('report-id-internal').value = report.id;
@@ -1711,9 +1718,19 @@
         }, 50);
         
         const modal = document.getElementById('reportModal');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        if (modal) {
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+          console.log('✅ Modal opened');
+        } else {
+          console.error('❌ Modal element not found!');
+        }
       }
+      
+      // Expose to global scope for Confluence
+      window.editReport = editReport;
+      window.viewReport = viewReport;
+      window.deleteReport = deleteReport;
       
       // Helper function to update Alpine.js dropdown display
       function updateAlpineDropdown(fieldId, displayValue) {
@@ -1746,8 +1763,14 @@
       }
       
       function viewReport(reportId) {
-        const report = reports.find(r => r.id === reportId);
-        if (!report) return;
+        console.log('viewReport called with reportId:', reportId);
+        // Unescape the ID if it was escaped for HTML
+        const unescapedId = reportId.replace(/\\'/g, "'").replace(/&quot;/g, '"');
+        const report = reports.find(r => String(r.id) === String(reportId) || String(r.id) === String(unescapedId));
+        if (!report) {
+          console.warn('Report not found for ID:', reportId);
+          return;
+        }
         
         // For now, just open edit modal in view mode
         editReport(reportId);
@@ -1831,8 +1854,14 @@
       
       // Delete report
       async function deleteReport(reportId) {
-        const report = reports.find(r => r.id === reportId);
-        if (!report) return;
+        console.log('deleteReport called with reportId:', reportId);
+        // Unescape the ID if it was escaped for HTML
+        const unescapedId = reportId.replace(/\\'/g, "'").replace(/&quot;/g, '"');
+        const report = reports.find(r => String(r.id) === String(reportId) || String(r.id) === String(unescapedId));
+        if (!report) {
+          console.warn('Report not found for ID:', reportId);
+          return;
+        }
         
         if (!confirm(`Are you sure you want to delete "${report.reportName}"?`)) {
           return;
