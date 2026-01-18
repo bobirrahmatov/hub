@@ -1700,24 +1700,31 @@
         
         // Update Alpine.js dropdown display values with longer timeout for modal opening
         setTimeout(() => {
-          // Update all single-select dropdowns
-          updateAlpineDropdown('report-type', report.reportType || 'Select Report Type');
-          updateAlpineDropdown('report-category', report.category || 'Select Category');
-          updateAlpineDropdown('report-subcategory', report.subCategory || 'Select Sub Category');
-          updateAlpineDropdown('report-critical', report.criticalReport || 'Select Critical Report');
-          updateAlpineDropdown('report-complexity', report.reportComplexity || 'Select Complexity');
-          updateAlpineDropdown('report-frequency', report.frequency || 'Select Frequency');
-          updateAlpineDropdown('report-prepared-by', report.preparedBy || 'Select Prepared By');
-          updateAlpineDropdown('report-status', report.activeStatus || 'Active');
-          updateAlpineDropdown('report-pii', report.includePII || 'No');
-          updateAlpineDropdown('report-euc', report.euc || 'No');
+          console.log('Updating dropdowns for report:', report);
+          // Update all single-select dropdowns - use actual value or empty string to trigger default
+          if (report.reportType) updateAlpineDropdown('report-type', report.reportType);
+          if (report.category) updateAlpineDropdown('report-category', report.category);
+          if (report.subCategory) updateAlpineDropdown('report-subcategory', report.subCategory);
+          if (report.criticalReport) updateAlpineDropdown('report-critical', report.criticalReport);
+          if (report.reportComplexity) updateAlpineDropdown('report-complexity', report.reportComplexity);
+          if (report.frequency) updateAlpineDropdown('report-frequency', report.frequency);
+          if (report.preparedBy) updateAlpineDropdown('report-prepared-by', report.preparedBy);
+          if (report.activeStatus) updateAlpineDropdown('report-status', report.activeStatus);
+          if (report.includePII) updateAlpineDropdown('report-pii', report.includePII);
+          if (report.euc) updateAlpineDropdown('report-euc', report.euc);
           
           // Update multi-select region dropdowns with a bit more delay
           setTimeout(() => {
-            updateAlpineDropdownArray('report-region', Array.isArray(report.reportRegion) ? report.reportRegion : (report.reportRegion ? [report.reportRegion] : []));
-            updateAlpineDropdownArray('report-prepare-region', Array.isArray(report.prepareRegion) ? report.prepareRegion : (report.prepareRegion ? [report.prepareRegion] : []));
-          }, 100);
-        }, 150);
+            if (report.reportRegion) {
+              const regions = Array.isArray(report.reportRegion) ? report.reportRegion : [report.reportRegion];
+              updateAlpineDropdownArray('report-region', regions);
+            }
+            if (report.prepareRegion) {
+              const prepareRegions = Array.isArray(report.prepareRegion) ? report.prepareRegion : [report.prepareRegion];
+              updateAlpineDropdownArray('report-prepare-region', prepareRegions);
+            }
+          }, 150);
+        }, 200);
         
         const modal = document.getElementById('reportModal');
         if (modal) {
@@ -2137,6 +2144,9 @@
             searchInput.value = '';
           }
           
+          // Reset filter dropdowns visually
+          resetFilterDropdowns();
+          
           // Reset filtered reports
           filteredReports = [...reports];
           
@@ -2166,6 +2176,52 @@
           setTimeout(() => {
             refreshButton.disabled = false;
           }, 500); // Keep disabled for at least 500ms
+        }
+      }
+      
+      // Helper function to reset filter dropdowns visually
+      function resetFilterDropdowns() {
+        const statusDropdown = document.getElementById('statusFilterDropdown');
+        const typeDropdown = document.getElementById('reportTypeFilterDropdown');
+        const regionDropdown = document.getElementById('regionFilterDropdown');
+
+        // For status dropdown
+        if (statusDropdown) {
+          try {
+            const statusAlpineData = statusDropdown.__x;
+            if (statusAlpineData && statusAlpineData.$data) {
+              statusAlpineData.$data.selected = 'All Statuses';
+              statusAlpineData.$data.open = false;
+            }
+          } catch (e) {
+            console.warn('Could not reset status dropdown:', e);
+          }
+        }
+
+        // For report type dropdown
+        if (typeDropdown) {
+          try {
+            const typeAlpineData = typeDropdown.__x;
+            if (typeAlpineData && typeAlpineData.$data) {
+              typeAlpineData.$data.selected = 'All Types';
+              typeAlpineData.$data.open = false;
+            }
+          } catch (e) {
+            console.warn('Could not reset type dropdown:', e);
+          }
+        }
+
+        // For region dropdown
+        if (regionDropdown) {
+          try {
+            const regionAlpineData = regionDropdown.__x;
+            if (regionAlpineData && regionAlpineData.$data) {
+              regionAlpineData.$data.selectedRegions = ['All'];
+              regionAlpineData.$data.open = false;
+            }
+          } catch (e) {
+            console.warn('Could not reset region dropdown:', e);
+          }
         }
       }
       
