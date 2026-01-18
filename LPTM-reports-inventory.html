@@ -23,6 +23,9 @@
     <!-- SheetJS library for Excel export/import -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
+    <!-- ApexCharts CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    
     <!-- Tailwind Config -->
     <script>
       tailwind.config = {
@@ -226,76 +229,38 @@
           
           <div class="border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
         
-        <!-- Metric Cards -->
-        <div class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
-          <!-- Total Reports -->
-          <article class="flex gap-5 rounded-xl border border-gray-200 bg-white p-4 shadow-xs dark:border-gray-800 dark:bg-white/[0.03]">
-            <div class="bg-brand-500/10 text-brand-500 inline-flex h-14 w-14 items-center justify-center rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <path d="M4.95833 6.125C3.99183 6.125 3.20833 6.9085 3.20833 7.875V11.2998C4.69996 11.2998 5.9098 12.509 5.9098 14.0006C5.9098 15.4923 4.7006 16.7015 3.20897 16.7015L3.20833 20.125C3.20833 21.0915 3.99183 21.875 4.95833 21.875H23.0417C24.0082 21.875 24.7917 21.0915 24.7917 20.125V16.7015C23.3003 16.7011 22.0915 15.4921 22.0915 14.0006C22.0915 12.5092 23.3003 11.3001 24.7917 11.2998V7.875C24.7917 6.9085 24.0082 6.125 23.0417 6.125H4.95833Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Tabs Navigation -->
+            <div class="rounded-xl border border-gray-200 dark:border-gray-800" x-data="{ activeTab: 'table' }">
+              <div class="border-b border-gray-200 dark:border-gray-800">
+                <nav class="-mb-px flex space-x-2 overflow-x-auto px-6 pt-4 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 dark:[&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5">
+                  <button
+                    class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out"
+                    x-bind:class="activeTab === 'table' ? ' text-brand-500 border-brand-500  dark:text-brand-400 dark:border-brand-400' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+                    x-on:click="activeTab = 'table'"
+                  >
+                    <svg class="size-5" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M3 3.5C3 2.67157 3.67157 2 4.5 2H15.5C16.3284 2 17 2.67157 17 3.5V16.5C17 17.3284 16.3284 18 15.5 18H4.5C3.67157 18 3 17.3284 3 16.5V3.5ZM15.5 3.5H4.5V7.5H15.5V3.5ZM4.5 9V12H15.5V9H4.5ZM4.5 13.5V16.5H15.5V13.5H4.5Z" fill="currentColor"/>
               </svg>
-            </div>
-            <div class="flex-1">
-              <h3 class="text-title-xs mb-1 font-semibold text-gray-800 dark:text-white/90" id="total-reports-count">
-                0
-              </h3>
-              <p class="!text-base text-gray-500 dark:text-gray-400">
-                Total Reports
-              </p>
-            </div>
-          </article>
-          
-          <!-- Active Reports -->
-          <article class="flex gap-5 rounded-xl border border-gray-200 bg-white p-4 shadow-xs dark:border-gray-800 dark:bg-white/[0.03]">
-            <div class="bg-success-500/10 text-success-500 inline-flex h-14 w-14 items-center justify-center rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" width="29" height="28" viewBox="0 0 29 28" fill="none">
-                <path d="M17.8062 11.6598L13.1257 16.3403L10.8605 14.0751M25.125 13.9999C25.125 19.96 20.2934 24.7916 14.3334 24.7916C8.37328 24.7916 3.54169 19.96 3.54169 13.9999C3.54169 8.03985 8.37328 3.20825 14.3334 3.20825C20.2934 3.20825 25.125 8.03985 25.125 13.9999Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    Table View
+                  </button>
+                  <button
+                    class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out"
+                    x-bind:class="activeTab === 'dashboard' ? ' text-brand-500 border-brand-500  dark:border-brand-400  dark:text-brand-400' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+                    x-on:click="activeTab = 'dashboard'"
+                  >
+                    <svg class="size-5" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M9.85954 4.0835C9.5834 4.0835 9.35954 4.30735 9.35954 4.5835V15.4161C9.35954 15.6922 9.5834 15.9161 9.85954 15.9161H10.1373C10.4135 15.9161 10.6373 15.6922 10.6373 15.4161V4.5835C10.6373 4.30735 10.4135 4.0835 10.1373 4.0835H9.85954ZM7.85954 4.5835C7.85954 3.47893 8.75497 2.5835 9.85954 2.5835H10.1373C11.2419 2.5835 12.1373 3.47893 12.1373 4.5835V15.4161C12.1373 16.5206 11.2419 17.4161 10.1373 17.4161H9.85954C8.75497 17.4161 7.85954 16.5206 7.85954 15.4161V4.5835ZM4.58203 8.9598C4.30589 8.9598 4.08203 9.18366 4.08203 9.4598V15.4168C4.08203 15.693 4.30589 15.9168 4.58203 15.9168H4.85981C5.13595 15.9168 5.35981 15.693 5.35981 15.4168V9.4598C5.35981 9.18366 5.13595 8.9598 4.85981 8.9598H4.58203ZM2.58203 9.4598C2.58203 8.35523 3.47746 7.4598 4.58203 7.4598H4.85981C5.96438 7.4598 6.85981 8.35523 6.85981 9.4598V15.4168C6.85981 16.5214 5.96438 17.4168 4.85981 17.4168H4.58203C3.47746 17.4168 2.58203 16.5214 2.58203 15.4168V9.4598ZM14.637 12.435C14.637 12.1589 14.8609 11.935 15.137 11.935H15.4148C15.691 11.935 15.9148 12.1589 15.9148 12.435V15.4168C15.9148 15.693 15.691 15.9168 15.4148 15.9168H15.137C14.8609 15.9168 14.637 15.693 14.637 15.4168V12.435ZM15.137 10.435C14.0325 10.435 13.137 11.3304 13.137 12.435V15.4168C13.137 16.5214 14.0325 17.4168 15.137 17.4168H15.4148C16.5194 17.4168 17.4148 16.5214 17.4148 15.4168V12.435C17.4148 11.3304 16.5194 10.435 15.4148 10.435H15.137Z" fill="currentColor"/>
               </svg>
+                    Dashboard
+                  </button>
+                </nav>
             </div>
-            <div class="flex-1">
-              <h3 class="text-title-xs mb-1 font-semibold text-gray-800 dark:text-white/90" id="active-reports-count">
-                0
-              </h3>
-              <p class="!text-base text-gray-500 dark:text-gray-400">
-                Active Reports
-              </p>
-            </div>
-          </article>
-          
-          <!-- On-Hold Reports -->
-          <article class="flex gap-5 rounded-xl border border-gray-200 bg-white p-4 shadow-xs dark:border-gray-800 dark:bg-white/[0.03]">
-            <div class="bg-warning-500/10 text-warning-500 inline-flex h-14 w-14 items-center justify-center rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" width="29" height="28" viewBox="0 0 29 28" fill="none">
-                <path d="M5.33333 4.66675H24M5.33333 23.3334L24 23.3334M21.6667 4.66675V7.0001C21.6667 10.8661 18.5327 14.0001 14.6667 14.0001M7.66666 4.66675V7.0001C7.66666 10.8661 10.8007 14.0001 14.6667 14.0001M14.6667 14.0001C18.5327 14.0001 21.6667 17.1341 21.6667 21.0001V23.3334M14.6667 14.0001C10.8007 14.0001 7.66666 17.1341 7.66666 21.0001L7.66666 23.3334" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="flex-1">
-              <h3 class="text-title-xs mb-1 font-semibold text-gray-800 dark:text-white/90" id="onhold-reports-count">
-                0
-              </h3>
-              <p class="!text-base text-gray-500 dark:text-gray-400">
-                On-Hold Reports
-              </p>
-            </div>
-          </article>
-          
-          <!-- Retired Reports -->
-          <article class="flex gap-5 rounded-xl border border-gray-200 bg-white p-4 shadow-xs dark:border-gray-800 dark:bg-white/[0.03]">
-            <div class="bg-gray-500/10 text-gray-500 inline-flex h-14 w-14 items-center justify-center rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <path d="M9 12.25L12.25 15.5L19.25 8.5M25.375 14C25.375 20.4203 20.1703 25.625 13.75 25.625C7.32969 25.625 2.125 20.4203 2.125 14C2.125 7.57969 7.32969 2.375 13.75 2.375C20.1703 2.375 25.375 7.57969 25.375 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="flex-1">
-              <h3 class="text-title-xs mb-1 font-semibold text-gray-800 dark:text-white/90" id="retired-reports-count">
-                0
-              </h3>
-              <p class="!text-base text-gray-500 dark:text-gray-400">
-                Retired Reports
-              </p>
-            </div>
-          </article>
-        </div>
+
+              <!-- Tab Content -->
+              <div class="p-4 dark:border-gray-800 sm:p-6">
+                
+                <!-- Table View Tab -->
+                <div x-show="activeTab === 'table'">
             
             <!-- Buttons & Search Bar -->
             <div class="mb-4 flex flex-wrap items-center gap-3">
@@ -635,6 +600,215 @@
                 </div>
               </div>
             </div>
+            
+          </div>
+                <!-- End Table View Tab -->
+                
+                <!-- Dashboard Tab -->
+                <div x-show="activeTab === 'dashboard'">
+                  <div class="grid grid-cols-12 gap-4 md:gap-6">
+                    
+                    <!-- Metric Cards -->
+                    <div class="col-span-12">
+                      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4">
+                        
+                        <!-- Total Reports -->
+                        <div class="rounded-2xl border border-gray-200 bg-white px-6 pb-5 pt-6 dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                          <div class="mb-6 flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/20">
+                              <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                              </svg>
+                            </div>
+                            <div>
+                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Total Reports</h3>
+                              <span class="block !text-base text-gray-500 dark:text-gray-400">All reports</span>
+                            </div>
+                          </div>
+                          <div class="flex items-end justify-between">
+                            <div>
+                              <h4 id="dashboard-total-reports" class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Active Reports -->
+                        <div class="rounded-2xl border border-gray-200 bg-white px-6 pb-5 pt-6 dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                          <div class="mb-6 flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/20">
+                              <svg class="h-6 w-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                              </svg>
+                            </div>
+                            <div>
+                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Active</h3>
+                              <span class="block !text-base text-gray-500 dark:text-gray-400">Currently active</span>
+                            </div>
+                          </div>
+                          <div class="flex items-end justify-between gap-3">
+                            <div>
+                              <h4 id="dashboard-active-reports" class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                            </div>
+                            <span class="flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 text-xl font-bold text-green-600 leading-none dark:bg-green-500/15 dark:text-green-500" id="dashboard-active-percentage">
+                              0%
+                            </span>
+                          </div>
+                        </div>
+
+                        <!-- On-Hold Reports -->
+                        <div class="rounded-2xl border border-gray-200 bg-white px-6 pb-5 pt-6 dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                          <div class="mb-6 flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/20">
+                              <svg class="h-6 w-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                              </svg>
+                            </div>
+                            <div>
+                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">On-Hold</h3>
+                              <span class="block !text-base text-gray-500 dark:text-gray-400">Temporarily paused</span>
+                            </div>
+                          </div>
+                          <div class="flex items-end justify-between gap-3">
+                            <div>
+                              <h4 id="dashboard-onhold-reports" class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                            </div>
+                            <span class="flex items-center gap-1 rounded-full bg-orange-50 px-3 py-1 text-xl font-bold text-orange-600 leading-none dark:bg-orange-500/15 dark:text-orange-500" id="dashboard-onhold-percentage">
+                              0%
+                            </span>
+                          </div>
+                        </div>
+
+                        <!-- Retired Reports -->
+                        <div class="rounded-2xl border border-gray-200 bg-white px-6 pb-5 pt-6 dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                          <div class="mb-6 flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-900/20">
+                              <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                              </svg>
+                            </div>
+                            <div>
+                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Retired</h3>
+                              <span class="block !text-base text-gray-500 dark:text-gray-400">No longer active</span>
+                            </div>
+                          </div>
+                          <div class="flex items-end justify-between gap-3">
+                            <div>
+                              <h4 id="dashboard-retired-reports" class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                            </div>
+                            <span class="flex items-center gap-1 rounded-full bg-gray-50 px-3 py-1 text-xl font-bold text-gray-600 leading-none dark:bg-gray-500/15 dark:text-gray-500" id="dashboard-retired-percentage">
+                              0%
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <!-- Report Makers Summary Table -->
+                    <div class="col-span-12">
+                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+                          <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Reports by Maker</h3>
+                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Report count breakdown by each maker</p>
+                        </div>
+                        <div class="custom-scrollbar overflow-x-auto">
+                          <table class="min-w-full" id="reportMakersSummaryTable">
+                            <thead>
+                              <tr class="bg-gray-50 dark:bg-gray-800/50">
+                                <th class="px-6 py-4 text-left !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Report Maker</th>
+                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Total Reports</th>
+                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Active</th>
+                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">On-Hold</th>
+                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Retired</th>
+                              </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="reportMakersSummaryTableBody">
+                              <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Charts Row 1: Donut Charts -->
+                    <div class="col-span-12 grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
+                      
+                      <!-- Report Type Distribution Chart (Donut) -->
+                      <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                        <div class="mb-9">
+                          <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+                            Report Types
+                          </h3>
+                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Distribution by report type</p>
+                        </div>
+                        <div class="">
+                          <div id="reportTypeChart" class="flex justify-center mx-auto chartDarkStyle"></div>
+                        </div>
+                      </div>
+
+                      <!-- Report Complexity Chart (Donut) -->
+                      <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                        <div class="mb-9">
+                          <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+                            Report Complexity
+                          </h3>
+                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Complexity distribution</p>
+                        </div>
+                        <div class="">
+                          <div id="reportComplexityChart" class="flex justify-center mx-auto chartDarkStyle"></div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <!-- Charts Row 2: Tables and Bar Charts -->
+                    <div class="col-span-12 grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
+                      
+                      <!-- Region Distribution Table -->
+                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 flex flex-col" style="background-color: var(--card-bg, white);">
+                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+                          <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Reports by Region</h3>
+                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Regional distribution</p>
+                        </div>
+                        <div class="custom-scrollbar overflow-x-auto flex-1">
+                          <table class="min-w-full h-full" id="reportRegionSummaryTable">
+                            <thead>
+                              <tr class="bg-gray-50 dark:bg-gray-800/50">
+                                <th class="px-6 py-4 text-left !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Region</th>
+                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Report Count</th>
+                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Percentage</th>
+                              </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="reportRegionSummaryTableBody">
+                              <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      <!-- Frequency Chart -->
+                      <div class="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                        <div class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                          <div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Report Frequency</h3>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Distribution by frequency</p>
+                          </div>
+                        </div>
+                        <div>
+                          <div id="reportFrequencyChart" class="-ml-5"></div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+                <!-- End Dashboard Tab -->
+                
+              </div>
+              <!-- End Tab Content -->
+            </div>
+            <!-- End Tabs -->
             
           </div>
         </div>
@@ -1294,11 +1468,11 @@
           // Check if the attachment exists
           try {
             const attachmentsResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment?filename=reports_inventory.json');
-            const attachmentsData = await attachmentsResponse.json();
-            
-            if (attachmentsData.results && attachmentsData.results.length > 0) {
+              const attachmentsData = await attachmentsResponse.json();
+              
+              if (attachmentsData.results && attachmentsData.results.length > 0) {
               // File exists, get its content
-              attachmentId = attachmentsData.results[0].id;
+                attachmentId = attachmentsData.results[0].id;
               console.log('Found existing attachment with ID:', attachmentId);
               
               try {
@@ -1327,16 +1501,16 @@
 
           // Update metadata
           existingReports.metadata = {
-            lastUpdated: new Date().toISOString(),
-            totalReports: reportsData.length,
-            version: '1.0'
+              lastUpdated: new Date().toISOString(),
+              totalReports: reportsData.length,
+              version: '1.0'
           };
-
+          
           // Prepare the form data
           const formData = new FormData();
           const blob = new Blob([JSON.stringify(existingReports, null, 2)], { type: 'application/json' });
           formData.append('file', blob, 'reports_inventory.json');
-
+          
           // Use the correct endpoint - always POST to base endpoint
           // If attachmentId exists, it will update; otherwise it creates new
           const uploadUrl = `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment${attachmentId ? `/${attachmentId}` : ''}`;
@@ -1351,7 +1525,7 @@
             },
             body: formData
           });
-
+          
           if (!response.ok) {
             const errorText = await response.text();
             console.error('Upload failed:', errorText);
@@ -1533,16 +1707,283 @@
       }
       
       // Update metric cards
+      // Chart instances
+      let reportTypeDonutChartInstance = null;
+      let statusBarChartInstance = null;
+      
       function updateMetricCards() {
         const total = reports.length;
         const active = reports.filter(r => r.activeStatus === 'Active').length;
         const onHold = reports.filter(r => r.activeStatus === 'On-Hold').length;
         const retired = reports.filter(r => r.activeStatus === 'Retired').length;
         
+        // Calculate percentages
+        const activePercentage = total > 0 ? Math.round((active / total) * 100) : 0;
+        const onHoldPercentage = total > 0 ? Math.round((onHold / total) * 100) : 0;
+        const retiredPercentage = total > 0 ? Math.round((retired / total) * 100) : 0;
+        
         document.getElementById('total-reports-count').textContent = total;
         document.getElementById('active-reports-count').textContent = active;
         document.getElementById('onhold-reports-count').textContent = onHold;
         document.getElementById('retired-reports-count').textContent = retired;
+        
+        document.getElementById('active-percentage').textContent = activePercentage + '%';
+        document.getElementById('onhold-percentage').textContent = onHoldPercentage + '%';
+        document.getElementById('retired-percentage').textContent = retiredPercentage + '%';
+        
+        // Update charts
+        initializeReportTypeDonutChart();
+        initializeStatusBarChart();
+      }
+      
+      function initializeReportTypeDonutChart() {
+        const chartElement = document.querySelector("#reportTypeDonutChart");
+        
+        if (!chartElement) return;
+        
+        // Destroy existing chart if it exists
+        if (reportTypeDonutChartInstance) {
+          reportTypeDonutChartInstance.destroy();
+          reportTypeDonutChartInstance = null;
+        }
+        
+        // Clear the element
+        chartElement.innerHTML = '';
+        
+        // Count report types
+        const bauReports = reports.filter(r => r.reportType === 'BAU Report').length;
+        const dqReports = reports.filter(r => r.reportType === 'DQ').length;
+        const extractReports = reports.filter(r => r.reportType === 'Extracts').length;
+        const interimReports = reports.filter(r => r.reportType === 'Interim Reports').length;
+        
+        // Show "no data" message if no reports
+        if (reports.length === 0) {
+          chartElement.innerHTML = `
+            <div class="flex items-center justify-center py-20">
+              <div class="text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No report data available</p>
+                <p class="mt-1 !text-base text-gray-400 dark:text-gray-500">Add reports to see distribution</p>
+              </div>
+            </div>
+          `;
+          return;
+        }
+        
+        const chartOptions = {
+          series: [bauReports, dqReports, extractReports, interimReports],
+          colors: ["#3641f5", "#7592ff", "#10B981", "#F59E0B"],
+          labels: ["BAU Report", "DQ", "Extracts", "Interim Reports"],
+          chart: {
+            fontFamily: "Outfit, sans-serif",
+            type: "donut",
+            width: 445,
+            height: 290,
+            parentHeightOffset: 0,
+          },
+          plotOptions: {
+            pie: {
+              donut: {
+                size: "65%",
+                background: "transparent",
+                labels: {
+                  show: true,
+                  name: {
+                    show: true,
+                    fontSize: "14px",
+                    fontFamily: "Outfit, sans-serif",
+                    fontWeight: 400,
+                    color: "#6B7280",
+                    offsetY: -10,
+                  },
+                  value: {
+                    show: true,
+                    fontSize: "28px",
+                    fontFamily: "Outfit, sans-serif",
+                    fontWeight: 600,
+                    color: "#1F2937",
+                    offsetY: 10,
+                  },
+                  total: {
+                    show: true,
+                    showAlways: true,
+                    label: "Total",
+                    fontSize: "14px",
+                    fontFamily: "Outfit, sans-serif",
+                    fontWeight: 400,
+                    color: "#6B7280",
+                    formatter: function (w) {
+                      return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                    },
+                  },
+                },
+              },
+            },
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          tooltip: {
+            enabled: true,
+          },
+          stroke: {
+            show: false,
+            width: 4,
+            colors: "transparent",
+          },
+          legend: {
+            show: true,
+            position: "bottom",
+            horizontalAlign: "center",
+            fontFamily: "Outfit, sans-serif",
+            fontSize: "14px",
+            fontWeight: 400,
+            labels: {
+              colors: ['#6B7280'],
+              useSeriesColors: false,
+            },
+            markers: {
+              size: 5,
+              shape: "circle",
+              radius: 999,
+              strokeWidth: 0,
+            },
+            itemMargin: {
+              horizontal: 10,
+              vertical: 0,
+            },
+          },
+          responsive: [
+            {
+              breakpoint: 640,
+              options: {
+                chart: {
+                  width: 370,
+                  height: 290,
+                },
+              },
+            },
+          ],
+        };
+        
+        reportTypeDonutChartInstance = new ApexCharts(chartElement, chartOptions);
+        reportTypeDonutChartInstance.render();
+      }
+      
+      function initializeStatusBarChart() {
+        const chartElement = document.querySelector("#statusBarChart");
+        
+        if (!chartElement) return;
+        
+        // Destroy existing chart if it exists
+        if (statusBarChartInstance) {
+          statusBarChartInstance.destroy();
+          statusBarChartInstance = null;
+        }
+        
+        // Clear the element
+        chartElement.innerHTML = '';
+        
+        // Count statuses
+        const activeCount = reports.filter(r => r.activeStatus === 'Active').length;
+        const onHoldCount = reports.filter(r => r.activeStatus === 'On-Hold').length;
+        const retiredCount = reports.filter(r => r.activeStatus === 'Retired').length;
+        
+        // Show "no data" message if no reports
+        if (reports.length === 0) {
+          chartElement.innerHTML = `
+            <div class="flex items-center justify-center py-20">
+              <div class="text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No report data available</p>
+                <p class="mt-1 !text-base text-gray-400 dark:text-gray-500">Add reports to see status overview</p>
+              </div>
+            </div>
+          `;
+          return;
+        }
+        
+        const chartOptions = {
+          series: [
+            { name: "Reports", data: [activeCount, onHoldCount, retiredCount] }
+          ],
+          colors: ["#465fff"],
+          chart: {
+            fontFamily: "Outfit, sans-serif",
+            type: "bar",
+            height: 335,
+            toolbar: { show: false },
+            parentHeightOffset: 0,
+          },
+          plotOptions: {
+            bar: {
+              horizontal: false,
+              columnWidth: "50%",
+              borderRadius: 5,
+              borderRadiusApplication: "end",
+              dataLabels: {
+                position: "top",
+              },
+            },
+          },
+          dataLabels: { 
+            enabled: true,
+            offsetY: -25,
+            style: {
+              fontSize: "11px",
+              fontWeight: 600,
+              colors: ["#374151"],
+            },
+            background: {
+              enabled: true,
+              foreColor: "#374151",
+              backgroundColor: "#F3F4F6",
+              borderRadius: 8,
+              padding: 6,
+              opacity: 1,
+              borderWidth: 0,
+            },
+          },
+          stroke: {
+            show: true,
+            width: 4,
+            colors: ["transparent"],
+          },
+          xaxis: {
+            categories: ["Active", "On-Hold", "Retired"],
+            axisBorder: { show: false },
+            axisTicks: { show: false },
+          },
+          legend: {
+            show: false,
+          },
+          yaxis: { title: false },
+          grid: {
+            yaxis: {
+              lines: {
+                show: true,
+                borderColor: '#E5E7EB',
+                strokeDashArray: 4
+              }
+            },
+          },
+          fill: { opacity: 1 },
+          tooltip: {
+            x: { show: true },
+            y: {
+              formatter: function (val) {
+                return val + " reports";
+              },
+            },
+          },
+        };
+        
+        statusBarChartInstance = new ApexCharts(chartElement, chartOptions);
+        statusBarChartInstance.render();
       }
       
       // Filter functions
@@ -1698,42 +2139,62 @@
         document.getElementById('report-euc').value = report.euc || 'No';
         document.getElementById('report-audience').value = report.audience || '';
         
-        // Update Alpine.js dropdown display values with longer timeout for modal opening
+        // Open modal first so Alpine.js components can initialize
+        const modal = document.getElementById('reportModal');
+        if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+          console.log('✅ Modal opened');
+        } else {
+          console.error('❌ Modal element not found!');
+          return;
+        }
+        
+        // Update Alpine.js dropdown display values after modal is opened
         setTimeout(() => {
           console.log('Updating dropdowns for report:', report);
-          // Update all single-select dropdowns - use actual value or empty string to trigger default
-          if (report.reportType) updateAlpineDropdown('report-type', report.reportType);
-          if (report.category) updateAlpineDropdown('report-category', report.category);
-          if (report.subCategory) updateAlpineDropdown('report-subcategory', report.subCategory);
-          if (report.criticalReport) updateAlpineDropdown('report-critical', report.criticalReport);
-          if (report.reportComplexity) updateAlpineDropdown('report-complexity', report.reportComplexity);
-          if (report.frequency) updateAlpineDropdown('report-frequency', report.frequency);
-          if (report.preparedBy) updateAlpineDropdown('report-prepared-by', report.preparedBy);
-          if (report.activeStatus) updateAlpineDropdown('report-status', report.activeStatus);
-          if (report.includePII) updateAlpineDropdown('report-pii', report.includePII);
-          if (report.euc) updateAlpineDropdown('report-euc', report.euc);
+          console.log('  - reportType:', report.reportType);
+          console.log('  - category:', report.category);
+          console.log('  - subCategory:', report.subCategory);
+          console.log('  - criticalReport:', report.criticalReport);
+          console.log('  - reportComplexity:', report.reportComplexity);
+          console.log('  - frequency:', report.frequency);
+          console.log('  - preparedBy:', report.preparedBy);
+          console.log('  - audience:', report.audience);
+          console.log('  - activeStatus:', report.activeStatus);
+          console.log('  - includePII:', report.includePII);
+          console.log('  - euc:', report.euc);
+          
+          // Update all single-select dropdowns - pass actual values
+          updateAlpineDropdown('report-type', report.reportType);
+          updateAlpineDropdown('report-category', report.category);
+          updateAlpineDropdown('report-subcategory', report.subCategory);
+          updateAlpineDropdown('report-critical', report.criticalReport);
+          updateAlpineDropdown('report-complexity', report.reportComplexity);
+          updateAlpineDropdown('report-frequency', report.frequency);
+          updateAlpineDropdown('report-prepared-by', report.preparedBy);
+          updateAlpineDropdown('report-audience', report.audience);
+          updateAlpineDropdown('report-status', report.activeStatus);
+          updateAlpineDropdown('report-pii', report.includePII);
+          updateAlpineDropdown('report-euc', report.euc);
           
           // Update multi-select region dropdowns with a bit more delay
           setTimeout(() => {
+            console.log('  - reportRegion:', report.reportRegion);
+            console.log('  - prepareRegion:', report.prepareRegion);
+            
             if (report.reportRegion) {
               const regions = Array.isArray(report.reportRegion) ? report.reportRegion : [report.reportRegion];
+              console.log('    Updating report-region with:', regions);
               updateAlpineDropdownArray('report-region', regions);
             }
             if (report.prepareRegion) {
               const prepareRegions = Array.isArray(report.prepareRegion) ? report.prepareRegion : [report.prepareRegion];
+              console.log('    Updating report-prepare-region with:', prepareRegions);
               updateAlpineDropdownArray('report-prepare-region', prepareRegions);
             }
           }, 150);
-        }, 200);
-        
-        const modal = document.getElementById('reportModal');
-        if (modal) {
-          modal.classList.remove('hidden');
-          modal.classList.add('flex');
-          console.log('✅ Modal opened');
-        } else {
-          console.error('❌ Modal element not found!');
-        }
+        }, 100);
       }
       
       // Expose to global scope for Confluence
@@ -1744,15 +2205,52 @@
       // Helper function to update Alpine.js dropdown display
       function updateAlpineDropdown(fieldId, displayValue) {
         const field = document.getElementById(fieldId);
-        if (field && field.closest('[x-data]')) {
-          try {
-            const alpineComponent = field.closest('[x-data]').__x;
-            if (alpineComponent && alpineComponent.$data) {
-              alpineComponent.$data.selected = displayValue;
+        if (!field) {
+          console.warn('Field not found:', fieldId);
+          return;
+        }
+        
+        // If displayValue is empty/falsy, don't update (leave at default)
+        if (!displayValue || displayValue.trim() === '') {
+          console.log(`⚠️ Skipping ${fieldId} - empty value`);
+          field.value = '';
+          return;
+        }
+        
+        // Update the hidden input value
+        field.value = displayValue;
+        
+        // Find the button that triggers the dropdown
+        const button = field.parentElement.querySelector('button[type="button"]');
+        if (!button) {
+          console.warn('Button not found for field:', fieldId);
+          return;
+        }
+        
+        // Get the Alpine.js container
+        const alpineContainer = button.closest('[x-data]');
+        if (!alpineContainer) {
+          console.warn('Alpine container not found for field:', fieldId);
+          return;
+        }
+        
+        try {
+          // Access Alpine component using Alpine.js API
+          if (window.Alpine && alpineContainer._x_dataStack) {
+            const alpineData = alpineContainer._x_dataStack[0];
+            if (alpineData) {
+              alpineData.selected = displayValue;
+              console.log(`✅ Updated ${fieldId} to: ${displayValue}`);
+            }
+          } else if (alpineContainer.__x && alpineContainer.__x.$data) {
+            // Fallback to older Alpine access method
+            alpineContainer.__x.$data.selected = displayValue;
+            console.log(`✅ Updated ${fieldId} to: ${displayValue}`);
+          } else {
+            console.warn('Could not access Alpine data for', fieldId);
             }
           } catch (e) {
             console.warn('Could not update Alpine dropdown for', fieldId, e);
-          }
         }
       }
 
@@ -1770,22 +2268,37 @@
         // Update the hidden input value
         field.value = JSON.stringify(cleanedArray);
         
-        // Find and update the Alpine component
-        const alpineContainer = field.closest('[x-data]');
-        if (alpineContainer) {
-          try {
-            const alpineComponent = alpineContainer.__x;
-            if (alpineComponent && alpineComponent.$data) {
-              alpineComponent.$data.selectedRegions = cleanedArray;
+        // Find the button that displays the selected regions
+        const button = field.parentElement.querySelector('button[type="button"]');
+        if (!button) {
+          console.warn('Button not found for field:', fieldId);
+          return;
+        }
+        
+        // Get the Alpine.js container
+        const alpineContainer = button.closest('[x-data]');
+        if (!alpineContainer) {
+          console.warn('Alpine container not found for', fieldId);
+          return;
+        }
+        
+        try {
+          // Access Alpine component using Alpine.js API
+          if (window.Alpine && alpineContainer._x_dataStack) {
+            const alpineData = alpineContainer._x_dataStack[0];
+            if (alpineData) {
+              alpineData.selectedRegions = cleanedArray;
               console.log(`✅ Updated ${fieldId} to:`, cleanedArray);
-            } else {
-              console.warn('Alpine component not initialized for', fieldId);
+            }
+          } else if (alpineContainer.__x && alpineContainer.__x.$data) {
+            // Fallback to older Alpine access method
+            alpineContainer.__x.$data.selectedRegions = cleanedArray;
+            console.log(`✅ Updated ${fieldId} to:`, cleanedArray);
+          } else {
+            console.warn('Could not access Alpine data for', fieldId);
             }
           } catch (e) {
             console.warn('Could not update Alpine multi-select dropdown for', fieldId, e);
-          }
-        } else {
-          console.warn('No Alpine container found for', fieldId);
         }
       }
       
@@ -1870,6 +2383,7 @@
           await updateReportsFile(reports);
           filteredReports = [...reports];
           renderReportsTable();
+          refreshDashboard();
           closeReportModal();
           
           showSuccessToast(reportIdInternal ? 'Report updated successfully' : 'Report added successfully');
@@ -1923,6 +2437,7 @@
           await updateReportsFile(reports);
           filteredReports = [...reports];
           renderReportsTable();
+          refreshDashboard();
           showSuccessToast('Report deleted successfully');
         } catch (error) {
           console.error('Error deleting report:', error);
@@ -2081,7 +2596,7 @@
       // Modal close event listeners
       document.addEventListener('DOMContentLoaded', function() {
         // Set up close button listeners
-        document.querySelectorAll('.modal-close-btn').forEach(btn => {
+      document.querySelectorAll('.modal-close-btn').forEach(btn => {
           btn.addEventListener('click', function(e) {
             e.stopPropagation();
             closeReportModal();
@@ -2156,6 +2671,7 @@
           // Re-render table
           renderReportsTable();
           updateMetricCards();
+          refreshDashboard();
           
           // Wait a bit to ensure render completes, then hide overlay and show toast
           setTimeout(() => {
@@ -2188,10 +2704,22 @@
         // For status dropdown
         if (statusDropdown) {
           try {
-            const statusAlpineData = statusDropdown.__x;
-            if (statusAlpineData && statusAlpineData.$data) {
-              statusAlpineData.$data.selected = 'All Statuses';
-              statusAlpineData.$data.open = false;
+            // Try modern Alpine.js API first
+            if (window.Alpine && statusDropdown._x_dataStack) {
+              const alpineData = statusDropdown._x_dataStack[0];
+              if (alpineData) {
+                alpineData.selected = 'All Statuses';
+                alpineData.open = false;
+              }
+            } else if (statusDropdown.__x && statusDropdown.__x.$data) {
+              // Fallback to older Alpine access method
+              statusDropdown.__x.$data.selected = 'All Statuses';
+              statusDropdown.__x.$data.open = false;
+            }
+            // Also update the button text directly as fallback
+            const statusButton = statusDropdown.querySelector('button span');
+            if (statusButton) {
+              statusButton.textContent = 'All Statuses';
             }
           } catch (e) {
             console.warn('Could not reset status dropdown:', e);
@@ -2201,10 +2729,22 @@
         // For report type dropdown
         if (typeDropdown) {
           try {
-            const typeAlpineData = typeDropdown.__x;
-            if (typeAlpineData && typeAlpineData.$data) {
-              typeAlpineData.$data.selected = 'All Types';
-              typeAlpineData.$data.open = false;
+            // Try modern Alpine.js API first
+            if (window.Alpine && typeDropdown._x_dataStack) {
+              const alpineData = typeDropdown._x_dataStack[0];
+              if (alpineData) {
+                alpineData.selected = 'All Types';
+                alpineData.open = false;
+              }
+            } else if (typeDropdown.__x && typeDropdown.__x.$data) {
+              // Fallback to older Alpine access method
+              typeDropdown.__x.$data.selected = 'All Types';
+              typeDropdown.__x.$data.open = false;
+            }
+            // Also update the button text directly as fallback
+            const typeButton = typeDropdown.querySelector('button span');
+            if (typeButton) {
+              typeButton.textContent = 'All Types';
             }
           } catch (e) {
             console.warn('Could not reset type dropdown:', e);
@@ -2214,10 +2754,22 @@
         // For region dropdown
         if (regionDropdown) {
           try {
-            const regionAlpineData = regionDropdown.__x;
-            if (regionAlpineData && regionAlpineData.$data) {
-              regionAlpineData.$data.selectedRegions = ['All'];
-              regionAlpineData.$data.open = false;
+            // Try modern Alpine.js API first
+            if (window.Alpine && regionDropdown._x_dataStack) {
+              const alpineData = regionDropdown._x_dataStack[0];
+              if (alpineData) {
+                alpineData.selectedRegions = ['All'];
+                alpineData.open = false;
+              }
+            } else if (regionDropdown.__x && regionDropdown.__x.$data) {
+              // Fallback to older Alpine access method
+              regionDropdown.__x.$data.selectedRegions = ['All'];
+              regionDropdown.__x.$data.open = false;
+            }
+            // Also update the button text directly as fallback
+            const regionButton = regionDropdown.querySelector('button span');
+            if (regionButton) {
+              regionButton.textContent = 'All Regions';
             }
           } catch (e) {
             console.warn('Could not reset region dropdown:', e);
@@ -2581,38 +3133,76 @@
 
         // For status dropdown
         if (statusDropdown) {
-          const statusAlpineData = statusDropdown.__x;
-          if (statusAlpineData && statusAlpineData.$data) {
-            statusAlpineData.$data.selected = 'All Statuses';
-            statusAlpineData.$data.open = false;
+          try {
+            // Try modern Alpine.js API first
+            if (window.Alpine && statusDropdown._x_dataStack) {
+              const alpineData = statusDropdown._x_dataStack[0];
+              if (alpineData) {
+                alpineData.selected = 'All Statuses';
+                alpineData.open = false;
+              }
+            } else if (statusDropdown.__x && statusDropdown.__x.$data) {
+              // Fallback to older Alpine access method
+              statusDropdown.__x.$data.selected = 'All Statuses';
+              statusDropdown.__x.$data.open = false;
           }
           // Also update the button text directly as fallback
           const statusButton = statusDropdown.querySelector('button span');
           if (statusButton) {
             statusButton.textContent = 'All Statuses';
+            }
+          } catch (e) {
+            console.warn('Could not reset status dropdown:', e);
           }
         }
 
         // For report type dropdown
         if (typeDropdown) {
-          const typeAlpineData = typeDropdown.__x;
-          if (typeAlpineData && typeAlpineData.$data) {
-            typeAlpineData.$data.selected = 'All Types';
-            typeAlpineData.$data.open = false;
+          try {
+            // Try modern Alpine.js API first
+            if (window.Alpine && typeDropdown._x_dataStack) {
+              const alpineData = typeDropdown._x_dataStack[0];
+              if (alpineData) {
+                alpineData.selected = 'All Types';
+                alpineData.open = false;
+              }
+            } else if (typeDropdown.__x && typeDropdown.__x.$data) {
+              // Fallback to older Alpine access method
+              typeDropdown.__x.$data.selected = 'All Types';
+              typeDropdown.__x.$data.open = false;
           }
           // Also update the button text directly as fallback
           const typeButton = typeDropdown.querySelector('button span');
           if (typeButton) {
             typeButton.textContent = 'All Types';
+            }
+          } catch (e) {
+            console.warn('Could not reset type dropdown:', e);
           }
         }
 
         // For region dropdown
         if (regionDropdown) {
-          const regionAlpineData = regionDropdown.__x;
-          if (regionAlpineData && regionAlpineData.$data) {
-            regionAlpineData.$data.selectedRegions = ['All'];
-            regionAlpineData.$data.open = false;
+          try {
+            // Try modern Alpine.js API first
+            if (window.Alpine && regionDropdown._x_dataStack) {
+              const alpineData = regionDropdown._x_dataStack[0];
+              if (alpineData) {
+                alpineData.selectedRegions = ['All'];
+                alpineData.open = false;
+              }
+            } else if (regionDropdown.__x && regionDropdown.__x.$data) {
+              // Fallback to older Alpine access method
+              regionDropdown.__x.$data.selectedRegions = ['All'];
+              regionDropdown.__x.$data.open = false;
+            }
+            // Also update the button text directly as fallback
+            const regionButton = regionDropdown.querySelector('button span');
+            if (regionButton) {
+              regionButton.textContent = 'All Regions';
+            }
+          } catch (e) {
+            console.warn('Could not reset region dropdown:', e);
           }
         }
 
@@ -2621,10 +3211,8 @@
         filterIdCounter = 0;
         renderFilterRows();
 
-        // Reset all reports to show everything
-        filteredReports = [...reports];
-        currentPage = 1;
-        renderReportsTable();
+        // Apply all filter changes (this will re-filter and re-render)
+        filterReports();
         updatePaginationInfo();
         updateFilterCount();
       }
@@ -2654,21 +3242,27 @@
       // Initialize on page load
       document.addEventListener('DOMContentLoaded', async function() {
         try {
+          // Fetch reports from Confluence
           const data = await fetchReports();
           if (data && data.length > 0) {
             reports = data;
             filteredReports = [...reports];
             renderReportsTable();
+            console.log('✅ Loaded', reports.length, 'reports from Confluence');
           } else {
+            console.log('⚠️ No data from Confluence');
             reports = [];
             filteredReports = [];
             renderReportsTable();
           }
         } catch (error) {
-          console.error('Error initializing:', error);
-          reports = [];
-          filteredReports = [];
-          renderReportsTable();
+          console.error('❌ Error initializing:', error);
+          // If there's an error and no reports loaded, show empty state
+          if (reports.length === 0) {
+            reports = [];
+            filteredReports = [];
+            renderReportsTable();
+          }
         }
         
         // Set up search input listener
@@ -2751,8 +3345,535 @@
           }
         });
         
+        // Dashboard chart initialization
+        initializeDashboard();
+        
         console.log('✅ Report action event listeners attached successfully');
       });
+      
+      // ============================================
+      // DASHBOARD FUNCTIONS
+      // ============================================
+      
+      let reportTypeChartInstance = null;
+      let reportComplexityChartInstance = null;
+      let reportFrequencyChartInstance = null;
+      
+      function initializeDashboard() {
+        updateDashboardMetrics();
+        populateReportMakersSummaryTable();
+        initializeReportTypeChart();
+        initializeReportComplexityChart();
+        populateReportRegionTable();
+        initializeReportFrequencyChart();
+      }
+      
+      function updateDashboardMetrics() {
+        const total = reports.length;
+        const active = reports.filter(r => r.activeStatus === 'Active').length;
+        const onHold = reports.filter(r => r.activeStatus === 'On-Hold').length;
+        const retired = reports.filter(r => r.activeStatus === 'Retired').length;
+        
+        const activePercentage = total > 0 ? Math.round((active / total) * 100) : 0;
+        const onHoldPercentage = total > 0 ? Math.round((onHold / total) * 100) : 0;
+        const retiredPercentage = total > 0 ? Math.round((retired / total) * 100) : 0;
+        
+        document.getElementById('dashboard-total-reports').textContent = total;
+        document.getElementById('dashboard-active-reports').textContent = active;
+        document.getElementById('dashboard-onhold-reports').textContent = onHold;
+        document.getElementById('dashboard-retired-reports').textContent = retired;
+        
+        document.getElementById('dashboard-active-percentage').textContent = activePercentage + '%';
+        document.getElementById('dashboard-onhold-percentage').textContent = onHoldPercentage + '%';
+        document.getElementById('dashboard-retired-percentage').textContent = retiredPercentage + '%';
+      }
+      
+      function initializeReportTypeChart() {
+        const chartElement = document.querySelector("#reportTypeChart");
+        if (!chartElement) return;
+        
+        if (reportTypeChartInstance) {
+          reportTypeChartInstance.destroy();
+          reportTypeChartInstance = null;
+        }
+        
+        chartElement.innerHTML = '';
+        
+        if (reports.length === 0) {
+          chartElement.innerHTML = '<div class="flex items-center justify-center py-20"><p class="!text-base text-gray-500 dark:text-gray-400">No data available</p></div>';
+          return;
+        }
+        
+        // Count by report type
+        const typeCounts = {};
+        reports.forEach(r => {
+          const type = r.reportType || 'Unknown';
+          typeCounts[type] = (typeCounts[type] || 0) + 1;
+        });
+        
+        const labels = Object.keys(typeCounts);
+        const series = Object.values(typeCounts);
+        
+        const chartOptions = {
+          series: series,
+          colors: ["#3641f5", "#7592ff", "#dde9ff", "#10B981", "#F59E0B", "#EF4444"],
+          labels: labels,
+          chart: {
+            fontFamily: "Outfit, sans-serif",
+            type: "donut",
+            width: 445,
+            height: 290,
+          },
+          plotOptions: {
+            pie: {
+              donut: {
+                size: "65%",
+                background: "transparent",
+                labels: {
+                  show: true,
+                  name: {
+                    show: true,
+                    fontSize: "14px",
+                    fontFamily: "Outfit, sans-serif",
+                    fontWeight: 400,
+                    color: "#6B7280",
+                    offsetY: -10,
+                  },
+                  value: {
+                    show: true,
+                    fontSize: "28px",
+                    fontFamily: "Outfit, sans-serif",
+                    fontWeight: 600,
+                    color: "#1F2937",
+                    offsetY: 10,
+                  },
+                  total: {
+                    show: true,
+                    showAlways: true,
+                    label: "Total",
+                    fontSize: "14px",
+                    fontFamily: "Outfit, sans-serif",
+                    fontWeight: 400,
+                    color: "#6B7280",
+                    formatter: function (w) {
+                      return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                    },
+                  },
+                },
+              },
+            },
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          tooltip: {
+            enabled: true,
+          },
+          stroke: {
+            show: false,
+            width: 4,
+            colors: "transparent",
+          },
+          legend: {
+            show: true,
+            position: "bottom",
+            horizontalAlign: "center",
+            fontFamily: "Outfit, sans-serif",
+            fontSize: "14px",
+            fontWeight: 400,
+            labels: {
+              colors: ['#6B7280'],
+              useSeriesColors: false,
+            },
+            markers: {
+              size: 5,
+              shape: "circle",
+              radius: 999,
+              strokeWidth: 0,
+            },
+            itemMargin: {
+              horizontal: 10,
+              vertical: 0,
+            },
+          },
+          responsive: [
+            {
+              breakpoint: 640,
+              options: {
+                chart: {
+                  width: 370,
+                  height: 290,
+                },
+              },
+            },
+          ],
+        };
+        
+        reportTypeChartInstance = new ApexCharts(chartElement, chartOptions);
+        reportTypeChartInstance.render();
+      }
+      
+      function initializeReportComplexityChart() {
+        const chartElement = document.querySelector("#reportComplexityChart");
+        if (!chartElement) return;
+        
+        if (reportComplexityChartInstance) {
+          reportComplexityChartInstance.destroy();
+          reportComplexityChartInstance = null;
+        }
+        
+        chartElement.innerHTML = '';
+        
+        if (reports.length === 0) {
+          chartElement.innerHTML = '<div class="flex items-center justify-center py-20"><p class="!text-base text-gray-500 dark:text-gray-400">No data available</p></div>';
+          return;
+        }
+        
+        // Count by complexity
+        const complexityCounts = {};
+        reports.forEach(r => {
+          const complexity = r.reportComplexity || 'Unknown';
+          complexityCounts[complexity] = (complexityCounts[complexity] || 0) + 1;
+        });
+        
+        const labels = Object.keys(complexityCounts);
+        const series = Object.values(complexityCounts);
+        
+        const chartOptions = {
+          series: series,
+          colors: ["#3641f5", "#7592ff", "#dde9ff"],
+          labels: labels,
+          chart: {
+            fontFamily: "Outfit, sans-serif",
+            type: "donut",
+            width: 445,
+            height: 290,
+          },
+          plotOptions: {
+            pie: {
+              donut: {
+                size: "65%",
+                background: "transparent",
+                labels: {
+                  show: true,
+                  name: {
+                    show: true,
+                    fontSize: "14px",
+                    fontFamily: "Outfit, sans-serif",
+                    fontWeight: 400,
+                    color: "#6B7280",
+                    offsetY: -10,
+                  },
+                  value: {
+                    show: true,
+                    fontSize: "28px",
+                    fontFamily: "Outfit, sans-serif",
+                    fontWeight: 600,
+                    color: "#1F2937",
+                    offsetY: 10,
+                  },
+                  total: {
+                    show: true,
+                    showAlways: true,
+                    label: "Total",
+                    fontSize: "14px",
+                    fontFamily: "Outfit, sans-serif",
+                    fontWeight: 400,
+                    color: "#6B7280",
+                    formatter: function (w) {
+                      return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                    },
+                  },
+                },
+              },
+            },
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          tooltip: {
+            enabled: true,
+          },
+          stroke: {
+            show: false,
+            width: 4,
+            colors: "transparent",
+          },
+          legend: {
+            show: true,
+            position: "bottom",
+            horizontalAlign: "center",
+            fontFamily: "Outfit, sans-serif",
+            fontSize: "14px",
+            fontWeight: 400,
+            labels: {
+              colors: ['#6B7280'],
+              useSeriesColors: false,
+            },
+            markers: {
+              size: 5,
+              shape: "circle",
+              radius: 999,
+              strokeWidth: 0,
+            },
+            itemMargin: {
+              horizontal: 10,
+              vertical: 0,
+            },
+          },
+          responsive: [
+            {
+              breakpoint: 640,
+              options: {
+                chart: {
+                  width: 370,
+                  height: 290,
+                },
+              },
+            },
+          ],
+        };
+        
+        reportComplexityChartInstance = new ApexCharts(chartElement, chartOptions);
+        reportComplexityChartInstance.render();
+      }
+      
+      function populateReportMakersSummaryTable() {
+        const tbody = document.getElementById('reportMakersSummaryTableBody');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        
+        if (reports.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5" class="px-6 py-8 text-center">
+                <p class="text-gray-500 dark:text-gray-400">No data available</p>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+        
+        // Count by maker and status
+        const makerStats = {};
+        reports.forEach(r => {
+          const maker = r.preparedBy || 'Unknown';
+          if (!makerStats[maker]) {
+            makerStats[maker] = {
+              total: 0,
+              active: 0,
+              onHold: 0,
+              retired: 0
+            };
+          }
+          makerStats[maker].total++;
+          if (r.activeStatus === 'Active') makerStats[maker].active++;
+          else if (r.activeStatus === 'On-Hold') makerStats[maker].onHold++;
+          else if (r.activeStatus === 'Retired') makerStats[maker].retired++;
+        });
+        
+        // Sort by total count (descending)
+        const sortedMakers = Object.entries(makerStats).sort((a, b) => b[1].total - a[1].total);
+        
+        sortedMakers.forEach(([maker, stats]) => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors';
+          row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="!text-base font-medium text-gray-900 dark:text-white">${maker}</span>
+            </td>
+            <td class="px-6 py-4 text-center whitespace-nowrap">
+              <span class="!text-base font-semibold text-gray-900 dark:text-white">${stats.total}</span>
+            </td>
+            <td class="px-6 py-4 text-center whitespace-nowrap">
+              <span class="!text-base font-semibold text-success-600 dark:text-success-400">${stats.active}</span>
+            </td>
+            <td class="px-6 py-4 text-center whitespace-nowrap">
+              <span class="!text-base font-semibold text-warning-600 dark:text-warning-400">${stats.onHold}</span>
+            </td>
+            <td class="px-6 py-4 text-center whitespace-nowrap">
+              <span class="!text-base font-semibold text-gray-600 dark:text-gray-400">${stats.retired}</span>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+      
+      function populateReportRegionTable() {
+        const tbody = document.getElementById('reportRegionSummaryTableBody');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        
+        if (reports.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="3" class="px-6 py-8 text-center">
+                <p class="text-gray-500 dark:text-gray-400">No data available</p>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+        
+        // Count by region (handle arrays)
+        const regionCounts = {};
+        reports.forEach(r => {
+          const regions = Array.isArray(r.reportRegion) ? r.reportRegion : [r.reportRegion || 'Unknown'];
+          regions.forEach(region => {
+            if (region && region !== 'All') {
+              regionCounts[region] = (regionCounts[region] || 0) + 1;
+            }
+          });
+        });
+        
+        const total = Object.values(regionCounts).reduce((a, b) => a + b, 0);
+        const regionData = Object.entries(regionCounts).map(([region, count]) => ({
+          region,
+          count,
+          percentage: total > 0 ? Math.round((count / total) * 100) : 0
+        })).sort((a, b) => b.count - a.count);
+        
+        regionData.forEach(({ region, count, percentage }) => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors';
+          
+          const regionBadgeConfig = {
+            'NAM': 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400',
+            'EMEA': 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400',
+            'APAC': 'bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400',
+            'LATAM': 'bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400'
+          };
+          const badgeClass = regionBadgeConfig[region] || 'bg-gray-50 text-gray-600 dark:bg-gray-900/20 dark:text-gray-400';
+          
+          row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="inline-flex items-center whitespace-nowrap rounded-full px-2.5 py-0.5 !text-base font-medium ${badgeClass}">${region}</span>
+            </td>
+            <td class="px-6 py-4 text-center whitespace-nowrap">
+              <span class="!text-base font-semibold text-gray-900 dark:text-white">${count}</span>
+            </td>
+            <td class="px-6 py-4 text-center whitespace-nowrap">
+              <span class="!text-base font-medium text-gray-700 dark:text-gray-300">${percentage}%</span>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+      
+      function initializeReportFrequencyChart() {
+        const chartElement = document.querySelector("#reportFrequencyChart");
+        if (!chartElement) return;
+        
+        if (reportFrequencyChartInstance) {
+          reportFrequencyChartInstance.destroy();
+          reportFrequencyChartInstance = null;
+        }
+        
+        chartElement.innerHTML = '';
+        
+        if (reports.length === 0) {
+          chartElement.innerHTML = '<div class="flex items-center justify-center py-20"><p class="!text-base text-gray-500 dark:text-gray-400">No data available</p></div>';
+          return;
+        }
+        
+        // Count by frequency
+        const frequencyCounts = {};
+        reports.forEach(r => {
+          const frequency = r.frequency || 'Unknown';
+          frequencyCounts[frequency] = (frequencyCounts[frequency] || 0) + 1;
+        });
+        
+        const frequencies = Object.keys(frequencyCounts);
+        const values = Object.values(frequencyCounts);
+        
+        const chartOptions = {
+          series: [{
+            name: "Reports",
+            data: values
+          }],
+          colors: ["#3B82F6"],
+          chart: {
+            fontFamily: "Outfit, sans-serif",
+            type: "bar",
+            height: 335,
+            toolbar: { show: false },
+          },
+          plotOptions: {
+            bar: {
+              horizontal: false,
+              columnWidth: "50%",
+              borderRadius: 5,
+              borderRadiusApplication: "end",
+              dataLabels: { position: "top" },
+            },
+          },
+          dataLabels: {
+            enabled: true,
+            offsetY: -25,
+            style: {
+              fontSize: "11px",
+              fontWeight: 600,
+              colors: ["#374151"],
+            },
+            background: {
+              enabled: true,
+              foreColor: "#374151",
+              backgroundColor: "#F3F4F6",
+              borderRadius: 8,
+              padding: 6,
+              opacity: 1,
+              borderWidth: 0,
+            },
+          },
+          stroke: {
+            show: true,
+            width: 4,
+            colors: ["transparent"],
+          },
+          xaxis: {
+            categories: frequencies,
+            axisBorder: { show: false },
+            axisTicks: { show: false },
+            labels: {
+              style: { fontSize: '11px' },
+              rotate: -45,
+              rotateAlways: frequencies.length > 5,
+            }
+          },
+          legend: { show: false },
+          yaxis: { title: false },
+          grid: {
+            yaxis: { lines: { show: true } },
+            borderColor: '#E5E7EB',
+            strokeDashArray: 4,
+          },
+          fill: { opacity: 1 },
+          tooltip: {
+            x: { show: true },
+            y: {
+              formatter: function (val) {
+                return val + " reports";
+              },
+            },
+          },
+        };
+        
+        reportFrequencyChartInstance = new ApexCharts(chartElement, chartOptions);
+        reportFrequencyChartInstance.render();
+      }
+      
+      // Refresh dashboard when reports change
+      function refreshDashboard() {
+        if (typeof initializeDashboard === 'function') {
+          initializeDashboard();
+        }
+      }
+      
+      // ============================================
+      // END DASHBOARD FUNCTIONS
+      // ============================================
     </script>
     
     <!-- BEGIN DELETE CONFIRMATION MODAL -->
