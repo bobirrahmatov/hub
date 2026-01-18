@@ -385,7 +385,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                   </svg>
                   Filter
-                  <span id="activeFilterCount" class="hidden ml-1 rounded-full bg-brand-500 px-2 py-0.5 text-xs font-medium text-white"></span>
+                  <span id="activeFilterCount" class="hidden ml-1 rounded-full bg-brand-500 px-2 py-0.5 !text-base font-medium text-white"></span>
                 </button>
                 
                 <!-- Advanced Filter Popover -->
@@ -496,40 +496,80 @@
                 </div>
                 
                 <!-- Region Filter -->
-                <div x-data="{ open: false, selected: 'All Regions' }" class="relative" id="regionFilterDropdown">
+                <div x-data="{
+                  open: false,
+                  selectedRegions: ['All'],
+                  regions: ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
+                  getDisplayText() {
+                    if (this.selectedRegions.includes('All') || this.selectedRegions.length === 0) {
+                      return 'All Regions';
+                    }
+                    if (this.selectedRegions.length === 1) {
+                      return this.selectedRegions[0];
+                    }
+                    return this.selectedRegions.length + ' Selected';
+                  },
+                  toggleRegion(region) {
+                    if (region === 'All') {
+                      this.selectedRegions = ['All'];
+                    } else {
+                      // Remove 'All' if it exists
+                      this.selectedRegions = this.selectedRegions.filter(r => r !== 'All');
+
+                      if (this.selectedRegions.includes(region)) {
+                        this.selectedRegions = this.selectedRegions.filter(r => r !== region);
+                        // If no regions selected, default to 'All'
+                        if (this.selectedRegions.length === 0) {
+                          this.selectedRegions = ['All'];
+                        }
+                      } else {
+                        this.selectedRegions.push(region);
+                      }
+                    }
+                    filterByRegion(this.selectedRegions);
+                  },
+                  isSelected(region) {
+                    return this.selectedRegions.includes(region);
+                  }
+                }" class="relative" id="regionFilterDropdown">
                   <button @click="open = !open" type="button"
                     class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
-                    <span x-text="selected"></span>
+                    <span x-text="getDisplayText()"></span>
                     <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
                   <div x-show="open" @click.outside="open = false" x-cloak
-                    class="absolute right-0 top-full z-[99999] mt-2 w-48 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
-                    <button type="button" @click="selected = 'All Regions'; open = false; filterByRegion('All')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      All Regions
-                    </button>
-                    <button type="button" @click="selected = 'Global'; open = false; filterByRegion('Global')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      Global
-                    </button>
-                    <button type="button" @click="selected = 'APAC'; open = false; filterByRegion('APAC')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      APAC
-                    </button>
-                    <button type="button" @click="selected = 'EMEA'; open = false; filterByRegion('EMEA')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      EMEA
-                    </button>
-                    <button type="button" @click="selected = 'LATAM'; open = false; filterByRegion('LATAM')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      LATAM
-                    </button>
-                    <button type="button" @click="selected = 'NAM'; open = false; filterByRegion('NAM')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      NAM
-                    </button>
+                    class="absolute right-0 top-full z-[99999] mt-2 w-56 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
+                    <div class="space-y-1">
+                      <!-- All Regions Option -->
+                      <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          :checked="isSelected('All')"
+                          @change="toggleRegion('All')"
+                          class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500"
+                        />
+                        All Regions
+                      </label>
+
+                      <!-- Separator -->
+                      <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
+                      <!-- Individual Regions -->
+                      <template x-for="region in regions" :key="region">
+                        <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            :checked="isSelected(region) && !isSelected('All')"
+                            :disabled="isSelected('All')"
+                            @change="toggleRegion(region)"
+                            class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500 disabled:opacity-50"
+                          />
+                          <span x-text="region"></span>
+                        </label>
+                      </template>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -554,7 +594,7 @@
             <!-- Reports Table -->
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 relative" style="background-color: var(--card-bg, white);" id="tableContainer">
               <!-- Loading Overlay -->
-              <div id="tableLoadingOverlay" class="absolute inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl hidden z-50 flex items-center justify-center">
+              <div id="tableLoadingOverlay" class="absolute inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl hidden z-[9999] flex items-center justify-center">
                 <div class="text-center">
                   <svg class="animate-spin h-12 w-12 text-blue-600 dark:text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -890,40 +930,71 @@
             </div>
             
             <!-- Report Region -->
-            <div class="col-span-1" x-data="{ open: false, selected: 'Select Report Region' }">
+            <div class="col-span-1" x-data="{
+              open: false,
+              selectedRegions: [],
+              regions: ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
+              getDisplayText() {
+                if (this.selectedRegions.length === 0) {
+                  return 'Select Report Region';
+                }
+                if (this.selectedRegions.length === 1) {
+                  return this.selectedRegions[0];
+                }
+                return this.selectedRegions.length + ' Selected';
+              },
+              toggleRegion(region) {
+                if (this.selectedRegions.includes(region)) {
+                  this.selectedRegions = this.selectedRegions.filter(r => r !== region);
+                } else {
+                  this.selectedRegions.push(region);
+                }
+                document.getElementById('report-region').value = JSON.stringify(this.selectedRegions);
+              },
+              isSelected(region) {
+                return this.selectedRegions.includes(region);
+              },
+              init() {
+                // Initialize from existing value if editing
+                const existingValue = document.getElementById('report-region').value;
+                if (existingValue) {
+                  try {
+                    const parsed = JSON.parse(existingValue);
+                    if (Array.isArray(parsed)) {
+                      this.selectedRegions = parsed;
+                    } else if (typeof parsed === 'string') {
+                      this.selectedRegions = [parsed];
+                    }
+                  } catch (e) {
+                    this.selectedRegions = [existingValue];
+                  }
+                }
+              }
+            }" x-init="init()">
               <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                 Report Region <span class="text-error-500">*</span>
               </label>
               <div class="relative">
                 <button @click="open = !open" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
-                  <span x-text="selected" :class="selected === 'Select Report Region' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
+                  <span x-text="getDisplayText()" :class="selectedRegions.length === 0 ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
                 <div x-show="open" @click.outside="open = false" x-cloak
                   class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
-                  <button type="button" @click="selected = 'Global'; open = false; document.getElementById('report-region').value = 'Global';"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                    Global
-                  </button>
-                  <button type="button" @click="selected = 'APAC'; open = false; document.getElementById('report-region').value = 'APAC';"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                    APAC
-                  </button>
-                  <button type="button" @click="selected = 'EMEA'; open = false; document.getElementById('report-region').value = 'EMEA';"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                    EMEA
-                  </button>
-                  <button type="button" @click="selected = 'LATAM'; open = false; document.getElementById('report-region').value = 'LATAM';"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                    LATAM
-                  </button>
-                  <button type="button" @click="selected = 'NAM'; open = false; document.getElementById('report-region').value = 'NAM';"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                    NAM
-                  </button>
+                  <template x-for="region in regions" :key="region">
+                    <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        :checked="isSelected(region)"
+                        @change="toggleRegion(region)"
+                        class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500"
+                      />
+                      <span x-text="region"></span>
+                    </label>
+                  </template>
                 </div>
                 <input type="hidden" id="report-region" required />
               </div>
@@ -995,40 +1066,71 @@
             </div>
             
             <!-- Prepare Region -->
-            <div class="col-span-1" x-data="{ open: false, selected: 'Select Prepare Region' }">
+            <div class="col-span-1" x-data="{
+              open: false,
+              selectedRegions: [],
+              regions: ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
+              getDisplayText() {
+                if (this.selectedRegions.length === 0) {
+                  return 'Select Prepare Region';
+                }
+                if (this.selectedRegions.length === 1) {
+                  return this.selectedRegions[0];
+                }
+                return this.selectedRegions.length + ' Selected';
+              },
+              toggleRegion(region) {
+                if (this.selectedRegions.includes(region)) {
+                  this.selectedRegions = this.selectedRegions.filter(r => r !== region);
+                } else {
+                  this.selectedRegions.push(region);
+                }
+                document.getElementById('report-prepare-region').value = JSON.stringify(this.selectedRegions);
+              },
+              isSelected(region) {
+                return this.selectedRegions.includes(region);
+              },
+              init() {
+                // Initialize from existing value if editing
+                const existingValue = document.getElementById('report-prepare-region').value;
+                if (existingValue) {
+                  try {
+                    const parsed = JSON.parse(existingValue);
+                    if (Array.isArray(parsed)) {
+                      this.selectedRegions = parsed;
+                    } else if (typeof parsed === 'string') {
+                      this.selectedRegions = [parsed];
+                    }
+                  } catch (e) {
+                    this.selectedRegions = [existingValue];
+                  }
+                }
+              }
+            }" x-init="init()">
               <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                 Prepare Region
               </label>
               <div class="relative">
                 <button @click="open = !open" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
-                  <span x-text="selected" :class="selected === 'Select Prepare Region' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
+                  <span x-text="getDisplayText()" :class="selectedRegions.length === 0 ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
                 <div x-show="open" @click.outside="open = false" x-cloak
                   class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
-                  <button type="button" @click="selected = 'Global'; open = false; document.getElementById('report-prepare-region').value = 'Global';"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                    Global
-                  </button>
-                  <button type="button" @click="selected = 'APAC'; open = false; document.getElementById('report-prepare-region').value = 'APAC';"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                    APAC
-                  </button>
-                  <button type="button" @click="selected = 'EMEA'; open = false; document.getElementById('report-prepare-region').value = 'EMEA';"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                    EMEA
-                  </button>
-                  <button type="button" @click="selected = 'LATAM'; open = false; document.getElementById('report-prepare-region').value = 'LATAM';"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                    LATAM
-                  </button>
-                  <button type="button" @click="selected = 'NAM'; open = false; document.getElementById('report-prepare-region').value = 'NAM';"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                    NAM
-                  </button>
+                  <template x-for="region in regions" :key="region">
+                    <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        :checked="isSelected(region)"
+                        @change="toggleRegion(region)"
+                        class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500"
+                      />
+                      <span x-text="region"></span>
+                    </label>
+                  </template>
                 </div>
                 <input type="hidden" id="report-prepare-region" />
               </div>
@@ -1187,7 +1289,7 @@
       let itemsPerPage = 25;
       let currentStatusFilter = 'All';
       let currentReportTypeFilter = 'All';
-      let currentRegionFilter = 'All';
+      let currentRegionFilter = ['All']; // Now supports multiple regions
       
       // Fetch reports from Confluence
       async function fetchReports() {
@@ -1337,7 +1439,10 @@
                 ${getComplexityBadge(report.reportComplexity)}
               </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
-                ${getRegionBadge(report.reportRegion)}
+                ${Array.isArray(report.reportRegion)
+                  ? report.reportRegion.map(region => getRegionBadge(region)).join('')
+                  : getRegionBadge(report.reportRegion)
+                }
               </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
                 <span class="!text-base text-gray-700 dark:text-gray-300">${report.frequency || '-'}</span>
@@ -1346,7 +1451,10 @@
                 <span class="!text-base text-gray-700 dark:text-gray-300">${report.preparedBy || '-'}</span>
               </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
-                ${getRegionBadge(report.prepareRegion)}
+                ${Array.isArray(report.prepareRegion)
+                  ? report.prepareRegion.map(region => getRegionBadge(region)).join('')
+                  : getRegionBadge(report.prepareRegion)
+                }
               </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
                 ${getStatusBadge(report.activeStatus)}
@@ -1460,8 +1568,8 @@
         filterReports();
       }
       
-      function filterByRegion(region) {
-        currentRegionFilter = region;
+      function filterByRegion(regions) {
+        currentRegionFilter = Array.isArray(regions) ? regions : [regions];
         filterReports();
       }
       
@@ -1480,8 +1588,12 @@
           }
           
           // Apply region filter
-          if (currentRegionFilter !== 'All' && report.reportRegion !== currentRegionFilter) {
-            return false;
+          if (!currentRegionFilter.includes('All')) {
+            const reportRegions = Array.isArray(report.reportRegion) ? report.reportRegion : [report.reportRegion];
+            const hasMatchingRegion = reportRegions.some(region => currentRegionFilter.includes(region));
+            if (!hasMatchingRegion) {
+              return false;
+            }
           }
           
           // Apply search filter
@@ -1581,10 +1693,10 @@
         document.getElementById('report-subcategory').value = report.subCategory || '';
         document.getElementById('report-critical').value = report.criticalReport || '';
         document.getElementById('report-complexity').value = report.reportComplexity || '';
-        document.getElementById('report-region').value = report.reportRegion || '';
+        document.getElementById('report-region').value = JSON.stringify(Array.isArray(report.reportRegion) ? report.reportRegion : [report.reportRegion || '']);
         document.getElementById('report-frequency').value = report.frequency || '';
         document.getElementById('report-prepared-by').value = report.preparedBy || '';
-        document.getElementById('report-prepare-region').value = report.prepareRegion || '';
+        document.getElementById('report-prepare-region').value = JSON.stringify(Array.isArray(report.prepareRegion) ? report.prepareRegion : [report.prepareRegion || '']);
         document.getElementById('report-status').value = report.activeStatus || 'Active';
         document.getElementById('report-time').value = report.timeAvgPerRun || 0;
         document.getElementById('report-pii').value = report.includePII || 'No';
@@ -1600,7 +1712,11 @@
           updateAlpineDropdown('report-complexity', report.reportComplexity || 'Select Complexity');
           updateAlpineDropdown('report-region', report.reportRegion || 'Select Report Region');
           updateAlpineDropdown('report-frequency', report.frequency || 'Select Frequency');
-          updateAlpineDropdown('report-prepare-region', report.prepareRegion || 'Select Prepare Region');
+          // Update region dropdowns with arrays
+          setTimeout(() => {
+            updateAlpineDropdownArray('report-region', Array.isArray(report.reportRegion) ? report.reportRegion : [report.reportRegion || '']);
+            updateAlpineDropdownArray('report-prepare-region', Array.isArray(report.prepareRegion) ? report.prepareRegion : [report.prepareRegion || '']);
+          }, 50);
           updateAlpineDropdown('report-status', report.activeStatus || 'Active');
           updateAlpineDropdown('report-pii', report.includePII || 'No');
           updateAlpineDropdown('report-euc', report.euc || 'No');
@@ -1622,6 +1738,21 @@
             }
           } catch (e) {
             console.warn('Could not update Alpine dropdown for', fieldId, e);
+          }
+        }
+      }
+
+      // Helper function to update Alpine.js multi-select dropdown display
+      function updateAlpineDropdownArray(fieldId, selectedArray) {
+        const field = document.getElementById(fieldId);
+        if (field && field.closest('[x-data]')) {
+          try {
+            const alpineComponent = field.closest('[x-data]').__x;
+            if (alpineComponent && alpineComponent.$data) {
+              alpineComponent.$data.selectedRegions = selectedArray.filter(item => item && item.trim() !== '');
+            }
+          } catch (e) {
+            console.warn('Could not update Alpine multi-select dropdown for', fieldId, e);
           }
         }
       }
@@ -1657,10 +1788,26 @@
           subCategory: document.getElementById('report-subcategory').value || '',
           criticalReport: document.getElementById('report-critical').value || '',
           reportComplexity: document.getElementById('report-complexity').value || '',
-          reportRegion: document.getElementById('report-region').value,
+          reportRegion: (() => {
+            const regionValue = document.getElementById('report-region').value;
+            try {
+              const parsed = JSON.parse(regionValue);
+              return Array.isArray(parsed) ? parsed : [parsed];
+            } catch (e) {
+              return regionValue ? [regionValue] : [];
+            }
+          })(),
           frequency: document.getElementById('report-frequency').value,
           preparedBy: document.getElementById('report-prepared-by').value || '',
-          prepareRegion: document.getElementById('report-prepare-region').value || '',
+          prepareRegion: (() => {
+            const prepareRegionValue = document.getElementById('report-prepare-region').value;
+            try {
+              const parsed = JSON.parse(prepareRegionValue);
+              return Array.isArray(parsed) ? parsed : [parsed];
+            } catch (e) {
+              return prepareRegionValue ? [prepareRegionValue] : [];
+            }
+          })(),
           activeStatus: document.getElementById('report-status').value,
           timeAvgPerRun: parseFloat(document.getElementById('report-time').value) || 0,
           includePII: document.getElementById('report-pii').value,
@@ -1758,10 +1905,10 @@
               'Sub Category': report.subCategory || '',
               'Critical Report': report.criticalReport || '',
               'Report Complexity': report.reportComplexity || '',
-              'Report Region': report.reportRegion || '',
+              'Report Region': Array.isArray(report.reportRegion) ? report.reportRegion.join(', ') : (report.reportRegion || ''),
               'Frequency': report.frequency || '',
               'Prepared By': report.preparedBy || '',
-              'Prepare Region': report.prepareRegion || '',
+              'Prepare Region': Array.isArray(report.prepareRegion) ? report.prepareRegion.join(', ') : (report.prepareRegion || ''),
               'Active Status': report.activeStatus || '',
               'Time (Avg Per Run)': report.timeAvgPerRun || 0,
               'Include PII?': report.includePII || '',
@@ -1805,27 +1952,39 @@
               const jsonData = XLSX.utils.sheet_to_json(firstSheet);
               
               // Transform Excel data to report format
-              const importedReports = jsonData.map(row => ({
-                id: row['ID'] || `REP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-                reportName: row['Report Name'] || '',
-                description: row['Description'] || '',
-                reportType: row['Report Type'] || '',
-                category: row['Category'] || '',
-                subCategory: row['Sub Category'] || '',
-                criticalReport: row['Critical Report'] || '',
-                reportComplexity: row['Report Complexity'] || '',
-                reportRegion: row['Report Region'] || '',
-                frequency: row['Frequency'] || '',
-                preparedBy: row['Prepared By'] || '',
-                prepareRegion: row['Prepare Region'] || '',
-                activeStatus: row['Active Status'] || 'Active',
-                timeAvgPerRun: parseFloat(row['Time (Avg Per Run)']) || 0,
-                includePII: row['Include PII?'] || 'No',
-                euc: row['EUC'] || 'No',
-                audience: row['Audience'] || '',
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-              }));
+              const importedReports = jsonData.map(row => {
+                // Helper function to parse regions (single value or comma-separated)
+                const parseRegions = (regionString) => {
+                  if (!regionString) return [];
+                  if (typeof regionString === 'string') {
+                    // Split by comma and clean up whitespace
+                    return regionString.split(',').map(r => r.trim()).filter(r => r);
+                  }
+                  return [regionString];
+                };
+
+                return {
+                  id: row['ID'] || `REP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                  reportName: row['Report Name'] || '',
+                  description: row['Description'] || '',
+                  reportType: row['Report Type'] || '',
+                  category: row['Category'] || '',
+                  subCategory: row['Sub Category'] || '',
+                  criticalReport: row['Critical Report'] || '',
+                  reportComplexity: row['Report Complexity'] || '',
+                  reportRegion: parseRegions(row['Report Region']),
+                  frequency: row['Frequency'] || '',
+                  preparedBy: row['Prepared By'] || '',
+                  prepareRegion: parseRegions(row['Prepare Region']),
+                  activeStatus: row['Active Status'] || 'Active',
+                  timeAvgPerRun: parseFloat(row['Time (Avg Per Run)']) || 0,
+                  includePII: row['Include PII?'] || 'No',
+                  euc: row['EUC'] || 'No',
+                  audience: row['Audience'] || '',
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString()
+                };
+              });
               
               // Replace all reports with imported data
               reports = importedReports;
@@ -2179,30 +2338,58 @@
             const filter = advancedFilters[i];
 
             // Evaluate the filter condition
-            const fieldValue = String(report[filter.column] || '').toLowerCase();
-            const filterValue = filter.value.toLowerCase();
-
             let matches = false;
 
-            switch (filter.operator) {
-              case 'contains':
-                matches = fieldValue.includes(filterValue);
-                break;
-              case 'notContains':
-                matches = !fieldValue.includes(filterValue);
-                break;
-              case 'is':
-                matches = fieldValue === filterValue;
-                break;
-              case 'isNot':
-                matches = fieldValue !== filterValue;
-                break;
-              case 'isEmpty':
-                matches = fieldValue === '';
-                break;
-              case 'isNotEmpty':
-                matches = fieldValue !== '';
-                break;
+            // Handle array fields (like regions) specially
+            if (filter.column === 'reportRegion' || filter.column === 'prepareRegion') {
+              const regions = Array.isArray(report[filter.column]) ? report[filter.column] : [report[filter.column]].filter(r => r);
+              const filterValue = filter.value.toLowerCase();
+
+              switch (filter.operator) {
+                case 'contains':
+                  matches = regions.some(region => region.toLowerCase().includes(filterValue));
+                  break;
+                case 'notContains':
+                  matches = !regions.some(region => region.toLowerCase().includes(filterValue));
+                  break;
+                case 'is':
+                  matches = regions.some(region => region.toLowerCase() === filterValue);
+                  break;
+                case 'isNot':
+                  matches = !regions.some(region => region.toLowerCase() === filterValue);
+                  break;
+                case 'isEmpty':
+                  matches = regions.length === 0;
+                  break;
+                case 'isNotEmpty':
+                  matches = regions.length > 0;
+                  break;
+              }
+            } else {
+              // Handle regular string fields
+              const fieldValue = String(report[filter.column] || '').toLowerCase();
+              const filterValue = filter.value.toLowerCase();
+
+              switch (filter.operator) {
+                case 'contains':
+                  matches = fieldValue.includes(filterValue);
+                  break;
+                case 'notContains':
+                  matches = !fieldValue.includes(filterValue);
+                  break;
+                case 'is':
+                  matches = fieldValue === filterValue;
+                  break;
+                case 'isNot':
+                  matches = fieldValue !== filterValue;
+                  break;
+                case 'isEmpty':
+                  matches = fieldValue === '';
+                  break;
+                case 'isNotEmpty':
+                  matches = fieldValue !== '';
+                  break;
+              }
             }
 
             // Add filter result to current AND group
@@ -2278,13 +2465,8 @@
         if (regionDropdown) {
           const regionAlpineData = regionDropdown.__x;
           if (regionAlpineData && regionAlpineData.$data) {
-            regionAlpineData.$data.selected = 'All Regions';
+            regionAlpineData.$data.selectedRegions = ['All'];
             regionAlpineData.$data.open = false;
-          }
-          // Also update the button text directly as fallback
-          const regionButton = regionDropdown.querySelector('button span');
-          if (regionButton) {
-            regionButton.textContent = 'All Regions';
           }
         }
 
