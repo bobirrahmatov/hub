@@ -1698,24 +1698,26 @@
         document.getElementById('report-euc').value = report.euc || 'No';
         document.getElementById('report-audience').value = report.audience || '';
         
-        // Update Alpine.js dropdown display values
+        // Update Alpine.js dropdown display values with longer timeout for modal opening
         setTimeout(() => {
+          // Update all single-select dropdowns
           updateAlpineDropdown('report-type', report.reportType || 'Select Report Type');
           updateAlpineDropdown('report-category', report.category || 'Select Category');
           updateAlpineDropdown('report-subcategory', report.subCategory || 'Select Sub Category');
           updateAlpineDropdown('report-critical', report.criticalReport || 'Select Critical Report');
           updateAlpineDropdown('report-complexity', report.reportComplexity || 'Select Complexity');
-          updateAlpineDropdown('report-region', report.reportRegion || 'Select Report Region');
           updateAlpineDropdown('report-frequency', report.frequency || 'Select Frequency');
-          // Update region dropdowns with arrays
-          setTimeout(() => {
-            updateAlpineDropdownArray('report-region', Array.isArray(report.reportRegion) ? report.reportRegion : [report.reportRegion || '']);
-            updateAlpineDropdownArray('report-prepare-region', Array.isArray(report.prepareRegion) ? report.prepareRegion : [report.prepareRegion || '']);
-          }, 50);
+          updateAlpineDropdown('report-prepared-by', report.preparedBy || 'Select Prepared By');
           updateAlpineDropdown('report-status', report.activeStatus || 'Active');
           updateAlpineDropdown('report-pii', report.includePII || 'No');
           updateAlpineDropdown('report-euc', report.euc || 'No');
-        }, 50);
+          
+          // Update multi-select region dropdowns with a bit more delay
+          setTimeout(() => {
+            updateAlpineDropdownArray('report-region', Array.isArray(report.reportRegion) ? report.reportRegion : (report.reportRegion ? [report.reportRegion] : []));
+            updateAlpineDropdownArray('report-prepare-region', Array.isArray(report.prepareRegion) ? report.prepareRegion : (report.prepareRegion ? [report.prepareRegion] : []));
+          }, 100);
+        }, 150);
         
         const modal = document.getElementById('reportModal');
         if (modal) {
@@ -1750,15 +1752,33 @@
       // Helper function to update Alpine.js multi-select dropdown display
       function updateAlpineDropdownArray(fieldId, selectedArray) {
         const field = document.getElementById(fieldId);
-        if (field && field.closest('[x-data]')) {
+        if (!field) {
+          console.warn('Field not found:', fieldId);
+          return;
+        }
+        
+        // Filter out empty values
+        const cleanedArray = selectedArray.filter(item => item && item.trim() !== '');
+        
+        // Update the hidden input value
+        field.value = JSON.stringify(cleanedArray);
+        
+        // Find and update the Alpine component
+        const alpineContainer = field.closest('[x-data]');
+        if (alpineContainer) {
           try {
-            const alpineComponent = field.closest('[x-data]').__x;
+            const alpineComponent = alpineContainer.__x;
             if (alpineComponent && alpineComponent.$data) {
-              alpineComponent.$data.selectedRegions = selectedArray.filter(item => item && item.trim() !== '');
+              alpineComponent.$data.selectedRegions = cleanedArray;
+              console.log(`✅ Updated ${fieldId} to:`, cleanedArray);
+            } else {
+              console.warn('Alpine component not initialized for', fieldId);
             }
           } catch (e) {
             console.warn('Could not update Alpine multi-select dropdown for', fieldId, e);
           }
+        } else {
+          console.warn('No Alpine container found for', fieldId);
         }
       }
       
@@ -2106,13 +2126,19 @@
           } else {
           }
           
-          // Apply current search filter
-          const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-          if (searchTerm) {
-            filterReports();
-          } else {
-            filteredReports = [...reports];
+          // Clear all filters
+          currentStatusFilter = 'All';
+          currentReportTypeFilter = 'All';
+          currentRegionFilter = ['All'];
+          
+          // Clear search input
+          const searchInput = document.getElementById('searchInput');
+          if (searchInput) {
+            searchInput.value = '';
           }
+          
+          // Reset filtered reports
+          filteredReports = [...reports];
           
           // Reset to first page
           currentPage = 1;
@@ -2126,7 +2152,7 @@
             tableLoadingOverlay.classList.add('hidden');
             tableLoadingOverlay.classList.remove('flex');
             tableContent.style.opacity = '1';
-            showSuccessToast('Reports refreshed successfully');
+            showSuccessToast('Reports refreshed and filters cleared');
           }, 500);
         } catch (error) {
           console.error('❌ Error refreshing reports:', error);
