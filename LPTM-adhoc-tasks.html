@@ -141,18 +141,38 @@
       }
       
       .custom-scrollbar::-webkit-scrollbar {
-        width: 6px !important;
-        height: 6px !important;
+        width: 8px !important;
+        height: 8px !important;
+        display: block !important;
       }
       .custom-scrollbar::-webkit-scrollbar-track {
         border-radius: 9999px !important;
+        background-color: #f3f4f6 !important;
       }
       .custom-scrollbar::-webkit-scrollbar-thumb {
         border-radius: 9999px !important;
-        background-color: #e4e7ec !important;
+        background-color: #9ca3af !important;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: #6b7280 !important;
+      }
+      .dark .custom-scrollbar::-webkit-scrollbar-track {
+        background-color: #1f2937 !important;
       }
       .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #344054 !important;
+        background-color: #4b5563 !important;
+      }
+      .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: #6b7280 !important;
+      }
+      
+      /* Force scrollbar visibility */
+      .custom-scrollbar {
+        scrollbar-width: thin !important;
+        scrollbar-color: #9ca3af #f3f4f6 !important;
+      }
+      .dark .custom-scrollbar {
+        scrollbar-color: #4b5563 #1f2937 !important;
       }
       
       /* Dark mode */
@@ -232,10 +252,16 @@
       }
       
       /* Table header styles - prevent global CSS overrides */
-      #mainTasksTable thead th,
+      #mainTasksTable thead th {
+        padding: 1rem 1.5rem !important;
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+        white-space: nowrap !important;
+      }
+      
       #summaryRecentTasksTable thead th {
         padding: 1rem 1.5rem !important;
-        text-align: left !important;
+        text-align: center !important;
         font-size: 1rem !important;
         font-weight: 500 !important;
         white-space: nowrap !important;
@@ -270,6 +296,15 @@
       .space-y-5.bg-gray-50 {
         transition: background-color 0.2s ease;
       }
+      
+      /* Line clamp for truncating text */
+      .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950">
@@ -278,7 +313,7 @@
       <div class="mx-auto max-w-[1536px] p-4 md:p-6">
         <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800" style="background-color: var(--card-bg, white);">
           <div class="px-5 py-4 sm:px-6 sm:py-5">
-            <h3 class="text-2xl font-medium text-gray-800 dark:text-white/90">
+            <h3 class="!text-2xl font-medium text-gray-800 dark:text-white/90">
               Ad Hoc Tasks Tracker
             </h3>
             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">
@@ -508,7 +543,7 @@
             <!-- Tasks Table -->
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 relative" style="background-color: var(--card-bg, white);" id="tableContainer">
               <!-- Loading Overlay -->
-              <div id="tableLoadingOverlay" class="absolute inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl hidden z-50 flex items-center justify-center">
+              <div id="tableLoadingOverlay" class="absolute inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl hidden z-[9999] flex items-center justify-center">
                 <div class="text-center">
                   <svg class="animate-spin h-12 w-12 text-blue-600 dark:text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -524,6 +559,7 @@
                     <tr class="bg-gray-50 dark:bg-gray-800/50">
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Actions</th>
                       <th class="px-6 py-4 text-left !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Report Name</th>
+                      <th class="px-6 py-4 text-left !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Description</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Date Received</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Close Date</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Maker</th>
@@ -533,6 +569,7 @@
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Days to Close</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Priority</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Region</th>
+                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Requestor Region</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="tasksTableBody">
@@ -687,7 +724,7 @@
                     <!-- Pending Column -->
                     <div class="swim-lane flex flex-col gap-5 border-r border-gray-200 dark:border-gray-800">
                       <div class="mb-1 flex items-center justify-between p-4 xl:px-6 xl:pt-6">
-                        <h3 class="flex items-center gap-3 text-base font-medium text-gray-800 dark:text-white/90">
+                        <h3 class="flex items-center gap-3 !text-base font-medium text-gray-800 dark:text-white/90">
                           Pending
                           <span id="pending-count" class="inline-flex rounded-full bg-gray-100 px-2 py-0.5 !text-base font-medium text-gray-700 dark:bg-white/[0.03] dark:text-white/80">
                             0
@@ -720,7 +757,7 @@
                           </div>
                         </div>
                       </div>
-                      <div id="pending-tasks" class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar px-4 pb-4 xl:px-6 xl:pb-6" 
+                      <div id="pending-tasks" class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar pt-1 px-4 pb-4 xl:px-6 xl:pb-6" 
                            ondrop="drop(event, 'Pending')" 
                            ondragover="allowDrop(event)"
                            ondragleave="dragLeave(event)">
@@ -731,7 +768,7 @@
                     <!-- In Progress Column -->
                     <div class="swim-lane flex flex-col gap-5 border-r border-gray-200 dark:border-gray-800">
                       <div class="mb-1 flex items-center justify-between p-4 xl:px-6 xl:pt-6">
-                        <h3 class="flex items-center gap-3 text-base font-medium text-gray-800 dark:text-white/90">
+                        <h3 class="flex items-center gap-3 !text-base font-medium text-gray-800 dark:text-white/90">
                           In Progress
                           <span id="inprogress-count" class="inline-flex rounded-full bg-warning-50 px-2 py-0.5 !text-base font-medium text-warning-700 dark:bg-warning-500/15 dark:text-orange-400">
                             0
@@ -764,7 +801,7 @@
                           </div>
                         </div>
                       </div>
-                      <div id="inprogress-tasks" class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar px-4 pb-4 xl:px-6 xl:pb-6"
+                      <div id="inprogress-tasks" class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar pt-1 px-4 pb-4 xl:px-6 xl:pb-6"
                            ondrop="drop(event, 'In Progress')" 
                            ondragover="allowDrop(event)"
                            ondragleave="dragLeave(event)">
@@ -775,7 +812,7 @@
                     <!-- On Hold Column -->
                     <div class="swim-lane flex flex-col gap-5 border-r border-gray-200 dark:border-gray-800">
                       <div class="mb-1 flex items-center justify-between p-4 xl:px-6 xl:pt-6">
-                        <h3 class="flex items-center gap-3 text-base font-medium text-gray-800 dark:text-white/90">
+                        <h3 class="flex items-center gap-3 !text-base font-medium text-gray-800 dark:text-white/90">
                           On Hold
                           <span id="onhold-count" class="inline-flex rounded-full bg-gray-100 px-2 py-0.5 !text-base font-medium text-gray-700 dark:bg-white/[0.03] dark:text-white/80">
                             0
@@ -808,7 +845,7 @@
                           </div>
                         </div>
                       </div>
-                      <div id="onhold-tasks" class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar px-4 pb-4 xl:px-6 xl:pb-6"
+                      <div id="onhold-tasks" class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar pt-1 px-4 pb-4 xl:px-6 xl:pb-6"
                            ondrop="drop(event, 'On Hold')" 
                            ondragover="allowDrop(event)"
                            ondragleave="dragLeave(event)">
@@ -819,7 +856,7 @@
                     <!-- Completed Column -->
                     <div class="swim-lane flex flex-col gap-5">
                       <div class="mb-1 flex items-center justify-between p-4 xl:px-6 xl:pt-6">
-                        <h3 class="flex items-center gap-3 text-base font-medium text-gray-800 dark:text-white/90">
+                        <h3 class="flex items-center gap-3 !text-base font-medium text-gray-800 dark:text-white/90">
                           Completed
                           <span id="completed-count" class="inline-flex rounded-full bg-success-50 px-2 py-0.5 !text-base font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500">
                             0
@@ -852,7 +889,7 @@
                           </div>
                         </div>
                       </div>
-                      <div id="completed-tasks" class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar px-4 pb-4 xl:px-6 xl:pb-6"
+                      <div id="completed-tasks" class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar pt-1 px-4 pb-4 xl:px-6 xl:pb-6"
                            ondrop="drop(event, 'Completed')" 
                            ondragover="allowDrop(event)"
                            ondragleave="dragLeave(event)">
@@ -882,13 +919,13 @@
                               </svg>
                             </div>
                             <div>
-                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Total Tasks</h3>
+                              <h3 class="!text-base font-semibold text-gray-800 dark:text-white/90">Total Tasks</h3>
                               <span class="block !text-base text-gray-500 dark:text-gray-400">All tasks</span>
                             </div>
                           </div>
                           <div class="flex items-end justify-between">
                             <div>
-                              <h4 id="summary-total-tasks" class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                              <h4 id="summary-total-tasks" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             </div>
                           </div>
                         </div>
@@ -902,15 +939,15 @@
                               </svg>
                             </div>
                             <div>
-                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Pending</h3>
+                              <h3 class="!text-base font-semibold text-gray-800 dark:text-white/90">Pending</h3>
                               <span class="block !text-base text-gray-500 dark:text-gray-400">Not started</span>
                             </div>
                           </div>
                           <div class="flex items-end justify-between gap-3">
                             <div>
-                              <h4 id="summary-pending-tasks" class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                              <h4 id="summary-pending-tasks" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             </div>
-                            <span class="flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xl font-bold text-amber-600 leading-none dark:bg-amber-500/15 dark:text-amber-500" id="summary-pending-percentage">
+                            <span class="flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 !text-xl font-bold text-amber-600 leading-none dark:bg-amber-500/15 dark:text-amber-500" id="summary-pending-percentage">
                               0%
                             </span>
                           </div>
@@ -925,15 +962,15 @@
                               </svg>
                             </div>
                             <div>
-                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">In Progress</h3>
+                              <h3 class="!text-base font-semibold text-gray-800 dark:text-white/90">In Progress</h3>
                               <span class="block !text-base text-gray-500 dark:text-gray-400">Active</span>
                             </div>
                           </div>
                           <div class="flex items-end justify-between gap-3">
                             <div>
-                              <h4 id="summary-inprogress-tasks" class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                              <h4 id="summary-inprogress-tasks" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             </div>
-                            <span class="flex items-center gap-1 rounded-full bg-orange-50 px-3 py-1 text-xl font-bold text-orange-600 leading-none dark:bg-orange-500/15 dark:text-orange-500" id="summary-inprogress-percentage">
+                            <span class="flex items-center gap-1 rounded-full bg-orange-50 px-3 py-1 !text-xl font-bold text-orange-600 leading-none dark:bg-orange-500/15 dark:text-orange-500" id="summary-inprogress-percentage">
                               0%
                             </span>
                           </div>
@@ -948,15 +985,15 @@
                               </svg>
                             </div>
                             <div>
-                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Completed</h3>
+                              <h3 class="!text-base font-semibold text-gray-800 dark:text-white/90">Completed</h3>
                               <span class="block !text-base text-gray-500 dark:text-gray-400">Finished</span>
                             </div>
                           </div>
                           <div class="flex items-end justify-between gap-3">
                             <div>
-                              <h4 id="summary-completed-tasks" class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                              <h4 id="summary-completed-tasks" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             </div>
-                            <span class="flex items-center gap-1 rounded-full bg-success-50 px-3 py-1 text-xl font-bold text-success-600 leading-none dark:bg-success-500/15 dark:text-success-500" id="summary-completed-percentage">
+                            <span class="flex items-center gap-1 rounded-full bg-success-50 px-3 py-1 !text-xl font-bold text-success-600 leading-none dark:bg-success-500/15 dark:text-success-500" id="summary-completed-percentage">
                               0%
                             </span>
                           </div>
@@ -971,13 +1008,13 @@
                         
                         <!-- Average Days to Close -->
                         <div class="border-b border-gray-200 px-6 py-5 sm:border-r xl:border-b-0 dark:border-gray-800">
-                          <span class="text-sm text-gray-500 dark:text-gray-400">Average Days to Close</span>
+                          <span class="!text-base text-gray-500 dark:text-gray-400">Average Days to Close</span>
                           <div class="mt-2 flex items-end gap-3">
                             <h4 class="text-title-xs sm:text-title-sm font-bold text-gray-800 dark:text-white/90">
                               <span id="summary-avg-days-to-close">0</span> days
                             </h4>
                             <div>
-                              <span class="bg-purple-50 text-purple-600 dark:bg-purple-500/15 dark:text-purple-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 text-sm font-medium">
+                              <span class="bg-purple-50 text-purple-600 dark:bg-purple-500/15 dark:text-purple-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 !text-base font-medium">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
                                 </svg>
@@ -988,13 +1025,13 @@
 
                         <!-- Fastest Close Time -->
                         <div class="border-b border-gray-200 px-6 py-5 xl:border-r xl:border-b-0 dark:border-gray-800">
-                          <span class="text-sm text-gray-500 dark:text-gray-400">Fastest Resolution</span>
+                          <span class="!text-base text-gray-500 dark:text-gray-400">Fastest Resolution</span>
                           <div class="mt-2 flex items-end gap-3">
                             <h4 class="text-title-xs sm:text-title-sm font-bold text-gray-800 dark:text-white/90">
                               <span id="summary-fastest-close">0</span> days
                             </h4>
                             <div>
-                              <span class="bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 text-sm font-medium">
+                              <span class="bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 !text-base font-medium">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                   <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
                                 </svg>
@@ -1005,13 +1042,13 @@
 
                         <!-- Slowest Close Time -->
                         <div class="px-6 py-5">
-                          <span class="text-sm text-gray-500 dark:text-gray-400">Slowest Resolution</span>
+                          <span class="!text-base text-gray-500 dark:text-gray-400">Slowest Resolution</span>
                           <div class="mt-2 flex items-end gap-3">
                             <h4 class="text-title-xs sm:text-title-sm font-bold text-gray-800 dark:text-white/90">
                               <span id="summary-slowest-close">0</span> days
                             </h4>
                             <div>
-                              <span class="bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 text-sm font-medium">
+                              <span class="bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 !text-base font-medium">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                   <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
                                 </svg>
@@ -1030,7 +1067,7 @@
                       <div class="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800" style="background-color: var(--card-bg, white);">
                         <div class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                           <div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Task Status Distribution</h3>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Task Status Distribution</h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Breakdown by status</p>
                           </div>
                         </div>
@@ -1043,7 +1080,7 @@
                       <div class="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800" style="background-color: var(--card-bg, white);">
                         <div class="mb-6 flex items-center justify-between">
                           <div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Priority Distribution</h3>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Priority Distribution</h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Tasks by priority level</p>
                           </div>
                         </div>
@@ -1059,7 +1096,7 @@
                       <div class="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800" style="background-color: var(--card-bg, white);">
                         <div class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                           <div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Task Volume Over Time</h3>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Task Volume Over Time</h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Monthly task distribution throughout the year</p>
                           </div>
                         </div>
@@ -1076,7 +1113,7 @@
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
                           <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <div>
-                              <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Top 10 Most Time-Consuming Tasks</h3>
+                              <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Top 10 Most Time-Consuming Tasks</h3>
                               <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Tasks with highest time spent</p>
                             </div>
                             <!-- Search Input -->
@@ -1150,7 +1187,7 @@
           <input type="hidden" id="task-id" />
           <input type="hidden" id="task-parent-id" />
           
-          <h4 class="mb-6 text-lg font-medium text-gray-800 dark:text-white/90" id="taskModalTitle">
+          <h4 class="mb-6 !text-lg font-medium text-gray-800 dark:text-white/90" id="taskModalTitle">
             Add Task
           </h4>
           
@@ -1449,6 +1486,37 @@
       let expandedTasks = new Set();
       let kanbanSearchTerm = '';
       let kanbanStatusFilter = 'All';
+      
+      // Fetch current user from Confluence API
+      async function getCurrentUser() {
+        try {
+          const response = await fetch('https://cedt-confluence.net/confluence/rest/api/user/current');
+          
+          if (!response.ok) {
+            console.warn('Could not fetch current user');
+            return null;
+          }
+          
+          const user = await response.json();
+          
+          // Format: "Name, Surname [Business]" -> "Name Surname"
+          // Remove commas, brackets, and content inside brackets
+          let displayName = user.displayName || user.username || '';
+          displayName = displayName
+            .replace(/,/g, '') // Remove commas
+            .replace(/\s*\[.*?\]/g, '') // Remove [WLTH], [MRKS], etc.
+            .trim();
+          
+          return {
+            username: user.username,
+            displayName: displayName,
+            key: user.userKey || user.key
+          };
+        } catch (error) {
+          console.error('Error fetching current user:', error);
+          return null;
+        }
+      }
       
       // Fetch team members from leave tracker
       async function fetchTeamMembers() {
@@ -1827,7 +1895,7 @@
         if (filteredTasks.length === 0) {
           tbody.innerHTML = `
             <tr>
-              <td colspan="11" class="px-6 py-12 text-center">
+              <td colspan="13" class="px-6 py-12 text-center">
                 <div class="flex flex-col items-center justify-center">
                   <svg class="h-12 w-12 text-gray-400 dark:text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
@@ -1897,6 +1965,9 @@
                   <span class="!text-base font-medium text-gray-900 dark:text-white">${task.reportName}</span>
                 </div>
               </td>
+              <td class="px-6 py-4">
+                <span class="!text-base text-gray-700 dark:text-gray-300 line-clamp-2">${task.description || '-'}</span>
+              </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
                 <span class="!text-base text-gray-700 dark:text-gray-300">${new Date(task.dateReceived).toLocaleDateString()}</span>
               </td>
@@ -1929,6 +2000,9 @@
               </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
                 ${getRegionBadge(task.region)}
+              </td>
+              <td class="px-6 py-4 text-center whitespace-nowrap">
+                ${getRegionBadge(task.requestorRegion)}
               </td>
             </tr>
           `;
@@ -1968,6 +2042,9 @@
                       <span class="!text-base text-gray-700 dark:text-gray-300">${childTask.reportName}</span>
                     </div>
                   </td>
+                  <td class="px-6 py-3">
+                    <span class="!text-base text-gray-600 dark:text-gray-400 line-clamp-2">${childTask.description || '-'}</span>
+                  </td>
                   <td class="px-6 py-3 text-center whitespace-nowrap">
                     <span class="!text-base text-gray-600 dark:text-gray-400">${new Date(childTask.dateReceived).toLocaleDateString()}</span>
                   </td>
@@ -2000,6 +2077,9 @@
                   </td>
                   <td class="px-6 py-3 text-center whitespace-nowrap">
                     ${getRegionBadge(childTask.region)}
+                  </td>
+                  <td class="px-6 py-3 text-center whitespace-nowrap">
+                    ${getRegionBadge(childTask.requestorRegion)}
                   </td>
                 </tr>
               `;
@@ -2099,7 +2179,7 @@
                  data-task-id="${task.id}">
               <div class="flex items-start justify-between gap-6">
                 <div class="flex-1" onclick="editTask('${task.id}')" style="cursor: pointer;">
-                  <h4 class="mb-5 text-base text-gray-800 dark:text-white/90">
+                  <h4 class="mb-5 !text-base text-gray-800 dark:text-white/90">
                     ${task.reportName}
                   </h4>
                   
@@ -2121,11 +2201,11 @@
                     ` : ''}
                   </div>
                   
-                  ${task.priority ? `<span class="mt-3 inline-flex rounded-full bg-brand-50 px-2 py-0.5 !text-base font-medium text-brand-500 dark:bg-brand-500/15 dark:text-brand-400">${task.priority}</span>` : ''}
+                  ${task.priority ? `<div class="mt-3">${getPriorityBadge(task.priority)}</div>` : ''}
                 </div>
                 
-                <div class="h-6 w-full max-w-6 overflow-hidden rounded-full border-[0.5px] border-gray-200 dark:border-gray-800">
-                  <div class="h-6 w-6 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-medium !text-base dark:bg-brand-900/30 dark:text-brand-400">
+                <div class="h-10 w-full max-w-10 overflow-hidden rounded-full border-[0.5px] border-gray-200 dark:border-gray-800">
+                  <div class="h-10 w-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-semibold !text-base dark:bg-brand-900/30 dark:text-brand-400">
                     ${maker ? maker.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '?'}
                   </div>
                 </div>
@@ -2314,34 +2394,109 @@
         modal.classList.add('flex');
       }
       
-      function addChildTask(parentId) {
+      async function addChildTask(parentId) {
+        const parentTask = tasks.find(t => t.id === parentId);
+        if (!parentTask) {
+          console.error('Parent task not found');
+          return;
+        }
+        
         document.getElementById('taskModalTitle').textContent = 'Add Child Task';
         document.getElementById('taskForm').reset();
         document.getElementById('task-id').value = '';
         document.getElementById('task-parent-id').value = parentId;
         
-        // Reset Alpine.js dropdowns
-        setTimeout(() => {
-          updateAlpineDropdown('task-status', 'Pending');
-          updateAlpineDropdown('task-maker', 'Select Maker');
-          updateAlpineDropdown('task-requestor', 'Select Requestor');
-          updateAlpineDropdown('task-region', 'Select Region');
-          updateAlpineDropdown('task-requestor-region', 'Select Requestor Region');
-          updateAlpineDropdown('task-priority', 'Select Priority');
-        }, 50);
+        // Set today's date
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('task-date-received').value = today;
         
+        // Get current user and find in team members
+        const currentUser = await getCurrentUser();
+        let requestorId = '';
+        let requestorName = 'Select Requestor';
+        
+        if (currentUser && currentUser.displayName) {
+          // Try multiple matching strategies
+          let matchingMember = null;
+          
+          // Strategy 1: Exact match (case insensitive)
+          matchingMember = teamMembers.find(m => 
+            m.name.toLowerCase() === currentUser.displayName.toLowerCase()
+          );
+          
+          // Strategy 2: Contains match
+          if (!matchingMember) {
+            matchingMember = teamMembers.find(m => {
+              const memberName = m.name.toLowerCase();
+              const displayName = currentUser.displayName.toLowerCase();
+              return memberName.includes(displayName) || displayName.includes(memberName);
+            });
+          }
+          
+          // Strategy 3: Match by first and last name parts
+          if (!matchingMember && currentUser.displayName.includes(' ')) {
+            const nameParts = currentUser.displayName.toLowerCase().split(' ').filter(p => p.length > 0);
+            if (nameParts.length >= 2) {
+              const firstName = nameParts[0];
+              const lastName = nameParts[nameParts.length - 1];
+              matchingMember = teamMembers.find(m => {
+                const memberParts = m.name.toLowerCase().split(' ');
+                return (memberParts[0] === firstName && memberParts[memberParts.length - 1] === lastName) ||
+                       (memberParts[0] === lastName && memberParts[memberParts.length - 1] === firstName);
+              });
+            }
+          }
+          
+          // Strategy 4: Match by username if available
+          if (!matchingMember && currentUser.username) {
+            matchingMember = teamMembers.find(m => 
+              m.id && m.id.toLowerCase().includes(currentUser.username.toLowerCase())
+            );
+          }
+          
+          if (matchingMember) {
+            requestorId = matchingMember.id;
+            requestorName = matchingMember.name;
+          } else {
+            // If not found, use display name but user will need to select from dropdown
+            requestorName = currentUser.displayName;
+            console.warn('Could not find matching team member for:', currentUser.displayName);
+          }
+        }
+        
+        // Set region and requestor region from parent task
+        document.getElementById('task-region').value = parentTask.region || '';
+        document.getElementById('task-requestor-region').value = parentTask.requestorRegion || '';
+        
+        // Open modal first
         const modal = document.getElementById('taskModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
+        
+        // Update Alpine.js dropdowns after modal opens
+        setTimeout(() => {
+          updateAlpineDropdown('task-status', 'Pending');
+          updateAlpineDropdown('task-maker', 'Select Maker');
+          updateAlpineDropdown('task-requestor', requestorName);
+          updateAlpineDropdown('task-region', parentTask.region || 'Select Region');
+          updateAlpineDropdown('task-requestor-region', parentTask.requestorRegion || 'Select Requestor Region');
+          updateAlpineDropdown('task-priority', 'Select Priority');
+          
+          // Set hidden input values
+          if (requestorId) {
+            document.getElementById('task-requestor').value = requestorId;
+          }
+        }, 100);
       }
       
       function editTask(taskId) {
         const task = tasks.find(t => t.id === taskId);
         if (!task) return;
         
-        const isChild = !!task.parentId;
+        const isChild = !task.parentId;
         document.getElementById('taskModalTitle').textContent = isChild ? 'Edit Child Task' : 'Edit Task';
         
+        // Set all hidden input values first
         document.getElementById('task-id').value = task.id;
         document.getElementById('task-parent-id').value = task.parentId || '';
         document.getElementById('task-report-name').value = task.reportName;
@@ -2355,7 +2510,17 @@
         document.getElementById('task-requestor-region').value = task.requestorRegion || '';
         document.getElementById('task-priority').value = task.priority || '';
         
-        // Update Alpine.js dropdown display values
+        // Open modal first so Alpine.js components can initialize
+        const modal = document.getElementById('taskModal');
+        if (modal) {
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+        } else {
+          console.error('❌ Modal element not found!');
+          return;
+        }
+        
+        // Update Alpine.js dropdown display values after modal is opened
         setTimeout(() => {
           updateAlpineDropdown('task-status', task.status);
           const maker = teamMembers.find(m => m.id === task.makerId);
@@ -2365,25 +2530,58 @@
           updateAlpineDropdown('task-region', task.region || 'Select Region');
           updateAlpineDropdown('task-requestor-region', task.requestorRegion || 'Select Requestor Region');
           updateAlpineDropdown('task-priority', task.priority || 'Select Priority');
-        }, 50);
-        
-        const modal = document.getElementById('taskModal');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        }, 100);
       }
       
       // Helper function to update Alpine.js dropdown display
       function updateAlpineDropdown(fieldId, displayValue) {
         const field = document.getElementById(fieldId);
-        if (field && field.closest('[x-data]')) {
-          try {
-            const alpineComponent = field.closest('[x-data]').__x;
-            if (alpineComponent && alpineComponent.$data) {
-              alpineComponent.$data.selected = displayValue;
+        if (!field) {
+          console.warn('Field not found:', fieldId);
+          return;
+        }
+        
+        // Update the hidden input value
+        field.value = displayValue;
+        
+        // Find the button for visual display
+        const button = field.parentElement.querySelector('button[type="button"]');
+        if (!button) {
+          console.warn('Button not found for field:', fieldId);
+          return;
+        }
+        
+        // Update button text
+        const buttonSpan = button.querySelector('span');
+        if (buttonSpan) {
+          buttonSpan.textContent = displayValue;
+        }
+        
+        // Find Alpine.js container
+        const alpineContainer = button.closest('[x-data]');
+        if (!alpineContainer) {
+          console.warn('Alpine container not found for field:', fieldId);
+          return;
+        }
+        
+        // Update Alpine.js state
+        try {
+          if (window.Alpine && alpineContainer._x_dataStack) {
+            const alpineData = alpineContainer._x_dataStack[0];
+            if (alpineData) {
+              alpineData.selected = displayValue;
+              alpineData.open = false;
+              console.log(`✅ Updated ${fieldId} to: ${displayValue}`);
             }
-          } catch (e) {
-            console.warn('Could not update Alpine dropdown for', fieldId, e);
+          } else if (alpineContainer.__x && alpineContainer.__x.$data) {
+            alpineContainer.__x.$data.selected = displayValue;
+            alpineContainer.__x.$data.open = false;
+            console.log(`✅ Updated ${fieldId} to: ${displayValue}`);
+          } else {
+            console.warn('Could not access Alpine data for', fieldId);
           }
+        } catch (e) {
+          console.warn('Could not update Alpine dropdown for', fieldId, e);
         }
       }
       
@@ -3242,10 +3440,10 @@
               <span class="!text-base font-medium text-gray-900 dark:text-white">${task.reportName}</span>
             </td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
-              ${getStatusBadgeForTable(task.status)}
+              ${getStatusDropdown(task.id, task.status)}
             </td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
-              ${getPriorityBadgeForTable(task.priority)}
+              ${getPriorityBadge(task.priority)}
             </td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
               <span class="!text-base font-medium text-gray-900 dark:text-white">${makerName}</span>
@@ -3264,7 +3462,7 @@
         });
       }
       
-      // Helper functions for table badges
+      // Helper functions for table badges (kept for backward compatibility if needed)
       function getStatusBadgeForTable(status) {
         const badges = {
           'Pending': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-amber-100 px-2.5 py-0.5 !text-base font-medium text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">Pending</span>',
