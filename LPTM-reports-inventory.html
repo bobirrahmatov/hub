@@ -496,42 +496,7 @@
                 </div>
                 
                 <!-- Region Filter -->
-                <div x-data="{
-                  open: false,
-                  selectedRegions: ['All'],
-                  regions: ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
-                  getDisplayText() {
-                    if (this.selectedRegions.includes('All') || this.selectedRegions.length === 0) {
-                      return 'All Regions';
-                    }
-                    if (this.selectedRegions.length === 1) {
-                      return this.selectedRegions[0];
-                    }
-                    return this.selectedRegions.length + ' Selected';
-                  },
-                  toggleRegion(region) {
-                    if (region === 'All') {
-                      this.selectedRegions = ['All'];
-                    } else {
-                      // Remove 'All' if it exists
-                      this.selectedRegions = this.selectedRegions.filter(r => r !== 'All');
-
-                      if (this.selectedRegions.includes(region)) {
-                        this.selectedRegions = this.selectedRegions.filter(r => r !== region);
-                        // If no regions selected, default to 'All'
-                        if (this.selectedRegions.length === 0) {
-                          this.selectedRegions = ['All'];
-                        }
-                      } else {
-                        this.selectedRegions.push(region);
-                      }
-                    }
-                    filterByRegion(this.selectedRegions);
-                  },
-                  isSelected(region) {
-                    return this.selectedRegions.includes(region);
-                  }
-                }" class="relative" id="regionFilterDropdown">
+                <div x-data="{open:false,selectedRegions:['All'],regions:['Global','APAC','EMEA','LATAM','NAM'],getDisplayText:function(){if(this.selectedRegions.includes('All')||this.selectedRegions.length===0)return'All Regions';if(this.selectedRegions.length===1)return this.selectedRegions[0];return this.selectedRegions.length+' Selected';},toggleRegion:function(region){if(region==='All'){this.selectedRegions=['All'];filterByRegion(this.selectedRegions);this.open=false;}else{if(this.selectedRegions.includes('All')){this.selectedRegions=[region];}else{if(this.selectedRegions.includes(region)){this.selectedRegions=this.selectedRegions.filter(function(r){return r!==region;});if(this.selectedRegions.length===0){this.selectedRegions=['All'];this.open=false;}}else{this.selectedRegions.push(region);}}filterByRegion(this.selectedRegions);}},isSelected:function(region){return this.selectedRegions.includes(region);}}" class="relative" id="regionFilterDropdown">
                   <button @click="open = !open" type="button"
                     class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                     <span x-text="getDisplayText()"></span>
@@ -561,10 +526,9 @@
                         <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
                           <input
                             type="checkbox"
-                            :checked="isSelected(region) && !isSelected('All')"
-                            :disabled="isSelected('All')"
+                            :checked="isSelected(region)"
                             @change="toggleRegion(region)"
-                            class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500 disabled:opacity-50"
+                            class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500"
                           />
                           <span x-text="region"></span>
                         </label>
@@ -1289,7 +1253,7 @@
       let itemsPerPage = 25;
       let currentStatusFilter = 'All';
       let currentReportTypeFilter = 'All';
-      let currentRegionFilter = ['All']; // Now supports multiple regions
+      let currentRegionFilter = ['All']; // Now supports multiple regions - starts with All selected
       
       // Fetch reports from Confluence
       async function fetchReports() {
@@ -1413,7 +1377,7 @@
         
         pageReports.forEach(report => {
           html += `
-            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer" data-report-id="${report.id}">
               <td class="px-6 py-4 whitespace-nowrap">
                 <span class="!text-base font-mono text-gray-700 dark:text-gray-300">${report.id}</span>
               </td>
@@ -1473,18 +1437,18 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center justify-center gap-2">
-                  <button onclick="viewReport('${report.id}')" class="text-blue-500 hover:text-blue-600 dark:text-blue-400" title="View">
+                  <button data-action="view" data-report-id="${report.id}" class="text-blue-500 hover:text-blue-600 dark:text-blue-400" title="View">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                     </svg>
                   </button>
-                  <button onclick="editReport('${report.id}')" class="text-gray-400 hover:text-gray-600 dark:text-gray-500" title="Edit">
+                  <button data-action="edit" data-report-id="${report.id}" class="text-gray-400 hover:text-gray-600 dark:text-gray-500" title="Edit">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                     </svg>
                   </button>
-                  <button onclick="deleteReport('${report.id}')" class="text-error-500 hover:text-error-600 dark:text-error-400" title="Delete">
+                  <button data-action="delete" data-report-id="${report.id}" class="text-error-500 hover:text-error-600 dark:text-error-400" title="Delete">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                     </svg>
@@ -1496,6 +1460,46 @@
         });
         
         tbody.innerHTML = html;
+
+        // Add event listeners for table rows and action buttons
+        const tableContainer = document.getElementById('tableContainer');
+        if (tableContainer) {
+          // Handle row clicks (edit)
+          tableContainer.addEventListener('click', function(e) {
+            const row = e.target.closest('tr[data-report-id]');
+            if (row && !e.target.closest('button[data-action]')) {
+              const reportId = row.getAttribute('data-report-id');
+              if (reportId) {
+                editReport(reportId);
+              }
+            }
+          });
+
+          // Handle action button clicks
+          tableContainer.addEventListener('click', function(e) {
+            const button = e.target.closest('button[data-action]');
+            if (button) {
+              e.stopPropagation(); // Prevent row click
+              const action = button.getAttribute('data-action');
+              const reportId = button.getAttribute('data-report-id');
+
+              if (action && reportId) {
+                switch (action) {
+                  case 'view':
+                    viewReport(reportId);
+                    break;
+                  case 'edit':
+                    editReport(reportId);
+                    break;
+                  case 'delete':
+                    deleteReport(reportId);
+                    break;
+                }
+              }
+            }
+          });
+        }
+
         updatePaginationInfo();
         updateMetricCards();
       }
@@ -1575,7 +1579,7 @@
       
       function filterReports() {
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        
+
         filteredReports = reports.filter(report => {
           // Apply status filter
           if (currentStatusFilter !== 'All' && report.activeStatus !== currentStatusFilter) {
@@ -2425,7 +2429,7 @@
         // Reset basic filters
         currentStatusFilter = 'All';
         currentReportTypeFilter = 'All';
-        currentRegionFilter = 'All';
+        currentRegionFilter = ['All']; // Reset to array format
 
         // Reset Alpine.js dropdown displays using a more reliable approach
         // Force re-initialization of Alpine components by recreating the x-data
