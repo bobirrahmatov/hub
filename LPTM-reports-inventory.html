@@ -1263,13 +1263,38 @@
           
           if (!response.ok) {
             if (response.status === 404) {
+              console.info('ℹ️ Reports file not found. Starting with empty inventory.');
             } else {
               console.warn('⚠️ Could not fetch reports file:', response.status, response.statusText);
             }
             return [];
           }
           
-          const data = await response.json();
+          // Check if response has content
+          const contentType = response.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            console.warn('⚠️ Response is not JSON. Content-Type:', contentType);
+            return [];
+          }
+          
+          // Get response text first to check if it's empty
+          const text = await response.text();
+          
+          // If empty, return empty array
+          if (!text || text.trim() === '') {
+            console.info('ℹ️ Reports file is empty. Starting with empty inventory.');
+            return [];
+          }
+          
+          // Try to parse as JSON
+          let data;
+          try {
+            data = JSON.parse(text);
+          } catch (parseError) {
+            console.error('❌ Failed to parse JSON:', parseError);
+            console.error('Response text (first 200 chars):', text.substring(0, 200));
+            return [];
+          }
           
           // Check if data has a reports array or is directly an array
           if (data.reports && Array.isArray(data.reports)) {
