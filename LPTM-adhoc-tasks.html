@@ -141,18 +141,18 @@
       }
       
       .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
+        width: 6px !important;
+        height: 6px !important;
       }
       .custom-scrollbar::-webkit-scrollbar-track {
-        border-radius: 9999px;
+        border-radius: 9999px !important;
       }
       .custom-scrollbar::-webkit-scrollbar-thumb {
-        border-radius: 9999px;
-        background-color: #e4e7ec;
+        border-radius: 9999px !important;
+        background-color: #e4e7ec !important;
       }
       .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #344054;
+        background-color: #344054 !important;
       }
       
       /* Dark mode */
@@ -229,6 +229,16 @@
       /* Ensure the Actions column (last th) has proper radius */
       #mainTasksTable thead tr:first-child th:nth-child(9) {
         border-top-right-radius: 1rem !important;
+      }
+      
+      /* Table header styles - prevent global CSS overrides */
+      #mainTasksTable thead th,
+      #summaryRecentTasksTable thead th {
+        padding: 1rem 1.5rem !important;
+        text-align: left !important;
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+        white-space: nowrap !important;
       }
       
       /* Remove rounded corners for summary table header */
@@ -512,6 +522,7 @@
                 <table class="min-w-full" id="mainTasksTable">
                   <thead>
                     <tr class="bg-gray-50 dark:bg-gray-800/50">
+                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Actions</th>
                       <th class="px-6 py-4 text-left !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Report Name</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Date Received</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Close Date</th>
@@ -522,7 +533,6 @@
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Days to Close</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Priority</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Region</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Actions</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="tasksTableBody">
@@ -672,7 +682,7 @@
                   </div>
                   
                   <!-- Kanban Board -->
-                  <div class="mt-7 grid grid-cols-1 border-t border-gray-200 dark:border-gray-800 sm:mt-0 sm:grid-cols-2 xl:grid-cols-4 min-h-[600px]">
+                  <div class="mt-7 grid grid-cols-1 border-t border-gray-200 dark:border-gray-800 sm:mt-0 sm:grid-cols-2 xl:grid-cols-4 min-h-[600px] -mx-4 sm:-mx-6 -mb-4 sm:-mb-6">
                     
                     <!-- Pending Column -->
                     <div class="swim-lane flex flex-col gap-5 border-r border-gray-200 dark:border-gray-800">
@@ -1857,6 +1867,25 @@
           // Parent task row
           html += `
             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors task-row-parent ${hasChildren ? 'cursor-pointer' : ''}" ${hasChildren ? `onclick="toggleTaskExpansion('${task.id}')"` : `onclick="editTask('${task.id}')"`}>
+              <td class="px-6 py-4 whitespace-nowrap" onclick="event.stopPropagation()">
+                <div class="flex items-center justify-center gap-2">
+                  <button onclick="addChildTask('${task.id}')" class="text-brand-500 hover:text-brand-600 dark:text-brand-400" title="Add Child Task">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                  </button>
+                  <button onclick="editTask('${task.id}')" class="text-gray-400 hover:text-gray-600 dark:text-gray-500" title="Edit">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                  </button>
+                  <button onclick="deleteTask('${task.id}')" class="text-error-500 hover:text-error-600 dark:text-error-400" title="Delete">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center gap-2">
                   ${hasChildren ? `
@@ -1901,25 +1930,6 @@
               <td class="px-6 py-4 text-center whitespace-nowrap">
                 ${getRegionBadge(task.region)}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap" onclick="event.stopPropagation()">
-                <div class="flex items-center justify-center gap-2">
-                  <button onclick="addChildTask('${task.id}')" class="text-brand-500 hover:text-brand-600 dark:text-brand-400" title="Add Child Task">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                  </button>
-                  <button onclick="editTask('${task.id}')" class="text-gray-400 hover:text-gray-600 dark:text-gray-500" title="Edit">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                    </svg>
-                  </button>
-                  <button onclick="deleteTask('${task.id}')" class="text-error-500 hover:text-error-600 dark:text-error-400" title="Delete">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                    </svg>
-                  </button>
-                </div>
-              </td>
             </tr>
           `;
           
@@ -1937,6 +1947,20 @@
               
               html += `
                 <tr class="task-row-child hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors cursor-pointer" onclick="editTask('${childTask.id}')">
+                  <td class="px-6 py-3 whitespace-nowrap" onclick="event.stopPropagation()">
+                    <div class="flex items-center justify-center gap-2">
+                      <button onclick="editTask('${childTask.id}')" class="text-gray-400 hover:text-gray-600 dark:text-gray-500" title="Edit">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                      </button>
+                      <button onclick="deleteTask('${childTask.id}')" class="text-error-500 hover:text-error-600 dark:text-error-400" title="Delete">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
                   <td class="px-6 py-3 whitespace-nowrap">
                     <div class="flex items-center gap-2">
                       <div class="w-4"></div>
@@ -1976,20 +2000,6 @@
                   </td>
                   <td class="px-6 py-3 text-center whitespace-nowrap">
                     ${getRegionBadge(childTask.region)}
-                  </td>
-                  <td class="px-6 py-3 whitespace-nowrap" onclick="event.stopPropagation()">
-                    <div class="flex items-center justify-center gap-2">
-                      <button onclick="editTask('${childTask.id}')" class="text-gray-400 hover:text-gray-600 dark:text-gray-500" title="Edit">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                        </svg>
-                      </button>
-                      <button onclick="deleteTask('${childTask.id}')" class="text-error-500 hover:text-error-600 dark:text-error-400" title="Delete">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                      </button>
-                    </div>
                   </td>
                 </tr>
               `;
@@ -2471,6 +2481,83 @@
         }
       }
       
+      // Reset all filters
+      function resetAllFilters() {
+        // Clear search input
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+          searchInput.value = '';
+        }
+        
+        // Reset filter state variables
+        statusFilter = 'All';
+        priorityFilter = 'All';
+        regionFilter = 'All';
+        
+        // Reset Alpine.js dropdown displays by finding each filter dropdown
+        // Status filter
+        const statusFilterContainer = document.querySelector('[x-data*="All Statuses"]');
+        if (statusFilterContainer) {
+          try {
+            if (window.Alpine && statusFilterContainer._x_dataStack) {
+              const alpineData = statusFilterContainer._x_dataStack[0];
+              if (alpineData) {
+                alpineData.selected = 'All Statuses';
+                alpineData.open = false;
+              }
+            } else if (statusFilterContainer.__x && statusFilterContainer.__x.$data) {
+              statusFilterContainer.__x.$data.selected = 'All Statuses';
+              statusFilterContainer.__x.$data.open = false;
+            }
+          } catch (e) {
+            console.warn('Could not reset status filter:', e);
+          }
+        }
+        
+        // Priority filter
+        const priorityFilterContainer = document.querySelector('[x-data*="All Priorities"]');
+        if (priorityFilterContainer) {
+          try {
+            if (window.Alpine && priorityFilterContainer._x_dataStack) {
+              const alpineData = priorityFilterContainer._x_dataStack[0];
+              if (alpineData) {
+                alpineData.selected = 'All Priorities';
+                alpineData.open = false;
+              }
+            } else if (priorityFilterContainer.__x && priorityFilterContainer.__x.$data) {
+              priorityFilterContainer.__x.$data.selected = 'All Priorities';
+              priorityFilterContainer.__x.$data.open = false;
+            }
+          } catch (e) {
+            console.warn('Could not reset priority filter:', e);
+          }
+        }
+        
+        // Region filter
+        const regionFilterContainer = document.querySelector('[x-data*="All Regions"]');
+        if (regionFilterContainer) {
+          try {
+            if (window.Alpine && regionFilterContainer._x_dataStack) {
+              const alpineData = regionFilterContainer._x_dataStack[0];
+              if (alpineData) {
+                alpineData.selected = 'All Regions';
+                alpineData.open = false;
+              }
+            } else if (regionFilterContainer.__x && regionFilterContainer.__x.$data) {
+              regionFilterContainer.__x.$data.selected = 'All Regions';
+              regionFilterContainer.__x.$data.open = false;
+            }
+          } catch (e) {
+            console.warn('Could not reset region filter:', e);
+          }
+        }
+        
+        // Apply filters to show all tasks
+        filteredTasks = [...tasks];
+        currentPage = 1;
+        renderTasksTable();
+      }
+      
       // Refresh tasks table
       async function refreshTasksTable() {
         const refreshButton = document.getElementById('refreshButton');
@@ -2497,16 +2584,8 @@
           // Keep current expansion state (don't auto-expand after refresh)
           // Note: expandedTasks Set is preserved to maintain user's expand/collapse choices
           
-          // Apply current search filter
-          const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-          if (searchTerm) {
-            filterTasks();
-          } else {
-            filteredTasks = [...tasks];
-          }
-          
-          // Reset to first page
-          currentPage = 1;
+          // Reset all filters and clear search
+          resetAllFilters();
           
           // Re-render all views
           renderAllViews();
