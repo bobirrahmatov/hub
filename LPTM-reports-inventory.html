@@ -494,7 +494,7 @@
                   <button
                     class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out"
                     x-bind:class="activeTab === 'dashboard' ? ' text-brand-500 border-brand-500  dark:border-brand-400  dark:text-brand-400' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
-                    x-on:click="activeTab = 'dashboard'"
+                    x-on:click="activeTab = 'dashboard'; setTimeout(() => { if (typeof refreshDashboard === 'function') refreshDashboard(); }, 100);"
                   >
                     <svg class="size-5" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M9.85954 4.0835C9.5834 4.0835 9.35954 4.30735 9.35954 4.5835V15.4161C9.35954 15.6922 9.5834 15.9161 9.85954 15.9161H10.1373C10.4135 15.9161 10.6373 15.6922 10.6373 15.4161V4.5835C10.6373 4.30735 10.4135 4.0835 10.1373 4.0835H9.85954ZM7.85954 4.5835C7.85954 3.47893 8.75497 2.5835 9.85954 2.5835H10.1373C11.2419 2.5835 12.1373 3.47893 12.1373 4.5835V15.4161C12.1373 16.5206 11.2419 17.4161 10.1373 17.4161H9.85954C8.75497 17.4161 7.85954 16.5206 7.85954 15.4161V4.5835ZM4.58203 8.9598C4.30589 8.9598 4.08203 9.18366 4.08203 9.4598V15.4168C4.08203 15.693 4.30589 15.9168 4.58203 15.9168H4.85981C5.13595 15.9168 5.35981 15.693 5.35981 15.4168V9.4598C5.35981 9.18366 5.13595 8.9598 4.85981 8.9598H4.58203ZM2.58203 9.4598C2.58203 8.35523 3.47746 7.4598 4.58203 7.4598H4.85981C5.96438 7.4598 6.85981 8.35523 6.85981 9.4598V15.4168C6.85981 16.5214 5.96438 17.4168 4.85981 17.4168H4.58203C3.47746 17.4168 2.58203 16.5214 2.58203 15.4168V9.4598ZM14.637 12.435C14.637 12.1589 14.8609 11.935 15.137 11.935H15.4148C15.691 11.935 15.9148 12.1589 15.9148 12.435V15.4168C15.9148 15.693 15.691 15.9168 15.4148 15.9168H15.137C14.8609 15.9168 14.637 15.693 14.637 15.4168V12.435ZM15.137 10.435C14.0325 10.435 13.137 11.3304 13.137 12.435V15.4168C13.137 16.5214 14.0325 17.4168 15.137 17.4168H15.4148C16.5194 17.4168 17.4148 16.5214 17.4148 15.4168V12.435C17.4148 11.3304 16.5194 10.435 15.4148 10.435H15.137Z" fill="currentColor"/>
@@ -3381,6 +3381,10 @@
       }
       
       function updateDashboardMetrics() {
+        // Check if dashboard elements exist before updating
+        const totalEl = document.getElementById('dashboard-total-reports');
+        if (!totalEl) return; // Dashboard not loaded yet
+        
         const total = filteredReports.length;
         const active = filteredReports.filter(r => r.activeStatus === 'Active').length;
         const onHold = filteredReports.filter(r => r.activeStatus === 'On-Hold').length;
@@ -3390,7 +3394,7 @@
         const onHoldPercentage = total > 0 ? Math.round((onHold / total) * 100) : 0;
         const retiredPercentage = total > 0 ? Math.round((retired / total) * 100) : 0;
         
-        document.getElementById('dashboard-total-reports').textContent = total;
+        totalEl.textContent = total;
         document.getElementById('dashboard-active-reports').textContent = active;
         document.getElementById('dashboard-onhold-reports').textContent = onHold;
         document.getElementById('dashboard-retired-reports').textContent = retired;
@@ -3411,14 +3415,14 @@
         
         chartElement.innerHTML = '';
         
-        if (reports.length === 0) {
+        if (filteredReports.length === 0) {
           chartElement.innerHTML = '<div class="flex items-center justify-center py-20"><p class="!text-base text-gray-500 dark:text-gray-400">No data available</p></div>';
           return;
         }
         
         // Count by report type
         const typeCounts = {};
-        reports.forEach(r => {
+        filteredReports.forEach(r => {
           const type = r.reportType || 'Unknown';
           typeCounts[type] = (typeCounts[type] || 0) + 1;
         });
@@ -3536,7 +3540,7 @@
         
         chartElement.innerHTML = '';
         
-        if (reports.length === 0) {
+        if (filteredReports.length === 0) {
           chartElement.innerHTML = '<div class="flex items-center justify-center py-20"><p class="!text-base text-gray-500 dark:text-gray-400">No data available</p></div>';
           return;
         }
@@ -3656,7 +3660,7 @@
         
         tbody.innerHTML = '';
         
-        if (reports.length === 0) {
+        if (filteredReports.length === 0) {
           tbody.innerHTML = `
             <tr>
               <td colspan="5" class="px-6 py-8 text-center">
@@ -3718,7 +3722,7 @@
         
         tbody.innerHTML = '';
         
-        if (reports.length === 0) {
+        if (filteredReports.length === 0) {
           tbody.innerHTML = `
             <tr>
               <td colspan="3" class="px-6 py-8 text-center">
@@ -3785,7 +3789,7 @@
         
         chartElement.innerHTML = '';
         
-        if (reports.length === 0) {
+        if (filteredReports.length === 0) {
           chartElement.innerHTML = '<div class="flex items-center justify-center py-20"><p class="!text-base text-gray-500 dark:text-gray-400">No data available</p></div>';
           return;
         }
