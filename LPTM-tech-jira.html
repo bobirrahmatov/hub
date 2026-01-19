@@ -570,6 +570,18 @@
                       class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                       Enhancement
                     </button>
+                    <button type="button" @click="selected = 'Jira'; open = false; filterTicketsByType('Jira')"
+                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                      Jira
+                    </button>
+                    <button type="button" @click="selected = 'BRD'; open = false; filterTicketsByType('BRD')"
+                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                      BRD
+                    </button>
+                    <button type="button" @click="selected = 'Incident'; open = false; filterTicketsByType('Incident')"
+                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                      Incident
+                    </button>
                     <button type="button" @click="selected = 'Investigation'; open = false; filterTicketsByType('Investigation')"
                       class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                       Investigation
@@ -655,7 +667,7 @@
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Close Date</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Team in Charge</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Status</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Days to Close</th>
+                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Days Pending</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Priority</th>
                     </tr>
                   </thead>
@@ -1437,6 +1449,21 @@
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
                     Investigation
                   </button>
+                  <button type="button" @click="selected = 'Jira'; open = false; document.getElementById('ticket-type').value = 'Jira';"
+                    :class="selected === 'Jira' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
+                    Jira
+                  </button>
+                  <button type="button" @click="selected = 'BRD'; open = false; document.getElementById('ticket-type').value = 'BRD';"
+                    :class="selected === 'BRD' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
+                    BRD
+                  </button>
+                  <button type="button" @click="selected = 'Incident'; open = false; document.getElementById('ticket-type').value = 'Incident';"
+                    :class="selected === 'Incident' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
+                    Incident
+                  </button>
                 </div>
                 <input type="hidden" id="task-region" required />
               </div>
@@ -1949,6 +1976,30 @@
         return `<span class="inline-flex items-center whitespace-nowrap gap-1 rounded-full px-2.5 py-0.5 !text-base font-medium ${config.class}">${config.svg}${priority}</span>`;
       }
       
+      // Get initials from team name for avatar
+      function getTeamInitials(teamName) {
+        if (!teamName || teamName.trim() === '') return '?';
+        
+        const trimmed = teamName.trim();
+        const words = trimmed.split(/\s+/).filter(w => w.length > 0);
+        
+        if (words.length === 0) return '?';
+        
+        // If single word, take first 2-3 characters
+        if (words.length === 1) {
+          const word = words[0];
+          if (word.length <= 3) {
+            return word.toUpperCase();
+          }
+          // For longer single words, take first 2 characters
+          return word.substring(0, 2).toUpperCase();
+        }
+        
+        // If multiple words, take first letter of first 2-3 words
+        const initials = words.slice(0, 3).map(w => w[0]).join('');
+        return initials.toUpperCase();
+      }
+      
       function getRegionBadge(region) {
         if (!region) return '<span class="!text-base text-gray-400 dark:text-gray-500">-</span>';
         
@@ -2117,10 +2168,44 @@
           
           // Parent task row
           const isCompleted = task.status === 'Completed';
-          // Calculate days to close (excluding weekends)
-          const daysToClose = task.closeDate && task.dateReceived 
-            ? calculateWeekdays(task.dateReceived, task.closeDate)
-            : null;
+          const isClosed = task.status === 'Completed' || task.status === 'Cancelled';
+          
+          // Calculate days pending or days to close (excluding weekends)
+          let daysPendingBadge = '';
+          if (isClosed && task.closeDate && task.dateReceived) {
+            // Ticket is closed - show "Closed in X days"
+            const daysToClose = calculateWeekdays(task.dateReceived, task.closeDate);
+            if (daysToClose !== null) {
+              daysPendingBadge = `
+                <span class="inline-flex items-center gap-1 rounded-full px-3 py-1 !text-sm font-medium bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-400">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  Closed in ${daysToClose} ${daysToClose === 1 ? 'day' : 'days'}
+                </span>
+              `;
+            }
+          } else if (task.dateReceived) {
+            // Ticket is still open - show "X days pending"
+            const daysPending = calculateWeekdays(task.dateReceived, new Date().toISOString().split('T')[0]);
+            if (daysPending !== null) {
+              const badgeColor = daysPending > 10 ? 'bg-error-50 text-error-700 dark:bg-error-500/15 dark:text-error-400' : 
+                                 daysPending > 5 ? 'bg-warning-50 text-warning-700 dark:bg-warning-500/15 dark:text-warning-400' : 
+                                 'bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400';
+              daysPendingBadge = `
+                <span class="inline-flex items-center gap-1 rounded-full px-3 py-1 !text-sm font-medium ${badgeColor}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  ${daysPending} ${daysPending === 1 ? 'day' : 'days'} pending
+                </span>
+              `;
+            }
+          }
+          
+          if (!daysPendingBadge) {
+            daysPendingBadge = '<span class="!text-base text-gray-400 dark:text-gray-500">-</span>';
+          }
           
           html += `
             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors task-row-parent ${hasChildren ? 'cursor-pointer' : ''}" ${hasChildren ? `onclick="toggleTaskExpansion('${task.id}')"` : ''}>
@@ -2177,7 +2262,7 @@
                 ${getStatusDropdown(task.id, task.status)}
               </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
-                ${daysToClose !== null ? `<span class="!text-base font-medium text-success-600 dark:text-success-400">${daysToClose}</span>` : '<span class="!text-base text-gray-400 dark:text-gray-500">-</span>'}
+                ${daysPendingBadge}
               </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
                 ${getPriorityBadge(task.priority)}
@@ -2191,10 +2276,45 @@
               const childNumber = getTaskNumber(childTask);
               const childMaker = teamMembers.find(m => m.id === childTask.makerId);
               const childRequestor = teamMembers.find(m => m.id === childTask.requestorId);
-              // Calculate days to close for child (excluding weekends)
-              const childDaysToClose = childTask.closeDate && childTask.dateReceived 
-                ? calculateWeekdays(childTask.dateReceived, childTask.closeDate)
-                : null;
+              
+              // Calculate days pending or days to close for child (excluding weekends)
+              const isChildClosed = childTask.status === 'Completed' || childTask.status === 'Cancelled';
+              let childDaysPendingBadge = '';
+              
+              if (isChildClosed && childTask.closeDate && childTask.dateReceived) {
+                // Child is closed - show "Closed in X days"
+                const childDaysToClose = calculateWeekdays(childTask.dateReceived, childTask.closeDate);
+                if (childDaysToClose !== null) {
+                  childDaysPendingBadge = `
+                    <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 !text-xs font-medium bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-400">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      Closed in ${childDaysToClose} ${childDaysToClose === 1 ? 'day' : 'days'}
+                    </span>
+                  `;
+                }
+              } else if (childTask.dateReceived) {
+                // Child is still open - show "X days pending"
+                const childDaysPending = calculateWeekdays(childTask.dateReceived, new Date().toISOString().split('T')[0]);
+                if (childDaysPending !== null) {
+                  const childBadgeColor = childDaysPending > 10 ? 'bg-error-50 text-error-700 dark:bg-error-500/15 dark:text-error-400' : 
+                                         childDaysPending > 5 ? 'bg-warning-50 text-warning-700 dark:bg-warning-500/15 dark:text-warning-400' : 
+                                         'bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400';
+                  childDaysPendingBadge = `
+                    <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 !text-xs font-medium ${childBadgeColor}">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      ${childDaysPending} ${childDaysPending === 1 ? 'day' : 'days'} pending
+                    </span>
+                  `;
+                }
+              }
+              
+              if (!childDaysPendingBadge) {
+                childDaysPendingBadge = '<span class="!text-base text-gray-400 dark:text-gray-500">-</span>';
+              }
               
               html += `
                 <tr class="task-row-child hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors">
@@ -2241,7 +2361,7 @@
                     ${getStatusDropdown(childTask.id, childTask.status)}
                   </td>
                   <td class="px-6 py-3 text-center whitespace-nowrap">
-                    ${childDaysToClose !== null ? `<span class="!text-base text-success-600 dark:text-success-400">${childDaysToClose}</span>` : '<span class="!text-base text-gray-400 dark:text-gray-500">-</span>'}
+                    ${childDaysPendingBadge}
                   </td>
                   <td class="px-6 py-3 text-center whitespace-nowrap">
                     ${getPriorityBadge(childTask.priority)}
@@ -2330,8 +2450,6 @@
         }
         
         parentTasks.forEach(task => {
-          const maker = teamMembers.find(m => m.id === task.makerId);
-          const requestor = teamMembers.find(m => m.id === task.requestorId);
           const childTasks = tickets.filter(t => t.parentId === task.id);
           const childCount = childTasks.length;
           
@@ -2371,7 +2489,7 @@
                 
                 <div class="h-10 w-full max-w-10 overflow-hidden rounded-full border-[0.5px] border-gray-200 dark:border-gray-800">
                   <div class="h-10 w-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-medium !text-base dark:bg-brand-900/30 dark:text-brand-400">
-                    ${maker ? maker.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '?'}
+                    ${getTeamInitials(task.teamInCharge)}
                   </div>
                 </div>
               </div>
