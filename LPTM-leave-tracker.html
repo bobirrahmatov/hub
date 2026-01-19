@@ -713,8 +713,7 @@
                           <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <div>
                             <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Public Holidays</h3>
-                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Complete list of public holidays
-                              across all regions</p>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Upcoming holidays for the next 3 months (showing up to 5 nearest)</p>
                             </div>
                             <!-- Search Input -->
                             <div class="relative w-full sm:w-64">
@@ -755,55 +754,6 @@
                             </tbody>
                           </table>
                         </div>
-                      <!-- Pagination -->
-                      <div class="border-t border-gray-200 px-6 py-4 dark:border-gray-800">
-                        <div class="flex items-center justify-between">
-                          <div class="flex items-center gap-2">
-                            <span class="!!text-lg !text-gray-700 dark:!text-gray-400">Show</span>
-                            <select id="holidaysPerPage"
-                              class="rounded-lg border border-gray-300 bg-white px-2 py-1 !!text-lg !text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:!text-white/90">
-                              <option value="8" selected>8</option>
-                              <option value="10">10</option>
-                              <option value="20">20</option>
-                              <option value="50">50</option>
-                              <option value="100">100</option>
-                            </select>
-                            <span class="!!text-lg !text-gray-700 dark:!text-gray-400">items per page</span>
-                          </div>
-
-                          <div class="flex items-center gap-2">
-                            <button id="previousHolidayPageBtn"
-                              class="!!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
-                              <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M2.58301 9.99868C2.58272 10.1909 2.65588 10.3833 2.80249 10.53L7.79915 15.5301C8.09194 15.8231 8.56682 15.8233 8.85981 15.5305C9.15281 15.2377 9.15297 14.7629 8.86018 14.4699L5.14009 10.7472L16.6675 10.7472C17.0817 10.7472 17.4175 10.4114 17.4175 9.99715C17.4175 9.58294 17.0817 9.24715 16.6675 9.24715L5.14554 9.24715L8.86017 5.53016C9.15297 5.23717 9.15282 4.7623 8.85983 4.4695C8.56684 4.1767 8.09197 4.17685 7.79917 4.46984L2.84167 9.43049C2.68321 9.568 2.58301 9.77087 2.58301 9.99715C2.58301 9.99766 2.58301 9.99817 2.58301 9.99868Z"
-                                  fill=""></path>
-                              </svg>
-                              <span class="hidden sm:inline">Previous</span>
-                            </button>
-
-                            <span class="block !!text-lg font-medium !text-gray-700 sm:hidden dark:!text-gray-400">
-                              Page <span id="holidayCurrentPage">1</span> of <span id="holidayTotalPages">1</span>
-                            </span>
-
-                            <ul class="hidden items-center gap-0.5 sm:flex" id="holidayPagination">
-                              <!-- Pagination will be dynamically added here -->
-                            </ul>
-
-                            <button id="nextHolidayPageBtn"
-                              class="!!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
-                              <span class="hidden sm:inline">Next</span>
-                              <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M17.4175 9.9986C17.4178 10.1909 17.3446 10.3832 17.198 10.53L12.2013 15.5301C11.9085 15.8231 11.4337 15.8233 11.1407 15.5305C10.8477 15.2377 10.8475 14.7629 11.1403 14.4699L14.8604 10.7472L3.33301 10.7472C2.91879 10.7472 2.58301 10.4114 2.58301 9.99715C2.58301 9.58294 2.91879 9.24715 3.33301 9.24715L14.8549 9.24715L11.1403 5.53016C10.8475 5.23717 10.8477 4.7623 11.1407 4.4695C11.4336 4.1767 11.9085 4.17685 12.2013 4.46984L17.1588 9.43049C17.3173 9.568 17.4175 9.77087 17.4175 9.99715C17.4175 9.99763 17.4175 9.99812 17.4175 9.9986Z"
-                                  fill=""></path>
-                              </svg>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
                       </div>
                     
                     <!-- FTE Utilization Chart -->
@@ -2762,11 +2712,7 @@
       if (previousLeaveBtn) previousLeaveBtn.addEventListener('click', previousLeavePage);
       if (nextLeaveBtn) nextLeaveBtn.addEventListener('click', nextLeavePage);
 
-      // Public Holidays Pagination
-      const previousHolidayBtn = document.getElementById('previousHolidayPageBtn');
-      const nextHolidayBtn = document.getElementById('nextHolidayPageBtn');
-      if (previousHolidayBtn) previousHolidayBtn.addEventListener('click', previousHolidayPage);
-      if (nextHolidayBtn) nextHolidayBtn.addEventListener('click', nextHolidayPage);
+      // Public Holidays Pagination removed - showing only next 3 months, max 5 items
 
       // Calendar Action Buttons are now attached inside the calendar DOMContentLoaded block
       // (Add Leave, Manage Team, Fetch Holidays, Download Outlook)
@@ -3389,53 +3335,28 @@
         chart: {
           fontFamily: "Outfit, sans-serif",
           height: 335,
-          type: "line",
+          type: "area",
           toolbar: { show: false },
           parentHeightOffset: 0,
         },
         stroke: {
           curve: "smooth",
-          width: 3,
+          width: 2,
         },
         dataLabels: { enabled: false },
-        markers: { 
-          size: 5,
-          colors: ["#465fff"],
-          strokeColors: "#fff",
-          strokeWidth: 2,
-          hover: {
-            size: 7
-          }
-        },
+        markers: { size: 0 },
         xaxis: {
           categories: weeks,
           axisBorder: { show: false },
           axisTicks: { show: false },
-          labels: {
-            style: {
-              fontSize: '12px',
-            },
-            rotate: -45,
-            rotateAlways: false,
-          }
         },
-        yaxis: {
-          title: { 
-            text: "Utilization %",
-            style: { 
-              fontSize: "14px",
-              fontWeight: 500,
-              color: '#6B7280'
-            }
+        fill: {
+          type: 'gradient',
+          gradient: {
+            enabled: true,
+            opacityFrom: 0.55,
+            opacityTo: 0,
           },
-          min: 0,
-          max: 100,
-          tickAmount: 5,
-          labels: {
-            formatter: function(val) {
-              return val.toFixed(0) + '%';
-            }
-          }
         },
         grid: {
           xaxis: { lines: { show: false } },
@@ -3446,6 +3367,9 @@
               strokeDashArray: 4
             }
           },
+        },
+        yaxis: {
+          title: { style: { fontSize: "0px" } },
         },
         annotations: {
           yaxis: [
@@ -4280,9 +4204,21 @@
       const events = calendarEvents;
       console.log('🎉 populateHolidaysTable called, calendarEvents:', events.length);
 
-      // Filter only public holidays
+      // Get date range for next 3 months
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const threeMonthsLater = new Date(today);
+      threeMonthsLater.setMonth(threeMonthsLater.getMonth() + 3);
+      threeMonthsLater.setHours(23, 59, 59, 999);
+
+      // Filter only public holidays within next 3 months
       allHolidays = events
-        .filter(event => event.extendedProps.calendar === 'Public')
+        .filter(event => {
+          if (event.extendedProps.calendar !== 'Public') return false;
+          const eventDate = typeof event.start === 'string' ? new Date(event.start) : new Date(event.start);
+          eventDate.setHours(0, 0, 0, 0);
+          return eventDate >= today && eventDate <= threeMonthsLater;
+        })
         .map(event => ({
           name: event.title,
           date: event.start,
@@ -4293,11 +4229,11 @@
           const dateA = typeof a.date === 'string' ? new Date(a.date) : a.date;
           const dateB = typeof b.date === 'string' ? new Date(b.date) : b.date;
           return dateA - dateB;
-        });
+        })
+        .slice(0, 5); // Limit to 5 items
 
-      console.log('   Public holidays found:', allHolidays.length);
+      console.log('   Public holidays found (next 3 months, limited to 5):', allHolidays.length);
       filteredHolidays = [...allHolidays];
-      holidayCurrentPage = 1;
       updateHolidaysTable();
     }
 
@@ -4318,20 +4254,15 @@
         tbody.innerHTML = `
             <tr>
               <td colspan="4" class="px-6 py-8 text-center">
-                <p class="text-gray-500 dark:text-gray-400">No public holidays found. Use "Fetch Holidays" button to load holidays.</p>
+                <p class="text-gray-500 dark:text-gray-400">No public holidays found for the next 3 months. Use "Fetch Holidays" button to load holidays.</p>
               </td>
             </tr>
           `;
         return;
       }
 
-      // Calculate pagination
-      const startIndex = (holidayCurrentPage - 1) * holidaysPerPage;
-      const endIndex = startIndex + holidaysPerPage;
-      const pageHolidays = filteredHolidays.slice(startIndex, endIndex);
-
-      // Populate table
-      pageHolidays.forEach(holiday => {
+      // Populate table (no pagination, show all filtered holidays - max 5)
+      filteredHolidays.forEach(holiday => {
         const holidayDate = typeof holiday.date === 'string' ? new Date(holiday.date) : holiday.date;
         const formattedDate = holidayDate.toLocaleDateString('en-US', {
           year: 'numeric',
@@ -4357,8 +4288,6 @@
           `;
         tbody.appendChild(row);
       });
-
-      updateHolidayPagination();
     }
 
     function updateHolidayPagination() {
@@ -4448,10 +4377,9 @@
         return holiday.name.toLowerCase().includes(searchTerm) ||
           holiday.countryCode.toLowerCase().includes(searchTerm) ||
           holiday.localName.toLowerCase().includes(searchTerm) ||
-          holiday.date.toLocaleDateString().toLowerCase().includes(searchTerm);
+          (typeof holiday.date === 'string' ? new Date(holiday.date) : holiday.date).toLocaleDateString().toLowerCase().includes(searchTerm);
       });
 
-      holidayCurrentPage = 1;
       updateHolidaysTable();
     }
       
@@ -4478,15 +4406,7 @@
         holidaySearchInput.addEventListener('input', filterHolidays);
       }
 
-      // Items per page change for holidays
-      const holidaysPerPageSelect = document.getElementById('holidaysPerPage');
-      if (holidaysPerPageSelect) {
-        holidaysPerPageSelect.addEventListener('change', function (e) {
-          holidaysPerPage = parseInt(e.target.value);
-          holidayCurrentPage = 1;
-          updateHolidaysTable();
-          });
-        }
+      // Items per page change for holidays removed - showing only next 3 months, max 5 items
       });
 
     // ============================================================================
