@@ -708,26 +708,11 @@
                     <!-- Public Holidays Table -->
                     <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800"
                       style="background-color: var(--card-bg, white);">
-                        <!-- Header with Title and Search -->
+                        <!-- Header with Title -->
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-                          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                            <div>
+                          <div>
                             <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Public Holidays</h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Upcoming holidays for the next 3 months (showing up to 5 nearest)</p>
-                            </div>
-                            <!-- Search Input -->
-                            <div class="relative w-full sm:w-64">
-                              <span class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2">
-                              <svg class="fill-gray-500 dark:fill-gray-400" width="18" height="18" viewBox="0 0 20 20"
-                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M3.04199 9.37381C3.04199 5.87712 5.87735 3.04218 9.37533 3.04218C12.8733 3.04218 15.7087 5.87712 15.7087 9.37381C15.7087 12.8705 12.8733 15.7055 9.37533 15.7055C5.87735 15.7055 3.04199 12.8705 3.04199 9.37381ZM9.37533 1.54218C5.04926 1.54218 1.54199 5.04835 1.54199 9.37381C1.54199 13.6993 5.04926 17.2055 9.37533 17.2055C11.2676 17.2055 13.0032 16.5346 14.3572 15.4178L17.1773 18.2381C17.4702 18.531 17.945 18.5311 18.2379 18.2382C18.5308 17.9453 18.5309 17.4704 18.238 17.1775L15.4182 14.3575C16.5367 13.0035 17.2087 11.2671 17.2087 9.37381C17.2087 5.04835 13.7014 1.54218 9.37533 1.54218Z"
-                                  fill="" />
-                                </svg>
-                              </span>
-                            <input type="text" id="holidaySearchInput" placeholder="Search by name, country, date..."
-                              class="h-9 w-full rounded-lg border border-gray-300 bg-white py-2 pr-3 pl-9 !text-base text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500" />
-                            </div>
                           </div>
                         </div>
                         <!-- Table -->
@@ -744,9 +729,6 @@
                               <th
                                 class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
                                 Country/Region</th>
-                              <th
-                                class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                Local Name</th>
                               </tr>
                             </thead>
                           <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="holidaysTableBody">
@@ -850,20 +832,20 @@
                         class="border-t border-gray-200 px-6 py-4 dark:border-gray-800 hidden">
                         <div class="flex items-center justify-between">
                           <div class="flex items-center gap-2">
-                            <span class="!!text-lg !text-gray-700 dark:!text-gray-400">Show</span>
+                            <span class="!text-lg !text-gray-700 dark:!text-gray-400">Show</span>
                             <select id="leavesPerPage"
-                              class="rounded-lg border border-gray-300 bg-white px-2 py-1 !!text-lg !text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:!text-white/90">
+                              class="rounded-lg border border-gray-300 bg-white px-2 py-1 !text-lg !text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:!text-white/90">
                               <option value="10" selected>10</option>
                               <option value="20">20</option>
                               <option value="50">50</option>
                               <option value="100">100</option>
                             </select>
-                            <span class="!!text-lg !text-gray-700 dark:!text-gray-400">items per page</span>
+                            <span class="!text-lg !text-gray-700 dark:!text-gray-400">items per page</span>
                           </div>
 
                           <div class="flex items-center gap-2">
                             <button id="previousLeavePageBtn"
-                              class="!!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
+                              class="!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
                               <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -873,7 +855,7 @@
                               <span class="hidden sm:inline">Previous</span>
                             </button>
 
-                            <span class="block !!text-lg font-medium !text-gray-700 sm:hidden dark:!text-gray-400">
+                            <span class="block !text-lg font-medium !text-gray-700 sm:hidden dark:!text-gray-400">
                               Page <span id="leaveCurrentPage">1</span> of <span id="leaveTotalPages">1</span>
                             </span>
 
@@ -882,7 +864,7 @@
                             </ul>
 
                             <button id="nextLeavePageBtn"
-                              class="!!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
+                              class="!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
                               <span class="hidden sm:inline">Next</span>
                               <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -2793,22 +2775,30 @@
         // Filter out public holidays for total count
         const nonPublicEvents = events.filter(event => event.extendedProps.calendar !== 'Public');
         
-        // Count unique team members with each leave type
+        // Count unique team members and total business days with each leave type
         const annualMembers = new Set();
         const sickMembers = new Set();
         const publicCount = events.filter(event => event.extendedProps.calendar === 'Public').length;
         const otherMembers = new Set();
         
+        let annualDays = 0;
+        let sickDays = 0;
+        
         events.forEach(event => {
           const leaveType = event.extendedProps.calendar;
           const teamMemberId = event.extendedProps.teamMember;
+          const startDate = typeof event.start === 'string' ? new Date(event.start) : event.start;
+          const endDate = event.end ? (typeof event.end === 'string' ? new Date(event.end) : event.end) : startDate;
+          const businessDays = calculateBusinessDays(startDate, endDate);
           
           switch (leaveType) {
             case 'Annual':
               if (teamMemberId) annualMembers.add(teamMemberId);
+              annualDays += businessDays;
               break;
             case 'Sick':
               if (teamMemberId) sickMembers.add(teamMemberId);
+              sickDays += businessDays;
               break;
             case 'Other':
               if (teamMemberId) otherMembers.add(teamMemberId);
@@ -2816,20 +2806,20 @@
           }
         });
         
-        const annualCount = annualMembers.size;
-        const sickCount = sickMembers.size;
+        const annualMembersCount = annualMembers.size;
+        const sickMembersCount = sickMembers.size;
         const totalCount = nonPublicEvents.length;
         
-        // Update metric cards
+        // Update metric cards - show members count and days
         document.getElementById('total-leaves-count').textContent = totalCount;
-        document.getElementById('annual-leave-count').textContent = annualCount;
-        document.getElementById('sick-leave-count').textContent = sickCount;
+        document.getElementById('annual-leave-count').textContent = `${annualMembersCount} (${annualDays}d)`;
+        document.getElementById('sick-leave-count').textContent = `${sickMembersCount} (${sickDays}d)`;
         document.getElementById('public-leave-count').textContent = publicCount;
         
         // Calculate percentages based on total team members
         const totalMembers = teamMembers.length;
-        const annualPercentage = totalMembers > 0 ? Math.round((annualCount / totalMembers) * 100) : 0;
-        const sickPercentage = totalMembers > 0 ? Math.round((sickCount / totalMembers) * 100) : 0;
+        const annualPercentage = totalMembers > 0 ? Math.round((annualMembersCount / totalMembers) * 100) : 0;
+        const sickPercentage = totalMembers > 0 ? Math.round((sickMembersCount / totalMembers) * 100) : 0;
         const publicPercentage = totalCount > 0 ? Math.round((publicCount / totalCount) * 100) : 0;
         
         document.getElementById('annual-percentage').textContent = annualPercentage + '%';
@@ -2977,8 +2967,11 @@
         // Clear the element
         chartElement.innerHTML = '';
         
-        // Show "no data" message if no events
-        if (events.length === 0) {
+        // Filter out public holidays
+        const nonPublicEvents = events.filter(event => event.extendedProps.calendar !== 'Public');
+        
+        // Show "no data" message if no non-public events
+        if (nonPublicEvents.length === 0) {
           chartElement.innerHTML = `
             <div class="flex items-center justify-center py-20">
               <div class="text-center">
@@ -2993,13 +2986,12 @@
           return;
         }
         
-        // Count business days for each leave type
+        // Count business days for each leave type (excluding public holidays)
         let annualCount = 0;
         let sickCount = 0;
-        let publicCount = 0;
         let otherCount = 0;
         
-        events.forEach(event => {
+        nonPublicEvents.forEach(event => {
           const leaveType = event.extendedProps.calendar;
           const startDate = typeof event.start === 'string' ? new Date(event.start) : event.start;
           const endDate = event.end ? (typeof event.end === 'string' ? new Date(event.end) : event.end) : startDate;
@@ -3012,9 +3004,6 @@
             case 'Sick':
               sickCount += businessDays;
               break;
-            case 'Public':
-              publicCount += businessDays;
-              break;
             case 'Other':
               otherCount += businessDays;
               break;
@@ -3023,7 +3012,7 @@
         
         const chartOptions = {
           series: [
-            { name: "Leave Days", data: [annualCount, sickCount, publicCount, otherCount] }
+            { name: "Leave Days", data: [annualCount, sickCount, otherCount] }
           ],
           colors: ["#465fff"],
           chart: {
@@ -3068,7 +3057,7 @@
             colors: ["transparent"],
           },
           xaxis: {
-            categories: ["Annual", "Sick", "Public", "Other"],
+            categories: ["Annual", "Sick", "Other"],
             axisBorder: { show: false },
             axisTicks: { show: false },
           },
@@ -3370,6 +3359,9 @@
         },
         yaxis: {
           title: { style: { fontSize: "0px" } },
+          min: 0,
+          max: 100,
+          tickAmount: 5,
         },
         annotations: {
           yaxis: [
@@ -3598,8 +3590,8 @@
       const a = document.createElement('a');
       a.href = '#';
       a.className = pageNum === leaveCurrentPage
-        ? 'bg-brand-500/[0.08] !!text-lg text-brand-500 hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium'
-        : '!!text-lg hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium !text-gray-700 dark:!text-gray-400';
+        ? 'bg-brand-500/[0.08] !text-lg text-brand-500 hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium'
+        : '!text-lg hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium !text-gray-700 dark:!text-gray-400';
       a.textContent = pageNum;
       a.onclick = (e) => {
         e.preventDefault();
@@ -3613,7 +3605,7 @@
     function addLeaveEllipsis() {
       const pagination = document.getElementById('leavePagination');
       const li = document.createElement('li');
-      li.className = '!!text-lg flex h-10 w-10 items-center justify-center text-gray-700 dark:!text-gray-400';
+      li.className = '!text-lg flex h-10 w-10 items-center justify-center text-gray-700 dark:!text-gray-400';
       li.textContent = '...';
       pagination.appendChild(li);
     }
@@ -3830,7 +3822,7 @@
       console.log('🎯 renderTimelineGrid called');
       const thead = document.querySelector('#timelineTableBody').parentElement.querySelector('thead tr');
       const tbody = document.getElementById('timelineTableBody');
-      console.log('   tbody:', !!tbody, ', thead:', !!thead, ', startDate:', timelineStartDate, ', endDate:', timelineEndDate);
+      console.log('   tbody:', !tbody, ', thead:', !thead, ', startDate:', timelineStartDate, ', endDate:', timelineEndDate);
       if (!tbody || !thead || !timelineStartDate || !timelineEndDate) {
         console.log('   ⚠️ Early return - missing elements or dates');
         return;
@@ -4253,7 +4245,7 @@
       if (filteredHolidays.length === 0) {
         tbody.innerHTML = `
             <tr>
-              <td colspan="4" class="px-6 py-8 text-center">
+              <td colspan="3" class="px-6 py-8 text-center">
                 <p class="text-gray-500 dark:text-gray-400">No public holidays found for the next 3 months. Use "Fetch Holidays" button to load holidays.</p>
               </td>
             </tr>
@@ -4281,9 +4273,6 @@
             </td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
               <span class="inline-flex items-center rounded-full bg-purple-100 px-2.5 py-0.5 !text-base font-medium text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">${holiday.countryCode}</span>
-            </td>
-            <td class="px-6 py-4 text-center whitespace-nowrap">
-              <span class="!text-base text-gray-700 dark:text-gray-300">${holiday.localName}</span>
             </td>
           `;
         tbody.appendChild(row);
@@ -4335,8 +4324,8 @@
       const a = document.createElement('a');
       a.href = '#';
       a.className = pageNum === holidayCurrentPage
-        ? 'bg-brand-500/[0.08] !!text-lg text-brand-500 hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium'
-        : '!!text-lg hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium !text-gray-700 dark:!text-gray-400';
+        ? 'bg-brand-500/[0.08] !text-lg text-brand-500 hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium'
+        : '!text-lg hover:bg-brand-500/[0.08] hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium !text-gray-700 dark:!text-gray-400';
       a.textContent = pageNum;
       a.onclick = (e) => {
         e.preventDefault();
@@ -4350,7 +4339,7 @@
     function addHolidayEllipsis() {
       const pagination = document.getElementById('holidayPagination');
       const li = document.createElement('li');
-      li.className = '!!text-lg flex h-10 w-10 items-center justify-center text-gray-700 dark:!text-gray-400';
+      li.className = '!text-lg flex h-10 w-10 items-center justify-center text-gray-700 dark:!text-gray-400';
       li.textContent = '...';
       pagination.appendChild(li);
     }
@@ -4400,12 +4389,7 @@
         });
       }
 
-      // Search functionality for holidays table
-      const holidaySearchInput = document.getElementById('holidaySearchInput');
-      if (holidaySearchInput) {
-        holidaySearchInput.addEventListener('input', filterHolidays);
-      }
-
+      // Search functionality for holidays table removed - no search bar anymore
       // Items per page change for holidays removed - showing only next 3 months, max 5 items
       });
 
