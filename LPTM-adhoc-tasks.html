@@ -1213,8 +1213,8 @@
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Monthly task distribution throughout the year</p>
                           </div>
                         </div>
-                        <div class="max-w-full overflow-x-auto">
-                          <div id="taskRegionChart" class="-ml-4 min-w-[600px] pl-2"></div>
+                        <div class="max-w-full overflow-hidden">
+                          <div id="taskRegionChart" class="-ml-4 pl-2"></div>
                         </div>
                       </div>
                     </div>
@@ -1801,6 +1801,31 @@
         });
       }
       
+      // Calculate weekdays between two dates (excluding weekends)
+      function calculateWeekdays(startDate, endDate) {
+        if (!startDate || !endDate) return null;
+        
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        
+        // Ensure start is before end
+        if (start > end) return null;
+        
+        let weekdays = 0;
+        const current = new Date(start);
+        
+        while (current <= end) {
+          const dayOfWeek = current.getDay();
+          // Count only weekdays (Monday=1 to Friday=5)
+          if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+            weekdays++;
+          }
+          current.setDate(current.getDate() + 1);
+        }
+        
+        return weekdays;
+      }
+      
       // Get task numbering (e.g., "1", "1.1", "1.2", "2", etc.)
       function getTaskNumber(task) {
         if (!task.parentId) {
@@ -2049,9 +2074,9 @@
           const childTasks = tasks.filter(t => t.parentId === task.id);
           const hasChildren = childTasks.length > 0;
           
-          // Calculate days to close
+          // Calculate days to close (excluding weekends)
           const daysToClose = task.closeDate && task.dateReceived 
-            ? Math.ceil((new Date(task.closeDate) - new Date(task.dateReceived)) / (1000 * 60 * 60 * 24))
+            ? calculateWeekdays(task.dateReceived, task.closeDate)
             : null;
           
           // Parent task row
@@ -2134,9 +2159,9 @@
             childTasks.forEach(childTask => {
               const childNumber = getTaskNumber(childTask);
               
-              // Calculate days to close for child
+              // Calculate days to close for child (excluding weekends)
               const childDaysToClose = childTask.closeDate && childTask.dateReceived 
-                ? Math.ceil((new Date(childTask.closeDate) - new Date(childTask.dateReceived)) / (1000 * 60 * 60 * 24))
+                ? calculateWeekdays(childTask.dateReceived, childTask.closeDate)
                 : null;
               
               html += `
@@ -3143,16 +3168,22 @@
         
         if (completedTasksWithCloseDate.length > 0) {
           const daysToCloseArray = completedTasksWithCloseDate.map(t => {
-            return Math.ceil((new Date(t.closeDate) - new Date(t.dateReceived)) / (1000 * 60 * 60 * 24));
-          });
+            return calculateWeekdays(t.dateReceived, t.closeDate) || 0;
+          }).filter(days => days > 0);
           
-          const avgDaysToClose = Math.round(daysToCloseArray.reduce((sum, days) => sum + days, 0) / daysToCloseArray.length);
-          const fastestClose = Math.min(...daysToCloseArray);
-          const slowestClose = Math.max(...daysToCloseArray);
-          
-          document.getElementById('summary-avg-days-to-close').textContent = avgDaysToClose;
-          document.getElementById('summary-fastest-close').textContent = fastestClose;
-          document.getElementById('summary-slowest-close').textContent = slowestClose;
+          if (daysToCloseArray.length > 0) {
+            const avgDaysToClose = Math.round(daysToCloseArray.reduce((sum, days) => sum + days, 0) / daysToCloseArray.length);
+            const fastestClose = Math.min(...daysToCloseArray);
+            const slowestClose = Math.max(...daysToCloseArray);
+            
+            document.getElementById('summary-avg-days-to-close').textContent = avgDaysToClose;
+            document.getElementById('summary-fastest-close').textContent = fastestClose;
+            document.getElementById('summary-slowest-close').textContent = slowestClose;
+          } else {
+            document.getElementById('summary-avg-days-to-close').textContent = '0';
+            document.getElementById('summary-fastest-close').textContent = '0';
+            document.getElementById('summary-slowest-close').textContent = '0';
+          }
         } else {
           document.getElementById('summary-avg-days-to-close').textContent = '0';
           document.getElementById('summary-fastest-close').textContent = '0';
@@ -3425,7 +3456,7 @@
         // Sort month-year combinations chronologically
         const sortedMonthYears = Array.from(monthYearSet).sort();
         
-        // Create display labels (e.g., "Jan 2024", "Feb 2024")
+        // Create display labels (e.g., "Jan 2024", "Feb 2026")
         const monthLabels = sortedMonthYears.map(my => {
           const [year, month] = my.split('-');
           return `${monthNames[parseInt(month)]} ${year}`;
@@ -3465,6 +3496,7 @@
             height: 335,
             type: "area",
             toolbar: { show: false },
+            width: '100%',
           },
           stroke: {
             curve: "smooth",
@@ -3481,6 +3513,14 @@
             categories: monthLabels,
             axisBorder: { show: false },
             axisTicks: { show: false },
+            labels: {
+              rotate: -45,
+              rotateAlways: true,
+              style: {
+                fontSize: '12px',
+                fontFamily: 'Outfit, sans-serif',
+              },
+            },
           },
           fill: {
             type: 'gradient',
