@@ -141,18 +141,18 @@
       }
       
       .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
+        width: 6px !important;
+        height: 6px !important;
       }
       .custom-scrollbar::-webkit-scrollbar-track {
-        border-radius: 9999px;
+        border-radius: 9999px !important;
       }
       .custom-scrollbar::-webkit-scrollbar-thumb {
-        border-radius: 9999px;
-        background-color: #e4e7ec;
+        border-radius: 9999px !important;
+        background-color: #e4e7ec !important;
       }
       .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #344054;
+        background-color: #344054 !important;
       }
       
       /* Dark mode */
@@ -237,6 +237,136 @@
       #summaryRecentTasksTable thead {
         border-top-left-radius: 0 !important;
         border-top-right-radius: 0 !important;
+      }
+      
+      /* Protect table headers from global CSS overrides */
+      #mainTasksTable thead th {
+        padding: 1rem 1.5rem !important;
+        text-align: center !important;
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+        white-space: nowrap !important;
+      }
+      
+      #summaryRecentTasksTable thead th {
+        padding: 1rem 1.5rem !important;
+        text-align: center !important;
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+        white-space: nowrap !important;
+      }
+      
+      /* Hide scrollbars in kanban columns until scrolling */
+      #pending-tasks,
+      #inprogress-tasks,
+      #onhold-tasks,
+      #completed-tasks {
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+      }
+      
+      #pending-tasks.scrolling,
+      #inprogress-tasks.scrolling,
+      #onhold-tasks.scrolling,
+      #completed-tasks.scrolling,
+      #pending-tasks:hover,
+      #inprogress-tasks:hover,
+      #onhold-tasks:hover,
+      #completed-tasks:hover {
+        scrollbar-color: #9ca3af #f3f4f6;
+      }
+      
+      .dark #pending-tasks.scrolling,
+      .dark #inprogress-tasks.scrolling,
+      .dark #onhold-tasks.scrolling,
+      .dark #completed-tasks.scrolling,
+      .dark #pending-tasks:hover,
+      .dark #inprogress-tasks:hover,
+      .dark #onhold-tasks:hover,
+      .dark #completed-tasks:hover {
+        scrollbar-color: #4b5563 #1f2937;
+      }
+      
+      #pending-tasks::-webkit-scrollbar,
+      #inprogress-tasks::-webkit-scrollbar,
+      #onhold-tasks::-webkit-scrollbar,
+      #completed-tasks::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      
+      #pending-tasks::-webkit-scrollbar-track,
+      #inprogress-tasks::-webkit-scrollbar-track,
+      #onhold-tasks::-webkit-scrollbar-track,
+      #completed-tasks::-webkit-scrollbar-track {
+        border-radius: 9999px;
+        background-color: transparent;
+      }
+      
+      #pending-tasks.scrolling::-webkit-scrollbar-track,
+      #inprogress-tasks.scrolling::-webkit-scrollbar-track,
+      #onhold-tasks.scrolling::-webkit-scrollbar-track,
+      #completed-tasks.scrolling::-webkit-scrollbar-track,
+      #pending-tasks:hover::-webkit-scrollbar-track,
+      #inprogress-tasks:hover::-webkit-scrollbar-track,
+      #onhold-tasks:hover::-webkit-scrollbar-track,
+      #completed-tasks:hover::-webkit-scrollbar-track {
+        background-color: #f3f4f6;
+      }
+      
+      #pending-tasks::-webkit-scrollbar-thumb,
+      #inprogress-tasks::-webkit-scrollbar-thumb,
+      #onhold-tasks::-webkit-scrollbar-thumb,
+      #completed-tasks::-webkit-scrollbar-thumb {
+        border-radius: 9999px;
+        background-color: transparent;
+      }
+      
+      #pending-tasks.scrolling::-webkit-scrollbar-thumb,
+      #inprogress-tasks.scrolling::-webkit-scrollbar-thumb,
+      #onhold-tasks.scrolling::-webkit-scrollbar-thumb,
+      #completed-tasks.scrolling::-webkit-scrollbar-thumb,
+      #pending-tasks:hover::-webkit-scrollbar-thumb,
+      #inprogress-tasks:hover::-webkit-scrollbar-thumb,
+      #onhold-tasks:hover::-webkit-scrollbar-thumb,
+      #completed-tasks:hover::-webkit-scrollbar-thumb {
+        background-color: #9ca3af;
+      }
+      
+      #pending-tasks::-webkit-scrollbar-thumb:hover,
+      #inprogress-tasks::-webkit-scrollbar-thumb:hover,
+      #onhold-tasks::-webkit-scrollbar-thumb:hover,
+      #completed-tasks::-webkit-scrollbar-thumb:hover {
+        background-color: #6b7280;
+      }
+      
+      .dark #pending-tasks.scrolling::-webkit-scrollbar-track,
+      .dark #inprogress-tasks.scrolling::-webkit-scrollbar-track,
+      .dark #onhold-tasks.scrolling::-webkit-scrollbar-track,
+      .dark #completed-tasks.scrolling::-webkit-scrollbar-track,
+      .dark #pending-tasks:hover::-webkit-scrollbar-track,
+      .dark #inprogress-tasks:hover::-webkit-scrollbar-track,
+      .dark #onhold-tasks:hover::-webkit-scrollbar-track,
+      .dark #completed-tasks:hover::-webkit-scrollbar-track {
+        background-color: #1f2937;
+      }
+      
+      .dark #pending-tasks.scrolling::-webkit-scrollbar-thumb,
+      .dark #inprogress-tasks.scrolling::-webkit-scrollbar-thumb,
+      .dark #onhold-tasks.scrolling::-webkit-scrollbar-thumb,
+      .dark #completed-tasks.scrolling::-webkit-scrollbar-thumb,
+      .dark #pending-tasks:hover::-webkit-scrollbar-thumb,
+      .dark #inprogress-tasks:hover::-webkit-scrollbar-thumb,
+      .dark #onhold-tasks:hover::-webkit-scrollbar-thumb,
+      .dark #completed-tasks:hover::-webkit-scrollbar-thumb {
+        background-color: #4b5563;
+      }
+      
+      .dark #pending-tasks::-webkit-scrollbar-thumb:hover,
+      .dark #inprogress-tasks::-webkit-scrollbar-thumb:hover,
+      .dark #onhold-tasks::-webkit-scrollbar-thumb:hover,
+      .dark #completed-tasks::-webkit-scrollbar-thumb:hover {
+        background-color: #6b7280;
       }
       
       /* Kanban board styles */
@@ -516,9 +646,10 @@
                 <table class="min-w-full" id="mainTasksTable">
                   <thead>
                     <tr class="bg-gray-50 dark:bg-gray-800/50">
-                      <th class="px-6 py-4 text-left !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Ticket ID</th>
+                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Actions</th>
+                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Ticket ID</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Ticket Type</th>
-                      <th class="px-6 py-4 text-left !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400" style="min-width: 250px;">Description</th>
+                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400" style="min-width: 250px;">Description</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Requested By</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Submission Date</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Close Date</th>
@@ -526,7 +657,6 @@
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Status</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Days to Close</th>
                       <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Priority</th>
-                      <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Actions</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="ticketsTableBody">
@@ -676,7 +806,7 @@
                   </div>
                   
                   <!-- Kanban Board -->
-                  <div class="mt-7 grid grid-cols-1 border-t border-gray-200 dark:border-gray-800 sm:mt-0 sm:grid-cols-2 xl:grid-cols-4 min-h-[600px]">
+                  <div class="mt-7 grid grid-cols-1 border-t border-gray-200 dark:border-gray-800 sm:mt-0 sm:grid-cols-2 xl:grid-cols-4 min-h-[600px] -mx-4 sm:-mx-6 -mb-4 sm:-mb-6">
                     
                     <!-- Pending Column -->
                     <div class="swim-lane flex flex-col gap-5 border-r border-gray-200 dark:border-gray-800">
@@ -1057,8 +1187,8 @@
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Monthly trend of incoming tickets compared to resolved tickets</p>
                           </div>
                         </div>
-                        <div class="max-w-full overflow-x-auto">
-                          <div id="taskRegionChart" class="-ml-4 min-w-[600px] pl-2"></div>
+                        <div class="max-w-full overflow-hidden">
+                          <div id="taskRegionChart" class="-ml-4 pl-2"></div>
                         </div>
                       </div>
                     </div>
@@ -1128,12 +1258,14 @@
     >
       <div class="modal-close-btn fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"></div>
       <div
-        class="modal-dialog relative w-full max-w-[700px] rounded-3xl bg-white p-6 lg:p-10"
+        class="modal-dialog relative w-full max-w-[900px] rounded-3xl bg-white p-6 lg:p-10"
         style="background-color: var(--card-bg, white);"
       >
         <!-- Close button -->
         <button
-          class="modal-close-btn group absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-200 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-500 dark:bg-gray-800 dark:hover:bg-gray-700 sm:right-6 sm:top-6 sm:h-11 sm:w-11"
+          type="button"
+          onclick="closeTicketModal()"
+          class="modal-close-btn group absolute right-3 top-3 z-[99999] flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-200 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-500 dark:bg-gray-800 dark:hover:bg-gray-700 sm:right-6 sm:top-6 sm:h-11 sm:w-11"
         >
           <svg class="fill-current transition-colors group-hover:text-gray-600 dark:group-hover:text-gray-200" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z" fill=""/>
@@ -1144,9 +1276,12 @@
           <input type="hidden" id="ticket-id-internal" />
           <input type="hidden" id="ticket-parent-id" />
           
-          <h4 class="mb-6 text-lg font-medium text-gray-800 dark:text-white/90" id="ticketModalTitle">
+          <h4 class="mb-6 !text-lg font-medium text-gray-800 dark:text-white/90" id="ticketModalTitle">
             Add Ticket
           </h4>
+          
+          <!-- Scrollable Content Area -->
+          <div class="max-h-[60vh] overflow-y-auto custom-scrollbar pr-2">
           
           <div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
             <!-- Report Name (Full Width) -->
@@ -1234,25 +1369,18 @@
               </div>
             </div>
             
-            <!-- Maker -->
-            <div class="col-span-1" x-data="{ open: false, selected: 'Requested By', selectedValue: '' }" x-init="$watch('open', value => { if(value) { /* Populate from teamMembers */ } })">
+            <!-- Requested By -->
+            <div class="col-span-1">
               <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                 Requested By <span class="text-error-500">*</span>
               </label>
-              <div class="relative">
-                <button @click="open = !open" type="button"
-                  class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
-                  <span x-text="selected" :class="selected === 'Select Requested By' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
-                  <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div x-show="open" @click.outside="open = false" x-cloak id="ticket-requested-by-dropdown"
-                  class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
-                  <!-- Options will be populated dynamically -->
-                </div>
-                <input type="hidden" id="ticket-requested-by" required />
-              </div>
+              <input
+                type="text"
+                id="ticket-requested-by"
+                required
+                placeholder="Enter requestor name"
+                class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+              />
             </div>
             
             <!-- Team in Charge -->
@@ -1410,6 +1538,9 @@
             </div>
           </div>
           
+          </div>
+          <!-- End Scrollable Content Area -->
+          
           <div class="flex items-center justify-end w-full gap-3 mt-6">
             <button
               type="button"
@@ -1428,7 +1559,67 @@
         </form>
       </div>
     </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div class="fixed inset-0 items-center justify-center hidden p-5 overflow-y-auto modal z-[9999]"
+      id="deleteTicketConfirmModal">
+      <div class="modal-close-delete-btn fixed inset-0 h-full w-full bg-gray-900/70 backdrop-blur-[32px]"></div>
+      <div class="modal-dialog relative flex w-full max-w-[450px] flex-col overflow-y-auto rounded-3xl p-6 lg:p-8"
+        style="background-color: var(--card-bg, white);">
+        <!-- close btn -->
+        <button
+          class="modal-close-delete-btn absolute right-6 top-6 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 transition-all duration-200 hover:bg-gray-200 dark:bg-white/[0.03] dark:hover:bg-white/10"
+          onclick="closeDeleteTicketModal()"
+        >
+          <svg class="fill-gray-700 dark:fill-gray-400" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M6.04289 16.5418C5.65237 16.9323 5.65237 17.5655 6.04289 17.956C6.43342 18.3465 7.06658 18.3465 7.45711 17.956L11.9987 13.4144L16.5408 17.9565C16.9313 18.347 17.5645 18.347 17.955 17.9565C18.3455 17.566 18.3455 16.9328 17.955 16.5423L13.4129 12.0002L17.955 7.45808C18.3455 7.06756 18.3455 6.43439 17.955 6.04387C17.5645 5.65335 16.9313 5.65335 16.5408 6.04387L11.9987 10.586L7.45711 6.04439C7.06658 5.65386 6.43342 5.65386 6.04289 6.04439C5.65237 6.43491 5.65237 7.06808 6.04289 7.4586L10.5845 12.0002L6.04289 16.5418Z"
+              fill="" />
+          </svg>
+        </button>
+
+        <div class="flex flex-col overflow-y-auto modal-content custom-scrollbar">
+          <div class="modal-header mb-6 text-center">
+            <!-- Warning Icon -->
+            <div
+              class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-error-50 dark:bg-error-500/15">
+              <svg class="h-7 w-7 text-error-600 dark:text-error-500" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                </path>
+              </svg>
+            </div>
+            <h5 class="mb-2 font-semibold text-gray-800 modal-title !text-xl lg:!text-2xl dark:text-white/90">
+              Delete Ticket
+            </h5>
+            <p class="!text-base text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete <span id="delete-ticket-name"
+                class="font-semibold text-gray-800 dark:text-white/90"></span>?
+            </p>
+            <p class="!text-base text-gray-500 mt-2 dark:text-gray-400">
+              This action cannot be undone.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3 mt-2">
+            <button type="button" id="closeDeleteTicketBtn"
+              class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+              style="background-color: var(--input-bg, white); border-color: var(--input-bg, #e4e7ec);"
+              onclick="closeDeleteTicketModal()">
+              Cancel
+            </button>
+            <button type="button" id="confirmDeleteTicketBtn"
+              class="bg-error-500 hover:bg-error-600 dark:bg-error-600 dark:hover:bg-error-700 flex w-full justify-center rounded-lg px-4 py-2.5 !text-base font-medium text-white transition-colors"
+              onclick="confirmDeleteTicket()">
+              Delete Ticket
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+    <!-- END DELETE CONFIRMATION MODAL -->
     
     <script>
       // Global variables
@@ -1565,25 +1756,10 @@
         }
       }
       
-      // Populate team member dropdowns
+      // Populate team member dropdowns - No longer needed for Requested By (now a text field)
       function populateTeamMemberDropdowns() {
-        const requestedByDropdown = document.getElementById('ticket-requested-by-dropdown');
-        
-        const requestedByOptions = teamMembers.map(member => `
-          <button type="button" 
-            onclick="setDropdownValue('ticket-requested-by', '${member.id}', '${member.name}'); this.closest('[x-data]').__x.$data.selected = '${member.name}'; this.closest('[x-data]').__x.$data.open = false;"
-            class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-            ${member.name}
-          </button>
-        `).join('');
-        
-        if (requestedByDropdown) requestedByDropdown.innerHTML = requestedByOptions;
-      }
-      
-      // Helper function to set dropdown values
-      function setDropdownValue(fieldId, value, displayText) {
-        const field = document.getElementById(fieldId);
-        if (field) field.value = value;
+        // Function kept for backwards compatibility but no longer populates anything
+        // Requested By is now a free text field
       }
       
       // Expand all parent tasks by default
@@ -1595,6 +1771,31 @@
             expandedTickets.add(parent.id);
           }
         });
+      }
+      
+      // Calculate weekdays between two dates (excluding weekends)
+      function calculateWeekdays(startDate, endDate) {
+        if (!startDate || !endDate) return null;
+        
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        
+        // Ensure start is before end
+        if (start > end) return null;
+        
+        let weekdays = 0;
+        const current = new Date(start);
+        
+        while (current <= end) {
+          const dayOfWeek = current.getDay();
+          // Count only weekdays (Monday=1 to Friday=5)
+          if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+            weekdays++;
+          }
+          current.setDate(current.getDate() + 1);
+        }
+        
+        return weekdays;
       }
       
       // Get task numbering (e.g., "1", "1.1", "1.2", "2", etc.)
@@ -1916,53 +2117,13 @@
           
           // Parent task row
           const isCompleted = task.status === 'Completed';
+          // Calculate days to close (excluding weekends)
           const daysToClose = task.closeDate && task.dateReceived 
-            ? Math.floor((new Date(task.closeDate) - new Date(task.dateReceived)) / (1000 * 60 * 60 * 24))
-            : (isCompleted && task.dateReceived 
-                ? Math.floor((new Date() - new Date(task.dateReceived)) / (1000 * 60 * 60 * 24))
-                : 0);
+            ? calculateWeekdays(task.dateReceived, task.closeDate)
+            : null;
           
           html += `
-            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors task-row-parent ${hasChildren ? 'cursor-pointer' : ''}" ${hasChildren ? `onclick="toggleTaskExpansion('${task.id}')"` : `onclick="editTicket('${task.id}')"`}>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center gap-2">
-                  ${hasChildren ? `
-                    <svg class="w-4 h-4 text-gray-400 expand-icon ${isExpanded ? 'expanded' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                  ` : '<div class="w-4"></div>'}
-                  <span class="!text-base font-mono text-blue-600 dark:text-blue-400">${task.ticketId || taskNumber}</span>
-                </div>
-              </td>
-              <td class="px-6 py-4 text-center whitespace-nowrap">
-                ${getTicketTypeBadge(task.ticketType)}
-              </td>
-              <td class="px-6 py-4 text-left" style="max-width: 400px; min-width: 250px;">
-                <div class="!text-base font-medium text-gray-900 dark:text-white overflow-hidden">
-                  <div class="line-clamp-2" title="${task.reportName || task.description || '-'}">${task.reportName || task.description || '-'}</div>
-                </div>
-              </td>
-              <td class="px-6 py-4 text-center whitespace-nowrap">
-                <span class="!text-base text-gray-700 dark:text-gray-300">${requestor ? requestor.name : '-'}</span>
-              </td>
-              <td class="px-6 py-4 text-center whitespace-nowrap">
-                <span class="!text-base text-gray-700 dark:text-gray-300">${new Date(task.dateReceived).toLocaleDateString()}</span>
-              </td>
-              <td class="px-6 py-4 text-center whitespace-nowrap">
-                ${task.closeDate ? `<span class="!text-base text-success-600 dark:text-success-400 font-medium">${new Date(task.closeDate).toLocaleDateString()}</span>` : '<span class="!text-base text-gray-400 dark:text-gray-500">-</span>'}
-              </td>
-              <td class="px-6 py-4 text-center whitespace-nowrap">
-                <span class="!text-base text-gray-700 dark:text-gray-300">${task.teamInCharge || '-'}</span>
-              </td>
-              <td class="px-6 py-4 text-center whitespace-nowrap relative" onclick="event.stopPropagation()">
-                ${getStatusDropdown(task.id, task.status)}
-              </td>
-              <td class="px-6 py-4 text-center whitespace-nowrap">
-                ${isCompleted ? `<span class="!text-base font-medium text-success-600 dark:text-success-400">${daysToClose}</span>` : '<span class="!text-base text-gray-400 dark:text-gray-500">-</span>'}
-              </td>
-              <td class="px-6 py-4 text-center whitespace-nowrap">
-                ${getPriorityBadge(task.priority)}
-              </td>
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors task-row-parent ${hasChildren ? 'cursor-pointer' : ''}" ${hasChildren ? `onclick="toggleTaskExpansion('${task.id}')"` : ''}>
               <td class="px-6 py-4 whitespace-nowrap" onclick="event.stopPropagation()">
                 <div class="flex items-center justify-center gap-2">
                   <button onclick="addChildTask('${task.id}')" class="text-brand-500 hover:text-brand-600 dark:text-brand-400" title="Add Update">
@@ -1982,6 +2143,45 @@
                   </button>
                 </div>
               </td>
+              <td class="px-6 py-4 whitespace-nowrap text-center">
+                <div class="flex items-center justify-center gap-2">
+                  ${hasChildren ? `
+                    <svg class="w-4 h-4 text-gray-400 expand-icon ${isExpanded ? 'expanded' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  ` : '<div class="w-4"></div>'}
+                  <span class="!text-base font-mono text-blue-600 dark:text-blue-400">${task.ticketId || taskNumber}</span>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-center whitespace-nowrap">
+                ${getTicketTypeBadge(task.ticketType)}
+              </td>
+              <td class="px-6 py-4 text-center" style="max-width: 400px; min-width: 250px;">
+                <div class="!text-base font-medium text-gray-900 dark:text-white overflow-hidden">
+                  <div class="line-clamp-2" title="${task.reportName || task.description || '-'}">${task.reportName || task.description || '-'}</div>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-center whitespace-nowrap">
+                <span class="!text-base text-gray-700 dark:text-gray-300">${task.requestedBy || (requestor ? requestor.name : '-')}</span>
+              </td>
+              <td class="px-6 py-4 text-center whitespace-nowrap">
+                <span class="!text-base text-gray-700 dark:text-gray-300">${new Date(task.dateReceived).toLocaleDateString()}</span>
+              </td>
+              <td class="px-6 py-4 text-center whitespace-nowrap">
+                ${task.closeDate ? `<span class="!text-base text-success-600 dark:text-success-400 font-medium">${new Date(task.closeDate).toLocaleDateString()}</span>` : '<span class="!text-base text-gray-400 dark:text-gray-500">-</span>'}
+              </td>
+              <td class="px-6 py-4 text-center whitespace-nowrap">
+                <span class="!text-base text-gray-700 dark:text-gray-300">${task.teamInCharge || '-'}</span>
+              </td>
+              <td class="px-6 py-4 text-center whitespace-nowrap relative" onclick="event.stopPropagation()">
+                ${getStatusDropdown(task.id, task.status)}
+              </td>
+              <td class="px-6 py-4 text-center whitespace-nowrap">
+                ${daysToClose !== null ? `<span class="!text-base font-medium text-success-600 dark:text-success-400">${daysToClose}</span>` : '<span class="!text-base text-gray-400 dark:text-gray-500">-</span>'}
+              </td>
+              <td class="px-6 py-4 text-center whitespace-nowrap">
+                ${getPriorityBadge(task.priority)}
+              </td>
             </tr>
           `;
           
@@ -1991,30 +2191,42 @@
               const childNumber = getTaskNumber(childTask);
               const childMaker = teamMembers.find(m => m.id === childTask.makerId);
               const childRequestor = teamMembers.find(m => m.id === childTask.requestorId);
-              const childIsCompleted = childTask.status === 'Completed';
+              // Calculate days to close for child (excluding weekends)
               const childDaysToClose = childTask.closeDate && childTask.dateReceived 
-                ? Math.floor((new Date(childTask.closeDate) - new Date(childTask.dateReceived)) / (1000 * 60 * 60 * 24))
-                : (childIsCompleted && childTask.dateReceived 
-                    ? Math.floor((new Date() - new Date(childTask.dateReceived)) / (1000 * 60 * 60 * 24))
-                    : 0);
+                ? calculateWeekdays(childTask.dateReceived, childTask.closeDate)
+                : null;
               
               html += `
-                <tr class="task-row-child hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors cursor-pointer" onclick="editTicket('${childTask.id}')">
-                  <td class="px-6 py-3 whitespace-nowrap">
-                    <div class="flex items-center gap-2 pl-6">
+                <tr class="task-row-child hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors">
+                  <td class="px-6 py-3 whitespace-nowrap" onclick="event.stopPropagation()">
+                    <div class="flex items-center justify-center gap-2">
+                      <button onclick="editTicket('${childTask.id}')" class="text-gray-400 hover:text-gray-600 dark:text-gray-500" title="Edit">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                      </button>
+                      <button onclick="deleteTicket('${childTask.id}')" class="text-error-500 hover:text-error-600 dark:text-error-400" title="Delete">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="px-6 py-3 whitespace-nowrap text-center">
+                    <div class="flex items-center justify-center gap-2 pl-6">
                       <span class="!text-base font-mono text-gray-500 dark:text-gray-400">↳ ${childNumber}</span>
                     </div>
                   </td>
                   <td class="px-6 py-3 text-center whitespace-nowrap">
                     ${getTicketTypeBadge(childTask.ticketType || 'Update')}
                   </td>
-                  <td class="px-6 py-3 text-left" style="max-width: 400px; min-width: 250px;">
+                  <td class="px-6 py-3 text-center" style="max-width: 400px; min-width: 250px;">
                     <div class="!text-base text-gray-700 dark:text-gray-300 overflow-hidden">
                       <div class="line-clamp-2" title="${childTask.reportName || childTask.description || '-'}">${childTask.reportName || childTask.description || '-'}</div>
                     </div>
                   </td>
                   <td class="px-6 py-3 text-center whitespace-nowrap">
-                    <span class="!text-base text-gray-600 dark:text-gray-400">${childRequestor ? childRequestor.name : '-'}</span>
+                    <span class="!text-base text-gray-600 dark:text-gray-400">${childTask.requestedBy || (childRequestor ? childRequestor.name : '-')}</span>
                   </td>
                   <td class="px-6 py-3 text-center whitespace-nowrap">
                     <span class="!text-base text-gray-600 dark:text-gray-400">${new Date(childTask.dateReceived).toLocaleDateString()}</span>
@@ -2029,24 +2241,10 @@
                     ${getStatusDropdown(childTask.id, childTask.status)}
                   </td>
                   <td class="px-6 py-3 text-center whitespace-nowrap">
-                    ${childIsCompleted ? `<span class="!text-base text-success-600 dark:text-success-400">${childDaysToClose}</span>` : '<span class="!text-base text-gray-400 dark:text-gray-500">-</span>'}
+                    ${childDaysToClose !== null ? `<span class="!text-base text-success-600 dark:text-success-400">${childDaysToClose}</span>` : '<span class="!text-base text-gray-400 dark:text-gray-500">-</span>'}
                   </td>
                   <td class="px-6 py-3 text-center whitespace-nowrap">
                     ${getPriorityBadge(childTask.priority)}
-                  </td>
-                  <td class="px-6 py-3 whitespace-nowrap" onclick="event.stopPropagation()">
-                    <div class="flex items-center justify-center gap-2">
-                      <button onclick="editTicket('${childTask.id}')" class="text-gray-400 hover:text-gray-600 dark:text-gray-500" title="Edit">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                        </svg>
-                      </button>
-                      <button onclick="deleteTicket('${childTask.id}')" class="text-error-500 hover:text-error-600 dark:text-error-400" title="Delete">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                      </button>
-                    </div>
                   </td>
                 </tr>
               `;
@@ -2168,11 +2366,11 @@
                     ` : ''}
                   </div>
                   
-                  ${task.priority ? `<span class="mt-3 inline-flex rounded-full bg-brand-50 px-2 py-0.5 !text-base font-medium text-brand-500 dark:bg-brand-500/15 dark:text-brand-400">${task.priority}</span>` : ''}
+                  ${task.priority ? `<div class="mt-3">${getPriorityBadge(task.priority)}</div>` : ''}
                 </div>
                 
-                <div class="h-6 w-full max-w-6 overflow-hidden rounded-full border-[0.5px] border-gray-200 dark:border-gray-800">
-                  <div class="h-6 w-6 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-medium !text-base dark:bg-brand-900/30 dark:text-brand-400">
+                <div class="h-10 w-full max-w-10 overflow-hidden rounded-full border-[0.5px] border-gray-200 dark:border-gray-800">
+                  <div class="h-10 w-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-medium !text-base dark:bg-brand-900/30 dark:text-brand-400">
                     ${maker ? maker.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '?'}
                   </div>
                 </div>
@@ -2211,6 +2409,36 @@
                 </div>
               </div>
             `;
+          }
+        });
+        
+        // Re-initialize scrollbar listeners after render
+        setTimeout(() => {
+          initializeKanbanScrollbars();
+        }, 50);
+      }
+      
+      // Initialize scrollbar visibility for kanban columns
+      function initializeKanbanScrollbars() {
+        const kanbanColumns = ['pending-tasks', 'inprogress-tasks', 'onhold-tasks', 'completed-tasks'];
+        kanbanColumns.forEach(columnId => {
+          const column = document.getElementById(columnId);
+          if (column) {
+            let isScrolling = false;
+            let scrollTimeout;
+            
+            column.addEventListener('scroll', () => {
+              if (!isScrolling) {
+                isScrolling = true;
+                column.classList.add('scrolling');
+              }
+              
+              clearTimeout(scrollTimeout);
+              scrollTimeout = setTimeout(() => {
+                isScrolling = false;
+                column.classList.remove('scrolling');
+              }, 1000);
+            });
           }
         });
       }
@@ -2350,9 +2578,8 @@
         // Reset Alpine.js dropdowns
         setTimeout(() => {
           updateAlpineDropdown('ticket-status', 'Pending');
-          updateAlpineDropdown('ticket-requested-by', 'Select Requested By');
-          updateAlpineDropdown('ticket-type', 'Select Ticket Type');
-          updateAlpineDropdown('ticket-priority', 'Select Priority');
+          updateAlpineDropdown('task-region', 'Select Ticket Type');
+          updateAlpineDropdown('task-priority', 'Select Priority');
         }, 50);
         
         const modal = document.getElementById('ticketModal');
@@ -2369,7 +2596,6 @@
         // Reset Alpine.js dropdowns
         setTimeout(() => {
           updateAlpineDropdown('task-status', 'Pending');
-          updateAlpineDropdown('ticket-requested-by', 'Select Requested By');
           updateAlpineDropdown('task-priority', 'Select Priority');
         }, 50);
         
@@ -2396,18 +2622,16 @@
         
         // Set hidden fields
         document.getElementById('task-status').value = ticket.status;
-        document.getElementById('ticket-requested-by').value = ticket.requestorId || '';
-        document.getElementById('task-region').value = ticket.region || '';
+        document.getElementById('ticket-requested-by').value = ticket.requestedBy || '';
+        document.getElementById('task-region').value = ticket.ticketType || '';
         document.getElementById('task-requestor-region').value = ticket.requestorRegion || '';
         document.getElementById('task-priority').value = ticket.priority || '';
         
         // Update Alpine.js dropdown display values
         setTimeout(() => {
           updateAlpineDropdown('task-status', ticket.status);
-          const requestor = teamMembers.find(m => m.id === ticket.requestorId);
-          updateAlpineDropdown('ticket-requested-by', requestor ? requestor.name : 'Select Requested By');
           updateAlpineDropdown('task-priority', ticket.priority || 'Select Priority');
-          updateAlpineDropdown('task-region', ticket.region || 'Select Region');
+          updateAlpineDropdown('task-region', ticket.ticketType || 'Select Ticket Type');
           updateAlpineDropdown('task-requestor-region', ticket.requestorRegion || 'Select Requestor Region');
         }, 50);
         
@@ -2446,15 +2670,18 @@
         const parentId = document.getElementById('ticket-parent-id').value;
         const ticketIdValue = document.getElementById('ticket-id-field').value;
         
+        const requestedBy = document.getElementById('ticket-requested-by').value;
+        
         const ticketData = {
           id: ticketIdField || `ticket-${Date.now()}`,
           parentId: parentId || null,
           ticketId: ticketIdValue || '',
-          ticketType: document.getElementById('task-region').value || '', // Using region as type for now
+          ticketType: document.getElementById('task-region').value || '',
           reportName: ticketIdValue || `Update ${Date.now()}`,
           description: document.getElementById('task-description').value,
-          requestorId: document.getElementById('ticket-requested-by').value,
-          makerId: document.getElementById('ticket-requested-by').value, // Same as requestor for now
+          requestedBy: requestedBy,
+          requestorId: requestedBy, // Keep for backwards compatibility
+          makerId: requestedBy, // Keep for backwards compatibility
           dateReceived: document.getElementById('ticket-submission-date').value,
           teamInCharge: document.getElementById('ticket-team-in-charge').value,
           status: document.getElementById('task-status').value,
@@ -2495,23 +2722,39 @@
         }
       }
       
+      // Global variable to track ticket to delete
+      let ticketToDelete = null;
+      
       // Delete task
-      async function deleteTicket(taskId) {
+      function deleteTicket(taskId) {
         const task = tickets.find(t => t.id === taskId);
         if (!task) return;
         
-        // Check if task has children
-        const hasChildren = tickets.some(t => t.parentId === taskId);
-        
-        if (hasChildren) {
-          if (!confirm('This task has child tasks. Deleting it will also delete all child tasks. Continue?')) {
-            return;
-          }
-        } else {
-          if (!confirm(`Are you sure you want to delete "${task.reportName}"?`)) {
-            return;
-          }
+        ticketToDelete = task.id;
+        document.getElementById('delete-ticket-name').textContent = task.reportName || task.ticketId || 'this ticket';
+        const modal = document.getElementById('deleteTicketConfirmModal');
+        if (modal) {
+          modal.classList.remove('hidden');
+          modal.style.display = 'flex';
         }
+      }
+      
+      // Close delete confirmation modal
+      function closeDeleteTicketModal() {
+        const modal = document.getElementById('deleteTicketConfirmModal');
+        if (modal) {
+          modal.classList.add('hidden');
+          modal.style.display = 'none';
+        }
+        ticketToDelete = null;
+      }
+      
+      // Confirm delete ticket
+      async function confirmDeleteTicket() {
+        if (!ticketToDelete) return;
+        
+        const taskId = ticketToDelete;
+        closeDeleteTicketModal();
         
         try {
           // Remove task and all its children
@@ -2522,11 +2765,89 @@
           expandedTickets.delete(taskId);
           renderAllViews();
           
-          showSuccessToast('Task deleted successfully');
+          showSuccessToast('Ticket deleted successfully');
         } catch (error) {
-          console.error('Error deleting task:', error);
-          showErrorToast('Failed to delete task. Please try again.');
+          console.error('Error deleting ticket:', error);
+          showErrorToast('Failed to delete ticket. Please try again.');
         }
+      }
+      
+      // Expose to global scope
+      window.closeDeleteTicketModal = closeDeleteTicketModal;
+      window.confirmDeleteTicket = confirmDeleteTicket;
+      
+      // Reset all filters
+      function resetAllFilters() {
+        // Clear search input
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+          searchInput.value = '';
+        }
+        
+        // Reset filter state variables
+        statusFilter = 'All';
+        typeFilter = 'All';
+        priorityFilter = 'All';
+        
+        // Reset Alpine.js dropdown displays
+        const statusFilterContainer = document.querySelector('[x-data*="All Statuses"]');
+        if (statusFilterContainer) {
+          try {
+            if (window.Alpine && statusFilterContainer._x_dataStack) {
+              const alpineData = statusFilterContainer._x_dataStack[0];
+              if (alpineData) {
+                alpineData.selected = 'All Statuses';
+                alpineData.open = false;
+              }
+            } else if (statusFilterContainer.__x && statusFilterContainer.__x.$data) {
+              statusFilterContainer.__x.$data.selected = 'All Statuses';
+              statusFilterContainer.__x.$data.open = false;
+            }
+          } catch (e) {
+            console.warn('Could not reset status filter:', e);
+          }
+        }
+        
+        // Type filter
+        const typeFilterContainer = document.querySelector('[x-data*="All Types"]');
+        if (typeFilterContainer) {
+          try {
+            if (window.Alpine && typeFilterContainer._x_dataStack) {
+              const alpineData = typeFilterContainer._x_dataStack[0];
+              if (alpineData) {
+                alpineData.selected = 'All Types';
+                alpineData.open = false;
+              }
+            } else if (typeFilterContainer.__x && typeFilterContainer.__x.$data) {
+              typeFilterContainer.__x.$data.selected = 'All Types';
+              typeFilterContainer.__x.$data.open = false;
+            }
+          } catch (e) {
+            console.warn('Could not reset type filter:', e);
+          }
+        }
+        
+        // Priority filter
+        const priorityFilterContainer = document.querySelector('[x-data*="All Priorities"]');
+        if (priorityFilterContainer) {
+          try {
+            if (window.Alpine && priorityFilterContainer._x_dataStack) {
+              const alpineData = priorityFilterContainer._x_dataStack[0];
+              if (alpineData) {
+                alpineData.selected = 'All Priorities';
+                alpineData.open = false;
+              }
+            } else if (priorityFilterContainer.__x && priorityFilterContainer.__x.$data) {
+              priorityFilterContainer.__x.$data.selected = 'All Priorities';
+              priorityFilterContainer.__x.$data.open = false;
+            }
+          } catch (e) {
+            console.warn('Could not reset priority filter:', e);
+          }
+        }
+        
+        // Apply filters
+        applyAllFilters();
       }
       
       // Refresh tasks table
@@ -2555,13 +2876,8 @@
           // Keep current expansion state (don't auto-expand after refresh)
           // Note: expandedTickets Set is preserved to maintain user's expand/collapse choices
           
-          // Apply current search filter
-          const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-          if (searchTerm) {
-            filterTickets();
-          } else {
-            filteredTickets = [...tickets];
-          }
+          // Reset all filters and clear search
+          resetAllFilters();
           
           // Reset to first page
           currentPage = 1;
@@ -2574,15 +2890,15 @@
             tableLoadingOverlay.classList.add('hidden');
             tableLoadingOverlay.classList.remove('flex');
             tableContent.style.opacity = '1';
-            showSuccessToast('Tasks refreshed successfully');
+            showSuccessToast('Tickets refreshed successfully');
           }, 500);
         } catch (error) {
-          console.error('❌ Error refreshing tasks:', error);
+          console.error('❌ Error refreshing tickets:', error);
           // Hide overlay immediately on error
           tableLoadingOverlay.classList.add('hidden');
           tableLoadingOverlay.classList.remove('flex');
           tableContent.style.opacity = '1';
-          showErrorToast('Failed to refresh tasks');
+          showErrorToast('Failed to refresh tickets');
         } finally {
           // Re-enable button
           setTimeout(() => {
@@ -2666,15 +2982,18 @@
       
       function allowDrop(ev) {
         ev.preventDefault();
+        ev.stopPropagation();
         ev.currentTarget.classList.add('bg-gray-50', 'dark:bg-gray-900/50');
       }
       
       function dragLeave(ev) {
         ev.preventDefault();
+        ev.stopPropagation();
         ev.currentTarget.classList.remove('bg-gray-50', 'dark:bg-gray-900/50');
       }
       
       function drag(ev, taskId) {
+        ev.stopPropagation();
         draggedTaskId = taskId;
         ev.dataTransfer.effectAllowed = 'move';
         ev.target.style.opacity = '0.5';
@@ -2682,6 +3001,7 @@
       
       async function drop(ev, newStatus) {
         ev.preventDefault();
+        ev.stopPropagation(); // Prevent default browser refresh behavior
         
         // Remove all grey backgrounds from all columns
         document.querySelectorAll('.space-y-5').forEach(col => {
@@ -2710,8 +3030,8 @@
         task.updatedAt = new Date().toISOString();
         filteredTickets = [...tickets];
         
-        // Render instantly for immediate visual feedback
-        renderAllViews();
+        // Render Kanban board instantly for immediate visual feedback
+        renderKanbanBoard(kanbanStatusFilter, kanbanSearchTerm); // Only re-render Kanban
         
         // Reset opacity
         const taskElement = document.querySelector(`[data-task-id="${draggedTaskId}"]`);
@@ -2728,7 +3048,7 @@
           // Revert on error
           task.status = oldStatus;
           filteredTickets = [...tickets];
-          renderAllViews();
+          renderKanbanBoard(kanbanStatusFilter, kanbanSearchTerm); // Revert Kanban on error
           showErrorToast('Failed to update task status');
         }
       }
@@ -2755,6 +3075,24 @@
       window.addEventListener('click', (event) => {
         if (event.target === document.getElementById('ticketModal')) {
           closeTicketModal();
+        }
+      });
+      
+      // Delete modal event listeners
+      const closeDeleteBtn = document.getElementById('closeDeleteTicketBtn');
+      const confirmDeleteBtn = document.getElementById('confirmDeleteTicketBtn');
+      if (closeDeleteBtn) closeDeleteBtn.addEventListener('click', closeDeleteTicketModal);
+      if (confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', confirmDeleteTicket);
+      
+      // Close delete modal on backdrop click
+      document.querySelectorAll('.modal-close-delete-btn').forEach((btn) => {
+        btn.addEventListener('click', closeDeleteTicketModal);
+      });
+      
+      // Close delete modal when clicking outside
+      window.addEventListener('click', (event) => {
+        if (event.target === document.getElementById('deleteTicketConfirmModal')) {
+          closeDeleteTicketModal();
         }
       });
       
@@ -2801,15 +3139,15 @@
         
         if (completedTasksWithCloseDate.length > 0) {
           const daysToCloseArray = completedTasksWithCloseDate.map(t => {
-            const start = new Date(t.dateReceived);
-            const end = new Date(t.closeDate);
-            return Math.floor((end - start) / (1000 * 60 * 60 * 24));
-          });
+            return calculateWeekdays(t.dateReceived, t.closeDate) || 0;
+          }).filter(days => days > 0);
           
-          const totalDays = daysToCloseArray.reduce((sum, days) => sum + days, 0);
-          avgDaysToClose = Math.round(totalDays / completedTasksWithCloseDate.length);
-          fastestClose = Math.min(...daysToCloseArray);
-          slowestClose = Math.max(...daysToCloseArray);
+          if (daysToCloseArray.length > 0) {
+            const totalDays = daysToCloseArray.reduce((sum, days) => sum + days, 0);
+            avgDaysToClose = Math.round(totalDays / daysToCloseArray.length);
+            fastestClose = Math.min(...daysToCloseArray);
+            slowestClose = Math.max(...daysToCloseArray);
+          }
         }
         
         // Update metric cards
@@ -3171,6 +3509,7 @@
             height: 335,
             type: "area",
             toolbar: { show: false },
+            width: '100%',
           },
           stroke: {
             curve: "smooth",
@@ -3187,6 +3526,14 @@
             categories: monthLabels,
             axisBorder: { show: false },
             axisTicks: { show: false },
+            labels: {
+              rotate: -45,
+              rotateAlways: true,
+              style: {
+                fontSize: '12px',
+                fontFamily: 'Outfit, sans-serif',
+              },
+            },
           },
           fill: {
             type: 'gradient',
@@ -3285,26 +3632,28 @@
         });
       }
       
-      // Helper functions for table badges
+      // Helper functions for table badges with SVGs
       function getStatusBadgeForTable(status) {
-        const badges = {
-          'Pending': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-amber-100 px-2.5 py-0.5 !text-base font-medium text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">Pending</span>',
-          'In Progress': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-orange-100 px-2.5 py-0.5 !text-base font-medium text-orange-700 dark:bg-orange-900/20 dark:text-orange-400">In Progress</span>',
-          'Completed': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-green-100 px-2.5 py-0.5 !text-base font-medium text-green-700 dark:bg-green-900/20 dark:text-green-400">Completed</span>',
-          'On Hold': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-gray-100 px-2.5 py-0.5 !text-base font-medium text-gray-700 dark:bg-gray-900/20 dark:text-gray-400">On Hold</span>',
-          'Cancelled': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-red-100 px-2.5 py-0.5 !text-base font-medium text-red-700 dark:bg-red-900/20 dark:text-red-400">Cancelled</span>'
+        const statusConfig = {
+          'Pending': { class: 'bg-amber-100 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400', svg: `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>` },
+          'In Progress': { class: 'bg-orange-100 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400', svg: `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>` },
+          'Completed': { class: 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400', svg: `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>` },
+          'On Hold': { class: 'bg-gray-100 text-gray-700 dark:bg-gray-900/20 dark:text-gray-400', svg: `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>` },
+          'Cancelled': { class: 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400', svg: `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>` }
         };
-        return badges[status] || status;
+        const config = statusConfig[status] || { class: 'bg-gray-50 text-gray-600 dark:bg-gray-900/20 dark:text-gray-400', svg: '' };
+        return `<span class="inline-flex items-center whitespace-nowrap gap-1 rounded-full px-2.5 py-0.5 !text-base font-medium ${config.class}">${config.svg} ${status}</span>`;
       }
       
       function getPriorityBadgeForTable(priority) {
-        const badges = {
-          'Low': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-blue-100 px-2.5 py-0.5 !text-base font-medium text-blue-700 dark:bg-blue-900/20 dark:text-blue-400">Low</span>',
-          'Medium': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-amber-100 px-2.5 py-0.5 !text-base font-medium text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">Medium</span>',
-          'High': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-orange-100 px-2.5 py-0.5 !text-base font-medium text-orange-700 dark:bg-orange-900/20 dark:text-orange-400">High</span>',
-          'Urgent': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-red-100 px-2.5 py-0.5 !text-base font-medium text-red-700 dark:bg-red-900/20 dark:text-red-400">Urgent</span>'
+        const priorityConfig = {
+          'Low': { class: 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400', svg: `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>` },
+          'Medium': { class: 'bg-amber-100 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400', svg: `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>` },
+          'High': { class: 'bg-orange-100 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400', svg: `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>` },
+          'Urgent': { class: 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400', svg: `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>` }
         };
-        return badges[priority] || priority;
+        const config = priorityConfig[priority] || { class: 'bg-gray-50 text-gray-600 dark:bg-gray-900/20 dark:text-gray-400', svg: '' };
+        return `<span class="inline-flex items-center whitespace-nowrap gap-1 rounded-full px-2.5 py-0.5 !text-base font-medium ${config.class}">${config.svg} ${priority}</span>`;
       }
       
       // Refresh summary whenever tasks change
@@ -3824,6 +4173,12 @@
           
           // Render all views
           renderAllViews();
+          
+          // Initialize kanban scrollbar visibility
+          setTimeout(() => {
+            initializeKanbanScrollbars();
+          }, 100);
+          
           if (tickets.length > 0) {
             showInfoToast(`Loaded ${tickets.length} tickets`);
           } else {
