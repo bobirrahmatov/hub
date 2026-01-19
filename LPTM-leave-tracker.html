@@ -587,7 +587,7 @@
                             </div>
                             <div>
                               <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Annual</h3>
-                            <span class="block !text-base text-gray-500 dark:text-gray-400">Vacation days</span>
+                            <span class="block !text-base text-gray-500 dark:text-gray-400">Team members</span>
                             </div>
                           </div>
                           <div class="flex items-end justify-between gap-3">
@@ -618,7 +618,7 @@
                             </div>
                             <div>
                               <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Sick</h3>
-                            <span class="block !text-base text-gray-500 dark:text-gray-400">Medical leave</span>
+                            <span class="block !text-base text-gray-500 dark:text-gray-400">Team members</span>
                             </div>
                           </div>
                           <div class="flex items-end justify-between gap-3">
@@ -701,6 +701,126 @@
                       </div>
 
                     </div>
+
+                  <!-- Public Holidays Table and FTE Forecast Row -->
+                  <div class="col-span-12 grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
+                    
+                    <!-- Public Holidays Table -->
+                    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800"
+                      style="background-color: var(--card-bg, white);">
+                        <!-- Header with Title and Search -->
+                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+                          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Public Holidays</h3>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Complete list of public holidays
+                              across all regions</p>
+                            </div>
+                            <!-- Search Input -->
+                            <div class="relative w-full sm:w-64">
+                              <span class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2">
+                              <svg class="fill-gray-500 dark:fill-gray-400" width="18" height="18" viewBox="0 0 20 20"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                  d="M3.04199 9.37381C3.04199 5.87712 5.87735 3.04218 9.37533 3.04218C12.8733 3.04218 15.7087 5.87712 15.7087 9.37381C15.7087 12.8705 12.8733 15.7055 9.37533 15.7055C5.87735 15.7055 3.04199 12.8705 3.04199 9.37381ZM9.37533 1.54218C5.04926 1.54218 1.54199 5.04835 1.54199 9.37381C1.54199 13.6993 5.04926 17.2055 9.37533 17.2055C11.2676 17.2055 13.0032 16.5346 14.3572 15.4178L17.1773 18.2381C17.4702 18.531 17.945 18.5311 18.2379 18.2382C18.5308 17.9453 18.5309 17.4704 18.238 17.1775L15.4182 14.3575C16.5367 13.0035 17.2087 11.2671 17.2087 9.37381C17.2087 5.04835 13.7014 1.54218 9.37533 1.54218Z"
+                                  fill="" />
+                                </svg>
+                              </span>
+                            <input type="text" id="holidaySearchInput" placeholder="Search by name, country, date..."
+                              class="h-9 w-full rounded-lg border border-gray-300 bg-white py-2 pr-3 pl-9 !text-base text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500" />
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Table -->
+                        <div class="custom-scrollbar overflow-x-auto">
+                          <table class="min-w-full">
+                            <thead>
+                              <tr class="bg-gray-50 dark:bg-gray-800/50">
+                              <th
+                                class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
+                                Holiday Name</th>
+                              <th
+                                class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
+                                Date</th>
+                              <th
+                                class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
+                                Country/Region</th>
+                              <th
+                                class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
+                                Local Name</th>
+                              </tr>
+                            </thead>
+                          <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="holidaysTableBody">
+                              <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                          </table>
+                        </div>
+                      <!-- Pagination -->
+                      <div class="border-t border-gray-200 px-6 py-4 dark:border-gray-800">
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <span class="!!text-lg !text-gray-700 dark:!text-gray-400">Show</span>
+                            <select id="holidaysPerPage"
+                              class="rounded-lg border border-gray-300 bg-white px-2 py-1 !!text-lg !text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:!text-white/90">
+                              <option value="8" selected>8</option>
+                              <option value="10">10</option>
+                              <option value="20">20</option>
+                              <option value="50">50</option>
+                              <option value="100">100</option>
+                            </select>
+                            <span class="!!text-lg !text-gray-700 dark:!text-gray-400">items per page</span>
+                          </div>
+
+                          <div class="flex items-center gap-2">
+                            <button id="previousHolidayPageBtn"
+                              class="!!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
+                              <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                  d="M2.58301 9.99868C2.58272 10.1909 2.65588 10.3833 2.80249 10.53L7.79915 15.5301C8.09194 15.8231 8.56682 15.8233 8.85981 15.5305C9.15281 15.2377 9.15297 14.7629 8.86018 14.4699L5.14009 10.7472L16.6675 10.7472C17.0817 10.7472 17.4175 10.4114 17.4175 9.99715C17.4175 9.58294 17.0817 9.24715 16.6675 9.24715L5.14554 9.24715L8.86017 5.53016C9.15297 5.23717 9.15282 4.7623 8.85983 4.4695C8.56684 4.1767 8.09197 4.17685 7.79917 4.46984L2.84167 9.43049C2.68321 9.568 2.58301 9.77087 2.58301 9.99715C2.58301 9.99766 2.58301 9.99817 2.58301 9.99868Z"
+                                  fill=""></path>
+                              </svg>
+                              <span class="hidden sm:inline">Previous</span>
+                            </button>
+
+                            <span class="block !!text-lg font-medium !text-gray-700 sm:hidden dark:!text-gray-400">
+                              Page <span id="holidayCurrentPage">1</span> of <span id="holidayTotalPages">1</span>
+                            </span>
+
+                            <ul class="hidden items-center gap-0.5 sm:flex" id="holidayPagination">
+                              <!-- Pagination will be dynamically added here -->
+                            </ul>
+
+                            <button id="nextHolidayPageBtn"
+                              class="!!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
+                              <span class="hidden sm:inline">Next</span>
+                              <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                  d="M17.4175 9.9986C17.4178 10.1909 17.3446 10.3832 17.198 10.53L12.2013 15.5301C11.9085 15.8231 11.4337 15.8233 11.1407 15.5305C10.8477 15.2377 10.8475 14.7629 11.1403 14.4699L14.8604 10.7472L3.33301 10.7472C2.91879 10.7472 2.58301 10.4114 2.58301 9.99715C2.58301 9.58294 2.91879 9.24715 3.33301 9.24715L14.8549 9.24715L11.1403 5.53016C10.8475 5.23717 10.8477 4.7623 11.1407 4.4695C11.4336 4.1767 11.9085 4.17685 12.2013 4.46984L17.1588 9.43049C17.3173 9.568 17.4175 9.77087 17.4175 9.99715C17.4175 9.99763 17.4175 9.99812 17.4175 9.9986Z"
+                                  fill=""></path>
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                    
+                    <!-- FTE Utilization Chart -->
+                    <div class="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800"
+                      style="background-color: var(--card-bg, white);">
+                        <div class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                          <div>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">FTE Utilization - Next 3 Months</h3>
+                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Team availability forecast with 80% capacity threshold</p>
+                          </div>
+                        </div>
+                      <div>
+                        <div id="fteUtilizationChart"></div>
+                        </div>
+                      </div>
+                    
+                  </div>
 
                     <!-- Recent Leave Requests Table -->
                     <div class="col-span-12">
@@ -826,108 +946,6 @@
                       </div>
                     </div>
                   </div>
-
-                  <!-- Public Holidays Table -->
-                  <div class="col-span-12">
-                    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800"
-                      style="background-color: var(--card-bg, white);">
-                        <!-- Header with Title and Search -->
-                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-                          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                            <div>
-                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Public Holidays</h3>
-                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Complete list of public holidays
-                              across all regions</p>
-                            </div>
-                            <!-- Search Input -->
-                            <div class="relative w-full sm:w-64">
-                              <span class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2">
-                              <svg class="fill-gray-500 dark:fill-gray-400" width="18" height="18" viewBox="0 0 20 20"
-                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M3.04199 9.37381C3.04199 5.87712 5.87735 3.04218 9.37533 3.04218C12.8733 3.04218 15.7087 5.87712 15.7087 9.37381C15.7087 12.8705 12.8733 15.7055 9.37533 15.7055C5.87735 15.7055 3.04199 12.8705 3.04199 9.37381ZM9.37533 1.54218C5.04926 1.54218 1.54199 5.04835 1.54199 9.37381C1.54199 13.6993 5.04926 17.2055 9.37533 17.2055C11.2676 17.2055 13.0032 16.5346 14.3572 15.4178L17.1773 18.2381C17.4702 18.531 17.945 18.5311 18.2379 18.2382C18.5308 17.9453 18.5309 17.4704 18.238 17.1775L15.4182 14.3575C16.5367 13.0035 17.2087 11.2671 17.2087 9.37381C17.2087 5.04835 13.7014 1.54218 9.37533 1.54218Z"
-                                  fill="" />
-                                </svg>
-                              </span>
-                            <input type="text" id="holidaySearchInput" placeholder="Search by name, country, date..."
-                              class="h-9 w-full rounded-lg border border-gray-300 bg-white py-2 pr-3 pl-9 !text-base text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500" />
-                            </div>
-                          </div>
-                        </div>
-                        <!-- Table -->
-                        <div class="custom-scrollbar overflow-x-auto">
-                          <table class="min-w-full">
-                            <thead>
-                              <tr class="bg-gray-50 dark:bg-gray-800/50">
-                              <th
-                                class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                Holiday Name</th>
-                              <th
-                                class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                Date</th>
-                              <th
-                                class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                Country/Region</th>
-                              <th
-                                class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                Local Name</th>
-                              </tr>
-                            </thead>
-                          <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="holidaysTableBody">
-                              <!-- Table rows will be populated by JavaScript -->
-                            </tbody>
-                          </table>
-                        </div>
-                      <!-- Pagination -->
-                      <div class="border-t border-gray-200 px-6 py-4 dark:border-gray-800">
-                        <div class="flex items-center justify-between">
-                          <div class="flex items-center gap-2">
-                            <span class="!!text-lg !text-gray-700 dark:!text-gray-400">Show</span>
-                            <select id="holidaysPerPage"
-                              class="rounded-lg border border-gray-300 bg-white px-2 py-1 !!text-lg !text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:!text-white/90">
-                              <option value="10" selected>10</option>
-                              <option value="20">20</option>
-                              <option value="50">50</option>
-                              <option value="100">100</option>
-                            </select>
-                            <span class="!!text-lg !text-gray-700 dark:!text-gray-400">items per page</span>
-                          </div>
-
-                          <div class="flex items-center gap-2">
-                            <button id="previousHolidayPageBtn"
-                              class="!!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
-                              <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M2.58301 9.99868C2.58272 10.1909 2.65588 10.3833 2.80249 10.53L7.79915 15.5301C8.09194 15.8231 8.56682 15.8233 8.85981 15.5305C9.15281 15.2377 9.15297 14.7629 8.86018 14.4699L5.14009 10.7472L16.6675 10.7472C17.0817 10.7472 17.4175 10.4114 17.4175 9.99715C17.4175 9.58294 17.0817 9.24715 16.6675 9.24715L5.14554 9.24715L8.86017 5.53016C9.15297 5.23717 9.15282 4.7623 8.85983 4.4695C8.56684 4.1767 8.09197 4.17685 7.79917 4.46984L2.84167 9.43049C2.68321 9.568 2.58301 9.77087 2.58301 9.99715C2.58301 9.99766 2.58301 9.99817 2.58301 9.99868Z"
-                                  fill=""></path>
-                              </svg>
-                              <span class="hidden sm:inline">Previous</span>
-                            </button>
-
-                            <span class="block !!text-lg font-medium !text-gray-700 sm:hidden dark:!text-gray-400">
-                              Page <span id="holidayCurrentPage">1</span> of <span id="holidayTotalPages">1</span>
-                            </span>
-
-                            <ul class="hidden items-center gap-0.5 sm:flex" id="holidayPagination">
-                              <!-- Pagination will be dynamically added here -->
-                            </ul>
-
-                            <button id="nextHolidayPageBtn"
-                              class="!!text-lg shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium !text-gray-700 hover:bg-gray-50 hover:!text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:!text-gray-400 dark:hover:bg-gray-700">
-                              <span class="hidden sm:inline">Next</span>
-                              <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M17.4175 9.9986C17.4178 10.1909 17.3446 10.3832 17.198 10.53L12.2013 15.5301C11.9085 15.8231 11.4337 15.8233 11.1407 15.5305C10.8477 15.2377 10.8475 14.7629 11.1403 14.4699L14.8604 10.7472L3.33301 10.7472C2.91879 10.7472 2.58301 10.4114 2.58301 9.99715C2.58301 9.58294 2.91879 9.24715 3.33301 9.24715L14.8549 9.24715L11.1403 5.53016C10.8475 5.23717 10.8477 4.7623 11.1407 4.4695C11.4336 4.1767 11.9085 4.17685 12.2013 4.46984L17.1588 9.43049C17.3173 9.568 17.4175 9.77087 17.4175 9.99715C17.4175 9.99763 17.4175 9.99812 17.4175 9.9986Z"
-                                  fill=""></path>
-                              </svg>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      </div>
-                    </div>
 
                   </div>
                 </div>
@@ -1403,6 +1421,7 @@
         let leaveBreakdownChart = null;
     let pendingCountryCodes = [];
     let teamSummaryChart = null;
+    let fteUtilizationChart = null;
 
       // =====================================================
       // LOADING OVERLAY FUNCTIONS
@@ -2792,11 +2811,32 @@
       // Analytics and Summary Dashboard Functions
       /*=====================================================*/
       
+      // Helper function to calculate business days (excluding weekends)
+      function calculateBusinessDays(startDate, endDate) {
+        const start = typeof startDate === 'string' ? new Date(startDate) : new Date(startDate);
+        const end = typeof endDate === 'string' ? new Date(endDate) : new Date(endDate);
+        
+        let count = 0;
+        const current = new Date(start);
+        
+        while (current <= end) {
+          const dayOfWeek = current.getDay();
+          // Only count weekdays (Monday=1 to Friday=5)
+          if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+            count++;
+          }
+          current.setDate(current.getDate() + 1);
+        }
+        
+        return count;
+      }
+      
       function initializeAnalytics() {
         console.log('📊 initializeAnalytics called, calendarEvents:', calendarEvents.length);
         calculateAndDisplayMetrics();
         initializeLeaveTrendsChart();
         initializeLeaveBreakdownChart();
+        initializeFTEUtilizationChart();
         populateRecentLeavesTable();
         populateHolidaysTable();
       }
@@ -2804,31 +2844,35 @@
       function calculateAndDisplayMetrics() {
         const events = calendarEvents;
         
-        // Count leave types
-        let annualCount = 0;
-        let sickCount = 0;
-        let publicCount = 0;
-        let otherCount = 0;
+        // Filter out public holidays for total count
+        const nonPublicEvents = events.filter(event => event.extendedProps.calendar !== 'Public');
+        
+        // Count unique team members with each leave type
+        const annualMembers = new Set();
+        const sickMembers = new Set();
+        const publicCount = events.filter(event => event.extendedProps.calendar === 'Public').length;
+        const otherMembers = new Set();
         
         events.forEach(event => {
           const leaveType = event.extendedProps.calendar;
-        switch (leaveType) {
+          const teamMemberId = event.extendedProps.teamMember;
+          
+          switch (leaveType) {
             case 'Annual':
-              annualCount++;
+              if (teamMemberId) annualMembers.add(teamMemberId);
               break;
             case 'Sick':
-              sickCount++;
-              break;
-            case 'Public':
-              publicCount++;
+              if (teamMemberId) sickMembers.add(teamMemberId);
               break;
             case 'Other':
-              otherCount++;
+              if (teamMemberId) otherMembers.add(teamMemberId);
               break;
           }
         });
         
-        const totalCount = events.length;
+        const annualCount = annualMembers.size;
+        const sickCount = sickMembers.size;
+        const totalCount = nonPublicEvents.length;
         
         // Update metric cards
         document.getElementById('total-leaves-count').textContent = totalCount;
@@ -2836,9 +2880,10 @@
         document.getElementById('sick-leave-count').textContent = sickCount;
         document.getElementById('public-leave-count').textContent = publicCount;
         
-        // Calculate percentages
-        const annualPercentage = totalCount > 0 ? Math.round((annualCount / totalCount) * 100) : 0;
-        const sickPercentage = totalCount > 0 ? Math.round((sickCount / totalCount) * 100) : 0;
+        // Calculate percentages based on total team members
+        const totalMembers = teamMembers.length;
+        const annualPercentage = totalMembers > 0 ? Math.round((annualCount / totalMembers) * 100) : 0;
+        const sickPercentage = totalMembers > 0 ? Math.round((sickCount / totalMembers) * 100) : 0;
         const publicPercentage = totalCount > 0 ? Math.round((publicCount / totalCount) * 100) : 0;
         
         document.getElementById('annual-percentage').textContent = annualPercentage + '%';
@@ -2891,13 +2936,19 @@
           };
         });
         
-        // Count leaves per month
+        // Count business days per month for each leave
         events.forEach(event => {
           const startDate = typeof event.start === 'string' ? new Date(event.start) : event.start;
-          const month = months[startDate.getMonth()];
+          const endDate = event.end ? (typeof event.end === 'string' ? new Date(event.end) : event.end) : startDate;
           const leaveType = event.extendedProps.calendar;
+          
+          // Calculate business days for this leave
+          const businessDays = calculateBusinessDays(startDate, endDate);
+          
+          // Add to the month where the leave starts
+          const month = months[startDate.getMonth()];
           if (monthlyData[month] && monthlyData[month][leaveType] !== undefined) {
-            monthlyData[month][leaveType]++;
+            monthlyData[month][leaveType] += businessDays;
           }
         });
         
@@ -2996,7 +3047,7 @@
           return;
         }
         
-        // Count leave types
+        // Count business days for each leave type
         let annualCount = 0;
         let sickCount = 0;
         let publicCount = 0;
@@ -3004,18 +3055,22 @@
         
         events.forEach(event => {
           const leaveType = event.extendedProps.calendar;
-        switch (leaveType) {
+          const startDate = typeof event.start === 'string' ? new Date(event.start) : event.start;
+          const endDate = event.end ? (typeof event.end === 'string' ? new Date(event.end) : event.end) : startDate;
+          const businessDays = calculateBusinessDays(startDate, endDate);
+          
+          switch (leaveType) {
             case 'Annual':
-              annualCount++;
+              annualCount += businessDays;
               break;
             case 'Sick':
-              sickCount++;
+              sickCount += businessDays;
               break;
             case 'Public':
-              publicCount++;
+              publicCount += businessDays;
               break;
             case 'Other':
-              otherCount++;
+              otherCount += businessDays;
               break;
           }
         });
@@ -3229,6 +3284,201 @@
       teamSummaryChart.render();
     }
 
+    function initializeFTEUtilizationChart() {
+      const events = calendarEvents;
+      const chartElement = document.querySelector("#fteUtilizationChart");
+      
+      if (!chartElement) return;
+      
+      // Destroy existing chart if it exists
+      if (fteUtilizationChart) {
+        fteUtilizationChart.destroy();
+        fteUtilizationChart = null;
+      }
+      
+      // Clear the element
+      chartElement.innerHTML = '';
+      
+      // Show "no data" message if no team members
+      if (teamMembers.length === 0) {
+        chartElement.innerHTML = `
+          <div class="flex items-center justify-center py-20">
+            <div class="text-center">
+              <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+              <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No team members available</p>
+              <p class="mt-1 !text-base text-gray-400 dark:text-gray-500">Add team members to see FTE forecast</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      
+      // Calculate FTE for next 3 months (weekly)
+      const today = new Date();
+      const threeMonthsLater = new Date(today);
+      threeMonthsLater.setMonth(threeMonthsLater.getMonth() + 3);
+      
+      const weeks = [];
+      const fteData = [];
+      const totalFTE = teamMembers.length;
+      
+      // Generate weekly data points
+      let currentWeekStart = new Date(today);
+      currentWeekStart.setDate(currentWeekStart.getDate() - currentWeekStart.getDay() + 1); // Start on Monday
+      
+      while (currentWeekStart <= threeMonthsLater) {
+        const weekEnd = new Date(currentWeekStart);
+        weekEnd.setDate(weekEnd.getDate() + 6); // End on Sunday
+        
+        // Count how many team members are on leave during this week
+        let unavailableFTE = 0;
+        const membersOnLeave = new Set();
+        
+        events.forEach(event => {
+          // Skip public holidays for FTE calculation
+          if (event.extendedProps.calendar === 'Public') return;
+          
+          const eventStart = new Date(event.start);
+          const eventEnd = event.end ? new Date(event.end) : eventStart;
+          
+          eventStart.setHours(0, 0, 0, 0);
+          eventEnd.setHours(0, 0, 0, 0);
+          
+          const weekStartCopy = new Date(currentWeekStart);
+          const weekEndCopy = new Date(weekEnd);
+          weekStartCopy.setHours(0, 0, 0, 0);
+          weekEndCopy.setHours(0, 0, 0, 0);
+          
+          // Check if leave overlaps with this week
+          if (eventStart <= weekEndCopy && eventEnd >= weekStartCopy) {
+            const teamMemberId = event.extendedProps.teamMember;
+            if (teamMemberId && !membersOnLeave.has(teamMemberId)) {
+              membersOnLeave.add(teamMemberId);
+              unavailableFTE++;
+            }
+          }
+        });
+        
+        const availableFTE = totalFTE - unavailableFTE;
+        const utilizationPercentage = totalFTE > 0 ? Math.round((availableFTE / totalFTE) * 100) : 100;
+        
+        // Format week label
+        const weekLabel = `${currentWeekStart.getDate()} ${currentWeekStart.toLocaleDateString('en-US', { month: 'short' })}`;
+        weeks.push(weekLabel);
+        fteData.push(utilizationPercentage);
+        
+        // Move to next week
+        currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+      }
+      
+      const chartOptions = {
+        series: [
+          { 
+            name: "FTE Utilization", 
+            data: fteData 
+          }
+        ],
+        legend: {
+          show: true,
+          position: "top",
+          horizontalAlign: "left",
+        },
+        colors: ["#465fff"],
+        chart: {
+          fontFamily: "Outfit, sans-serif",
+          height: 335,
+          type: "line",
+          toolbar: { show: false },
+          parentHeightOffset: 0,
+        },
+        stroke: {
+          curve: "smooth",
+          width: 3,
+        },
+        dataLabels: { enabled: false },
+        markers: { 
+          size: 5,
+          colors: ["#465fff"],
+          strokeColors: "#fff",
+          strokeWidth: 2,
+          hover: {
+            size: 7
+          }
+        },
+        xaxis: {
+          categories: weeks,
+          axisBorder: { show: false },
+          axisTicks: { show: false },
+          labels: {
+            style: {
+              fontSize: '12px',
+            },
+            rotate: -45,
+            rotateAlways: false,
+          }
+        },
+        yaxis: {
+          title: { 
+            text: "Utilization %",
+            style: { 
+              fontSize: "14px",
+              fontWeight: 500,
+              color: '#6B7280'
+            }
+          },
+          min: 0,
+          max: 100,
+          tickAmount: 5,
+          labels: {
+            formatter: function(val) {
+              return val.toFixed(0) + '%';
+            }
+          }
+        },
+        grid: {
+          xaxis: { lines: { show: false } },
+          yaxis: {
+            lines: {
+              show: true,
+              borderColor: '#E5E7EB',
+              strokeDashArray: 4
+            }
+          },
+        },
+        annotations: {
+          yaxis: [
+            {
+              y: 80,
+              borderColor: '#EF4444',
+              strokeDashArray: 5,
+              label: {
+                borderColor: '#EF4444',
+                style: {
+                  color: '#fff',
+                  background: '#EF4444',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                },
+                text: '80% Minimum Capacity'
+              }
+            }
+          ]
+        },
+        tooltip: {
+          y: {
+            formatter: function(val) {
+              return val.toFixed(0) + '% capacity';
+            }
+          }
+        }
+      };
+      
+      fteUtilizationChart = new ApexCharts(chartElement, chartOptions);
+      fteUtilizationChart.render();
+    }
+
     // ============================================
     // RECENT LEAVE REQUESTS TABLE WITH FILTER AND PAGINATION
     // ============================================
@@ -3323,9 +3573,8 @@
           const startDate = start.toLocaleDateString();
           const endDate = end.toLocaleDateString();
           
-          // Calculate days
-          const diffTime = Math.abs(end - start);
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+          // Calculate business days (excluding weekends)
+          const diffDays = calculateBusinessDays(start, end);
           
           // Color coding for leave types with badge styling
           let leaveTypeBadge = '';
@@ -4025,7 +4274,7 @@
     let allHolidays = [];
     let filteredHolidays = [];
     let holidayCurrentPage = 1;
-    let holidaysPerPage = 10;
+    let holidaysPerPage = 8;
 
     function populateHolidaysTable() {
       const events = calendarEvents;
