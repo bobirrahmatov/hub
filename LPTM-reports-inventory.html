@@ -219,124 +219,94 @@
       <div class="mx-auto max-w-[1536px] p-4 md:p-6">
         <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800" style="background-color: var(--card-bg, white);">
           <div class="px-5 py-4 sm:px-6 sm:py-5">
-            <h3 class="!text-2xl font-medium text-gray-800 dark:text-white/90">
-              Reports Inventory
-            </h3>
-            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">
-              Comprehensive catalog of all reports, their specifications, and metadata
-            </p>
-          </div>
-          
-          <div class="border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
-        
-            <!-- Tabs Navigation -->
-            <div class="rounded-xl border border-gray-200 dark:border-gray-800" x-data="{ activeTab: 'table' }">
-              <div class="border-b border-gray-200 dark:border-gray-800">
-                <nav class="-mb-px flex space-x-2 overflow-x-auto px-6 pt-4 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 dark:[&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5">
-                  <button
-                    class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out"
-                    x-bind:class="activeTab === 'table' ? ' text-brand-500 border-brand-500  dark:text-brand-400 dark:border-brand-400' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
-                    x-on:click="activeTab = 'table'"
-                  >
-                    <svg class="size-5" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M3 3.5C3 2.67157 3.67157 2 4.5 2H15.5C16.3284 2 17 2.67157 17 3.5V16.5C17 17.3284 16.3284 18 15.5 18H4.5C3.67157 18 3 17.3284 3 16.5V3.5ZM15.5 3.5H4.5V7.5H15.5V3.5ZM4.5 9V12H15.5V9H4.5ZM4.5 13.5V16.5H15.5V13.5H4.5Z" fill="currentColor"/>
-              </svg>
-                    Table View
-                  </button>
-                  <button
-                    class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out"
-                    x-bind:class="activeTab === 'dashboard' ? ' text-brand-500 border-brand-500  dark:border-brand-400  dark:text-brand-400' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
-                    x-on:click="activeTab = 'dashboard'"
-                  >
-                    <svg class="size-5" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M9.85954 4.0835C9.5834 4.0835 9.35954 4.30735 9.35954 4.5835V15.4161C9.35954 15.6922 9.5834 15.9161 9.85954 15.9161H10.1373C10.4135 15.9161 10.6373 15.6922 10.6373 15.4161V4.5835C10.6373 4.30735 10.4135 4.0835 10.1373 4.0835H9.85954ZM7.85954 4.5835C7.85954 3.47893 8.75497 2.5835 9.85954 2.5835H10.1373C11.2419 2.5835 12.1373 3.47893 12.1373 4.5835V15.4161C12.1373 16.5206 11.2419 17.4161 10.1373 17.4161H9.85954C8.75497 17.4161 7.85954 16.5206 7.85954 15.4161V4.5835ZM4.58203 8.9598C4.30589 8.9598 4.08203 9.18366 4.08203 9.4598V15.4168C4.08203 15.693 4.30589 15.9168 4.58203 15.9168H4.85981C5.13595 15.9168 5.35981 15.693 5.35981 15.4168V9.4598C5.35981 9.18366 5.13595 8.9598 4.85981 8.9598H4.58203ZM2.58203 9.4598C2.58203 8.35523 3.47746 7.4598 4.58203 7.4598H4.85981C5.96438 7.4598 6.85981 8.35523 6.85981 9.4598V15.4168C6.85981 16.5214 5.96438 17.4168 4.85981 17.4168H4.58203C3.47746 17.4168 2.58203 16.5214 2.58203 15.4168V9.4598ZM14.637 12.435C14.637 12.1589 14.8609 11.935 15.137 11.935H15.4148C15.691 11.935 15.9148 12.1589 15.9148 12.435V15.4168C15.9148 15.693 15.691 15.9168 15.4148 15.9168H15.137C14.8609 15.9168 14.637 15.693 14.637 15.4168V12.435ZM15.137 10.435C14.0325 10.435 13.137 11.3304 13.137 12.435V15.4168C13.137 16.5214 14.0325 17.4168 15.137 17.4168H15.4148C16.5194 17.4168 17.4148 16.5214 17.4148 15.4168V12.435C17.4148 11.3304 16.5194 10.435 15.4148 10.435H15.137Z" fill="currentColor"/>
-              </svg>
-                    Dashboard
-                  </button>
-                </nav>
-            </div>
-
-              <!-- Tab Content -->
-              <div class="p-4 dark:border-gray-800 sm:p-6">
+            <!-- Top Row: Title (Left) | Search + Buttons (Right) -->
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <!-- Left: Title -->
+              <div class="flex-shrink-0">
+                <h3 class="!text-xl font-medium text-gray-800 dark:text-white/90">
+                  Reports Inventory
+                </h3>
+                <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">
+                  Comprehensive catalog of all reports, their specifications, and metadata
+                </p>
+              </div>
+              
+              <!-- Right: Search Bar + Action Buttons -->
+              <div class="flex flex-wrap items-center gap-2">
+                <!-- Search Bar -->
+                <div class="relative w-full lg:w-64 flex-shrink-0">
+                  <span class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2">
+                    <svg class="fill-gray-500 dark:fill-gray-400" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M3.04199 9.37381C3.04199 5.87712 5.87735 3.04218 9.37533 3.04218C12.8733 3.04218 15.7087 5.87712 15.7087 9.37381C15.7087 12.8705 12.8733 15.7055 9.37533 15.7055C5.87735 15.7055 3.04199 12.8705 3.04199 9.37381ZM9.37533 1.54218C5.04926 1.54218 1.54199 5.04835 1.54199 9.37381C1.54199 13.6993 5.04926 17.2055 9.37533 17.2055C11.2676 17.2055 13.0032 16.5346 14.3572 15.4178L17.1773 18.2381C17.4702 18.531 17.945 18.5311 18.2379 18.2382C18.5308 17.9453 18.5309 17.4704 18.238 17.1775L15.4182 14.3575C16.5367 13.0035 17.2087 11.2671 17.2087 9.37381C17.2087 5.04835 13.7014 1.54218 9.37533 1.54218Z" fill=""></path>
+                    </svg>
+                  </span>
+                  <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search reports..."
+                    class="h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-[42px] !text-base text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:border-gray-700 dark:text-white dark:placeholder:text-gray-500"
+                    oninput="filterReports()"
+                  />
+                </div>
                 
-                <!-- Table View Tab -->
-                <div x-show="activeTab === 'table'">
-            
-            <!-- Buttons & Search Bar -->
-            <div class="mb-4 flex flex-wrap items-center gap-3">
-              <!-- Buttons -->
-              <button
-                onclick="openAddReportModal()"
-                class="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 !text-base font-medium text-white hover:bg-brand-600 transition-all duration-200"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                Add Report
-              </button>
-              
-              <button
-                onclick="exportToExcel()"
-                class="flex items-center gap-2 rounded-lg bg-success-500 px-4 py-2.5 !text-base font-medium text-white hover:bg-success-600 transition-all duration-200"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                Download Excel
-              </button>
-              
-              <button
-                onclick="document.getElementById('excelUpload').click()"
-                class="flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2.5 !text-base font-medium text-white hover:bg-blue-600 transition-all duration-200"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                </svg>
-                Upload Excel
-              </button>
-              <input type="file" id="excelUpload" accept=".xlsx,.xls" class="hidden" onchange="importFromExcel(event)" />
-              
-              <button
-                id="refreshButton"
-                onclick="refreshReportsTable()"
-                class="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-200 transition-all duration-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-              >
-                <svg id="refreshIcon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M21 10C21 10 18.995 7.26822 17.3662 5.63824C15.7373 4.00827 13.4864 3 11 3C6.02944 3 2 7.02944 2 12C2 16.9706 6.02944 21 11 21C15.1031 21 18.5649 18.2543 19.6482 14.5M21 10V4M21 10H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Refresh
-              </button>
-              
-              <!-- Search Bar -->
-              <div class="relative w-80">
-                <span class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2">
-                  <svg class="fill-gray-500 dark:fill-gray-400" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.04199 9.37381C3.04199 5.87712 5.87735 3.04218 9.37533 3.04218C12.8733 3.04218 15.7087 5.87712 15.7087 9.37381C15.7087 12.8705 12.8733 15.7055 9.37533 15.7055C5.87735 15.7055 3.04199 12.8705 3.04199 9.37381ZM9.37533 1.54218C5.04926 1.54218 1.54199 5.04835 1.54199 9.37381C1.54199 13.6993 5.04926 17.2055 9.37533 17.2055C11.2676 17.2055 13.0032 16.5346 14.3572 15.4178L17.1773 18.2381C17.4702 18.531 17.945 18.5311 18.2379 18.2382C18.5308 17.9453 18.5309 17.4704 18.238 17.1775L15.4182 14.3575C16.5367 13.0035 17.2087 11.2671 17.2087 9.37381C17.2087 5.04835 13.7014 1.54218 9.37533 1.54218Z" fill=""></path>
-                  </svg>
-                </span>
-                <input
-                  type="text"
-                  id="searchInput"
-                  placeholder="Search reports..."
-                  class="h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-[42px] !text-base text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:border-gray-700 dark:text-white dark:placeholder:text-gray-500"
-                  oninput="filterReports()"
-                />
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center gap-2">
+                  <button
+                    onclick="openAddReportModal()"
+                    class="flex items-center gap-1.5 rounded-lg bg-brand-500 px-3 py-2 !text-base font-medium text-white hover:bg-brand-600 transition-all duration-200"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add
+                  </button>
+                  
+                  <button
+                    onclick="exportToExcel()"
+                    class="flex items-center gap-1.5 rounded-lg bg-success-500 px-3 py-2 !text-base font-medium text-white hover:bg-success-600 transition-all duration-200"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Download
+                  </button>
+                  
+                  <button
+                    onclick="document.getElementById('excelUpload').click()"
+                    class="flex items-center gap-1.5 rounded-lg bg-blue-500 px-3 py-2 !text-base font-medium text-white hover:bg-blue-600 transition-all duration-200"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                    </svg>
+                    Upload
+                  </button>
+                  <input type="file" id="excelUpload" accept=".xlsx,.xls" class="hidden" onchange="importFromExcel(event)" />
+                  
+                  <button
+                    id="refreshButton"
+                    onclick="refreshReportsTable()"
+                    class="flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-2 !text-base font-medium text-gray-700 hover:bg-gray-200 transition-all duration-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  >
+                    <svg id="refreshIcon" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M21 10C21 10 18.995 7.26822 17.3662 5.63824C15.7373 4.00827 13.4864 3 11 3C6.02944 3 2 7.02944 2 12C2 16.9706 6.02944 21 11 21C15.1031 21 18.5649 18.2543 19.6482 14.5M21 10V4M21 10H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Refresh
+                  </button>
+                </div>
               </div>
             </div>
             
-            <!-- Filters & Pagination -->
-            <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
-              <!-- Filters on the Left -->
-              <div class="flex flex-wrap items-center gap-3">
-              <!-- Clear All Filters Button -->
+            <!-- Filters Row: Below Subtitle -->
+            <div class="mt-4 flex flex-wrap items-center gap-2">
+              <!-- Clear Button -->
               <button
                 onclick="clearAllFilters()"
-                class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-700 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               >
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                Clear all
+                Clear
               </button>
               
               <!-- Advanced Filter Button -->
@@ -344,13 +314,13 @@
                 <button
                   id="advancedFilterToggle"
                   onclick="toggleAdvancedFilter()"
-                  class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800"
+                  class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800"
                 >
                   <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                   </svg>
                   Filter
-                  <span id="activeFilterCount" class="hidden ml-1 rounded-full bg-brand-500 px-2 py-0.5 !text-base font-medium text-white"></span>
+                  <span id="activeFilterCount" class="hidden ml-1 rounded-full bg-brand-500 px-1.5 py-0.5 !text-base font-medium text-white"></span>
                 </button>
                 
                 <!-- Advanced Filter Popover -->
@@ -397,111 +367,151 @@
                 </div>
               </div>
               
+              <!-- Status Filter -->
               <div x-data="{ open: false, selected: 'All Statuses' }" class="relative" id="statusFilterDropdown">
-                  <button @click="open = !open" type="button"
-                    class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
-                    <span x-text="selected"></span>
-                    <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
+                <button @click="open = !open" type="button"
+                  class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800 min-w-[140px]">
+                  <span x-text="selected" class="truncate"></span>
+                  <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div x-show="open" @click.outside="open = false" x-cloak
+                  class="absolute left-0 top-full z-[99999] mt-2 w-48 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
+                  <button type="button" @click="selected = 'All Statuses'; open = false; filterByStatus('All')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    All Statuses
                   </button>
-                  <div x-show="open" @click.outside="open = false" x-cloak
-                    class="absolute right-0 top-full z-[99999] mt-2 w-48 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
-                    <button type="button" @click="selected = 'All Statuses'; open = false; filterByStatus('All')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      All Statuses
-                    </button>
-                    <button type="button" @click="selected = 'Active'; open = false; filterByStatus('Active')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      Active
-                    </button>
-                    <button type="button" @click="selected = 'On-Hold'; open = false; filterByStatus('On-Hold')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      On-Hold
-                    </button>
-                    <button type="button" @click="selected = 'Retired'; open = false; filterByStatus('Retired')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      Retired
-                    </button>
-                  </div>
+                  <button type="button" @click="selected = 'Active'; open = false; filterByStatus('Active')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    Active
+                  </button>
+                  <button type="button" @click="selected = 'On-Hold'; open = false; filterByStatus('On-Hold')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    On-Hold
+                  </button>
+                  <button type="button" @click="selected = 'Retired'; open = false; filterByStatus('Retired')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    Retired
+                  </button>
                 </div>
-                
-                <!-- Report Type Filter -->
-                <div x-data="{ open: false, selected: 'All Types' }" class="relative" id="reportTypeFilterDropdown">
-                  <button @click="open = !open" type="button"
-                    class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
-                    <span x-text="selected"></span>
-                    <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
+              </div>
+              
+              <!-- Report Type Filter -->
+              <div x-data="{ open: false, selected: 'All Types' }" class="relative" id="reportTypeFilterDropdown">
+                <button @click="open = !open" type="button"
+                  class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800 min-w-[130px]">
+                  <span x-text="selected" class="truncate"></span>
+                  <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div x-show="open" @click.outside="open = false" x-cloak
+                  class="absolute left-0 top-full z-[99999] mt-2 w-48 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
+                  <button type="button" @click="selected = 'All Types'; open = false; filterByReportType('All')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    All Types
                   </button>
-                  <div x-show="open" @click.outside="open = false" x-cloak
-                    class="absolute right-0 top-full z-[99999] mt-2 w-48 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
-                    <button type="button" @click="selected = 'All Types'; open = false; filterByReportType('All')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      All Types
-                    </button>
-                    <button type="button" @click="selected = 'BAU Report'; open = false; filterByReportType('BAU Report')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      BAU Report
-                    </button>
-                    <button type="button" @click="selected = 'DQ'; open = false; filterByReportType('DQ')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      DQ
-                    </button>
-                    <button type="button" @click="selected = 'Extracts'; open = false; filterByReportType('Extracts')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      Extracts
-                    </button>
-                    <button type="button" @click="selected = 'Interim Reports'; open = false; filterByReportType('Interim Reports')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      Interim Reports
-                    </button>
-                  </div>
+                  <button type="button" @click="selected = 'BAU Report'; open = false; filterByReportType('BAU Report')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    BAU Report
+                  </button>
+                  <button type="button" @click="selected = 'DQ'; open = false; filterByReportType('DQ')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    DQ
+                  </button>
+                  <button type="button" @click="selected = 'Extracts'; open = false; filterByReportType('Extracts')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    Extracts
+                  </button>
+                  <button type="button" @click="selected = 'Interim Reports'; open = false; filterByReportType('Interim Reports')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    Interim Reports
+                  </button>
                 </div>
-                
-                <!-- Region Filter -->
-                <div x-data="{open:false,selectedRegions:['All'],regions:['Global','APAC','EMEA','LATAM','NAM'],getDisplayText:function(){if(this.selectedRegions.includes('All')||this.selectedRegions.length===0)return'All Regions';if(this.selectedRegions.length===1)return this.selectedRegions[0];return this.selectedRegions.length+' Selected';},toggleRegion:function(region){if(region==='All'){this.selectedRegions=['All'];filterByRegion(this.selectedRegions);this.open=false;}else{if(this.selectedRegions.includes('All')){this.selectedRegions=[region];}else{if(this.selectedRegions.includes(region)){this.selectedRegions=this.selectedRegions.filter(function(r){return r!==region;});if(this.selectedRegions.length===0){this.selectedRegions=['All'];this.open=false;}}else{this.selectedRegions.push(region);}}filterByRegion(this.selectedRegions);}},isSelected:function(region){return this.selectedRegions.includes(region);}}" class="relative" id="regionFilterDropdown">
-                  <button @click="open = !open" type="button"
-                    class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
-                    <span x-text="getDisplayText()"></span>
-                    <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  <div x-show="open" @click.outside="open = false" x-cloak
-                    class="absolute right-0 top-full z-[99999] mt-2 w-56 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
-                    <div class="space-y-1">
-                      <!-- All Regions Option -->
+              </div>
+              
+              <!-- Region Filter -->
+              <div x-data="{open:false,selectedRegions:['All'],regions:['Global','APAC','EMEA','LATAM','NAM'],getDisplayText:function(){if(this.selectedRegions.includes('All')||this.selectedRegions.length===0)return'All Regions';if(this.selectedRegions.length===1)return this.selectedRegions[0];return this.selectedRegions.length+' Selected';},toggleRegion:function(region){if(region==='All'){this.selectedRegions=['All'];filterByRegion(this.selectedRegions);this.open=false;}else{if(this.selectedRegions.includes('All')){this.selectedRegions=[region];}else{if(this.selectedRegions.includes(region)){this.selectedRegions=this.selectedRegions.filter(function(r){return r!==region;});if(this.selectedRegions.length===0){this.selectedRegions=['All'];this.open=false;}}else{this.selectedRegions.push(region);}}filterByRegion(this.selectedRegions);}},isSelected:function(region){return this.selectedRegions.includes(region);}}" class="relative" id="regionFilterDropdown">
+                <button @click="open = !open" type="button"
+                  class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800 min-w-[140px]">
+                  <span x-text="getDisplayText()" class="truncate"></span>
+                  <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div x-show="open" @click.outside="open = false" x-cloak
+                  class="absolute left-0 top-full z-[99999] mt-2 w-56 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
+                  <div class="space-y-1">
+                    <!-- All Regions Option -->
+                    <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        :checked="isSelected('All')"
+                        @change="toggleRegion('All')"
+                        class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500"
+                      />
+                      All Regions
+                    </label>
+
+                    <!-- Separator -->
+                    <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
+                    <!-- Individual Regions -->
+                    <template x-for="region in regions" :key="region">
                       <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
                         <input
                           type="checkbox"
-                          :checked="isSelected('All')"
-                          @change="toggleRegion('All')"
+                          :checked="isSelected(region)"
+                          @change="toggleRegion(region)"
                           class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500"
                         />
-                        All Regions
+                        <span x-text="region"></span>
                       </label>
-
-                      <!-- Separator -->
-                      <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-
-                      <!-- Individual Regions -->
-                      <template x-for="region in regions" :key="region">
-                        <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            :checked="isSelected(region)"
-                            @change="toggleRegion(region)"
-                            class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500"
-                          />
-                          <span x-text="region"></span>
-                        </label>
-                      </template>
-                    </div>
+                    </template>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          
+          <div class="border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
+        
+            <!-- Tabs Navigation -->
+            <div class="rounded-xl border border-gray-200 dark:border-gray-800" x-data="{ activeTab: 'table' }">
+              <div class="border-b border-gray-200 dark:border-gray-800">
+                <nav class="-mb-px flex space-x-2 overflow-x-auto px-6 pt-4 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 dark:[&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5">
+                  <button
+                    class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out"
+                    x-bind:class="activeTab === 'table' ? ' text-brand-500 border-brand-500  dark:text-brand-400 dark:border-brand-400' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+                    x-on:click="activeTab = 'table'"
+                  >
+                    <svg class="size-5" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M3 3.5C3 2.67157 3.67157 2 4.5 2H15.5C16.3284 2 17 2.67157 17 3.5V16.5C17 17.3284 16.3284 18 15.5 18H4.5C3.67157 18 3 17.3284 3 16.5V3.5ZM15.5 3.5H4.5V7.5H15.5V3.5ZM4.5 9V12H15.5V9H4.5ZM4.5 13.5V16.5H15.5V13.5H4.5Z" fill="currentColor"/>
+              </svg>
+                    Table View
+                  </button>
+                  <button
+                    class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out"
+                    x-bind:class="activeTab === 'dashboard' ? ' text-brand-500 border-brand-500  dark:border-brand-400  dark:text-brand-400' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+                    x-on:click="activeTab = 'dashboard'"
+                  >
+                    <svg class="size-5" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M9.85954 4.0835C9.5834 4.0835 9.35954 4.30735 9.35954 4.5835V15.4161C9.35954 15.6922 9.5834 15.9161 9.85954 15.9161H10.1373C10.4135 15.9161 10.6373 15.6922 10.6373 15.4161V4.5835C10.6373 4.30735 10.4135 4.0835 10.1373 4.0835H9.85954ZM7.85954 4.5835C7.85954 3.47893 8.75497 2.5835 9.85954 2.5835H10.1373C11.2419 2.5835 12.1373 3.47893 12.1373 4.5835V15.4161C12.1373 16.5206 11.2419 17.4161 10.1373 17.4161H9.85954C8.75497 17.4161 7.85954 16.5206 7.85954 15.4161V4.5835ZM4.58203 8.9598C4.30589 8.9598 4.08203 9.18366 4.08203 9.4598V15.4168C4.08203 15.693 4.30589 15.9168 4.58203 15.9168H4.85981C5.13595 15.9168 5.35981 15.693 5.35981 15.4168V9.4598C5.35981 9.18366 5.13595 8.9598 4.85981 8.9598H4.58203ZM2.58203 9.4598C2.58203 8.35523 3.47746 7.4598 4.58203 7.4598H4.85981C5.96438 7.4598 6.85981 8.35523 6.85981 9.4598V15.4168C6.85981 16.5214 5.96438 17.4168 4.85981 17.4168H4.58203C3.47746 17.4168 2.58203 16.5214 2.58203 15.4168V9.4598ZM14.637 12.435C14.637 12.1589 14.8609 11.935 15.137 11.935H15.4148C15.691 11.935 15.9148 12.1589 15.9148 12.435V15.4168C15.9148 15.693 15.691 15.9168 15.4148 15.9168H15.137C14.8609 15.9168 14.637 15.693 14.637 15.4168V12.435ZM15.137 10.435C14.0325 10.435 13.137 11.3304 13.137 12.435V15.4168C13.137 16.5214 14.0325 17.4168 15.137 17.4168H15.4148C16.5194 17.4168 17.4148 16.5214 17.4148 15.4168V12.435C17.4148 11.3304 16.5194 10.435 15.4148 10.435H15.137Z" fill="currentColor"/>
+              </svg>
+                    Dashboard
+                  </button>
+                </nav>
+            </div>
+
+              <!-- Tab Content -->
+              <div class="p-4 dark:border-gray-800 sm:p-6">
+                
+                <!-- Table View Tab -->
+                <div x-show="activeTab === 'table'">
+            
+            <!-- Pagination Controls -->
+            <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
               
               <!-- Pagination Controls on the Right -->
               <div class="flex items-center gap-2">
@@ -627,7 +637,7 @@
                           </div>
                           <div class="flex items-end justify-between">
                             <div>
-                              <h4 id="dashboard-total-reports" class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                              <h4 id="dashboard-total-reports" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             </div>
                           </div>
                         </div>
@@ -647,9 +657,9 @@
                           </div>
                           <div class="flex items-end justify-between gap-3">
                             <div>
-                              <h4 id="dashboard-active-reports" class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                              <h4 id="dashboard-active-reports" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             </div>
-                            <span class="flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 text-xl font-bold text-green-600 leading-none dark:bg-green-500/15 dark:text-green-500" id="dashboard-active-percentage">
+                            <span class="flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 !text-xl font-bold text-green-600 leading-none dark:bg-green-500/15 dark:text-green-500" id="dashboard-active-percentage">
                               0%
                             </span>
                           </div>
@@ -670,9 +680,9 @@
                           </div>
                           <div class="flex items-end justify-between gap-3">
                             <div>
-                              <h4 id="dashboard-onhold-reports" class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                              <h4 id="dashboard-onhold-reports" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             </div>
-                            <span class="flex items-center gap-1 rounded-full bg-orange-50 px-3 py-1 text-xl font-bold text-orange-600 leading-none dark:bg-orange-500/15 dark:text-orange-500" id="dashboard-onhold-percentage">
+                            <span class="flex items-center gap-1 rounded-full bg-orange-50 px-3 py-1 !text-xl font-bold text-orange-600 leading-none dark:bg-orange-500/15 dark:text-orange-500" id="dashboard-onhold-percentage">
                               0%
                             </span>
                           </div>
@@ -693,9 +703,9 @@
                           </div>
                           <div class="flex items-end justify-between gap-3">
                             <div>
-                              <h4 id="dashboard-retired-reports" class="text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                              <h4 id="dashboard-retired-reports" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             </div>
-                            <span class="flex items-center gap-1 rounded-full bg-gray-50 px-3 py-1 text-xl font-bold text-gray-600 leading-none dark:bg-gray-500/15 dark:text-gray-500" id="dashboard-retired-percentage">
+                            <span class="flex items-center gap-1 rounded-full bg-gray-50 px-3 py-1 !text-xl font-bold text-gray-600 leading-none dark:bg-gray-500/15 dark:text-gray-500" id="dashboard-retired-percentage">
                               0%
                             </span>
                           </div>
@@ -708,7 +718,7 @@
                     <div class="col-span-12">
                       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800" style="background-color: var(--card-bg, white);">
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-                          <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Reports by Maker</h3>
+                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Reports by Maker</h3>
                           <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Report count breakdown by each maker</p>
                         </div>
                         <div class="custom-scrollbar overflow-x-auto">
@@ -736,7 +746,7 @@
                       <!-- Report Type Distribution Chart (Donut) -->
                       <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
                         <div class="mb-9">
-                          <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">
                             Report Types
                           </h3>
                           <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Distribution by report type</p>
@@ -749,7 +759,7 @@
                       <!-- Report Complexity Chart (Donut) -->
                       <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
                         <div class="mb-9">
-                          <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">
                             Report Complexity
                           </h3>
                           <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Complexity distribution</p>
@@ -767,7 +777,7 @@
                       <!-- Region Distribution Table -->
                       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 flex flex-col" style="background-color: var(--card-bg, white);">
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-                          <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Reports by Region</h3>
+                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Reports by Region</h3>
                           <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Regional distribution</p>
                         </div>
                         <div class="custom-scrollbar overflow-x-auto flex-1">
@@ -790,7 +800,7 @@
                       <div class="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800" style="background-color: var(--card-bg, white);">
                         <div class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                           <div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Report Frequency</h3>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Report Frequency</h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Distribution by frequency</p>
                           </div>
                         </div>
@@ -1751,10 +1761,10 @@
         chartElement.innerHTML = '';
         
         // Count report types
-        const bauReports = reports.filter(r => r.reportType === 'BAU Report').length;
-        const dqReports = reports.filter(r => r.reportType === 'DQ').length;
-        const extractReports = reports.filter(r => r.reportType === 'Extracts').length;
-        const interimReports = reports.filter(r => r.reportType === 'Interim Reports').length;
+        const bauReports = filteredReports.filter(r => r.reportType === 'BAU Report').length;
+        const dqReports = filteredReports.filter(r => r.reportType === 'DQ').length;
+        const extractReports = filteredReports.filter(r => r.reportType === 'Extracts').length;
+        const interimReports = filteredReports.filter(r => r.reportType === 'Interim Reports').length;
         
         // Show "no data" message if no reports
         if (reports.length === 0) {
@@ -2039,9 +2049,10 @@
           
           return true;
         });
-        
+
         currentPage = 1;
         renderReportsTable();
+        refreshDashboard();
       }
       
       // Pagination
@@ -3111,7 +3122,8 @@
         currentPage = 1;
         renderReportsTable();
         updatePaginationInfo();
-        
+        refreshDashboard();
+
         // Close the popover after applying filters
         toggleAdvancedFilter();
       }
@@ -3369,10 +3381,10 @@
       }
       
       function updateDashboardMetrics() {
-        const total = reports.length;
-        const active = reports.filter(r => r.activeStatus === 'Active').length;
-        const onHold = reports.filter(r => r.activeStatus === 'On-Hold').length;
-        const retired = reports.filter(r => r.activeStatus === 'Retired').length;
+        const total = filteredReports.length;
+        const active = filteredReports.filter(r => r.activeStatus === 'Active').length;
+        const onHold = filteredReports.filter(r => r.activeStatus === 'On-Hold').length;
+        const retired = filteredReports.filter(r => r.activeStatus === 'Retired').length;
         
         const activePercentage = total > 0 ? Math.round((active / total) * 100) : 0;
         const onHoldPercentage = total > 0 ? Math.round((onHold / total) * 100) : 0;
@@ -3531,7 +3543,7 @@
         
         // Count by complexity
         const complexityCounts = {};
-        reports.forEach(r => {
+        filteredReports.forEach(r => {
           const complexity = r.reportComplexity || 'Unknown';
           complexityCounts[complexity] = (complexityCounts[complexity] || 0) + 1;
         });
@@ -3657,7 +3669,7 @@
         
         // Count by maker and status
         const makerStats = {};
-        reports.forEach(r => {
+        filteredReports.forEach(r => {
           const maker = r.preparedBy || 'Unknown';
           if (!makerStats[maker]) {
             makerStats[maker] = {
@@ -3719,7 +3731,7 @@
         
         // Count by region (handle arrays)
         const regionCounts = {};
-        reports.forEach(r => {
+        filteredReports.forEach(r => {
           const regions = Array.isArray(r.reportRegion) ? r.reportRegion : [r.reportRegion || 'Unknown'];
           regions.forEach(region => {
             if (region && region !== 'All') {
@@ -3780,7 +3792,7 @@
         
         // Count by frequency
         const frequencyCounts = {};
-        reports.forEach(r => {
+        filteredReports.forEach(r => {
           const frequency = r.frequency || 'Unknown';
           frequencyCounts[frequency] = (frequencyCounts[frequency] || 0) + 1;
         });
@@ -3905,7 +3917,7 @@
                 </path>
               </svg>
             </div>
-            <h5 class="mb-2 font-semibold text-gray-800 modal-title !text-xl lg:!text-2xl dark:text-white/90">
+            <h5 class="mb-2 font-semibold text-gray-800 modal-title !text-xl lg:!text-xl dark:text-white/90">
               Delete Report
             </h5>
             <p class="!text-base text-gray-500 dark:text-gray-400">
