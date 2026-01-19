@@ -342,7 +342,7 @@
     .form-check-input:checked~span {
         border-color: #465fff;
         border-width: 6px;
-      }
+        }
 
     .dark .form-check-input:checked~span {
         border-color: #465fff;
@@ -356,20 +356,20 @@
 
         @keyframes pulse {
             0%, 100% {
-                opacity: 1;
-            }
+        opacity: 1;
+      }
             50% {
                 opacity: 0.6;
-            }
+      }
         }
 
         .loading-spinner {
             animation: spin 1s linear infinite;
-        }
+      }
 
         .loading-text {
             animation: pulse 1.5s ease-in-out infinite;
-        }
+      }
     </style>
 </head>
 
@@ -416,9 +416,9 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
                   </path>
-                </svg>
+                    </svg>
                 <span>Refresh</span>
-              </button>
+                  </button>
 
               <!-- Right Side Action Buttons -->
               <div class="flex items-center gap-3">
@@ -426,9 +426,9 @@
                   class="flex items-center gap-2 rounded-lg border border-brand-500 bg-brand-500 px-4 py-2.5 !text-base font-medium text-white hover:bg-brand-600 transition-all duration-200">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                  </svg>
+                    </svg>
                   Add Leave
-                </button>
+                  </button>
                 <button id="manageTeamButton"
                   class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-all duration-200">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -451,7 +451,7 @@
                   Download Outlook
                 </button>
               </div>
-            </div>
+              </div>
 
             <!-- Timeline Section -->
             <div class="rounded-2xl border border-gray-200 bg-white p-6 mb-6 dark:border-gray-800"
@@ -501,8 +501,8 @@
                 <table class="min-w-full">
                   <thead>
                     <tr>
-                      <th class="sticky left-0 z-20 border-r border-b border-gray-200 bg-gray-50 px-4 py-3 text-left dark:border-gray-700 dark:bg-gray-800">
-                        <span class="!text-base font-medium text-gray-700 dark:text-gray-300">Team Member</span>
+                      <th class="sticky left-0 z-20 border-r border-b border-gray-200 bg-gray-50 px-4 py-3 text-center dark:border-gray-700 dark:bg-gray-800" style="text-align: center !important;">
+                        <span class="!text-base !font-medium !text-gray-700 dark:!text-gray-300" style="text-align: center !important; display: block !important;">Team Member</span>
                       </th>
                       <!-- Date columns will be generated here -->
                     </tr>
@@ -2074,7 +2074,7 @@
           } else {
             console.error("Event modal not found");
           }
-        };
+                };
         window.openModal = openModal;
 
                 const closeModal = () => {
@@ -2252,10 +2252,12 @@
               'Vietnam': 'VN',
             };
             
-            // Get country codes
-            const countryCodes = countries
-              .map(country => countryCodeMap[country] || countryCodeMap[country.trim()])
-              .filter(code => code);
+            // Get country codes and remove duplicates
+            const countryCodes = [...new Set(
+              countries
+                .map(country => countryCodeMap[country] || countryCodeMap[country.trim()])
+                .filter(code => code)
+            )];
             
             if (countryCodes.length === 0) {
               showWarningToast('No valid country codes found. Please use standard country names (e.g., Austria, Germany, USA, UK, etc.).');
@@ -2322,19 +2324,37 @@
             document.body.appendChild(loadingOverlay);
             
             try {
-              // Fetch holidays for each country
+              // Fetch holidays for each country (deduplicate country codes first)
+              const uniqueCountryCodes = [...new Set(countryCodes)];
               let totalHolidays = 0;
-              for (const code of countryCodes) {
+              const addedHolidayIds = new Set(); // Track added holiday IDs to prevent duplicates
+              
+              for (const code of uniqueCountryCodes) {
                 try {
                   const response = await fetch(`https://date.nager.at/api/v3/publicholidays/${currentYear}/${code}`);
                   if (!response.ok) continue;
                   
                   const holidays = await response.json();
                   
-                  // Add each holiday to the calendar
+                  // Add each holiday to the calendar (only if not already added)
                   holidays.forEach(holiday => {
+                    const holidayId = `holiday-${code}-${holiday.date}`;
+                    
+                    // Skip if this holiday ID already exists
+                    if (addedHolidayIds.has(holidayId)) {
+                      console.log(`Skipping duplicate holiday: ${holidayId}`);
+                      return;
+                    }
+                    
+                    // Check if holiday already exists in calendarEvents
+                    const existingHoliday = calendarEvents.find(e => e.id === holidayId);
+                    if (existingHoliday) {
+                      console.log(`Holiday already exists: ${holidayId}`);
+                      return;
+                    }
+                    
                     calendarEvents.push({
-                      id: `holiday-${code}-${holiday.date}`,
+                      id: holidayId,
                       title: `${holiday.name} (${code})`,
                       start: holiday.date,
                       end: holiday.date,
@@ -2345,6 +2365,7 @@
                         localName: holiday.localName
                       },
                     });
+                    addedHolidayIds.add(holidayId);
                     totalHolidays++;
                   });
                 } catch (err) {
@@ -3469,7 +3490,7 @@
           renderTimelineGrid();
         }
       }
-
+      
     // ============================================
     // TIMELINE GRID VIEW
     // ============================================
@@ -3670,7 +3691,7 @@
       console.log(`Team Member column width: ${dynamicWidth}px (longest name: "${longestName}", ${maxNameLength} chars)`);
       
       // Build header row with dates
-      let headerHTML = `<th class="sticky left-0 z-20 border-r border-b border-gray-200 bg-gray-50 px-6 py-3 text-left dark:border-gray-700 dark:bg-gray-800 whitespace-nowrap" style="width: ${dynamicWidth}px !important; min-width: ${dynamicWidth}px !important; max-width: ${dynamicWidth}px !important;"><span class="!text-base !font-medium !text-gray-700 dark:!text-gray-300">Team Member</span></th>`;
+      let headerHTML = `<th class="sticky left-0 z-20 border-r border-b border-gray-200 bg-gray-50 px-6 py-3 text-center dark:border-gray-700 dark:bg-gray-800 whitespace-nowrap" style="width: ${dynamicWidth}px !important; min-width: ${dynamicWidth}px !important; max-width: ${dynamicWidth}px !important; text-align: center !important;"><span class="!text-base !font-medium !text-gray-700 dark:!text-gray-300" style="text-align: center !important; display: block !important;">Team Member</span></th>`;
       
       dates.forEach(date => {
         const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
@@ -3694,8 +3715,8 @@
       // Body rows with team members
       teamMembers.forEach(member => {
         bodyHTML += '<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">';
-        bodyHTML += `<td class="sticky left-0 z-10 bg-white dark:bg-gray-900 border-r border-b border-gray-200 dark:border-gray-700 px-6 py-4 whitespace-nowrap" style="width: ${dynamicWidth}px !important; min-width: ${dynamicWidth}px !important; max-width: ${dynamicWidth}px !important;">`;
-        bodyHTML += `<span class="!text-base !font-medium !text-gray-800 dark:!text-white whitespace-nowrap">${member.name}</span>`;
+        bodyHTML += `<td class="sticky left-0 z-10 bg-white dark:bg-gray-900 border-r border-b border-gray-200 dark:border-gray-700 px-6 py-4 whitespace-nowrap text-center" style="width: ${dynamicWidth}px !important; min-width: ${dynamicWidth}px !important; max-width: ${dynamicWidth}px !important; text-align: center !important;">`;
+        bodyHTML += `<span class="!text-base !font-medium !text-gray-800 dark:!text-white whitespace-nowrap" style="text-align: center !important; display: block !important;">${member.name}</span>`;
         bodyHTML += '</td>';
         
         dates.forEach(date => {
@@ -3703,9 +3724,61 @@
           const isWeekend = date.getDay() === 0 || date.getDay() === 6;
           const isToday = date.toDateString() === new Date().toDateString();
           
-          // Check for public holidays first (applies to everyone)
+          // Map team member's country to country code for filtering public holidays
+          const countryCodeMap = {
+            'Austria': 'AT',
+            'Germany': 'DE',
+            'USA': 'US',
+            'United States': 'US',
+            'UK': 'GB',
+            'United Kingdom': 'GB',
+            'Canada': 'CA',
+            'Australia': 'AU',
+            'Singapore': 'SG',
+            'France': 'FR',
+            'Italy': 'IT',
+            'Spain': 'ES',
+            'Netherlands': 'NL',
+            'Belgium': 'BE',
+            'Switzerland': 'CH',
+            'Poland': 'PL',
+            'Sweden': 'SE',
+            'Norway': 'NO',
+            'Denmark': 'DK',
+            'Finland': 'FI',
+            'Ireland': 'IE',
+            'Portugal': 'PT',
+            'Greece': 'GR',
+            'Czech Republic': 'CZ',
+            'Hungary': 'HU',
+            'Romania': 'RO',
+            'Japan': 'JP',
+            'China': 'CN',
+            'India': 'IN',
+            'Brazil': 'BR',
+            'Mexico': 'MX',
+            'Argentina': 'AR',
+            'Chile': 'CL',
+            'Colombia': 'CO',
+            'South Africa': 'ZA',
+            'New Zealand': 'NZ',
+            'South Korea': 'KR',
+            'Thailand': 'TH',
+            'Malaysia': 'MY',
+            'Indonesia': 'ID',
+            'Philippines': 'PH',
+            'Vietnam': 'VN',
+          };
+          
+          const memberCountryCode = countryCodeMap[member.country] || countryCodeMap[member.country?.trim()];
+          
+          // Check for public holidays (only for this member's country)
           const publicHoliday = events.find(event => {
             if (event.extendedProps.calendar !== 'Public') return false;
+            
+            // Only show public holiday if it matches the team member's country
+            if (memberCountryCode && event.extendedProps.countryCode !== memberCountryCode) return false;
+            
             const eventStart = new Date(event.start);
             const eventEnd = event.end ? new Date(event.end) : eventStart;
             eventStart.setHours(0, 0, 0, 0);
@@ -3828,9 +3901,61 @@
       // Check if there's already leave on this date
       const events = calendarEvents;
       
-      // Check for public holiday (not editable from timeline)
+      // Map team member's country to country code
+      const countryCodeMap = {
+        'Austria': 'AT',
+        'Germany': 'DE',
+        'USA': 'US',
+        'United States': 'US',
+        'UK': 'GB',
+        'United Kingdom': 'GB',
+        'Canada': 'CA',
+        'Australia': 'AU',
+        'Singapore': 'SG',
+        'France': 'FR',
+        'Italy': 'IT',
+        'Spain': 'ES',
+        'Netherlands': 'NL',
+        'Belgium': 'BE',
+        'Switzerland': 'CH',
+        'Poland': 'PL',
+        'Sweden': 'SE',
+        'Norway': 'NO',
+        'Denmark': 'DK',
+        'Finland': 'FI',
+        'Ireland': 'IE',
+        'Portugal': 'PT',
+        'Greece': 'GR',
+        'Czech Republic': 'CZ',
+        'Hungary': 'HU',
+        'Romania': 'RO',
+        'Japan': 'JP',
+        'China': 'CN',
+        'India': 'IN',
+        'Brazil': 'BR',
+        'Mexico': 'MX',
+        'Argentina': 'AR',
+        'Chile': 'CL',
+        'Colombia': 'CO',
+        'South Africa': 'ZA',
+        'New Zealand': 'NZ',
+        'South Korea': 'KR',
+        'Thailand': 'TH',
+        'Malaysia': 'MY',
+        'Indonesia': 'ID',
+        'Philippines': 'PH',
+        'Vietnam': 'VN',
+      };
+      
+      const memberCountryCode = countryCodeMap[member.country] || countryCodeMap[member.country?.trim()];
+      
+      // Check for public holiday (not editable from timeline, filtered by country)
       const publicHoliday = events.find(event => {
         if (event.extendedProps.calendar !== 'Public') return false;
+        
+        // Only check public holidays for this member's country
+        if (memberCountryCode && event.extendedProps.countryCode !== memberCountryCode) return false;
+        
         const eventStart = new Date(event.start);
         const eventEnd = event.end ? new Date(event.end) : eventStart;
         const clickedDate = new Date(date);
