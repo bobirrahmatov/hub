@@ -266,13 +266,13 @@
       white-space: nowrap !important;
     }
 
-    /* Hide scrollbars in kanban columns until scrolling */
+    /* Scrollbars in kanban columns - track always visible, thumb hidden until scrolling */
     #pending-tasks,
     #inprogress-tasks,
     #onhold-tasks,
     #completed-tasks {
       scrollbar-width: thin;
-      scrollbar-color: transparent transparent;
+      scrollbar-color: transparent #f3f4f6;
     }
 
     #pending-tasks.scrolling,
@@ -284,6 +284,13 @@
     #onhold-tasks:hover,
     #completed-tasks:hover {
       scrollbar-color: #9ca3af #f3f4f6;
+    }
+
+    .dark #pending-tasks,
+    .dark #inprogress-tasks,
+    .dark #onhold-tasks,
+    .dark #completed-tasks {
+      scrollbar-color: transparent #1f2937;
     }
 
     .dark #pending-tasks.scrolling,
@@ -305,25 +312,23 @@
       height: 8px;
     }
 
+    /* Scrollbar track - always visible but subtle */
     #pending-tasks::-webkit-scrollbar-track,
     #inprogress-tasks::-webkit-scrollbar-track,
     #onhold-tasks::-webkit-scrollbar-track,
     #completed-tasks::-webkit-scrollbar-track {
       border-radius: 9999px;
-      background-color: transparent;
-    }
-
-    #pending-tasks.scrolling::-webkit-scrollbar-track,
-    #inprogress-tasks.scrolling::-webkit-scrollbar-track,
-    #onhold-tasks.scrolling::-webkit-scrollbar-track,
-    #completed-tasks.scrolling::-webkit-scrollbar-track,
-    #pending-tasks:hover::-webkit-scrollbar-track,
-    #inprogress-tasks:hover::-webkit-scrollbar-track,
-    #onhold-tasks:hover::-webkit-scrollbar-track,
-    #completed-tasks:hover::-webkit-scrollbar-track {
       background-color: #f3f4f6;
     }
 
+    .dark #pending-tasks::-webkit-scrollbar-track,
+    .dark #inprogress-tasks::-webkit-scrollbar-track,
+    .dark #onhold-tasks::-webkit-scrollbar-track,
+    .dark #completed-tasks::-webkit-scrollbar-track {
+      background-color: #1f2937;
+    }
+
+    /* Scrollbar thumb - hidden until scrolling or hover */
     #pending-tasks::-webkit-scrollbar-thumb,
     #inprogress-tasks::-webkit-scrollbar-thumb,
     #onhold-tasks::-webkit-scrollbar-thumb,
@@ -350,17 +355,6 @@
       background-color: #6b7280;
     }
 
-    .dark #pending-tasks.scrolling::-webkit-scrollbar-track,
-    .dark #inprogress-tasks.scrolling::-webkit-scrollbar-track,
-    .dark #onhold-tasks.scrolling::-webkit-scrollbar-track,
-    .dark #completed-tasks.scrolling::-webkit-scrollbar-track,
-    .dark #pending-tasks:hover::-webkit-scrollbar-track,
-    .dark #inprogress-tasks:hover::-webkit-scrollbar-track,
-    .dark #onhold-tasks:hover::-webkit-scrollbar-track,
-    .dark #completed-tasks:hover::-webkit-scrollbar-track {
-      background-color: #1f2937;
-    }
-
     .dark #pending-tasks.scrolling::-webkit-scrollbar-thumb,
     .dark #inprogress-tasks.scrolling::-webkit-scrollbar-thumb,
     .dark #onhold-tasks.scrolling::-webkit-scrollbar-thumb,
@@ -381,7 +375,7 @@
 
     /* Kanban board styles */
     .swim-lane {
-      min-height: 500px;
+      min-height: 700px;
     }
 
     .task {
@@ -812,7 +806,7 @@
                   </div>
                 </div>
                 <div id="pending-tasks"
-                  class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar px-4 pb-4 xl:px-6 xl:pb-6"
+                  class="space-y-5 min-h-[700px] max-h-[900px] overflow-y-scroll custom-scrollbar px-4 pb-4 xl:px-6 xl:pb-6"
                   ondrop="drop(event, 'Open')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
                   <!-- Open tasks will be populated here -->
                 </div>
@@ -851,7 +845,7 @@
                   </div>
                 </div>
                 <div id="inprogress-tasks"
-                  class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar px-4 pb-4 xl:px-6 xl:pb-6"
+                  class="space-y-5 min-h-[700px] max-h-[900px] overflow-y-scroll custom-scrollbar px-4 pb-4 xl:px-6 xl:pb-6"
                   ondrop="drop(event, 'In Progress')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
                   <!-- In Progress tasks will be populated here -->
                 </div>
@@ -890,7 +884,7 @@
                   </div>
                 </div>
                 <div id="onhold-tasks"
-                  class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar px-4 pb-4 xl:px-6 xl:pb-6"
+                  class="space-y-5 min-h-[700px] max-h-[900px] overflow-y-scroll custom-scrollbar px-4 pb-4 xl:px-6 xl:pb-6"
                   ondrop="drop(event, 'Resolved')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
                   <!-- Resolved tasks will be populated here -->
                 </div>
@@ -929,7 +923,7 @@
                   </div>
                 </div>
                 <div id="completed-tasks"
-                  class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar px-4 pb-4 xl:px-6 xl:pb-6"
+                  class="space-y-5 min-h-[700px] max-h-[900px] overflow-y-scroll custom-scrollbar px-4 pb-4 xl:px-6 xl:pb-6"
                   ondrop="drop(event, 'Closed')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
                   <!-- Closed tasks will be populated here -->
                 </div>
