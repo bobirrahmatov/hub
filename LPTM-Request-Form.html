@@ -986,12 +986,88 @@
                     console.warn('⚠️ Could not check for existing adhoc tasks file:', checkError);
                 }
 
+                // Create formatted details string with all report request information
+                let detailsText = `Report Name:
+${requestData.reportName}
+
+Purpose:
+${requestData.purpose}
+
+Urgency & Deadline:
+${requestData.urgency}
+
+Frequency:
+${requestData.frequency}
+
+Key Metrics/Data Points:
+${requestData.metrics}
+
+Time Period:
+${requestData.timePeriod}`;
+
+                // Add optional fields if they exist
+                if (requestData.filters) {
+                    detailsText += `
+
+Filters/Breakdowns:
+${requestData.filters}`;
+                }
+
+                if (requestData.existingSQL) {
+                    detailsText += `
+
+Existing SQL Query:
+${requestData.existingSQL}`;
+                }
+
+                if (requestData.context) {
+                    detailsText += `
+
+Additional Context:
+${requestData.context}`;
+                }
+
+                // Add EUC Assessment if exists
+                if (requestData.eucAssessment) {
+                    detailsText += `
+
+--- EUC ASSESSMENT ---
+Business Process/MCA: ${requestData.eucAssessment.businessProcess || 'N/A'}`;
+                    
+                    if (requestData.eucAssessment.processName) {
+                        detailsText += `
+Process Name/MCA ID: ${requestData.eucAssessment.processName}`;
+                    }
+                    
+                    detailsText += `
+System Upload: ${requestData.eucAssessment.systemUpload || 'N/A'}`;
+                    
+                    if (requestData.eucAssessment.systemName) {
+                        detailsText += `
+System Name: ${requestData.eucAssessment.systemName}`;
+                    }
+                    
+                    detailsText += `
+Manual Manipulation: ${requestData.eucAssessment.manualManipulation || 'N/A'}
+Financial Impact: ${requestData.eucAssessment.financialImpact || 'N/A'}`;
+                }
+
+                // Add requestor information
+                detailsText += `
+
+--- REQUESTOR INFORMATION ---
+Name: ${requestData.requestorName}
+Email: ${requestData.requestorEmail}
+Department: ${requestData.department}
+Request Date: ${requestData.requestDate}
+Request ID: ${requestData.id}`;
+
                 // Map report request to adhoc task format
                 const adhocTask = {
                     id: `task-${Date.now()}`,
                     parentId: null,
                     reportName: requestData.reportName,
-                    description: `Report Request: ${requestData.purpose}\n\nMetrics: ${requestData.metrics}\n\nTime Period: ${requestData.timePeriod}\n\nFrequency: ${requestData.frequency}${requestData.filters ? '\n\nFilters: ' + requestData.filters : ''}${requestData.context ? '\n\nContext: ' + requestData.context : ''}`,
+                    description: detailsText,
                     dateReceived: requestData.requestDate,
                     maker: '', // Left empty - to be assigned by team
                     requestor: requestData.requestorName,
@@ -1001,18 +1077,7 @@
                     requestorRegion: requestData.department || 'Not Specified',
                     priority: determinePriority(requestData.urgency),
                     createdAt: requestData.createdAt,
-                    updatedAt: requestData.updatedAt,
-                    // Store additional report request fields
-                    reportRequestDetails: {
-                        urgency: requestData.urgency,
-                        frequency: requestData.frequency,
-                        timePeriod: requestData.timePeriod,
-                        filters: requestData.filters,
-                        existingSQL: requestData.existingSQL,
-                        context: requestData.context,
-                        requestorEmail: requestData.requestorEmail,
-                        eucAssessment: requestData.eucAssessment || null
-                    }
+                    updatedAt: requestData.updatedAt
                 };
 
                 // Add new task to existing tasks
