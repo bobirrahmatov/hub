@@ -1386,49 +1386,49 @@
                 <div x-show="open" @click.outside="open = false" x-cloak
                   class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
                   <button type="button"
-                    @click="selected = 'Bug'; open = false; document.getElementById('ticket-type').value = 'Bug';"
+                    @click="selected = 'Bug'; open = false; document.getElementById('task-region').value = 'Bug';"
                     :class="selected === 'Bug' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
                     Bug
                   </button>
                   <button type="button"
-                    @click="selected = 'Feature Request'; open = false; document.getElementById('ticket-type').value = 'Feature Request';"
+                    @click="selected = 'Feature Request'; open = false; document.getElementById('task-region').value = 'Feature Request';"
                     :class="selected === 'Feature Request' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
                     Feature Request
                   </button>
                   <button type="button"
-                    @click="selected = 'Support'; open = false; document.getElementById('ticket-type').value = 'Support';"
+                    @click="selected = 'Support'; open = false; document.getElementById('task-region').value = 'Support';"
                     :class="selected === 'Support' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
                     Support
                   </button>
                   <button type="button"
-                    @click="selected = 'Enhancement'; open = false; document.getElementById('ticket-type').value = 'Enhancement';"
+                    @click="selected = 'Enhancement'; open = false; document.getElementById('task-region').value = 'Enhancement';"
                     :class="selected === 'Enhancement' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
                     Enhancement
                   </button>
                   <button type="button"
-                    @click="selected = 'Investigation'; open = false; document.getElementById('ticket-type').value = 'Investigation';"
+                    @click="selected = 'Investigation'; open = false; document.getElementById('task-region').value = 'Investigation';"
                     :class="selected === 'Investigation' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
                     Investigation
                   </button>
                   <button type="button"
-                    @click="selected = 'Jira'; open = false; document.getElementById('ticket-type').value = 'Jira';"
+                    @click="selected = 'Jira'; open = false; document.getElementById('task-region').value = 'Jira';"
                     :class="selected === 'Jira' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
                     Jira
                   </button>
                   <button type="button"
-                    @click="selected = 'BRD'; open = false; document.getElementById('ticket-type').value = 'BRD';"
+                    @click="selected = 'BRD'; open = false; document.getElementById('task-region').value = 'BRD';"
                     :class="selected === 'BRD' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
                     BRD
                   </button>
                   <button type="button"
-                    @click="selected = 'Incident'; open = false; document.getElementById('ticket-type').value = 'Incident';"
+                    @click="selected = 'Incident'; open = false; document.getElementById('task-region').value = 'Incident';"
                     :class="selected === 'Incident' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
                     Incident
@@ -2769,7 +2769,7 @@
 
       // Reset Alpine.js dropdowns
       setTimeout(() => {
-        updateAlpineDropdown('ticket-status', 'Open');
+        updateAlpineDropdown('task-status', 'Open');
         updateAlpineDropdown('task-region', 'Select Ticket Type');
         updateAlpineDropdown('task-priority', 'Select Priority');
       }, 50);
@@ -2933,7 +2933,8 @@
         })
       };
 
-      const isUpdate = !ticketIdField;
+      // Determine if this is an update (ticket ID exists and is not empty) or a new ticket
+      const isUpdate = ticketIdField && ticketIdField.trim() !== '';
       const actionText = isUpdate ? 'Ticket updated successfully' : 'Ticket added successfully';
 
       // INSTANT CLOSE: Close modal immediately
@@ -2945,7 +2946,7 @@
       // Save in background
       try {
         if (isUpdate) {
-          // Update existing ticket - only update the specific record
+          // Update existing ticket - only update the specific record by ID
           const index = tickets.findIndex(t => t.id === ticketIdField);
           if (index !== -1) {
             tickets[index] = ticketData;
