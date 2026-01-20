@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Request Form - LPTM Hub</title>
+
+    <!-- 
+      CONFLUENCE MACRO REQUIRED: Include global-notifications.html as a macro
+      This provides showSuccessToast(), showErrorToast(), showWarningToast(), showInfoToast()
+    -->
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                25: '#f2f7ff',
+                50: '#ecf3ff',
+                100: '#dde9ff',
+                200: '#c2d6ff',
+                300: '#9cb9ff',
+                400: '#7592ff',
+                500: '#465fff',
+                600: '#3641f5',
+                700: '#2a31d8',
+                800: '#252dae',
+                900: '#262e89',
+                950: '#161950',
+              },
+              success: {
+                500: '#12b76a',
+              },
+              error: {
+                300: '#fda29b',
+                500: '#f04438',
+                700: '#b42318',
+              },
+              gray: {
+                25: '#fcfcfd',
+                50: '#f9fafb',
+                100: '#f2f4f7',
+                200: '#e4e7ec',
+                300: '#d0d5dd',
+                400: '#98a2b3',
+                500: '#667085',
+                600: '#475467',
+                700: '#344054',
+                800: '#1d2939',
+                900: '#101828',
+                950: '#0c111d',
+              },
+            },
+          },
+        },
+      }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Hero section styling */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 2.6vh;
+            margin-bottom: 3rem;
+        }
+
+        .video-holder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-holder video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 2.6vh;
+        }
+
+        .hero-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 0 20px 20px 20px;
+            z-index: 10;
+        }
+
+        .hero-info h1 {
+            color: #fff;
+            font-size: 55px;
+            line-height: 1.2;
+            margin: 0;
+            font-weight: 300;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 400px;
+            }
+
+            .hero-info h1 {
+                font-size: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section {
+                height: 350px;
+            }
+
+            .hero-info h1 {
+                font-size: 32px;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px !important;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1 !important;
+        }
+
+        .dark ::-webkit-scrollbar-track {
+            background: #374151 !important;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db !important;
+            border-radius: 5px !important;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af !important;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #6b7280 !important;
+        }
+
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af !important;
+        }
+
+        /* Dark mode */
+        body {
+            background-color: #f9fafb;
+        }
+
+        .dark body {
+            background-color: #0a0b0b;
+        }
+
+        .dark input[type="text"],
+        .dark input[type="date"],
+        .dark input[type="email"],
+        .dark textarea,
+        .dark select {
+            background-color: #1a1d1e !important;
+            border-color: #3a3d3f !important;
+        }
+
+        /* Radio button styling */
+        input[type="radio"]:checked {
+            background-color: #465fff;
+            border-color: #465fff;
+        }
+
+        input[type="radio"]:focus {
+            outline: 2px solid #465fff;
+            outline-offset: 2px;
+        }
+
+        /* Readonly field styling */
+        input[readonly],
+        textarea[readonly],
+        select[readonly] {
+            background-color: #f9fafb !important;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .dark input[readonly],
+        .dark textarea[readonly],
+        .dark select[readonly] {
+            background-color: #1a1d1e !important;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body class="mx-auto max-w-screen-2xl">
+    <!-- Main Container -->
+    <div class="px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Hero Section with Video -->
+        <div class="hero-section animate-fade-in" style="animation-delay: 0.1s;">
+            <div class="video-holder">
+                <video autoplay muted loop playsinline id="heroVideo">
+                    <source src="/LPTM-Hub/Animations/lptm-about.webm" type="video/webm">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="hero-info">
+                <h1>Request.<br>Report.<br>Deliver.</h1>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <section class="py-8">
+            <div class="px-6">
+                <div class="text-center animate-fade-in mb-12" style="animation-delay: 0.2s;">
+                    <h2 class="!text-3xl md:!text-4xl text-gray-900 font-semibold dark:text-white">Report Request Form</h2>
+                    <p class="mt-4 !text-lg text-gray-600 dark:text-gray-400 max-w-4xl mx-auto">
+                        Submit your reporting requirements using the form below. Please provide detailed information to help us understand and fulfill your request effectively.
+                    </p>
+                </div>
+
+                <!-- Form Container -->
+                <div class="max-w-7xl mx-auto animate-fade-in" style="animation-delay: 0.3s;">
+                    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                        <div class="px-5 py-4 sm:px-6 sm:py-5 border-b border-gray-200 dark:border-gray-800">
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-white/90">Report Request Form</h3>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Complete all required fields to submit your report request</p>
+                        </div>
+                        
+                        <form id="reportRequestForm" class="p-5 sm:p-6">
+                            <div class="space-y-8">
+                                <!-- Report Overview Section -->
+                                <div>
+                            <h4 class="text-base font-semibold text-gray-800 dark:text-white/90 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">Report Overview</h4>
+                            <div class="space-y-6">
+                                
+                                <!-- Question 1: Report Name -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        1. Report Name <span class="text-error-500">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="report-name"
+                                        name="reportName"
+                                        required
+                                        placeholder='e.g., "Monthly Loan Origination Summary," "Delinquency Rate by Loan Type Q4"'
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                    />
+                                </div>
+
+                                <!-- Question 2: Purpose -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        2. Purpose <span class="text-error-500">*</span>
+                                    </label>
+                                    <textarea
+                                        id="report-purpose"
+                                        name="purpose"
+                                        required
+                                        placeholder='What decision will this report inform? e.g., "Assess effectiveness of new loan products," "Identify high-risk loan segments," "Monitor regional lending performance."'
+                                        rows="3"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                    ></textarea>
+                                </div>
+
+                                <!-- Question 3: Urgency & Deadline -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        3. Urgency & Deadline <span class="text-error-500">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="report-urgency"
+                                        name="urgency"
+                                        required
+                                        placeholder='e.g., "ASAP," "By 2025-12-15 for board meeting," "Weekly for loan committee review"'
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                    />
+                                </div>
+
+                                <!-- Question 4: Frequency -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        4. Frequency <span class="text-error-500">*</span>
+                                    </label>
+                                    <div class="relative z-20 bg-transparent">
+                                        <select
+                                            id="report-frequency"
+                                            name="frequency"
+                                            required
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        >
+                                            <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">Select Frequency</option>
+                                            <option value="One-time" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">One-time</option>
+                                            <option value="Daily" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">Daily</option>
+                                            <option value="Weekly" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">Weekly</option>
+                                            <option value="Monthly" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">Monthly</option>
+                                            <option value="Quarterly" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">Quarterly</option>
+                                            <option value="Annually" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">Annually</option>
+                                        </select>
+                                        <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                                            <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Question 5: Key Metrics/Data Points -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        5. Key Metrics/Data Points <span class="text-error-500">*</span>
+                                    </label>
+                                    <textarea
+                                        id="report-metrics"
+                                        name="metrics"
+                                        required
+                                        placeholder='List specific metrics, e.g., "Number of Loan Applications," "Approved Loan Amount (USD)," "Average FICO Score," "Number of Delinquent Accounts," "Loan-to-Value (LTV) Ratio," "Interest Rate"'
+                                        rows="4"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                    ></textarea>
+                                </div>
+
+                                </div>
+                                </div>
+
+                                <!-- Data Requirements Section -->
+                                <div>
+                            <h4 class="text-base font-semibold text-gray-800 dark:text-white/90 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">Data Requirements</h4>
+                            <div class="space-y-6">
+                                
+                                <!-- Question 6: Time Period -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        6. Time Period <span class="text-error-500">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="report-time-period"
+                                        name="timePeriod"
+                                        required
+                                        placeholder='e.g., "Last Full Month," "Current Quarter-to-Date," "From 2024-01-01 to 2024-12-31"'
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                    />
+                                </div>
+
+                                <!-- Question 7: Filters/Breakdowns -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        7. Filters/Breakdowns
+                                    </label>
+                                    <textarea
+                                        id="report-filters"
+                                        name="filters"
+                                        placeholder='e.g., "By Loan Product Type (e.g., Mortgage, Auto, Personal)," "By Geographic Region (State/Branch)," "By Applicant Credit Score Range," "By Loan Officer," "By Delinquency Status (30/60/90+ days past due)"'
+                                        rows="4"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                    ></textarea>
+                                </div>
+
+                                <!-- Question 8: Existing SQL Query -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        8. Existing SQL Query
+                                    </label>
+                                    <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                                        Is there an existing SQL query that retrieves some or all of the necessary data? If yes, please provide it or a reference to its location.
+                                    </p>
+                                    <textarea
+                                        id="report-sql"
+                                        name="existingSQL"
+                                        placeholder="Paste SQL query or provide reference..."
+                                        rows="6"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 font-mono"
+                                    ></textarea>
+                                </div>
+
+                                </div>
+                                </div>
+
+                                <!-- Additional Notes Section -->
+                                <div>
+                            <h4 class="text-base font-semibold text-gray-800 dark:text-white/90 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">Additional Information</h4>
+                            <div class="space-y-6">
+                                
+                                <!-- Question 9: Other relevant context -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        9. Other Relevant Context
+                                    </label>
+                                    <textarea
+                                        id="report-context"
+                                        name="context"
+                                        placeholder='Any specific calculations, definitions (e.g., "What constitutes an \'active loan\'?"), or context relevant to this loan report.'
+                                        rows="4"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                    ></textarea>
+                                </div>
+
+                                </div>
+                                </div>
+
+                                <!-- EUC Assessment Section (Only if NOT One-time) -->
+                                <div id="euc-section" style="display: none;">
+                            <h4 class="text-base font-semibold text-gray-800 dark:text-white/90 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">
+                                EUC Assessment
+                                <span class="ml-2 text-xs font-normal text-gray-500 dark:text-gray-400">(Complete ONLY if "Frequency" is NOT "One-time")</span>
+                            </h4>
+                            <div class="space-y-6">
+                                
+                                <!-- Business Process MCA -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Does the report support the execution of a business process or a Manager Control Assessment (MCA) with a 1-3 inherent Risk associated to the process?
+                                    </label>
+                                    <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                                        This question assesses if the report is integral to a controlled business process or a process with identified inherent risks (1-3).
+                                    </p>
+                                    <div class="space-y-3">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="businessProcess" value="Yes" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
+                                            <span class="text-sm text-gray-700 dark:text-gray-400">Yes</span>
+                                        </label>
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="businessProcess" value="No" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
+                                            <span class="text-sm text-gray-700 dark:text-gray-400">No</span>
+                                        </label>
+                                    </div>
+                                    <div id="process-name-field" class="mt-4" style="display: none;">
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            If yes, please provide process name and MCA ID
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="process-name"
+                                            name="processName"
+                                            placeholder="e.g., MCA ID 1234556"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        />
+                                    </div>
+                                </div>
+
+                                <!-- System Upload -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Is the report used to upload data to a system of record or authorized redistributor of data, or is it used as a source for critical business decisions without further validation?
+                                    </label>
+                                    <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                                        This determines if the report's output directly feeds into official systems or drives significant decisions without subsequent checks, indicating higher risk and potential EUC classification.
+                                    </p>
+                                    <div class="space-y-3">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="systemUpload" value="Yes" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
+                                            <span class="text-sm text-gray-700 dark:text-gray-400">Yes</span>
+                                        </label>
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="systemUpload" value="No" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
+                                            <span class="text-sm text-gray-700 dark:text-gray-400">No</span>
+                                        </label>
+                                    </div>
+                                    <div id="system-name-field" class="mt-4" style="display: none;">
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            If yes, please specify the system of record or authorized redistributor
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="system-name"
+                                            name="systemName"
+                                            placeholder="e.g., Optima"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        />
+                                    </div>
+                                </div>
+
+                                <!-- Manual Manipulation -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Does the report involve manual manipulation or calculation of data (e.g., manual data entry, complex formulas in Excel, external macros) outside established, validated systems before being finalized or distributed?
+                                    </label>
+                                    <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                                        Manual interventions often introduce operational risk and are a key indicator of an EUC.
+                                    </p>
+                                    <div class="space-y-3">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="manualManipulation" value="Yes" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
+                                            <span class="text-sm text-gray-700 dark:text-gray-400">Yes</span>
+                                        </label>
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="manualManipulation" value="No" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
+                                            <span class="text-sm text-gray-700 dark:text-gray-400">No</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Financial Impact -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Is the report relied upon for financial reporting, regulatory submissions, or decisions impacting client accounts/transactions, where errors could lead to material financial loss, reputational damage, or non-compliance?
+                                    </label>
+                                    <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                                        This identifies reports with high impact if incorrect, often leading to EUC classification.
+                                    </p>
+                                    <div class="space-y-3">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="financialImpact" value="Yes" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
+                                            <span class="text-sm text-gray-700 dark:text-gray-400">Yes</span>
+                                        </label>
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="financialImpact" value="No" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
+                                            <span class="text-sm text-gray-700 dark:text-gray-400">No</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                </div>
+                                </div>
+
+                                <!-- Requestor Information Section -->
+                                <div>
+                            <h4 class="text-base font-semibold text-gray-800 dark:text-white/90 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">Requestor Information</h4>
+                            <div class="space-y-6">
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Requestor Name -->
+                                    <div>
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Requestor Name <span class="text-error-500">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="requestor-name"
+                                            name="requestorName"
+                                            required
+                                            placeholder="Your full name"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        />
+                                    </div>
+
+                                    <!-- Requestor Email -->
+                                    <div>
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Email Address <span class="text-error-500">*</span>
+                                        </label>
+                                        <input
+                                            type="email"
+                                            id="requestor-email"
+                                            name="requestorEmail"
+                                            required
+                                            placeholder="your.email@company.com"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Department -->
+                                    <div>
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Department <span class="text-error-500">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="requestor-department"
+                                            name="department"
+                                            required
+                                            placeholder="e.g., Credit Risk, Finance"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        />
+                                    </div>
+
+                                    <!-- Request Date -->
+                                    <div>
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Request Date <span class="text-error-500">*</span>
+                                        </label>
+                                        <input
+                                            type="date"
+                                            id="request-date"
+                                            name="requestDate"
+                                            required
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        />
+                                    </div>
+                                </div>
+
+                                </div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="flex justify-between items-center pt-6 border-t border-gray-100 dark:border-gray-800">
+                                    <button
+                                        type="button"
+                                        onclick="previewEmail()"
+                                        class="px-6 py-3 text-sm font-medium text-brand-600 bg-brand-50 border border-brand-200 rounded-lg hover:bg-brand-100 dark:bg-brand-900/20 dark:text-brand-400 dark:border-brand-800 dark:hover:bg-brand-900/30 transition-colors"
+                                    >
+                                        <svg class="inline-block w-4 h-4 mr-2 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        Preview Email
+                                    </button>
+                                    <div class="flex gap-4">
+                                        <button
+                                            type="button"
+                                            onclick="resetForm()"
+                                            class="px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors"
+                                        >
+                                            Reset
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            class="px-6 py-3 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600 dark:bg-brand-600 dark:hover:bg-brand-700 transition-colors"
+                                        >
+                                            Submit Request
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                    </form>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Email Options Modal -->
+    <div id="emailOptionsModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm" style="display: none;">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-md w-full mx-4 border border-gray-200 dark:border-gray-800">
+            <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-800">
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white/90">Send Report Request</h3>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Choose how to send your request</p>
+            </div>
+            <div class="p-6 space-y-3">
+                <button
+                    onclick="downloadAndOpenEmail()"
+                    class="w-full flex items-center justify-between px-4 py-3 text-left bg-brand-50 border-2 border-brand-200 rounded-lg hover:bg-brand-100 dark:bg-brand-900/20 dark:border-brand-800 dark:hover:bg-brand-900/30 transition-colors group"
+                >
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-brand-600 dark:text-brand-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        <div>
+                            <div class="text-sm font-medium text-gray-800 dark:text-white/90">Download HTML & Open Email</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400">Recommended - Best formatting</div>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-brand-600 dark:text-brand-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+                
+                <button
+                    onclick="copyEmailHTML()"
+                    class="w-full flex items-center justify-between px-4 py-3 text-left bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition-colors group"
+                >
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                        <div>
+                            <div class="text-sm font-medium text-gray-800 dark:text-white/90">Copy HTML to Clipboard</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400">Paste into email body</div>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl">
+                <button
+                    onclick="closeEmailModal()"
+                    class="w-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                >
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // Get current user information from Confluence
+        async function getCurrentUser() {
+            try {
+                const response = await fetch('/confluence/rest/api/user/current', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const user = await response.json();
+                    return {
+                        displayName: user.displayName || '',
+                        username: user.username || '',
+                        email: user.username ? `${user.username}@citi.com` : ''
+                    };
+                }
+            } catch (error) {
+                console.warn('Could not fetch current user from Confluence:', error);
+            }
+            
+            // Fallback: try to get from AJS if available
+            try {
+                if (typeof AJS !== 'undefined' && AJS.params && AJS.params.remoteUser) {
+                    const username = AJS.params.remoteUser;
+                    return {
+                        displayName: username,
+                        username: username,
+                        email: `${username}@citi.com`
+                    };
+                }
+            } catch (error) {
+                console.warn('Could not get user from AJS:', error);
+            }
+            
+            return null;
+        }
+
+        // Set today's date as default
+        document.addEventListener('DOMContentLoaded', async function () {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('request-date').value = today;
+
+            // Auto-populate user information
+            const currentUser = await getCurrentUser();
+            if (currentUser) {
+                document.getElementById('requestor-name').value = currentUser.displayName;
+                document.getElementById('requestor-email').value = currentUser.email;
+                // Make fields readonly since they're auto-populated
+                document.getElementById('requestor-name').readOnly = true;
+                document.getElementById('requestor-email').readOnly = true;
+            }
+
+            // Handle frequency select dropdown styling and EUC section visibility
+            const frequencySelect = document.getElementById('report-frequency');
+            const eucSection = document.getElementById('euc-section');
+            
+            if (frequencySelect) {
+                frequencySelect.addEventListener('change', function() {
+                    // Update text color when option is selected
+                    if (this.value) {
+                        this.classList.add('text-gray-800', 'dark:text-white/90');
+                    } else {
+                        this.classList.remove('text-gray-800', 'dark:text-white/90');
+                    }
+                    
+                    // Show/hide EUC section based on frequency
+                    if (this.value && this.value !== 'One-time') {
+                        eucSection.style.display = 'block';
+                    } else {
+                        eucSection.style.display = 'none';
+                    }
+                });
+            }
+
+            // Handle business process radio buttons
+            const businessProcessRadios = document.querySelectorAll('input[name="businessProcess"]');
+            const processNameField = document.getElementById('process-name-field');
+            
+            businessProcessRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'Yes') {
+                        processNameField.style.display = 'block';
+                    } else {
+                        processNameField.style.display = 'none';
+                    }
+                });
+            });
+
+            // Handle system upload radio buttons
+            const systemUploadRadios = document.querySelectorAll('input[name="systemUpload"]');
+            const systemNameField = document.getElementById('system-name-field');
+            
+            systemUploadRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'Yes') {
+                        systemNameField.style.display = 'block';
+                    } else {
+                        systemNameField.style.display = 'none';
+                    }
+                });
+            });
+
+            // Simple seamless video loop
+            const video = document.getElementById('heroVideo');
+            if (video) {
+                video.loop = true;
+                video.play().catch(error => {
+                    console.log('Video autoplay failed:', error);
+                });
+            }
+        });
+
+        // Generate beautiful HTML email body
+        function generateEmailHTML(formData) {
+            const eucSection = formData.eucAssessment ? `
+                <tr>
+                    <td colspan="2" style="padding: 24px 0 12px 0;">
+                        <h2 style="color: #465fff; font-size: 18px; font-weight: 600; margin: 0; padding-bottom: 8px; border-bottom: 2px solid #dde9ff;">
+                            EUC Assessment
+                        </h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054; width: 35%;">Business Process/MCA:</td>
+                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;">${formData.eucAssessment.businessProcess || 'N/A'}</td>
+                </tr>
+                ${formData.eucAssessment.processName ? `
+                <tr>
+                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054;">Process Name/MCA ID:</td>
+                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;">${formData.eucAssessment.processName}</td>
+                </tr>
+                ` : ''}
+                <tr>
+                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054;">System Upload:</td>
+                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;">${formData.eucAssessment.systemUpload || 'N/A'}</td>
+                </tr>
+                ${formData.eucAssessment.systemName ? `
+                <tr>
+                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054;">System Name:</td>
+                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;">${formData.eucAssessment.systemName}</td>
+                </tr>
+                ` : ''}
+                <tr>
+                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054;">Manual Manipulation:</td>
+                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;">${formData.eucAssessment.manualManipulation || 'N/A'}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054;">Financial Impact:</td>
+                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;">${formData.eucAssessment.financialImpact || 'N/A'}</td>
+                </tr>
+            ` : '';
+
+            const htmlString = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Request - ${formData.reportName}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f9fafb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <table width="700" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); overflow: hidden;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #465fff 0%, #2a31d8 100%); padding: 32px 40px; text-align: center;">
+                            <h1 style="color: #ffffff; font-size: 28px; font-weight: 600; margin: 0;">Report Request Form</h1>
+                            <p style="color: #dde9ff; font-size: 14px; margin: 8px 0 0 0;">Submitted: ${new Date(formData.requestDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px;">
+                            <table width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid #e4e7ec; border-radius: 8px; overflow: hidden;">
+                                <!-- Report Overview -->
+                                <tr>
+                                    <td colspan="2" style="padding: 20px 12px 12px 12px;">
+                                        <h2 style="color: #465fff; font-size: 18px; font-weight: 600; margin: 0; padding-bottom: 8px; border-bottom: 2px solid #dde9ff;">
+                                            Report Overview
+                                        </h2>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054; width: 35%;">Report Name:</td>
+                                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939; font-weight: 600;">${formData.reportName}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054;">Purpose:</td>
+                                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;">${formData.purpose}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054;">Urgency & Deadline:</td>
+                                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;">${formData.urgency}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054;">Frequency:</td>
+                                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;">
+                                        <span style="display: inline-block; padding: 4px 12px; background-color: #ecf3ff; color: #2a31d8; border-radius: 6px; font-size: 13px; font-weight: 500;">${formData.frequency}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054; vertical-align: top;">Key Metrics:</td>
+                                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939; white-space: pre-line;">${formData.metrics}</td>
+                                </tr>
+
+                                <!-- Data Requirements -->
+                                <tr>
+                                    <td colspan="2" style="padding: 24px 0 12px 0;">
+                                        <h2 style="color: #465fff; font-size: 18px; font-weight: 600; margin: 0; padding-bottom: 8px; border-bottom: 2px solid #dde9ff;">
+                                            Data Requirements
+                                        </h2>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054;">Time Period:</td>
+                                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;">${formData.timePeriod}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054; vertical-align: top;">Filters/Breakdowns:</td>
+                                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939; white-space: pre-line;">${formData.filters || 'None specified'}</td>
+                                </tr>
+                                ${formData.existingSQL ? `
+                                <tr>
+                                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054; vertical-align: top;">Existing SQL Query:</td>
+                                    <td style="padding: 8px 12px; background-color: #ffffff;">
+                                        <pre style="background-color: #f9fafb; padding: 12px; border-radius: 6px; border: 1px solid #e4e7ec; overflow-x: auto; font-size: 12px; color: #1d2939; margin: 0;">${formData.existingSQL}</pre>
+                                    </td>
+                                </tr>
+                                ` : ''}
+
+                                ${formData.context ? `
+                                <!-- Additional Information -->
+                                <tr>
+                                    <td colspan="2" style="padding: 24px 0 12px 0;">
+                                        <h2 style="color: #465fff; font-size: 18px; font-weight: 600; margin: 0; padding-bottom: 8px; border-bottom: 2px solid #dde9ff;">
+                                            Additional Information
+                                        </h2>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054; vertical-align: top;">Context:</td>
+                                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939; white-space: pre-line;">${formData.context}</td>
+                                </tr>
+                                ` : ''}
+
+                                ${eucSection}
+
+                                <!-- Requestor Information -->
+                                <tr>
+                                    <td colspan="2" style="padding: 24px 0 12px 0;">
+                                        <h2 style="color: #465fff; font-size: 18px; font-weight: 600; margin: 0; padding-bottom: 8px; border-bottom: 2px solid #dde9ff;">
+                                            Requestor Information
+                                        </h2>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054;">Name:</td>
+                                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;">${formData.requestorName}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054;">Email:</td>
+                                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;"><a href="mailto:${formData.requestorEmail}" style="color: #465fff; text-decoration: none;">${formData.requestorEmail}</a></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 12px; background-color: #f9fafb; font-weight: 500; color: #344054;">Department:</td>
+                                    <td style="padding: 8px 12px; background-color: #ffffff; color: #1d2939;">${formData.department}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f9fafb; padding: 24px 40px; text-align: center; border-top: 1px solid #e4e7ec;">
+                            <p style="color: #667085; font-size: 13px; margin: 0;">
+                                This is an automated report request from the LPTM Hub Report Request System
+                            </p>
+                            <p style="color: #98a2b3; font-size: 12px; margin: 8px 0 0 0;">
+                                Request ID: ${formData.id} | Generated: ${new Date().toLocaleString()}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+            `;
+            const closingBody = '</' + 'body' + '>';
+            const closingHtml = '</' + 'html' + '>';
+            return (htmlString + closingBody + '\n' + closingHtml).trim();
+        }
+
+        // Store current form data globally for email functions
+        let currentFormData = null;
+
+        // Show email options modal
+        function showEmailModal(formData) {
+            currentFormData = formData;
+            const modal = document.getElementById('emailOptionsModal');
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+        }
+
+        // Close email options modal
+        function closeEmailModal(shouldReset = false) {
+            const modal = document.getElementById('emailOptionsModal');
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+            
+            if (shouldReset) {
+                setTimeout(() => {
+                    resetForm();
+                }, 500);
+            }
+        }
+
+        // Download HTML and open email client
+        function downloadAndOpenEmail() {
+            if (!currentFormData) return;
+            
+            const emailHTML = generateEmailHTML(currentFormData);
+            const subject = `Report Request: ${currentFormData.reportName}`;
+            const recipient = 'lptm-reporting-team@citi.com';
+            
+            // Create text version for email body
+            const textBody = `
+Report Request Form Submission
+
+Please see the attached HTML file for the full formatted report request.
+
+Report Name: ${currentFormData.reportName}
+Requestor: ${currentFormData.requestorName} (${currentFormData.requestorEmail})
+Department: ${currentFormData.department}
+Request Date: ${currentFormData.requestDate}
+
+Request ID: ${currentFormData.id}
+            `.trim();
+            
+            // Download HTML file
+            const blob = new Blob([emailHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Report_Request_${currentFormData.reportName.replace(/[^a-z0-9]/gi, '_')}_${Date.now()}.html`;
+            link.click();
+            
+            // Open mailto with text version
+            const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(textBody)}`;
+            
+            setTimeout(() => {
+                window.location.href = mailtoLink;
+            }, 500);
+            
+            closeEmailModal(true);
+            showSuccessToast('HTML file downloaded! Email client opened. Please attach the HTML file to your email.');
+        }
+
+        // Copy HTML to clipboard
+        async function copyEmailHTML() {
+            if (!currentFormData) return;
+            
+            const emailHTML = generateEmailHTML(currentFormData);
+            
+            try {
+                await navigator.clipboard.writeText(emailHTML);
+                closeEmailModal(true);
+                showSuccessToast('HTML copied to clipboard! Paste it into your email body.');
+            } catch (error) {
+                console.error('Failed to copy to clipboard:', error);
+                // Fallback: create a textarea and copy from it
+                const textarea = document.createElement('textarea');
+                textarea.value = emailHTML;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    closeEmailModal(true);
+                    showSuccessToast('HTML copied to clipboard! Paste it into your email body.');
+                } catch (err) {
+                    showErrorToast('Failed to copy HTML. Please try downloading instead.');
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        // Send email via Outlook (deprecated - now using modal)
+        function sendOutlookEmail(formData) {
+            const emailHTML = generateEmailHTML(formData);
+            const subject = `Report Request: ${formData.reportName}`;
+            const recipient = 'lptm-reporting-team@citi.com'; // Update with actual team email
+            
+            // Create text version for email body
+            const textBody = `
+Report Request Form Submission
+
+REPORT OVERVIEW
+Report Name: ${formData.reportName}
+Purpose: ${formData.purpose}
+Urgency & Deadline: ${formData.urgency}
+Frequency: ${formData.frequency}
+Key Metrics: ${formData.metrics}
+
+DATA REQUIREMENTS
+Time Period: ${formData.timePeriod}
+Filters/Breakdowns: ${formData.filters || 'None specified'}
+${formData.existingSQL ? `Existing SQL Query: ${formData.existingSQL}` : ''}
+
+${formData.context ? `ADDITIONAL INFORMATION\nContext: ${formData.context}` : ''}
+
+${formData.eucAssessment ? `
+EUC ASSESSMENT
+Business Process/MCA: ${formData.eucAssessment.businessProcess || 'N/A'}
+${formData.eucAssessment.processName ? `Process Name/MCA ID: ${formData.eucAssessment.processName}` : ''}
+System Upload: ${formData.eucAssessment.systemUpload || 'N/A'}
+${formData.eucAssessment.systemName ? `System Name: ${formData.eucAssessment.systemName}` : ''}
+Manual Manipulation: ${formData.eucAssessment.manualManipulation || 'N/A'}
+Financial Impact: ${formData.eucAssessment.financialImpact || 'N/A'}
+` : ''}
+
+REQUESTOR INFORMATION
+Name: ${formData.requestorName}
+Email: ${formData.requestorEmail}
+Department: ${formData.department}
+Request Date: ${formData.requestDate}
+
+---
+Note: A formatted HTML version of this request is also available.
+Request ID: ${formData.id}
+            `.trim();
+            
+            // Create blob for HTML download
+            const blob = new Blob([emailHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            // Download HTML file
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Report_Request_${formData.reportName.replace(/[^a-z0-9]/gi, '_')}_${Date.now()}.html`;
+            link.click();
+            
+            // Open mailto with text version
+            const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(textBody)}`;
+            
+            setTimeout(() => {
+                window.location.href = mailtoLink;
+            }, 500);
+            
+            showSuccessToast('HTML email downloaded! Opening email client with text version. Please attach the HTML file to your email for best formatting.');
+        }
+
+        // Form submission handler
+        document.getElementById('reportRequestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = {
+                id: `report-${Date.now()}`,
+                reportName: document.getElementById('report-name').value,
+                purpose: document.getElementById('report-purpose').value,
+                urgency: document.getElementById('report-urgency').value,
+                frequency: document.getElementById('report-frequency').value,
+                metrics: document.getElementById('report-metrics').value,
+                timePeriod: document.getElementById('report-time-period').value,
+                filters: document.getElementById('report-filters').value,
+                existingSQL: document.getElementById('report-sql').value,
+                context: document.getElementById('report-context').value,
+                requestorName: document.getElementById('requestor-name').value,
+                requestorEmail: document.getElementById('requestor-email').value,
+                department: document.getElementById('requestor-department').value,
+                requestDate: document.getElementById('request-date').value,
+                status: 'Pending',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            // Add EUC assessment data if frequency is not one-time
+            if (formData.frequency && formData.frequency !== 'One-time') {
+                const businessProcess = document.querySelector('input[name="businessProcess"]:checked');
+                const systemUpload = document.querySelector('input[name="systemUpload"]:checked');
+                const manualManipulation = document.querySelector('input[name="manualManipulation"]:checked');
+                const financialImpact = document.querySelector('input[name="financialImpact"]:checked');
+
+                formData.eucAssessment = {
+                    businessProcess: businessProcess ? businessProcess.value : null,
+                    processName: document.getElementById('process-name').value,
+                    systemUpload: systemUpload ? systemUpload.value : null,
+                    systemName: document.getElementById('system-name').value,
+                    manualManipulation: manualManipulation ? manualManipulation.value : null,
+                    financialImpact: financialImpact ? financialImpact.value : null
+                };
+            }
+
+            // Show loading toast
+            showInfoToast('Submitting report request...');
+
+            try {
+                // Save to Confluence
+                await saveReportRequest(formData);
+                
+                // Also save as adhoc task
+                await saveAsAdhocTask(formData);
+                
+                // Show success message
+                showSuccessToast('Report request saved successfully!');
+                
+                // Show email options modal
+                showEmailModal(formData);
+                
+            } catch (error) {
+                console.error('Error submitting report request:', error);
+                showErrorToast('Failed to submit report request. Please try again.');
+            }
+        });
+
+        // Save report request to Confluence
+        async function saveReportRequest(requestData) {
+            try {
+                let attachmentId = null;
+                let fileExists = false;
+                let existingRequests = [];
+
+                // Check if the file already exists in Confluence attachments
+                try {
+                    const pageId = AJS.params.pageId || '2740868871'; // Use current page or default
+                    const attachmentsResponse = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment?filename=report_requests.json`);
+
+                    if (attachmentsResponse.ok) {
+                        const attachmentsData = await attachmentsResponse.json();
+
+                        if (attachmentsData.results && attachmentsData.results.length > 0) {
+                            attachmentId = attachmentsData.results[0].id;
+                            fileExists = true;
+
+                            // Fetch existing data
+                            const downloadUrl = attachmentsData.results[0]._links.download;
+                            const dataResponse = await fetch(`https://cedt-confluence.net/confluence${downloadUrl}`);
+                            if (dataResponse.ok) {
+                                const existingData = await dataResponse.json();
+                                existingRequests = existingData.requests || [];
+                            }
+                        }
+                    }
+                } catch (checkError) {
+                    console.warn('⚠️ Could not check for existing file (might be local dev):', checkError);
+                }
+
+                // Add new request to existing requests
+                existingRequests.push(requestData);
+
+                const dataToSave = {
+                    requests: existingRequests,
+                    metadata: {
+                        lastUpdated: new Date().toISOString(),
+                        totalRequests: existingRequests.length,
+                        version: '1.0'
+                    }
+                };
+
+                const jsonBlob = new Blob([JSON.stringify(dataToSave, null, 2)], { type: 'application/json' });
+                const formData = new FormData();
+                formData.append('file', jsonBlob, 'report_requests.json');
+                formData.append('minorEdit', 'true');
+
+                if (fileExists && attachmentId) {
+                    formData.append('comment', `Updated report requests: Added request ${requestData.reportName}`);
+                } else {
+                    formData.append('comment', 'Initial report requests file');
+                }
+
+                const pageId = AJS.params.pageId || '2740868871';
+                const uploadUrl = fileExists && attachmentId
+                    ? `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment/${attachmentId}/data`
+                    : `https://cedt-confluence.net/confluence/rest/api/content/${pageId}/child/attachment`;
+
+                const uploadResponse = await fetch(uploadUrl, {
+                    method: 'POST',
+                    headers: {
+                        'X-Atlassian-Token': 'no-check'
+                    },
+                    body: formData
+                });
+
+                if (!uploadResponse.ok) {
+                    throw new Error(`Failed to save: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                }
+
+                console.log('✅ Report request saved successfully');
+                return true;
+            } catch (error) {
+                console.error('❌ Error saving report request:', error);
+                // In development/local environment, just log the data
+                console.log('📝 Report request data (not saved to Confluence in dev):', requestData);
+                throw error;
+            }
+        }
+
+        // Save report request as adhoc task
+        async function saveAsAdhocTask(requestData) {
+            try {
+                let attachmentId = null;
+                let fileExists = false;
+                let existingTasks = [];
+
+                // Check if the file already exists in Confluence attachments
+                try {
+                    const attachmentsResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment?filename=adhoc_tasks.json');
+
+                    if (attachmentsResponse.ok) {
+                        const attachmentsData = await attachmentsResponse.json();
+
+                        if (attachmentsData.results && attachmentsData.results.length > 0) {
+                            attachmentId = attachmentsData.results[0].id;
+                            fileExists = true;
+
+                            // Fetch existing data
+                            const downloadUrl = attachmentsData.results[0]._links.download;
+                            const dataResponse = await fetch(`https://cedt-confluence.net/confluence${downloadUrl}`);
+                            if (dataResponse.ok) {
+                                const existingData = await dataResponse.json();
+                                existingTasks = existingData.tasks || [];
+                            }
+                        }
+                    }
+                } catch (checkError) {
+                    console.warn('⚠️ Could not check for existing adhoc tasks file:', checkError);
+                }
+
+                // Map report request to adhoc task format
+                const adhocTask = {
+                    id: `task-${Date.now()}`,
+                    parentId: null,
+                    reportName: requestData.reportName,
+                    description: `Report Request: ${requestData.purpose}\n\nMetrics: ${requestData.metrics}\n\nTime Period: ${requestData.timePeriod}\n\nFrequency: ${requestData.frequency}${requestData.filters ? '\n\nFilters: ' + requestData.filters : ''}${requestData.context ? '\n\nContext: ' + requestData.context : ''}`,
+                    dateReceived: requestData.requestDate,
+                    maker: '', // Left empty - to be assigned by team
+                    requestor: requestData.requestorName,
+                    status: 'Open',
+                    timeSpent: 0,
+                    region: requestData.department || 'Not Specified',
+                    requestorRegion: requestData.department || 'Not Specified',
+                    priority: determinePriority(requestData.urgency),
+                    createdAt: requestData.createdAt,
+                    updatedAt: requestData.updatedAt,
+                    // Store additional report request fields
+                    reportRequestDetails: {
+                        urgency: requestData.urgency,
+                        frequency: requestData.frequency,
+                        timePeriod: requestData.timePeriod,
+                        filters: requestData.filters,
+                        existingSQL: requestData.existingSQL,
+                        context: requestData.context,
+                        requestorEmail: requestData.requestorEmail,
+                        eucAssessment: requestData.eucAssessment || null
+                    }
+                };
+
+                // Add new task to existing tasks
+                existingTasks.push(adhocTask);
+
+                const dataToSave = {
+                    tasks: existingTasks,
+                    metadata: {
+                        lastUpdated: new Date().toISOString(),
+                        totalTasks: existingTasks.length,
+                        version: '1.0'
+                    }
+                };
+
+                const jsonBlob = new Blob([JSON.stringify(dataToSave, null, 2)], { type: 'application/json' });
+                const formData = new FormData();
+                formData.append('file', jsonBlob, 'adhoc_tasks.json');
+                formData.append('minorEdit', 'true');
+
+                if (fileExists && attachmentId) {
+                    formData.append('comment', `Added new report request task: ${requestData.reportName}`);
+                } else {
+                    formData.append('comment', 'Initial adhoc tasks file with report request');
+                }
+
+                const uploadUrl = fileExists && attachmentId
+                    ? `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment/${attachmentId}/data`
+                    : `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment`;
+
+                const uploadResponse = await fetch(uploadUrl, {
+                    method: 'POST',
+                    headers: {
+                        'X-Atlassian-Token': 'no-check'
+                    },
+                    body: formData
+                });
+
+                if (!uploadResponse.ok) {
+                    throw new Error(`Failed to save adhoc task: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                }
+
+                console.log('✅ Report request saved as adhoc task successfully');
+                return true;
+            } catch (error) {
+                console.error('❌ Error saving report request as adhoc task:', error);
+                console.log('📝 Adhoc task data (not saved to Confluence in dev):', requestData);
+                // Don't throw error here - we don't want to fail the whole submission if adhoc save fails
+                return false;
+            }
+        }
+
+        // Determine priority based on urgency text
+        function determinePriority(urgencyText) {
+            if (!urgencyText) return 'Medium';
+            
+            const urgencyLower = urgencyText.toLowerCase();
+            if (urgencyLower.includes('urgent') || urgencyLower.includes('asap') || urgencyLower.includes('immediate')) {
+                return 'Urgent';
+            } else if (urgencyLower.includes('high')) {
+                return 'High';
+            } else if (urgencyLower.includes('low')) {
+                return 'Low';
+            } else {
+                return 'Medium';
+            }
+        }
+
+        // Preview email in new window
+        function previewEmail() {
+            // Collect current form data
+            const formData = {
+                id: `report-${Date.now()}`,
+                reportName: document.getElementById('report-name').value || 'Preview Report',
+                purpose: document.getElementById('report-purpose').value || 'No purpose specified',
+                urgency: document.getElementById('report-urgency').value || 'Not specified',
+                frequency: document.getElementById('report-frequency').value || 'One-time',
+                metrics: document.getElementById('report-metrics').value || 'No metrics specified',
+                timePeriod: document.getElementById('report-time-period').value || 'Not specified',
+                filters: document.getElementById('report-filters').value,
+                existingSQL: document.getElementById('report-sql').value,
+                context: document.getElementById('report-context').value,
+                requestorName: document.getElementById('requestor-name').value || 'Not specified',
+                requestorEmail: document.getElementById('requestor-email').value || 'Not specified',
+                department: document.getElementById('requestor-department').value || 'Not specified',
+                requestDate: document.getElementById('request-date').value,
+                status: 'Pending',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            // Add EUC assessment data if frequency is not one-time
+            if (formData.frequency && formData.frequency !== 'One-time') {
+                const businessProcess = document.querySelector('input[name="businessProcess"]:checked');
+                const systemUpload = document.querySelector('input[name="systemUpload"]:checked');
+                const manualManipulation = document.querySelector('input[name="manualManipulation"]:checked');
+                const financialImpact = document.querySelector('input[name="financialImpact"]:checked');
+
+                formData.eucAssessment = {
+                    businessProcess: businessProcess ? businessProcess.value : null,
+                    processName: document.getElementById('process-name').value,
+                    systemUpload: systemUpload ? systemUpload.value : null,
+                    systemName: document.getElementById('system-name').value,
+                    manualManipulation: manualManipulation ? manualManipulation.value : null,
+                    financialImpact: financialImpact ? financialImpact.value : null
+                };
+            }
+
+            // Generate and open preview
+            const emailHTML = generateEmailHTML(formData);
+            const previewWindow = window.open('', 'Email Preview', 'width=800,height=600,scrollbars=yes');
+            previewWindow.document.write(emailHTML);
+            previewWindow.document.close();
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('reportRequestForm').reset();
+            document.getElementById('euc-section').style.display = 'none';
+            document.getElementById('process-name-field').style.display = 'none';
+            document.getElementById('system-name-field').style.display = 'none';
+            
+            // Reset date to today and re-populate user info
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('request-date').value = today;
+            
+            // Re-populate user information
+            getCurrentUser().then(currentUser => {
+                if (currentUser) {
+                    document.getElementById('requestor-name').value = currentUser.displayName;
+                    document.getElementById('requestor-email').value = currentUser.email;
+                }
+            });
+        }
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
+
