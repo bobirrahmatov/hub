@@ -266,43 +266,36 @@
       white-space: nowrap !important;
     }
 
-    /* Scrollbars in kanban columns - track always visible but subtle, thumb hidden until scrolling */
+    /* Scrollbars in kanban columns - track hidden, thumb visible only when scrolling */
     /* Using !important to override Confluence global CSS */
     #pending-tasks,
     #inprogress-tasks,
     #onhold-tasks,
     #completed-tasks {
       scrollbar-width: thin !important;
-      scrollbar-color: transparent #e5e7eb !important;
+      scrollbar-color: transparent transparent !important;
     }
 
+    /* Show thumb only when scrolling (not on hover) */
     #pending-tasks.scrolling,
     #inprogress-tasks.scrolling,
     #onhold-tasks.scrolling,
-    #completed-tasks.scrolling,
-    #pending-tasks:hover,
-    #inprogress-tasks:hover,
-    #onhold-tasks:hover,
-    #completed-tasks:hover {
-      scrollbar-color: #9ca3af #e5e7eb !important;
+    #completed-tasks.scrolling {
+      scrollbar-color: #9ca3af transparent !important;
     }
 
     .dark #pending-tasks,
     .dark #inprogress-tasks,
     .dark #onhold-tasks,
     .dark #completed-tasks {
-      scrollbar-color: transparent #374151 !important;
+      scrollbar-color: transparent transparent !important;
     }
 
     .dark #pending-tasks.scrolling,
     .dark #inprogress-tasks.scrolling,
     .dark #onhold-tasks.scrolling,
-    .dark #completed-tasks.scrolling,
-    .dark #pending-tasks:hover,
-    .dark #inprogress-tasks:hover,
-    .dark #onhold-tasks:hover,
-    .dark #completed-tasks:hover {
-      scrollbar-color: #4b5563 #374151 !important;
+    .dark #completed-tasks.scrolling {
+      scrollbar-color: #4b5563 transparent !important;
     }
 
     #pending-tasks::-webkit-scrollbar,
@@ -314,13 +307,13 @@
       -webkit-appearance: none !important;
     }
 
-    /* Scrollbar track - always visible but very subtle to override Confluence CSS */
+    /* Scrollbar track - always hidden/transparent */
     #pending-tasks::-webkit-scrollbar-track,
     #inprogress-tasks::-webkit-scrollbar-track,
     #onhold-tasks::-webkit-scrollbar-track,
     #completed-tasks::-webkit-scrollbar-track {
       border-radius: 9999px !important;
-      background-color: #e5e7eb !important;
+      background-color: transparent !important;
       -webkit-box-shadow: none !important;
       box-shadow: none !important;
     }
@@ -329,10 +322,10 @@
     .dark #inprogress-tasks::-webkit-scrollbar-track,
     .dark #onhold-tasks::-webkit-scrollbar-track,
     .dark #completed-tasks::-webkit-scrollbar-track {
-      background-color: #374151 !important;
+      background-color: transparent !important;
     }
 
-    /* Scrollbar thumb - hidden until scrolling or hover */
+    /* Scrollbar thumb - hidden by default, visible only when scrolling */
     #pending-tasks::-webkit-scrollbar-thumb,
     #inprogress-tasks::-webkit-scrollbar-thumb,
     #onhold-tasks::-webkit-scrollbar-thumb,
@@ -343,39 +336,32 @@
       box-shadow: none !important;
     }
 
+    /* Show thumb only when scrolling (not on hover) */
     #pending-tasks.scrolling::-webkit-scrollbar-thumb,
     #inprogress-tasks.scrolling::-webkit-scrollbar-thumb,
     #onhold-tasks.scrolling::-webkit-scrollbar-thumb,
-    #completed-tasks.scrolling::-webkit-scrollbar-thumb,
-    #pending-tasks:hover::-webkit-scrollbar-thumb,
-    #inprogress-tasks:hover::-webkit-scrollbar-thumb,
-    #onhold-tasks:hover::-webkit-scrollbar-thumb,
-    #completed-tasks:hover::-webkit-scrollbar-thumb {
+    #completed-tasks.scrolling::-webkit-scrollbar-thumb {
       background-color: #9ca3af !important;
     }
 
-    #pending-tasks::-webkit-scrollbar-thumb:hover,
-    #inprogress-tasks::-webkit-scrollbar-thumb:hover,
-    #onhold-tasks::-webkit-scrollbar-thumb:hover,
-    #completed-tasks::-webkit-scrollbar-thumb:hover {
+    #pending-tasks.scrolling::-webkit-scrollbar-thumb:hover,
+    #inprogress-tasks.scrolling::-webkit-scrollbar-thumb:hover,
+    #onhold-tasks.scrolling::-webkit-scrollbar-thumb:hover,
+    #completed-tasks.scrolling::-webkit-scrollbar-thumb:hover {
       background-color: #6b7280 !important;
     }
 
     .dark #pending-tasks.scrolling::-webkit-scrollbar-thumb,
     .dark #inprogress-tasks.scrolling::-webkit-scrollbar-thumb,
     .dark #onhold-tasks.scrolling::-webkit-scrollbar-thumb,
-    .dark #completed-tasks.scrolling::-webkit-scrollbar-thumb,
-    .dark #pending-tasks:hover::-webkit-scrollbar-thumb,
-    .dark #inprogress-tasks:hover::-webkit-scrollbar-thumb,
-    .dark #onhold-tasks:hover::-webkit-scrollbar-thumb,
-    .dark #completed-tasks:hover::-webkit-scrollbar-thumb {
+    .dark #completed-tasks.scrolling::-webkit-scrollbar-thumb {
       background-color: #4b5563 !important;
     }
 
-    .dark #pending-tasks::-webkit-scrollbar-thumb:hover,
-    .dark #inprogress-tasks::-webkit-scrollbar-thumb:hover,
-    .dark #onhold-tasks::-webkit-scrollbar-thumb:hover,
-    .dark #completed-tasks::-webkit-scrollbar-thumb:hover {
+    .dark #pending-tasks.scrolling::-webkit-scrollbar-thumb:hover,
+    .dark #inprogress-tasks.scrolling::-webkit-scrollbar-thumb:hover,
+    .dark #onhold-tasks.scrolling::-webkit-scrollbar-thumb:hover,
+    .dark #completed-tasks.scrolling::-webkit-scrollbar-thumb:hover {
       background-color: #6b7280 !important;
     }
 
@@ -2769,10 +2755,17 @@
 
     // Modal functions
     function openAddTicketModal() {
-      document.getElementById('ticketModalTitle').textContent = 'Add Ticket';
-      document.getElementById('ticketForm').reset();
-      document.getElementById('ticket-id-internal').value = '';
-      document.getElementById('ticket-parent-id').value = '';
+      const modalTitle = document.getElementById('ticketModalTitle');
+      if (modalTitle) modalTitle.textContent = 'Add Ticket';
+      
+      const form = document.getElementById('ticketForm');
+      if (form) form.reset();
+      
+      const ticketIdInternal = document.getElementById('ticket-id-internal');
+      if (ticketIdInternal) ticketIdInternal.value = '';
+      
+      const ticketParentId = document.getElementById('ticket-parent-id');
+      if (ticketParentId) ticketParentId.value = '';
 
       // Reset Alpine.js dropdowns
       setTimeout(() => {
@@ -2782,15 +2775,24 @@
       }, 50);
 
       const modal = document.getElementById('ticketModal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
     }
 
     function addChildTask(parentId) {
-      document.getElementById('ticketModalTitle').textContent = 'Add Update';
-      document.getElementById('ticketForm').reset();
-      document.getElementById('ticket-id-internal').value = '';
-      document.getElementById('ticket-parent-id').value = parentId;
+      const modalTitle = document.getElementById('ticketModalTitle');
+      if (modalTitle) modalTitle.textContent = 'Add Update';
+      
+      const form = document.getElementById('ticketForm');
+      if (form) form.reset();
+      
+      const ticketIdInternal = document.getElementById('ticket-id-internal');
+      if (ticketIdInternal) ticketIdInternal.value = '';
+      
+      const ticketParentId = document.getElementById('ticket-parent-id');
+      if (ticketParentId) ticketParentId.value = parentId;
 
       // Reset Alpine.js dropdowns
       setTimeout(() => {
@@ -2799,8 +2801,10 @@
       }, 50);
 
       const modal = document.getElementById('ticketModal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
     }
 
     function editTicket(ticketId) {
@@ -2808,22 +2812,43 @@
       if (!ticket) return;
 
       const isChild = !ticket.parentId;
-      document.getElementById('ticketModalTitle').textContent = isChild ? 'Edit Update' : 'Edit Ticket';
+      const modalTitle = document.getElementById('ticketModalTitle');
+      if (modalTitle) modalTitle.textContent = isChild ? 'Edit Update' : 'Edit Ticket';
 
-      // Fill form fields
-      document.getElementById('ticket-id-internal').value = ticket.id;
-      document.getElementById('ticket-parent-id').value = ticket.parentId || '';
-      document.getElementById('ticket-id-field').value = ticket.ticketId || '';
-      document.getElementById('task-description').value = ticket.description || '';
-      document.getElementById('ticket-submission-date').value = ticket.dateReceived || '';
-      document.getElementById('ticket-team-in-charge').value = ticket.teamInCharge || '';
+      // Fill form fields with null checks
+      const ticketIdInternal = document.getElementById('ticket-id-internal');
+      if (ticketIdInternal) ticketIdInternal.value = ticket.id;
+      
+      const ticketParentId = document.getElementById('ticket-parent-id');
+      if (ticketParentId) ticketParentId.value = ticket.parentId || '';
+      
+      const ticketIdField = document.getElementById('ticket-id-field');
+      if (ticketIdField) ticketIdField.value = ticket.ticketId || '';
+      
+      const taskDescription = document.getElementById('task-description');
+      if (taskDescription) taskDescription.value = ticket.description || '';
+      
+      const ticketSubmissionDate = document.getElementById('ticket-submission-date');
+      if (ticketSubmissionDate) ticketSubmissionDate.value = ticket.dateReceived || '';
+      
+      const ticketTeamInCharge = document.getElementById('ticket-team-in-charge');
+      if (ticketTeamInCharge) ticketTeamInCharge.value = ticket.teamInCharge || '';
 
       // Set hidden fields
-      document.getElementById('task-status').value = ticket.status;
-      document.getElementById('ticket-requested-by').value = ticket.requestedBy || '';
-      document.getElementById('task-region').value = ticket.ticketType || '';
-      document.getElementById('task-requestor-region').value = ticket.requestorRegion || '';
-      document.getElementById('task-priority').value = ticket.priority || '';
+      const taskStatus = document.getElementById('task-status');
+      if (taskStatus) taskStatus.value = ticket.status;
+      
+      const ticketRequestedBy = document.getElementById('ticket-requested-by');
+      if (ticketRequestedBy) ticketRequestedBy.value = ticket.requestedBy || '';
+      
+      const taskRegion = document.getElementById('task-region');
+      if (taskRegion) taskRegion.value = ticket.ticketType || '';
+      
+      const taskRequestorRegion = document.getElementById('task-requestor-region');
+      if (taskRequestorRegion) taskRequestorRegion.value = ticket.requestorRegion || '';
+      
+      const taskPriority = document.getElementById('task-priority');
+      if (taskPriority) taskPriority.value = ticket.priority || '';
 
       // Update Alpine.js dropdown display values
       setTimeout(() => {
@@ -2834,8 +2859,10 @@
       }, 50);
 
       const modal = document.getElementById('ticketModal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
     }
 
     // Helper function to update Alpine.js dropdown display
@@ -2855,9 +2882,14 @@
 
     function closeTicketModal() {
       const modal = document.getElementById('ticketModal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-      document.getElementById('taskForm').reset();
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+      const form = document.getElementById('ticketForm');
+      if (form) {
+        form.reset();
+      }
     }
 
     // Submit task
