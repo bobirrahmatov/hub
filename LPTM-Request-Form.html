@@ -234,19 +234,6 @@
     <!-- Main Container -->
     <div class="px-4 sm:px-6 lg:px-8 py-8">
 
-        <!-- Hero Section with Video -->
-        <div class="hero-section animate-fade-in" style="animation-delay: 0.1s;">
-            <div class="video-holder">
-                <video autoplay muted loop playsinline id="heroVideo">
-                    <source src="/LPTM-Hub/Animations/lptm-about.webm" type="video/webm">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            <div class="hero-info">
-                <h1>Request.<br>Report.<br>Deliver.</h1>
-            </div>
-        </div>
-
         <!-- Form Section -->
         <section id="report-request-form-section" class="py-8">
             <div class="px-6">
@@ -265,7 +252,7 @@
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Complete all required fields to submit your report request</p>
                         </div>
                         
-                        <form id="reportRequestForm" class="p-5 sm:p-6">
+                        <form id="reportRequestForm" class="p-5 sm:p-6" onsubmit="return false;">
                             <div class="space-y-8">
                                 <!-- Report Overview Section -->
                                 <div>
@@ -647,7 +634,8 @@
                                             Reset
                                         </button>
                                         <button
-                                            type="submit"
+                                            type="button"
+                                            onclick="handleFormSubmit(event)"
                                             class="px-6 py-3 !text-base font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600 dark:bg-brand-600 dark:hover:bg-brand-700 transition-colors"
                                         >
                                             Submit Request
@@ -677,11 +665,11 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                         </div>
-                        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Request Submitted Successfully!</h2>
-                        <p class="text-lg text-gray-600 dark:text-gray-400">
+                        <h2 class="!text-3xl font-bold text-gray-900 dark:text-white mb-2">Request Submitted Successfully!</h2>
+                        <p class="!text-lg text-gray-600 dark:text-gray-400">
                             Your report request has been saved and added to the adhoc tasks tracker.
                         </p>
-                        <p class="text-sm text-gray-500 dark:text-gray-500 mt-2" id="successRequestId"></p>
+                        <p class="!text-base text-gray-500 dark:text-gray-500 mt-2" id="successRequestId"></p>
                     </div>
 
                     <!-- Action Buttons -->
@@ -696,7 +684,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                             </svg>
                             <div class="!text-base font-semibold text-gray-900 dark:text-white mb-1">Preview Email</div>
-                            <div class="text-sm text-gray-500 dark:text-gray-400">View formatted HTML</div>
+                            <div class="!text-base text-gray-500 dark:text-gray-400">View formatted HTML</div>
                         </button>
 
                         <!-- Download HTML -->
@@ -708,7 +696,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                             <div class="!text-base font-semibold text-gray-900 dark:text-white mb-1">Download HTML</div>
-                            <div class="text-sm text-gray-500 dark:text-gray-400">Save for attachment</div>
+                            <div class="!text-base text-gray-500 dark:text-gray-400">Save for attachment</div>
                         </button>
 
                         <!-- Open Outlook -->
@@ -720,7 +708,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                             </svg>
                             <div class="!text-base font-semibold text-white mb-1">Open Outlook</div>
-                            <div class="text-sm text-white/80">Send via email client</div>
+                            <div class="!text-base text-white/80">Send via email client</div>
                         </button>
                     </div>
 
@@ -730,7 +718,7 @@
                             <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                             </svg>
-                            <div class="text-sm text-blue-800 dark:text-blue-300">
+                            <div class="!text-base text-blue-800 dark:text-blue-300">
                                 <p class="font-medium mb-1">Next Steps:</p>
                                 <ul class="list-disc list-inside space-y-1 text-blue-700 dark:text-blue-400">
                                     <li>Click "Download HTML" to save the formatted request</li>
@@ -924,15 +912,6 @@
                     }
                 });
             });
-
-            // Simple seamless video loop
-            const video = document.getElementById('heroVideo');
-            if (video) {
-                video.loop = true;
-                video.play().catch(error => {
-                    console.log('Video autoplay failed:', error);
-                });
-            }
         });
 
         // Generate beautiful HTML email body
@@ -1279,8 +1258,19 @@ Request ID: ${formData.id}
         }
 
         // Form submission handler
-        document.getElementById('reportRequestForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        async function handleFormSubmit(event) {
+            // Prevent any default behavior
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            // Validate form
+            const form = document.getElementById('reportRequestForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return false;
+            }
             
             // Collect form data
             const formData = {
@@ -1349,7 +1339,9 @@ Request ID: ${formData.id}
                 console.error('Error submitting report request:', error);
                 showErrorToast('Failed to submit report request. Please try again.');
             }
-        });
+            
+            return false;
+        }
 
         // Save report request to Confluence
         async function saveReportRequest(requestData) {
