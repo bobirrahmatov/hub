@@ -248,7 +248,7 @@
         </div>
 
         <!-- Form Section -->
-        <section class="py-8">
+        <section id="report-request-form-section" class="py-8">
             <div class="px-6">
                 <div class="text-center animate-fade-in mb-12" style="animation-delay: 0.2s;">
                     <h2 class="!text-3xl md:!text-4xl text-gray-900 font-semibold dark:text-white">Report Request Form</h2>
@@ -261,8 +261,8 @@
                 <div class="max-w-7xl mx-auto animate-fade-in" style="animation-delay: 0.3s;">
                     <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                         <div class="px-5 py-4 sm:px-6 sm:py-5 border-b border-gray-200 dark:border-gray-800">
-                            <h3 class="text-xl font-semibold text-gray-800 dark:text-white/90">Report Request Form</h3>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Complete all required fields to submit your report request</p>
+                            <h3 class="!text-xl font-semibold text-gray-800 dark:text-white/90">Report Request Form</h3>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Complete all required fields to submit your report request</p>
                         </div>
                         
                         <form id="reportRequestForm" class="p-5 sm:p-6">
@@ -274,7 +274,7 @@
                                 
                                 <!-- Question 1: Report Name -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         1. Report Name <span class="text-error-500">*</span>
                                     </label>
                                     <input
@@ -283,13 +283,13 @@
                                         name="reportName"
                                         required
                                         placeholder='e.g., "Monthly Loan Origination Summary," "Delinquency Rate by Loan Type Q4"'
-                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                     />
                                 </div>
 
                                 <!-- Question 2: Purpose -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         2. Purpose <span class="text-error-500">*</span>
                                     </label>
                                     <textarea
@@ -298,13 +298,13 @@
                                         required
                                         placeholder='What decision will this report inform? e.g., "Assess effectiveness of new loan products," "Identify high-risk loan segments," "Monitor regional lending performance."'
                                         rows="3"
-                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                     ></textarea>
                                 </div>
 
                                 <!-- Question 3: Urgency & Deadline -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         3. Urgency & Deadline <span class="text-error-500">*</span>
                                     </label>
                                     <input
@@ -313,13 +313,13 @@
                                         name="urgency"
                                         required
                                         placeholder='e.g., "ASAP," "By 2025-12-15 for board meeting," "Weekly for loan committee review"'
-                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                     />
                                 </div>
 
                                 <!-- Question 4: Frequency -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         4. Frequency <span class="text-error-500">*</span>
                                     </label>
                                     <div class="relative z-20 bg-transparent">
@@ -327,7 +327,7 @@
                                             id="report-frequency"
                                             name="frequency"
                                             required
-                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                         >
                                             <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">Select Frequency</option>
                                             <option value="One-time" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">One-time</option>
@@ -347,7 +347,7 @@
 
                                 <!-- Question 5: Key Metrics/Data Points -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         5. Key Metrics/Data Points <span class="text-error-500">*</span>
                                     </label>
                                     <textarea
@@ -356,7 +356,7 @@
                                         required
                                         placeholder='List specific metrics, e.g., "Number of Loan Applications," "Approved Loan Amount (USD)," "Average FICO Score," "Number of Delinquent Accounts," "Loan-to-Value (LTV) Ratio," "Interest Rate"'
                                         rows="4"
-                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                     ></textarea>
                                 </div>
 
@@ -370,7 +370,7 @@
                                 
                                 <!-- Question 6: Time Period -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         6. Time Period <span class="text-error-500">*</span>
                                     </label>
                                     <input
@@ -379,13 +379,13 @@
                                         name="timePeriod"
                                         required
                                         placeholder='e.g., "Last Full Month," "Current Quarter-to-Date," "From 2024-01-01 to 2024-12-31"'
-                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                     />
                                 </div>
 
                                 <!-- Question 7: Filters/Breakdowns -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         7. Filters/Breakdowns
                                     </label>
                                     <textarea
@@ -393,16 +393,16 @@
                                         name="filters"
                                         placeholder='e.g., "By Loan Product Type (e.g., Mortgage, Auto, Personal)," "By Geographic Region (State/Branch)," "By Applicant Credit Score Range," "By Loan Officer," "By Delinquency Status (30/60/90+ days past due)"'
                                         rows="4"
-                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                     ></textarea>
                                 </div>
 
                                 <!-- Question 8: Existing SQL Query -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         8. Existing SQL Query
                                     </label>
-                                    <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <p class="mb-2 !text-base text-gray-500 dark:text-gray-400">
                                         Is there an existing SQL query that retrieves some or all of the necessary data? If yes, please provide it or a reference to its location.
                                     </p>
                                     <textarea
@@ -410,7 +410,7 @@
                                         name="existingSQL"
                                         placeholder="Paste SQL query or provide reference..."
                                         rows="6"
-                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 font-mono"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 font-mono"
                                     ></textarea>
                                 </div>
 
@@ -424,7 +424,7 @@
                                 
                                 <!-- Question 9: Other relevant context -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         9. Other Relevant Context
                                     </label>
                                     <textarea
@@ -432,7 +432,7 @@
                                         name="context"
                                         placeholder='Any specific calculations, definitions (e.g., "What constitutes an \'active loan\'?"), or context relevant to this loan report.'
                                         rows="4"
-                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                     ></textarea>
                                 </div>
 
@@ -443,30 +443,30 @@
                                 <div id="euc-section" style="display: none;">
                             <h4 class="text-base font-semibold text-gray-800 dark:text-white/90 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">
                                 EUC Assessment
-                                <span class="ml-2 text-xs font-normal text-gray-500 dark:text-gray-400">(Complete ONLY if "Frequency" is NOT "One-time")</span>
+                                <span class="ml-2 !text-base font-normal text-gray-500 dark:text-gray-400">(Complete ONLY if "Frequency" is NOT "One-time")</span>
                             </h4>
                             <div class="space-y-6">
                                 
                                 <!-- Business Process MCA -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         Does the report support the execution of a business process or a Manager Control Assessment (MCA) with a 1-3 inherent Risk associated to the process?
                                     </label>
-                                    <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <p class="mb-2 !text-base text-gray-500 dark:text-gray-400">
                                         This question assesses if the report is integral to a controlled business process or a process with identified inherent risks (1-3).
                                     </p>
                                     <div class="space-y-3">
                                         <label class="flex items-center cursor-pointer">
                                             <input type="radio" name="businessProcess" value="Yes" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
-                                            <span class="text-sm text-gray-700 dark:text-gray-400">Yes</span>
+                                            <span class="!text-base text-gray-700 dark:text-gray-400">Yes</span>
                                         </label>
                                         <label class="flex items-center cursor-pointer">
                                             <input type="radio" name="businessProcess" value="No" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
-                                            <span class="text-sm text-gray-700 dark:text-gray-400">No</span>
+                                            <span class="!text-base text-gray-700 dark:text-gray-400">No</span>
                                         </label>
                                     </div>
                                     <div id="process-name-field" class="mt-4" style="display: none;">
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                             If yes, please provide process name and MCA ID
                                         </label>
                                         <input
@@ -474,31 +474,31 @@
                                             id="process-name"
                                             name="processName"
                                             placeholder="e.g., MCA ID 1234556"
-                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                         />
                                     </div>
                                 </div>
 
                                 <!-- System Upload -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         Is the report used to upload data to a system of record or authorized redistributor of data, or is it used as a source for critical business decisions without further validation?
                                     </label>
-                                    <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <p class="mb-2 !text-base text-gray-500 dark:text-gray-400">
                                         This determines if the report's output directly feeds into official systems or drives significant decisions without subsequent checks, indicating higher risk and potential EUC classification.
                                     </p>
                                     <div class="space-y-3">
                                         <label class="flex items-center cursor-pointer">
                                             <input type="radio" name="systemUpload" value="Yes" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
-                                            <span class="text-sm text-gray-700 dark:text-gray-400">Yes</span>
+                                            <span class="!text-base text-gray-700 dark:text-gray-400">Yes</span>
                                         </label>
                                         <label class="flex items-center cursor-pointer">
                                             <input type="radio" name="systemUpload" value="No" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
-                                            <span class="text-sm text-gray-700 dark:text-gray-400">No</span>
+                                            <span class="!text-base text-gray-700 dark:text-gray-400">No</span>
                                         </label>
                                     </div>
                                     <div id="system-name-field" class="mt-4" style="display: none;">
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                             If yes, please specify the system of record or authorized redistributor
                                         </label>
                                         <input
@@ -506,47 +506,47 @@
                                             id="system-name"
                                             name="systemName"
                                             placeholder="e.g., Optima"
-                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                         />
                                     </div>
                                 </div>
 
                                 <!-- Manual Manipulation -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         Does the report involve manual manipulation or calculation of data (e.g., manual data entry, complex formulas in Excel, external macros) outside established, validated systems before being finalized or distributed?
                                     </label>
-                                    <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <p class="mb-2 !text-base text-gray-500 dark:text-gray-400">
                                         Manual interventions often introduce operational risk and are a key indicator of an EUC.
                                     </p>
                                     <div class="space-y-3">
                                         <label class="flex items-center cursor-pointer">
                                             <input type="radio" name="manualManipulation" value="Yes" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
-                                            <span class="text-sm text-gray-700 dark:text-gray-400">Yes</span>
+                                            <span class="!text-base text-gray-700 dark:text-gray-400">Yes</span>
                                         </label>
                                         <label class="flex items-center cursor-pointer">
                                             <input type="radio" name="manualManipulation" value="No" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
-                                            <span class="text-sm text-gray-700 dark:text-gray-400">No</span>
+                                            <span class="!text-base text-gray-700 dark:text-gray-400">No</span>
                                         </label>
                                     </div>
                                 </div>
 
                                 <!-- Financial Impact -->
                                 <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                         Is the report relied upon for financial reporting, regulatory submissions, or decisions impacting client accounts/transactions, where errors could lead to material financial loss, reputational damage, or non-compliance?
                                     </label>
-                                    <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <p class="mb-2 !text-base text-gray-500 dark:text-gray-400">
                                         This identifies reports with high impact if incorrect, often leading to EUC classification.
                                     </p>
                                     <div class="space-y-3">
                                         <label class="flex items-center cursor-pointer">
                                             <input type="radio" name="financialImpact" value="Yes" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
-                                            <span class="text-sm text-gray-700 dark:text-gray-400">Yes</span>
+                                            <span class="!text-base text-gray-700 dark:text-gray-400">Yes</span>
                                         </label>
                                         <label class="flex items-center cursor-pointer">
                                             <input type="radio" name="financialImpact" value="No" class="mr-3 h-4 w-4 text-brand-500 focus:ring-brand-500">
-                                            <span class="text-sm text-gray-700 dark:text-gray-400">No</span>
+                                            <span class="!text-base text-gray-700 dark:text-gray-400">No</span>
                                         </label>
                                     </div>
                                 </div>
@@ -562,7 +562,7 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <!-- Requestor Name -->
                                     <div>
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                             Requestor Name <span class="text-error-500">*</span>
                                         </label>
                                         <input
@@ -571,13 +571,13 @@
                                             name="requestorName"
                                             required
                                             placeholder="Your full name"
-                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                         />
                                     </div>
 
                                     <!-- Requestor Email -->
                                     <div>
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                             Email Address <span class="text-error-500">*</span>
                                         </label>
                                         <input
@@ -586,7 +586,7 @@
                                             name="requestorEmail"
                                             required
                                             placeholder="your.email@company.com"
-                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                         />
                                     </div>
                                 </div>
@@ -594,7 +594,7 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <!-- Department -->
                                     <div>
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                             Department <span class="text-error-500">*</span>
                                         </label>
                                         <input
@@ -603,13 +603,13 @@
                                             name="department"
                                             required
                                             placeholder="e.g., Credit Risk, Finance"
-                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                         />
                                     </div>
 
                                     <!-- Request Date -->
                                     <div>
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                                             Request Date <span class="text-error-500">*</span>
                                         </label>
                                         <input
@@ -617,7 +617,7 @@
                                             id="request-date"
                                             name="requestDate"
                                             required
-                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                         />
                                     </div>
                                 </div>
@@ -630,7 +630,7 @@
                                     <button
                                         type="button"
                                         onclick="previewEmail()"
-                                        class="px-6 py-3 text-sm font-medium text-brand-600 bg-brand-50 border border-brand-200 rounded-lg hover:bg-brand-100 dark:bg-brand-900/20 dark:text-brand-400 dark:border-brand-800 dark:hover:bg-brand-900/30 transition-colors"
+                                        class="px-6 py-3 !text-base font-medium text-brand-600 bg-brand-50 border border-brand-200 rounded-lg hover:bg-brand-100 dark:bg-brand-900/20 dark:text-brand-400 dark:border-brand-800 dark:hover:bg-brand-900/30 transition-colors"
                                     >
                                         <svg class="inline-block w-4 h-4 mr-2 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -642,13 +642,13 @@
                                         <button
                                             type="button"
                                             onclick="resetForm()"
-                                            class="px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors"
+                                            class="px-6 py-3 !text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors"
                                         >
                                             Reset
                                         </button>
                                         <button
                                             type="submit"
-                                            class="px-6 py-3 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600 dark:bg-brand-600 dark:hover:bg-brand-700 transition-colors"
+                                            class="px-6 py-3 !text-base font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600 dark:bg-brand-600 dark:hover:bg-brand-700 transition-colors"
                                         >
                                             Submit Request
                                         </button>
@@ -665,12 +665,108 @@
 
     </div>
 
+    <!-- Success Section (Hidden by default) -->
+    <div id="successSection" class="hidden">
+        <section class="relative w-full overflow-hidden bg-gray-50 dark:bg-gray-950 z-0 mb-12">
+            <div class="relative mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
+                <div class="rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 dark:border-green-800 dark:from-green-900/20 dark:to-emerald-900/20 p-8">
+                    <!-- Success Header -->
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
+                            <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Request Submitted Successfully!</h2>
+                        <p class="text-lg text-gray-600 dark:text-gray-400">
+                            Your report request has been saved and added to the adhoc tasks tracker.
+                        </p>
+                        <p class="text-sm text-gray-500 dark:text-gray-500 mt-2" id="successRequestId"></p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <!-- Preview Email -->
+                        <button
+                            onclick="previewEmailFromSuccess()"
+                            class="flex flex-col items-center justify-center p-6 bg-white dark:bg-gray-900 rounded-xl border-2 border-brand-200 dark:border-brand-800 hover:border-brand-400 dark:hover:border-brand-600 hover:shadow-lg transition-all group"
+                        >
+                            <svg class="w-8 h-8 text-brand-600 dark:text-brand-400 mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            <div class="!text-base font-semibold text-gray-900 dark:text-white mb-1">Preview Email</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">View formatted HTML</div>
+                        </button>
+
+                        <!-- Download HTML -->
+                        <button
+                            onclick="downloadHTMLFromSuccess()"
+                            class="flex flex-col items-center justify-center p-6 bg-white dark:bg-gray-900 rounded-xl border-2 border-purple-200 dark:border-purple-800 hover:border-purple-400 dark:hover:border-purple-600 hover:shadow-lg transition-all group"
+                        >
+                            <svg class="w-8 h-8 text-purple-600 dark:text-purple-400 mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <div class="!text-base font-semibold text-gray-900 dark:text-white mb-1">Download HTML</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">Save for attachment</div>
+                        </button>
+
+                        <!-- Open Outlook -->
+                        <button
+                            onclick="openOutlookFromSuccess()"
+                            class="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-brand-500 to-brand-600 rounded-xl border-2 border-brand-600 hover:from-brand-600 hover:to-brand-700 hover:shadow-xl transition-all group"
+                        >
+                            <svg class="w-8 h-8 text-white mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            <div class="!text-base font-semibold text-white mb-1">Open Outlook</div>
+                            <div class="text-sm text-white/80">Send via email client</div>
+                        </button>
+                    </div>
+
+                    <!-- Info Message -->
+                    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                            <div class="text-sm text-blue-800 dark:text-blue-300">
+                                <p class="font-medium mb-1">Next Steps:</p>
+                                <ul class="list-disc list-inside space-y-1 text-blue-700 dark:text-blue-400">
+                                    <li>Click "Download HTML" to save the formatted request</li>
+                                    <li>Click "Open Outlook" to compose an email to <span class="font-semibold" id="teamDLDisplay"></span></li>
+                                    <li>Attach the downloaded HTML file to the email before sending</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-center gap-4">
+                        <button
+                            onclick="submitAnotherRequest()"
+                            class="px-6 py-3 !text-base font-medium text-brand-600 bg-white border-2 border-brand-200 rounded-lg hover:bg-brand-50 dark:bg-gray-900 dark:text-brand-400 dark:border-brand-800 dark:hover:bg-brand-900/30 transition-colors"
+                        >
+                            Submit Another Request
+                        </button>
+                        <button
+                            onclick="goToAdhocTasks()"
+                            class="px-6 py-3 !text-base font-medium text-white bg-gray-600 rounded-lg hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
+                        >
+                            View Adhoc Tasks
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
     <!-- Email Options Modal -->
-    <div id="emailOptionsModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm" style="display: none;">
+    <div id="emailOptionsModal" class="hidden fixed inset-0 z-[9999] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm" style="display: none;">
         <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-md w-full mx-4 border border-gray-200 dark:border-gray-800">
             <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-800">
-                <h3 class="text-xl font-semibold text-gray-800 dark:text-white/90">Send Report Request</h3>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Choose how to send your request</p>
+                <h3 class="!text-xl font-semibold text-gray-800 dark:text-white/90">Send Report Request</h3>
+                <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Choose how to send your request</p>
             </div>
             <div class="p-6 space-y-3">
                 <button
@@ -682,8 +778,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                         </svg>
                         <div>
-                            <div class="text-sm font-medium text-gray-800 dark:text-white/90">Download HTML & Open Email</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">Recommended - Best formatting</div>
+                            <div class="!text-base font-medium text-gray-800 dark:text-white/90">Download HTML & Open Email</div>
+                            <div class="!text-base text-gray-500 dark:text-gray-400">Recommended - Best formatting</div>
                         </div>
                     </div>
                     <svg class="w-5 h-5 text-brand-600 dark:text-brand-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -700,8 +796,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                         </svg>
                         <div>
-                            <div class="text-sm font-medium text-gray-800 dark:text-white/90">Copy HTML to Clipboard</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">Paste into email body</div>
+                            <div class="!text-base font-medium text-gray-800 dark:text-white/90">Copy HTML to Clipboard</div>
+                            <div class="!text-base text-gray-500 dark:text-gray-400">Paste into email body</div>
                         </div>
                     </div>
                     <svg class="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -712,7 +808,7 @@
             <div class="px-6 py-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl">
                 <button
                     onclick="closeEmailModal()"
-                    class="w-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                    class="w-full px-4 py-2 !text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 >
                     Cancel
                 </button>
@@ -721,6 +817,11 @@
     </div>
 
     <script type="text/javascript">
+        // ==========================================
+        // CONFIGURATION - Update this variable with your team's DL
+        // ==========================================
+        const TEAM_DL = 'lptm-reporting-team@citi.com'; // <-- CHANGE THIS TO YOUR TEAM DL
+        
         // Get current user information from Confluence
         async function getCurrentUser() {
             try {
@@ -1047,7 +1148,7 @@
             
             const emailHTML = generateEmailHTML(currentFormData);
             const subject = `Report Request: ${currentFormData.reportName}`;
-            const recipient = 'lptm-reporting-team@citi.com';
+            const recipient = TEAM_DL;
             
             // Create text version for email body
             const textBody = `
@@ -1116,7 +1217,7 @@ Request ID: ${currentFormData.id}
         function sendOutlookEmail(formData) {
             const emailHTML = generateEmailHTML(formData);
             const subject = `Report Request: ${formData.reportName}`;
-            const recipient = 'lptm-reporting-team@citi.com'; // Update with actual team email
+            const recipient = TEAM_DL;
             
             // Create text version for email body
             const textBody = `
@@ -1232,8 +1333,17 @@ Request ID: ${formData.id}
                 // Show success message
                 showSuccessToast('Report request saved successfully!');
                 
-                // Show email options modal
-                showEmailModal(formData);
+                // Store form data globally for email functions
+                currentFormData = formData;
+                
+                // Hide form and show success section
+                document.getElementById('report-request-form-section').style.display = 'none';
+                document.getElementById('successSection').classList.remove('hidden');
+                document.getElementById('successRequestId').textContent = `Request ID: ${formData.id}`;
+                document.getElementById('teamDLDisplay').textContent = TEAM_DL;
+                
+                // Scroll to success section
+                document.getElementById('successSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 
             } catch (error) {
                 console.error('Error submitting report request:', error);
@@ -1493,6 +1603,75 @@ Request ID: ${formData.id}
             const previewWindow = window.open('', 'Email Preview', 'width=800,height=600,scrollbars=yes');
             previewWindow.document.write(emailHTML);
             previewWindow.document.close();
+        }
+
+        // Success Section Functions
+        function previewEmailFromSuccess() {
+            if (!currentFormData) return;
+            const emailHTML = generateEmailHTML(currentFormData);
+            const previewWindow = window.open('', 'Email Preview', 'width=800,height=600,scrollbars=yes');
+            previewWindow.document.write(emailHTML);
+            previewWindow.document.close();
+        }
+
+        function downloadHTMLFromSuccess() {
+            if (!currentFormData) return;
+            
+            const emailHTML = generateEmailHTML(currentFormData);
+            const blob = new Blob([emailHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Report_Request_${currentFormData.reportName.replace(/[^a-z0-9]/gi, '_')}_${Date.now()}.html`;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            showSuccessToast('HTML file downloaded! Attach it to your email.');
+        }
+
+        function openOutlookFromSuccess() {
+            if (!currentFormData) return;
+            
+            const subject = `Report Request: ${currentFormData.reportName}`;
+            const textBody = `
+Report Request Form Submission
+
+Please see the attached HTML file for the full formatted report request.
+
+Report Name: ${currentFormData.reportName}
+Requestor: ${currentFormData.requestorName} (${currentFormData.requestorEmail})
+Department: ${currentFormData.department}
+Request Date: ${currentFormData.requestDate}
+Urgency: ${currentFormData.urgency}
+
+Request ID: ${currentFormData.id}
+
+---
+Note: Please download the HTML file using the "Download HTML" button and attach it to this email for best formatting.
+            `.trim();
+            
+            // Open mailto with text version
+            const mailtoLink = `mailto:${TEAM_DL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(textBody)}`;
+            window.location.href = mailtoLink;
+            
+            showInfoToast(`Opening email to ${TEAM_DL}. Don't forget to attach the HTML file!`);
+        }
+
+        function submitAnotherRequest() {
+            // Show form again and hide success section
+            document.getElementById('successSection').classList.add('hidden');
+            document.getElementById('report-request-form-section').style.display = 'block';
+            
+            // Reset form
+            resetForm();
+            
+            // Scroll to top of form
+            document.getElementById('report-request-form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function goToAdhocTasks() {
+            // Navigate to adhoc tasks page
+            window.location.href = '/LPTM-Hub/LPTM-adhoc-tasks.html';
         }
 
         // Reset form
