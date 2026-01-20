@@ -426,12 +426,246 @@
       <div class="mx-auto max-w-[1536px] p-4 md:p-6">
         <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800" style="background-color: var(--card-bg, white);">
           <div class="px-5 py-4 sm:px-6 sm:py-5">
-            <h3 class="!text-2xl font-medium text-gray-800 dark:text-white/90">
+            <!-- Top Row: Title (Left) | Search + Buttons (Right) -->
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <!-- Left: Title -->
+              <div class="flex-shrink-0">
+                <h3 class="!text-xl font-medium text-gray-800 dark:text-white/90">
               Ad Hoc Tasks Tracker
             </h3>
             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">
               Track and manage ad hoc reporting tasks and requests
             </p>
+              </div>
+              
+              <!-- Right: Search Bar + Action Buttons -->
+              <div class="flex flex-wrap items-center gap-2">
+                <!-- Search Bar -->
+                <div class="relative w-full lg:w-64 flex-shrink-0">
+                  <span class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2">
+                    <svg class="fill-gray-500 dark:fill-gray-400" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M3.04199 9.37381C3.04199 5.87712 5.87735 3.04218 9.37533 3.04218C12.8733 3.04218 15.7087 5.87712 15.7087 9.37381C15.7087 12.8705 12.8733 15.7055 9.37533 15.7055C5.87735 15.7055 3.04199 12.8705 3.04199 9.37381ZM9.37533 1.54218C5.04926 1.54218 1.54199 5.04835 1.54199 9.37381C1.54199 13.6993 5.04926 17.2055 9.37533 17.2055C11.2676 17.2055 13.0032 16.5346 14.3572 15.4178L17.1773 18.2381C17.4702 18.531 17.945 18.5311 18.2379 18.2382C18.5308 17.9453 18.5309 17.4704 18.238 17.1775L15.4182 14.3575C16.5367 13.0035 17.2087 11.2671 17.2087 9.37381C17.2087 5.04835 13.7014 1.54218 9.37533 1.54218Z" fill=""></path>
+                    </svg>
+                  </span>
+                  <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search tasks..."
+                    class="h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-[42px] !text-base text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:border-gray-700 dark:text-white dark:placeholder:text-gray-500"
+                    oninput="filterTasks()"
+                  />
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center gap-2">
+                  <button
+                    onclick="openAddTaskModal()"
+                    class="flex items-center gap-1.5 rounded-lg bg-brand-500 px-3 py-2 !text-base font-medium text-white hover:bg-brand-600 transition-all duration-200"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add
+                  </button>
+                  
+                  <button
+                    onclick="exportToExcel()"
+                    class="flex items-center gap-1.5 rounded-lg bg-success-500 px-3 py-2 !text-base font-medium text-white hover:bg-success-600 transition-all duration-200"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Export
+                  </button>
+                  
+                  <button
+                    id="refreshButton"
+                    onclick="refreshAllViews()"
+                    class="flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-2 !text-base font-medium text-gray-700 hover:bg-gray-200 transition-all duration-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  >
+                    <svg id="refreshIcon" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M21 10C21 10 18.995 7.26822 17.3662 5.63824C15.7373 4.00827 13.4864 3 11 3C6.02944 3 2 7.02944 2 12C2 16.9706 6.02944 21 11 21C15.1031 21 18.5649 18.2543 19.6482 14.5M21 10V4M21 10H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Refresh
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Filters Row: Below Subtitle -->
+            <div class="mt-4 flex flex-wrap items-center gap-3" x-data="{
+              selectedFilter: 'All',
+              updateFilter(status) {
+                this.selectedFilter = status;
+                applyGlobalFilter(status, this);
+              },
+              clearFilters() {
+                this.selectedFilter = 'All';
+                clearAllFilters(this);
+              }
+            }">
+              <!-- Clear All Filters Button -->
+              <button
+                @click="clearFilters()"
+                class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-700 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              >
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Clear
+              </button>
+
+              <!-- Status Filter Pills -->
+              <div class="flex flex-wrap items-center gap-x-1 gap-y-2 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900">
+                <button
+                  class="inline-flex items-center gap-2 px-4 py-2 !text-base font-medium rounded-md group hover:text-gray-900 dark:hover:text-white transition-colors"
+                  :class="selectedFilter === 'All' ? 'text-gray-900 dark:text-white bg-white dark:bg-gray-800 shadow-sm' : 'text-gray-500 dark:text-gray-400'"
+                  @click="updateFilter('All')"
+                >
+                  All Tasks
+                  <span
+                    class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium leading-normal group-hover:bg-brand-50 group-hover:text-brand-500 dark:group-hover:bg-brand-500/15 dark:group-hover:text-brand-400 transition-colors"
+                    :class="selectedFilter === 'All' ? 'text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/15' : 'bg-white dark:bg-white/[0.03]'"
+                    id="global-all-count"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <button
+                  class="inline-flex items-center gap-2 px-4 py-2 !text-base font-medium rounded-md group hover:text-gray-900 dark:hover:text-white transition-colors"
+                  :class="selectedFilter === 'Pending' ? 'text-gray-900 dark:text-white bg-white dark:bg-gray-800 shadow-sm' : 'text-gray-500 dark:text-gray-400'"
+                  @click="updateFilter('Pending')"
+                >
+                  Pending
+                  <span
+                    class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium leading-normal group-hover:bg-brand-50 group-hover:text-brand-500 dark:group-hover:bg-brand-500/15 dark:group-hover:text-brand-400 transition-colors"
+                    :class="selectedFilter === 'Pending' ? 'text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/15' : 'bg-white dark:bg-white/[0.03]'"
+                    id="global-pending-count"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <button
+                  class="inline-flex items-center gap-2 px-4 py-2 !text-base font-medium rounded-md group hover:text-gray-900 dark:hover:text-white transition-colors"
+                  :class="selectedFilter === 'In Progress' ? 'text-gray-900 dark:text-white bg-white dark:bg-gray-800 shadow-sm' : 'text-gray-500 dark:text-gray-400'"
+                  @click="updateFilter('In Progress')"
+                >
+                  In Progress
+                  <span
+                    class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium leading-normal group-hover:bg-brand-50 group-hover:text-brand-500 dark:group-hover:bg-brand-500/15 dark:group-hover:text-brand-400 transition-colors"
+                    :class="selectedFilter === 'In Progress' ? 'text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/15' : 'bg-white dark:bg-white/[0.03]'"
+                    id="global-inprogress-count"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <button
+                  class="inline-flex items-center gap-2 px-4 py-2 !text-base font-medium rounded-md group hover:text-gray-900 dark:hover:text-white transition-colors"
+                  :class="selectedFilter === 'Completed' ? 'text-gray-900 dark:text-white bg-white dark:bg-gray-800 shadow-sm' : 'text-gray-500 dark:text-gray-400'"
+                  @click="updateFilter('Completed')"
+                >
+                  Completed
+                  <span
+                    class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium leading-normal group-hover:bg-brand-50 group-hover:text-brand-500 dark:group-hover:bg-brand-500/15 dark:group-hover:text-brand-400 transition-colors"
+                    :class="selectedFilter === 'Completed' ? 'text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/15' : 'bg-white dark:bg-white/[0.03]'"
+                    id="global-completed-count"
+                  >
+                    0
+                  </span>
+                </button>
+              </div>
+              
+              <!-- Priority Filter -->
+              <div x-data="{ open: false, selected: 'All Priorities' }" class="relative" id="priorityFilterDropdown">
+                <button @click="open = !open" type="button"
+                  class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800 min-w-[140px]">
+                  <span x-text="selected" class="truncate"></span>
+                  <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div x-show="open" @click.outside="open = false" x-cloak
+                  class="absolute left-0 top-full z-[99999] mt-2 w-48 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
+                  <button type="button" @click="selected = 'All Priorities'; open = false; filterTasksByPriority('All')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    All Priorities
+                  </button>
+                  <button type="button" @click="selected = 'High'; open = false; filterTasksByPriority('High')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    High
+                  </button>
+                  <button type="button" @click="selected = 'Medium'; open = false; filterTasksByPriority('Medium')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    Medium
+                  </button>
+                  <button type="button" @click="selected = 'Low'; open = false; filterTasksByPriority('Low')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    Low
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Region Filter -->
+              <div x-data="{ open: false, selected: 'All Regions' }" class="relative" id="regionFilterDropdown">
+                <button @click="open = !open" type="button"
+                  class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800 min-w-[140px]">
+                  <span x-text="selected" class="truncate"></span>
+                  <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div x-show="open" @click.outside="open = false" x-cloak
+                  class="absolute left-0 top-full z-[99999] mt-2 w-48 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
+                  <button type="button" @click="selected = 'All Regions'; open = false; filterTasksByRegion('All')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    All Regions
+                  </button>
+                  <button type="button" @click="selected = 'Global'; open = false; filterTasksByRegion('Global')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    Global
+                  </button>
+                  <button type="button" @click="selected = 'NAM'; open = false; filterTasksByRegion('NAM')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    NAM
+                  </button>
+                  <button type="button" @click="selected = 'EMEA'; open = false; filterTasksByRegion('EMEA')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    EMEA
+                  </button>
+                  <button type="button" @click="selected = 'APAC'; open = false; filterTasksByRegion('APAC')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    APAC
+                  </button>
+                  <button type="button" @click="selected = 'LATAM'; open = false; filterTasksByRegion('LATAM')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    LATAM
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Maker Filter -->
+              <div x-data="{ open: false, selected: 'All Makers' }" class="relative" id="makerFilterDropdown">
+                <button @click="open = !open" type="button"
+                  class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800 min-w-[140px]">
+                  <span x-text="selected" class="truncate"></span>
+                  <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div x-show="open" @click.outside="open = false" x-cloak
+                  class="absolute left-0 top-full z-[99999] mt-2 w-56 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg max-h-64 overflow-y-auto dark:border-gray-700 dark:bg-gray-800">
+                  <button type="button" @click="selected = 'All Makers'; open = false; filterByMaker('All')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+                    All Makers
+                  </button>
+                  <!-- Dynamic maker options will be populated by JavaScript -->
+                  <div id="makerFilterOptions"></div>
+                </div>
+              </div>
+            </div>
           </div>
           
           <div class="dark:border-gray-800">
@@ -479,180 +713,6 @@
                 <!-- Table View Tab -->
                 <div x-show="activeTab === 'table'">
                   
-            <!-- Buttons & Search Bar -->
-            <div class="mb-4 flex flex-wrap items-center gap-3">
-              <!-- Buttons -->
-              <button
-                onclick="openAddTaskModal()"
-                class="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 !text-base font-medium text-white hover:bg-brand-600 transition-all duration-200"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                Add Task
-              </button>
-              
-              <button
-                onclick="exportToExcel()"
-                class="flex items-center gap-2 rounded-lg bg-success-500 px-4 py-2.5 !text-base font-medium text-white hover:bg-success-600 transition-all duration-200"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                Export
-              </button>
-              
-              <button
-                id="refreshButton"
-                onclick="refreshTasksTable()"
-                class="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2.5 !text-base font-medium text-gray-700 hover:bg-gray-200 transition-all duration-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-              >
-                <svg id="refreshIcon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M21 10C21 10 18.995 7.26822 17.3662 5.63824C15.7373 4.00827 13.4864 3 11 3C6.02944 3 2 7.02944 2 12C2 16.9706 6.02944 21 11 21C15.1031 21 18.5649 18.2543 19.6482 14.5M21 10V4M21 10H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Refresh
-              </button>
-              
-              <!-- Search Bar -->
-              <div class="relative w-80">
-                <span class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2">
-                  <svg class="fill-gray-500 dark:fill-gray-400" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.04199 9.37381C3.04199 5.87712 5.87735 3.04218 9.37533 3.04218C12.8733 3.04218 15.7087 5.87712 15.7087 9.37381C15.7087 12.8705 12.8733 15.7055 9.37533 15.7055C5.87735 15.7055 3.04199 12.8705 3.04199 9.37381ZM9.37533 1.54218C5.04926 1.54218 1.54199 5.04835 1.54199 9.37381C1.54199 13.6993 5.04926 17.2055 9.37533 17.2055C11.2676 17.2055 13.0032 16.5346 14.3572 15.4178L17.1773 18.2381C17.4702 18.531 17.945 18.5311 18.2379 18.2382C18.5308 17.9453 18.5309 17.4704 18.238 17.1775L15.4182 14.3575C16.5367 13.0035 17.2087 11.2671 17.2087 9.37381C17.2087 5.04835 13.7014 1.54218 9.37533 1.54218Z" fill=""></path>
-                  </svg>
-                </span>
-                <input
-                  type="text"
-                  id="searchInput"
-                  placeholder="Search tasks..."
-                  class="h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-[42px] !text-base text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:border-gray-700 dark:text-white dark:placeholder:text-gray-500"
-                  oninput="filterTasks()"
-                />
-              </div>
-            </div>
-            
-            <!-- Filters & Pagination -->
-            <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
-              <!-- Filters on the Left -->
-              <div class="flex flex-wrap items-center gap-3">
-              <div x-data="{ open: false, selected: 'All Statuses' }" class="relative">
-                  <button @click="open = !open" type="button"
-                    class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
-                    <span x-text="selected"></span>
-                    <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  <div x-show="open" @click.outside="open = false" x-cloak
-                    class="absolute right-0 top-full z-[99999] mt-2 w-48 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
-                    <button type="button" @click="selected = 'All Statuses'; open = false; filterTasksByStatus('All')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      All Statuses
-                    </button>
-                    <button type="button" @click="selected = 'Pending'; open = false; filterTasksByStatus('Pending')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      Pending
-                    </button>
-                    <button type="button" @click="selected = 'In Progress'; open = false; filterTasksByStatus('In Progress')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      In Progress
-                    </button>
-                    <button type="button" @click="selected = 'Completed'; open = false; filterTasksByStatus('Completed')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      Completed
-                    </button>
-                    <button type="button" @click="selected = 'On Hold'; open = false; filterTasksByStatus('On Hold')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      On Hold
-                    </button>
-                  </div>
-                </div>
-                
-                <!-- Priority Filter -->
-                <div x-data="{ open: false, selected: 'All Priorities' }" class="relative">
-                  <button @click="open = !open" type="button"
-                    class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
-                    <span x-text="selected"></span>
-                    <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  <div x-show="open" @click.outside="open = false" x-cloak
-                    class="absolute right-0 top-full z-[99999] mt-2 w-48 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
-                    <button type="button" @click="selected = 'All Priorities'; open = false; filterTasksByPriority('All')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      All Priorities
-                    </button>
-                    <button type="button" @click="selected = 'Low'; open = false; filterTasksByPriority('Low')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      Low
-                    </button>
-                    <button type="button" @click="selected = 'Medium'; open = false; filterTasksByPriority('Medium')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      Medium
-                    </button>
-                    <button type="button" @click="selected = 'High'; open = false; filterTasksByPriority('High')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      High
-                    </button>
-                    <button type="button" @click="selected = 'Urgent'; open = false; filterTasksByPriority('Urgent')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      Urgent
-                    </button>
-                  </div>
-                </div>
-                
-                <!-- Region Filter -->
-                <div x-data="{ open: false, selected: 'All Regions' }" class="relative">
-                  <button @click="open = !open" type="button"
-                    class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
-                    <span x-text="selected"></span>
-                    <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  <div x-show="open" @click.outside="open = false" x-cloak
-                    class="absolute right-0 top-full z-[99999] mt-2 w-48 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
-                    <button type="button" @click="selected = 'All Regions'; open = false; filterTasksByRegion('All')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      All Regions
-                    </button>
-                    <button type="button" @click="selected = 'APAC'; open = false; filterTasksByRegion('APAC')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      APAC
-                    </button>
-                    <button type="button" @click="selected = 'EMEA'; open = false; filterTasksByRegion('EMEA')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      EMEA
-                    </button>
-                    <button type="button" @click="selected = 'NAM'; open = false; filterTasksByRegion('NAM')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      NAM
-                    </button>
-                    <button type="button" @click="selected = 'LATAM'; open = false; filterTasksByRegion('LATAM')"
-                      class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
-                      LATAM
-                    </button>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Pagination Controls on the Right -->
-              <div class="flex items-center gap-2">
-                <span class="!text-base text-gray-700 dark:text-gray-400">Show</span>
-                <select
-                  id="itemsPerPage"
-                  class="rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                  onchange="changeItemsPerPage()"
-                >
-                  <option value="10">10</option>
-                  <option value="25" selected>25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
-                <span class="!text-base text-gray-700 dark:text-gray-400">per page</span>
-              </div>
-            </div>
-            
             <!-- Tasks Table -->
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 relative" style="background-color: var(--card-bg, white);" id="tableContainer">
               <!-- Loading Overlay -->
@@ -694,8 +754,27 @@
               <!-- Pagination -->
               <div class="border-t border-gray-200 px-6 py-4 dark:border-gray-800">
                 <div class="flex items-center justify-between">
-                  <div class="!text-base text-gray-700 dark:text-gray-400">
-                    Showing <span id="showingStart">0</span> to <span id="showingEnd">0</span> of <span id="totalTasks">0</span> tasks
+                  <div class="flex items-center gap-4">
+                    <!-- Show per page dropdown -->
+                    <div class="flex items-center gap-2">
+                      <span class="!text-base text-gray-700 dark:text-gray-400">Show</span>
+                      <select
+                        id="itemsPerPage"
+                        class="rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        onchange="changeItemsPerPage()"
+                      >
+                        <option value="10">10</option>
+                        <option value="25" selected>25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                      <span class="!text-base text-gray-700 dark:text-gray-400">per page</span>
+                    </div>
+                    
+                    <!-- Showing X to Y of Z tasks -->
+                    <div class="!text-base text-gray-700 dark:text-gray-400">
+                      Showing <span id="showingStart">0</span> to <span id="showingEnd">0</span> of <span id="totalTasks">0</span> tasks
+                    </div>
                   </div>
                   
                   <div class="flex items-center gap-2">
@@ -733,106 +812,10 @@
                 <!-- End Table View Tab -->
                 
                 <!-- Kanban View Tab -->
-                <div x-show="activeTab === 'kanban'" x-data="{ selectedFilter: 'All' }">
-                  
-                  <!-- Kanban Filters Header -->
-                  <div class="flex flex-col items-center mb-7">
-                    <div class="flex flex-col w-full gap-5 sm:justify-between xl:flex-row xl:items-center">
-                      
-                      <!-- Search Input -->
-                      <div class="relative w-full xl:w-80">
-                        <span class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2">
-                          <svg class="fill-gray-500 dark:fill-gray-400" width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.04199 9.37381C3.04199 5.87712 5.87735 3.04218 9.37533 3.04218C12.8733 3.04218 15.7087 5.87712 15.7087 9.37381C15.7087 12.8705 12.8733 15.7055 9.37533 15.7055C5.87735 15.7055 3.04199 12.8705 3.04199 9.37381ZM9.37533 1.54218C5.04926 1.54218 1.54199 5.04835 1.54199 9.37381C1.54199 13.6993 5.04926 17.2055 9.37533 17.2055C11.2676 17.2055 13.0032 16.5346 14.3572 15.4178L17.1773 18.2381C17.4702 18.531 17.945 18.5311 18.2379 18.2382C18.5308 17.9453 18.5309 17.4704 18.238 17.1775L15.4182 14.3575C16.5367 13.0035 17.2087 11.2671 17.2087 9.37381C17.2087 5.04835 13.7014 1.54218 9.37533 1.54218Z" fill="" />
-                          </svg>
-                        </span>
-                        <input 
-                          type="text" 
-                          id="kanbanSearchInput" 
-                          placeholder="Search tasks in Kanban..." 
-                          class="h-11 w-full rounded-lg border border-gray-300 bg-white py-2.5 pr-3 pl-10 !text-base text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500"
-                          oninput="searchKanbanTasks(this.value)"
-                        />
-                      </div>
-                      
-                      <!-- Filter Pills -->
-                      <div class="flex flex-wrap items-center gap-x-1 gap-y-2 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900">
-                        <button
-                          class="inline-flex items-center gap-2 px-4 py-2 !text-base font-medium rounded-md group hover:text-gray-900 dark:hover:text-white"
-                          :class="selectedFilter === 'All' ? 'text-gray-900 dark:text-white bg-white dark:bg-gray-800' : 'text-gray-500 dark:text-gray-400'"
-                          @click="selectedFilter = 'All'; applyKanbanFilter('All')"
-                        >
-                          All Tasks
-                          <span
-                            class="inline-flex rounded-full px-2 py-0.5 !text-base font-medium leading-normal group-hover:bg-brand-50 group-hover:text-brand-500 dark:group-hover:bg-brand-500/15 dark:group-hover:text-brand-400"
-                            :class="selectedFilter === 'All' ? 'text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/15' : 'bg-white dark:bg-white/[0.03]'"
-                            id="kanban-all-count"
-                          >
-                            0
-                          </span>
-                        </button>
-                        
-                        <button
-                          class="inline-flex items-center gap-2 px-4 py-2 !text-base font-medium rounded-md group hover:text-gray-900 dark:hover:text-white"
-                          :class="selectedFilter === 'Pending' ? 'text-gray-900 dark:text-white bg-white dark:bg-gray-800' : 'text-gray-500 dark:text-gray-400'"
-                          @click="selectedFilter = 'Pending'; applyKanbanFilter('Pending')"
-                        >
-                          Pending
-                          <span
-                            class="inline-flex rounded-full px-2 py-0.5 !text-base font-medium leading-normal group-hover:bg-brand-50 group-hover:text-brand-500 dark:group-hover:bg-brand-500/15 dark:group-hover:text-brand-400"
-                            :class="selectedFilter === 'Pending' ? 'text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/15' : 'bg-white dark:bg-white/[0.03]'"
-                            id="kanban-pending-filter-count"
-                          >
-                            0
-                          </span>
-                        </button>
-                        
-                        <button
-                          class="inline-flex items-center gap-2 px-4 py-2 !text-base font-medium rounded-md group hover:text-gray-900 dark:hover:text-white"
-                          :class="selectedFilter === 'In Progress' ? 'text-gray-900 dark:text-white bg-white dark:bg-gray-800' : 'text-gray-500 dark:text-gray-400'"
-                          @click="selectedFilter = 'In Progress'; applyKanbanFilter('In Progress')"
-                        >
-                          In Progress
-                          <span
-                            class="inline-flex rounded-full px-2 py-0.5 !text-base font-medium leading-normal group-hover:bg-brand-50 group-hover:text-brand-500 dark:group-hover:bg-brand-500/15 dark:group-hover:text-brand-400"
-                            :class="selectedFilter === 'In Progress' ? 'text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/15' : 'bg-white dark:bg-white/[0.03]'"
-                            id="kanban-inprogress-filter-count"
-                          >
-                            0
-                          </span>
-                        </button>
-                        
-                        <button
-                          class="inline-flex items-center gap-2 px-4 py-2 !text-base font-medium rounded-md group hover:text-gray-900 dark:hover:text-white"
-                          :class="selectedFilter === 'Completed' ? 'text-gray-900 dark:text-white bg-white dark:bg-gray-800' : 'text-gray-500 dark:text-gray-400'"
-                          @click="selectedFilter = 'Completed'; applyKanbanFilter('Completed')"
-                        >
-                          Completed
-                          <span
-                            class="inline-flex rounded-full px-2 py-0.5 !text-base font-medium leading-normal group-hover:bg-brand-50 group-hover:text-brand-500 dark:group-hover:bg-brand-500/15 dark:group-hover:text-brand-400"
-                            :class="selectedFilter === 'Completed' ? 'text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/15' : 'bg-white dark:bg-white/[0.03]'"
-                            id="kanban-completed-filter-count"
-                          >
-                            0
-                          </span>
-                        </button>
-                      </div>
-                      
-                      <!-- Add Task Button for Kanban -->
-                      <button
-                        onclick="openAddTaskModal()"
-                        class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 !text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                      >
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                        </svg>
-                        Add Task
-                      </button>
-                    </div>
-                  </div>
+                <div x-show="activeTab === 'kanban'">
                   
                   <!-- Kanban Board -->
-                  <div class="mt-7 grid grid-cols-1 border-t border-gray-200 dark:border-gray-800 sm:mt-0 sm:grid-cols-2 xl:grid-cols-4 min-h-[600px] -mx-4 sm:-mx-6 -mb-4 sm:-mb-6">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 min-h-[600px] -mx-4 sm:-mx-6 -mb-4 sm:-mb-6">
                     
                     <!-- Pending Column -->
                     <div class="swim-lane flex flex-col gap-5 border-r border-gray-200 dark:border-gray-800">
@@ -919,50 +902,6 @@
                            ondragover="allowDrop(event)"
                            ondragleave="dragLeave(event)">
                         <!-- In Progress tasks will be populated here -->
-                      </div>
-                    </div>
-                    
-                    <!-- On Hold Column -->
-                    <div class="swim-lane flex flex-col gap-5 border-r border-gray-200 dark:border-gray-800">
-                      <div class="mb-1 flex items-center justify-between p-4 xl:px-6 xl:pt-6">
-                        <h3 class="flex items-center gap-3 !text-base font-medium text-gray-800 dark:text-white/90">
-                          On Hold
-                          <span id="onhold-count" class="inline-flex rounded-full bg-gray-100 px-2 py-0.5 !text-base font-medium text-gray-700 dark:bg-white/[0.03] dark:text-white/80">
-                            0
-                          </span>
-                        </h3>
-                        
-                        <div x-data="{openDropDown: false}" class="relative">
-                          <button
-                            @click="openDropDown = !openDropDown"
-                            class="text-gray-700 dark:text-gray-400"
-                          >
-                            <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path fill-rule="evenodd" clip-rule="evenodd" d="M5.99902 10.2451C6.96552 10.2451 7.74902 11.0286 7.74902 11.9951V12.0051C7.74902 12.9716 6.96552 13.7551 5.99902 13.7551C5.03253 13.7551 4.24902 12.9716 4.24902 12.0051V11.9951C4.24902 11.0286 5.03253 10.2451 5.99902 10.2451ZM17.999 10.2451C18.9655 10.2451 19.749 11.0286 19.749 11.9951V12.0051C19.749 12.9716 18.9655 13.7551 17.999 13.7551C17.0325 13.7551 16.249 12.9716 16.249 12.0051V11.9951C16.249 11.0286 17.0325 10.2451 17.999 10.2451ZM13.749 11.9951C13.749 11.0286 12.9655 10.2451 11.999 10.2451C11.0325 10.2451 10.249 11.0286 10.249 11.9951V12.0051C10.249 12.9716 11.0325 13.7551 11.999 13.7551C12.9655 13.7551 13.749 12.9716 13.749 12.0051V11.9951Z" fill=""/>
-                            </svg>
-                          </button>
-                          <div
-                            x-show="openDropDown"
-                            @click.outside="openDropDown = false"
-                            x-cloak
-                            class="absolute right-0 top-full z-[9999] w-[160px] space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-md dark:border-gray-800 dark:bg-gray-dark"
-                          >
-                            <button 
-                              onclick="openAddTaskModal()"
-                              class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
-                              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                              </svg>
-                              Add Task
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <div id="onhold-tasks" class="space-y-5 min-h-[500px] max-h-[600px] overflow-y-scroll custom-scrollbar pt-1 px-4 pb-4 xl:px-6 xl:pb-6"
-                           ondrop="drop(event, 'On Hold')" 
-                           ondragover="allowDrop(event)"
-                           ondragleave="dragLeave(event)">
-                        <!-- On Hold tasks will be populated here -->
                       </div>
                     </div>
                     
@@ -1176,16 +1115,16 @@
                     <!-- Charts Row -->
                     <div class="col-span-12 grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
                       
-                      <!-- Task Status Distribution Chart -->
+                      <!-- Task Aging Analysis Chart -->
                       <div class="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800" style="background-color: var(--card-bg, white);">
                         <div class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                           <div>
-                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Task Status Distribution</h3>
-                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Breakdown by status</p>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Task Aging Analysis</h3>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Open tasks by age (days)</p>
                           </div>
                         </div>
                         <div>
-                          <div id="taskStatusChart" class="-ml-5"></div>
+                          <div id="taskAgingChart" class="-ml-5"></div>
                         </div>
                       </div>
 
@@ -1379,16 +1318,6 @@
                     :class="selected === 'Completed' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
                     Completed
-                  </button>
-                  <button type="button" @click="selected = 'On Hold'; open = false; document.getElementById('task-status').value = 'On Hold';"
-                    :class="selected === 'On Hold' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
-                    On Hold
-                  </button>
-                  <button type="button" @click="selected = 'Cancelled'; open = false; document.getElementById('task-status').value = 'Cancelled';"
-                    :class="selected === 'Cancelled' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium transition-colors">
-                    Cancelled
                   </button>
                 </div>
                 <input type="hidden" id="task-status" value="Pending" required />
@@ -1850,9 +1779,7 @@
         const icons = {
           'Pending': `<svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
           'In Progress': `<svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>`,
-          'Completed': `<svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
-          'On Hold': `<svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
-          'Cancelled': `<svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`
+          'Completed': `<svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`
         };
         return icons[status] || icons['Pending'];
       }
@@ -1862,9 +1789,7 @@
         const statusConfig = {
           'Pending': { class: 'bg-warning-50 text-warning-600 dark:bg-warning-900/20 dark:text-warning-400' },
           'In Progress': { class: 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400' },
-          'Completed': { class: 'bg-success-50 text-success-600 dark:bg-success-900/20 dark:text-success-400' },
-          'On Hold': { class: 'bg-gray-50 text-gray-600 dark:bg-gray-900/20 dark:text-gray-400' },
-          'Cancelled': { class: 'bg-error-50 text-error-600 dark:bg-error-900/20 dark:text-error-400' }
+          'Completed': { class: 'bg-success-50 text-success-600 dark:bg-success-900/20 dark:text-success-400' }
         };
         
         const current = statusConfig[currentStatus] || statusConfig['Pending'];
@@ -2238,12 +2163,145 @@
       
       // Render all views
       function renderAllViews(kanbanFilter = null) {
+        updateGlobalFilterCounts();
         renderTasksTable();
         renderKanbanBoard(kanbanFilter || kanbanStatusFilter, kanbanSearchTerm);
         refreshSummary();
       }
       
-      // Apply Kanban filter
+      // Refresh all views (used by refresh button) - same as clear button behavior
+      async function refreshAllViews() {
+        const refreshButton = document.getElementById('refreshButton');
+        const tableLoadingOverlay = document.getElementById('tableLoadingOverlay');
+
+        // Show loading state
+        if (refreshButton) {
+          refreshButton.disabled = true;
+          const refreshIcon = document.getElementById('refreshIcon');
+          if (refreshIcon) {
+            refreshIcon.style.animation = 'spin 1s linear infinite';
+          }
+        }
+
+        if (tableLoadingOverlay) {
+          tableLoadingOverlay.classList.remove('hidden');
+        }
+
+        try {
+          // Reload tasks from Confluence
+          const fetchedTasks = await fetchTasks();
+          if (fetchedTasks && fetchedTasks.length > 0) {
+            tasks = fetchedTasks;
+          }
+
+          // Find Alpine.js component and clear all filters (same as clear button)
+          // Use a more specific selector to find the filter container
+          const filterContainer = document.querySelector('.mt-4.flex.flex-wrap[x-data]');
+          let alpineComponent = null;
+          if (filterContainer) {
+            // Try multiple ways to access Alpine component
+            if (filterContainer.__x && filterContainer.__x.$data) {
+              alpineComponent = filterContainer.__x.$data;
+            } else if (filterContainer._x_dataStack && filterContainer._x_dataStack[0]) {
+              alpineComponent = filterContainer._x_dataStack[0];
+            }
+          }
+          
+          // If still not found, try the attribute selector as fallback
+          if (!alpineComponent) {
+            const fallbackContainer = document.querySelector('[x-data*="selectedFilter"]');
+            if (fallbackContainer && fallbackContainer.__x) {
+              alpineComponent = fallbackContainer.__x.$data;
+            }
+          }
+          
+          // Set selectedFilter to 'All' first (same as clear button does)
+          if (alpineComponent) {
+            alpineComponent.selectedFilter = 'All';
+          }
+          
+          clearAllFilters(alpineComponent);
+        } catch (error) {
+          console.error('Error refreshing views:', error);
+        } finally {
+          // Hide loading state
+          if (refreshButton) {
+            refreshButton.disabled = false;
+            const refreshIcon = document.getElementById('refreshIcon');
+            if (refreshIcon) {
+              refreshIcon.style.animation = '';
+            }
+          }
+
+          if (tableLoadingOverlay) {
+            tableLoadingOverlay.classList.add('hidden');
+          }
+        }
+      }
+
+      // Apply Global Filter (for all tabs)
+      function applyGlobalFilter(status, alpineComponent = null) {
+        statusFilter = status;
+        kanbanStatusFilter = status;
+
+        // Update Alpine.js state if component provided
+        if (alpineComponent) {
+          alpineComponent.selectedFilter = status;
+        }
+
+        // Update counts
+        updateGlobalFilterCounts();
+
+        // Apply to all views
+        applyAllFilters(); // for table view
+        renderKanbanBoard(null, ''); // for kanban view (use global statusFilter)
+        refreshSummary(); // for summary view
+      }
+      
+      // Update global filter counts
+      function updateGlobalFilterCounts() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+        // Filter tasks based on current filters (excluding status)
+        const filteredParentTasks = tasks.filter(t => {
+          if (t.parentId) return false; // Only parent tasks
+
+          // Search filter
+          const matchesSearch = !searchTerm ||
+            t.reportName.toLowerCase().includes(searchTerm) ||
+            (t.description && t.description.toLowerCase().includes(searchTerm)) ||
+            (t.maker && t.maker.toLowerCase().includes(searchTerm)) ||
+            (t.requestor && t.requestor.toLowerCase().includes(searchTerm)) ||
+            t.status.toLowerCase().includes(searchTerm) ||
+            (t.region && t.region.toLowerCase().includes(searchTerm));
+
+          // Priority filter
+          const matchesPriority = priorityFilter === 'All' || t.priority === priorityFilter;
+
+          // Region filter
+          const matchesRegion = regionFilter === 'All' || t.region === regionFilter;
+
+          // Maker filter
+          const matchesMaker = makerFilter === 'All' || (t.maker && t.maker === makerFilter);
+
+          return matchesSearch && matchesPriority && matchesRegion && matchesMaker;
+        });
+
+        const counts = {
+          'All': filteredParentTasks.length,
+          'Pending': filteredParentTasks.filter(t => t.status === 'Pending').length,
+          'In Progress': filteredParentTasks.filter(t => t.status === 'In Progress').length,
+          'Completed': filteredParentTasks.filter(t => t.status === 'Completed').length
+        };
+
+        // Update count badges
+        document.getElementById('global-all-count').textContent = counts['All'];
+        document.getElementById('global-pending-count').textContent = counts['Pending'];
+        document.getElementById('global-inprogress-count').textContent = counts['In Progress'];
+        document.getElementById('global-completed-count').textContent = counts['Completed'];
+      }
+      
+      // Apply Kanban filter (legacy - now uses global filter)
       function applyKanbanFilter(filter) {
         kanbanStatusFilter = filter;
         renderKanbanBoard(filter, kanbanSearchTerm);
@@ -2260,16 +2318,14 @@
         const statusColumns = {
           'Pending': document.getElementById('pending-tasks'),
           'In Progress': document.getElementById('inprogress-tasks'),
-          'On Hold': document.getElementById('onhold-tasks'),
           'Completed': document.getElementById('completed-tasks')
         };
         
-        // Calculate total counts from all parent tasks (for filter pills)
+        // Calculate total counts from all parent tasks
         const allParentTasks = tasks.filter(t => !t.parentId);
         const totalStatusCounts = {
           'Pending': 0,
           'In Progress': 0,
-          'On Hold': 0,
           'Completed': 0
         };
         
@@ -2283,7 +2339,6 @@
         const displayedStatusCounts = {
           'Pending': 0,
           'In Progress': 0,
-          'On Hold': 0,
           'Completed': 0
         };
         
@@ -2292,10 +2347,11 @@
         
         // Filter only parent tasks for Kanban
         let parentTasks = allParentTasks;
-        
-        // Apply status filter if provided
-        if (filterByStatus && filterByStatus !== 'All') {
-          parentTasks = parentTasks.filter(t => t.status === filterByStatus);
+
+        // Apply status filter (use parameter if provided, otherwise use global statusFilter)
+        const effectiveStatusFilter = filterByStatus !== null ? filterByStatus : statusFilter;
+        if (effectiveStatusFilter && effectiveStatusFilter !== 'All') {
+          parentTasks = parentTasks.filter(t => t.status === effectiveStatusFilter);
         }
         
         // Apply search filter if provided
@@ -2366,17 +2422,12 @@
           }
         });
         
-        // Update filter pill counts (always show total counts)
-        const totalCount = Object.values(totalStatusCounts).reduce((a, b) => a + b, 0);
-        document.getElementById('kanban-all-count').textContent = totalCount;
-        document.getElementById('kanban-pending-filter-count').textContent = totalStatusCounts['Pending'];
-        document.getElementById('kanban-inprogress-filter-count').textContent = totalStatusCounts['In Progress'];
-        document.getElementById('kanban-completed-filter-count').textContent = totalStatusCounts['Completed'];
+        // Update global filter counts
+        updateGlobalFilterCounts();
         
         // Update column header counts (show displayed counts)
         document.getElementById('pending-count').textContent = displayedStatusCounts['Pending'];
         document.getElementById('inprogress-count').textContent = displayedStatusCounts['In Progress'];
-        document.getElementById('onhold-count').textContent = displayedStatusCounts['On Hold'];
         document.getElementById('completed-count').textContent = displayedStatusCounts['Completed'];
         
         // Show empty state if no tasks in a column
@@ -2410,6 +2461,7 @@
       let statusFilter = 'All';
       let priorityFilter = 'All';
       let regionFilter = 'All';
+      let makerFilter = 'All';
       
       // Filter by status
       function filterTasksByStatus(status) {
@@ -2427,6 +2479,65 @@
       function filterTasksByRegion(region) {
         regionFilter = region;
         applyAllFilters();
+      }
+      
+      // Filter by maker
+      function filterTasksByMaker(maker) {
+        makerFilter = maker;
+        applyAllFilters();
+      }
+      
+      // Clear all filters
+      function clearAllFilters(alpineComponent = null) {
+        // Clear search box first
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+          searchInput.value = '';
+        }
+
+        // Reset dropdown filters
+        try {
+          // Reset Priority dropdown
+          const priorityDropdown = document.getElementById('priorityFilterDropdown');
+          if (priorityDropdown && priorityDropdown.__x) {
+            priorityDropdown.__x.$data.selected = 'All Priorities';
+          }
+
+          // Reset Region dropdown
+          const regionDropdown = document.getElementById('regionFilterDropdown');
+          if (regionDropdown && regionDropdown.__x) {
+            regionDropdown.__x.$data.selected = 'All Regions';
+          }
+
+          // Reset Maker dropdown
+          const makerDropdown = document.getElementById('makerFilterDropdown');
+          if (makerDropdown && makerDropdown.__x) {
+            makerDropdown.__x.$data.selected = 'All Makers';
+          }
+        } catch (e) {
+          console.warn('Could not reset dropdown filters:', e);
+        }
+
+        // Reset all filter variables
+        statusFilter = 'All';
+        priorityFilter = 'All';
+        regionFilter = 'All';
+        makerFilter = 'All';
+
+        // Update Alpine.js state if component provided, otherwise find it
+        if (!alpineComponent) {
+          const filterContainer = document.querySelector('[x-data*="selectedFilter"]');
+          if (filterContainer && filterContainer.__x) {
+            alpineComponent = filterContainer.__x.$data;
+          }
+        }
+
+        if (alpineComponent) {
+          alpineComponent.selectedFilter = 'All';
+        }
+
+        // Apply global filter to all views (this ensures status is reset and all views update)
+        applyGlobalFilter('All', alpineComponent);
       }
       
       // Apply all filters combined
@@ -2452,11 +2563,19 @@
           // Region filter
           const matchesRegion = regionFilter === 'All' || task.region === regionFilter;
           
-          return matchesSearch && matchesStatus && matchesPriority && matchesRegion;
+          // Maker filter
+          const matchesMaker = makerFilter === 'All' || (task.maker && task.maker === makerFilter);
+          
+          return matchesSearch && matchesStatus && matchesPriority && matchesRegion && matchesMaker;
         });
-        
+
+        // Update global filter counts based on current filters (excluding status)
+        updateGlobalFilterCounts();
+
         currentPage = 1;
         renderTasksTable();
+        refreshSummaryMetrics();
+        refreshKanbanBoard();
       }
       
       // Filter tasks (called by search input)
@@ -2688,32 +2807,55 @@
       async function submitTask(event) {
         event.preventDefault();
         
-        const taskId = document.getElementById('task-id').value;
-        const parentId = document.getElementById('task-parent-id').value;
+        // Capture all form values including hidden fields
+        const taskId = document.getElementById('task-id')?.value || '';
+        const parentId = document.getElementById('task-parent-id')?.value || null;
         
+        // Get existing task to preserve all fields
+        const existingTask = taskId ? tasks.find(t => t.id === taskId) : null;
+        
+        // Build task data, preserving existing fields and ensuring proper types
         const taskData = {
+          // Preserve ID as string
           id: taskId || `task_${Date.now()}`,
           parentId: parentId || null,
-          reportName: document.getElementById('task-report-name').value,
-          description: document.getElementById('task-description').value,
-          dateReceived: document.getElementById('task-date-received').value,
-          maker: document.getElementById('task-maker').value,
-          requestor: document.getElementById('task-requestor').value,
-          status: document.getElementById('task-status').value,
-          timeSpent: parseFloat(document.getElementById('task-time-spent').value) || 0,
-          region: document.getElementById('task-region').value,
-          requestorRegion: document.getElementById('task-requestor-region').value,
-          priority: document.getElementById('task-priority').value || '',
-          createdAt: taskId ? (tasks.find(t => t.id === taskId)?.createdAt || new Date().toISOString()) : new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+          reportName: document.getElementById('task-report-name')?.value || '',
+          description: document.getElementById('task-description')?.value || '',
+          dateReceived: document.getElementById('task-date-received')?.value || '',
+          maker: document.getElementById('task-maker')?.value || '',
+          requestor: document.getElementById('task-requestor')?.value || '',
+          status: document.getElementById('task-status')?.value || '',
+          timeSpent: parseFloat(document.getElementById('task-time-spent')?.value) || 0,
+          region: document.getElementById('task-region')?.value || '',
+          requestorRegion: document.getElementById('task-requestor-region')?.value || '',
+          priority: document.getElementById('task-priority')?.value || '',
+          // Preserve createdAt, only set if new task
+          createdAt: existingTask?.createdAt || new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          // Preserve any other existing fields not in form
+          ...(existingTask && {
+            closeDate: existingTask.closeDate
+          })
         };
         
+        const isUpdate = !!taskId;
+        const actionText = isUpdate ? 'Task updated successfully' : 'Task added successfully';
+        
+        // INSTANT CLOSE: Close modal immediately
+        closeTaskModal();
+        
+        // Show saving toast
+        showInfoToast('Saving task...');
+        
+        // Save in background
         try {
-          if (taskId) {
-            // Update existing task
+          if (isUpdate) {
+            // Update existing task - only update the specific record
             const index = tasks.findIndex(t => t.id === taskId);
             if (index !== -1) {
               tasks[index] = taskData;
+            } else {
+              throw new Error('Task not found for update');
             }
           } else {
             // Add new task
@@ -2725,15 +2867,30 @@
             }
           }
           
+          // Save to Confluence
           await updateTasksFile(tasks);
+          
+          // Update UI
           filteredTasks = [...tasks];
           renderAllViews();
-          closeTaskModal();
           
-          showSuccessToast(taskId ? 'Task updated successfully' : 'Task added successfully');
+          // Show success toast
+          showSuccessToast(actionText);
         } catch (error) {
           console.error('Error saving task:', error);
           showErrorToast('Failed to save task. Please try again.');
+          
+          // Revert changes on error
+          if (isUpdate && existingTask) {
+            const index = tasks.findIndex(t => t.id === taskId);
+            if (index !== -1) {
+              tasks[index] = existingTask;
+            }
+          } else if (!isUpdate) {
+            tasks = tasks.filter(t => t.id !== taskData.id);
+          }
+          filteredTasks = [...tasks];
+          renderAllViews();
         }
       }
       
@@ -3122,27 +3279,26 @@
       // SUMMARY DASHBOARD FUNCTIONS
       // ============================================
       
-      let taskStatusChart = null;
+      let taskAgingChart = null;
       let taskPriorityChart = null;
       let taskRegionChart = null;
       
       function initializeSummary() {
         calculateAndDisplayMetrics();
-        initializeTaskStatusChart();
+        initializeTaskAgingChart();
         initializeTaskPriorityChart();
         initializeTaskRegionChart();
         populateRecentTasksTable();
       }
       
       function calculateAndDisplayMetrics() {
-        const parentTasks = tasks.filter(t => !t.parentId);
+        const parentTasks = filteredTasks.filter(t => !t.parentId);
         const totalTasks = parentTasks.length;
         
         // Count by status
         const pendingCount = parentTasks.filter(t => t.status === 'Pending').length;
         const inProgressCount = parentTasks.filter(t => t.status === 'In Progress').length;
         const completedCount = parentTasks.filter(t => t.status === 'Completed').length;
-        const onHoldCount = parentTasks.filter(t => t.status === 'On Hold').length;
         
         // Calculate percentages
         const pendingPercentage = totalTasks > 0 ? Math.round((pendingCount / totalTasks) * 100) : 0;
@@ -3191,48 +3347,66 @@
         }
       }
       
-      function initializeTaskStatusChart() {
-        const chartElement = document.querySelector("#taskStatusChart");
+      function initializeTaskAgingChart() {
+        const chartElement = document.querySelector("#taskAgingChart");
         if (!chartElement) return;
         
         // Destroy existing chart if it exists
-        if (taskStatusChart) {
-          taskStatusChart.destroy();
-          taskStatusChart = null;
+        if (taskAgingChart) {
+          taskAgingChart.destroy();
+          taskAgingChart = null;
         }
         
         chartElement.innerHTML = '';
         
-        const parentTasks = tasks.filter(t => !t.parentId);
+        // Get only open tasks (not completed)
+        const openTasks = filteredTasks.filter(t => !t.parentId && t.status !== 'Completed');
         
-        if (parentTasks.length === 0) {
+        if (openTasks.length === 0) {
           chartElement.innerHTML = `
             <div class="flex items-center justify-center py-20">
               <div class="text-center">
                 <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No task data available</p>
+                <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No open tasks</p>
               </div>
             </div>
           `;
           return;
         }
         
-        // Count by status
-        const statusCounts = {
-          'Pending': parentTasks.filter(t => t.status === 'Pending').length,
-          'In Progress': parentTasks.filter(t => t.status === 'In Progress').length,
-          'On Hold': parentTasks.filter(t => t.status === 'On Hold').length,
-          'Completed': parentTasks.filter(t => t.status === 'Completed').length,
-          'Cancelled': parentTasks.filter(t => t.status === 'Cancelled').length
+        // Calculate days open for each task
+        const today = new Date();
+        const ageBuckets = {
+          '0-7 days': 0,
+          '8-14 days': 0,
+          '15-30 days': 0,
+          '30+ days': 0
         };
+        
+        openTasks.forEach(task => {
+          if (task.dateReceived) {
+            const receivedDate = new Date(task.dateReceived);
+            const daysOpen = Math.floor((today - receivedDate) / (1000 * 60 * 60 * 24));
+            
+            if (daysOpen <= 7) {
+              ageBuckets['0-7 days']++;
+            } else if (daysOpen <= 14) {
+              ageBuckets['8-14 days']++;
+            } else if (daysOpen <= 30) {
+              ageBuckets['15-30 days']++;
+            } else {
+              ageBuckets['30+ days']++;
+            }
+          }
+        });
         
         const chartOptions = {
           series: [
-            { name: "Tasks", data: [statusCounts['Pending'], statusCounts['In Progress'], statusCounts['On Hold'], statusCounts['Completed'], statusCounts['Cancelled']] }
+            { name: "Open Tasks", data: Object.values(ageBuckets) }
           ],
-          colors: ["#465fff"],
+          colors: ["#10B981", "#F59E0B", "#F97316", "#EF4444"],
           chart: {
             fontFamily: "Outfit, sans-serif",
             type: "bar",
@@ -3245,6 +3419,7 @@
               columnWidth: "50%",
               borderRadius: 5,
               borderRadiusApplication: "end",
+              distributed: true,
               dataLabels: {
                 position: "top",
               },
@@ -3274,14 +3449,27 @@
             colors: ["transparent"],
           },
           xaxis: {
-            categories: ["Pending", "In Progress", "On Hold", "Completed", "Cancelled"],
+            categories: Object.keys(ageBuckets),
             axisBorder: { show: false },
             axisTicks: { show: false },
+            labels: {
+              style: {
+                colors: '#6B7280',
+                fontSize: '12px',
+              }
+            }
           },
           legend: {
             show: false,
           },
-          yaxis: { title: false },
+          yaxis: { 
+            title: false,
+            labels: {
+              formatter: function(val) {
+                return Math.floor(val);
+              }
+            }
+          },
           grid: {
             yaxis: { lines: { show: true } },
             borderColor: '#E5E7EB',
@@ -3292,14 +3480,14 @@
             x: { show: true },
             y: {
               formatter: function (val) {
-                return val + " tasks";
+                return val + " task" + (val !== 1 ? "s" : "");
               },
             },
           },
         };
         
-        taskStatusChart = new ApexCharts(chartElement, chartOptions);
-        taskStatusChart.render();
+        taskAgingChart = new ApexCharts(chartElement, chartOptions);
+        taskAgingChart.render();
       }
       
       function initializeTaskPriorityChart() {
@@ -3342,7 +3530,7 @@
           series: [
             { name: "Tasks", data: [priorityCounts['Low'], priorityCounts['Medium'], priorityCounts['High'], priorityCounts['Urgent']] }
           ],
-          colors: ["#10B981"],
+          colors: ["#6B7280", "#F59E0B", "#F97316", "#EF4444"],
           chart: {
             fontFamily: "Outfit, sans-serif",
             type: "bar",
@@ -3355,6 +3543,7 @@
               columnWidth: "50%",
               borderRadius: 5,
               borderRadiusApplication: "end",
+              distributed: true,
               dataLabels: {
                 position: "top",
               },
@@ -3612,9 +3801,7 @@
         const badges = {
           'Pending': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-amber-100 px-2.5 py-0.5 !text-base font-medium text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">Pending</span>',
           'In Progress': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-orange-100 px-2.5 py-0.5 !text-base font-medium text-orange-700 dark:bg-orange-900/20 dark:text-orange-400">In Progress</span>',
-          'Completed': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-green-100 px-2.5 py-0.5 !text-base font-medium text-green-700 dark:bg-green-900/20 dark:text-green-400">Completed</span>',
-          'On Hold': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-gray-100 px-2.5 py-0.5 !text-base font-medium text-gray-700 dark:bg-gray-900/20 dark:text-gray-400">On Hold</span>',
-          'Cancelled': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-red-100 px-2.5 py-0.5 !text-base font-medium text-red-700 dark:bg-red-900/20 dark:text-red-400">Cancelled</span>'
+          'Completed': '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-green-100 px-2.5 py-0.5 !text-base font-medium text-green-700 dark:bg-green-900/20 dark:text-green-400">Completed</span>'
         };
         return badges[status] || status;
       }
@@ -3634,6 +3821,102 @@
         if (typeof initializeSummary === 'function') {
           initializeSummary();
         }
+      }
+      
+      // Populate maker dropdown with unique makers
+      function populateMakerFilter() {
+        const makerSet = new Set();
+        tasks.forEach(task => {
+          if (task.maker && task.maker.trim()) {
+            makerSet.add(task.maker.trim());
+          }
+        });
+        
+        const makers = Array.from(makerSet).sort();
+        const makerOptionsContainer = document.getElementById('makerFilterOptions');
+        if (makerOptionsContainer) {
+          makerOptionsContainer.innerHTML = makers.map(maker => `
+            <button type="button" onclick="filterTasksByMaker('${maker.replace(/'/g, "\\'")}'); 
+              const dropdown = document.getElementById('makerFilterDropdown');
+              if (dropdown && dropdown.__x) dropdown.__x.$data.selected = '${maker.replace(/'/g, "\\'")}';
+              if (dropdown && dropdown.__x) dropdown.__x.$data.open = false;"
+              class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
+              ${maker}
+            </button>
+          `).join('');
+        }
+      }
+      
+      // Wrapper functions for filter integration
+      function refreshSummaryMetrics() {
+        if (typeof initializeSummary === 'function') {
+          initializeSummary();
+        }
+      }
+      
+      function refreshKanbanBoard() {
+        // Re-render Kanban board with filtered tasks
+        renderKanbanBoardFiltered();
+      }
+      
+      function renderKanbanBoardFiltered() {
+        const statusColumns = {
+          'Pending': document.getElementById('pending-tasks'),
+          'In Progress': document.getElementById('inprogress-tasks'),
+          'Completed': document.getElementById('completed-tasks')
+        };
+        
+        if (!statusColumns['Pending']) return; // Not in Kanban view
+        
+        // Clear all columns
+        Object.values(statusColumns).forEach(col => col.innerHTML = '');
+        
+        // Filter only parent tasks for Kanban from filtered tasks
+        const parentTasks = filteredTasks.filter(t => !t.parentId);
+        
+        parentTasks.forEach(task => {
+          const childTasks = tasks.filter(t => t.parentId === task.id);
+          const childCount = childTasks.length;
+          
+          // Get initials from maker name
+          const makerInitials = task.maker 
+            ? task.maker.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+            : '?';
+          
+          const priorityColorMap = {
+            'High': 'bg-error-50 text-error-700 dark:bg-error-900/20 dark:text-error-400',
+            'Medium': 'bg-warning-50 text-warning-700 dark:bg-warning-900/20 dark:text-warning-400',
+            'Low': 'bg-success-50 text-success-700 dark:bg-success-900/20 dark:text-success-400'
+          };
+          
+          const taskCard = document.createElement('div');
+          taskCard.className = 'task bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-lg transition-all';
+          taskCard.draggable = true;
+          taskCard.dataset.taskId = task.id;
+          
+          taskCard.innerHTML = `
+            <div class="flex items-start justify-between mb-3">
+              <h4 class="!text-base font-semibold text-gray-800 dark:text-white line-clamp-2 flex-1">${task.reportName}</h4>
+              ${childCount > 0 ? `<span class="ml-2 inline-flex items-center rounded-full bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-700 dark:bg-brand-900/20 dark:text-brand-400">${childCount}</span>` : ''}
+            </div>
+            ${task.description ? `<p class="!text-base text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">${task.description}</p>` : ''}
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-brand-100 text-brand-700 dark:bg-brand-900/20 dark:text-brand-400 !text-base font-medium">
+                  ${makerInitials}
+                </span>
+                ${task.priority ? `<span class="inline-flex items-center rounded-full px-2 py-0.5 !text-base font-medium ${priorityColorMap[task.priority] || 'bg-gray-100 text-gray-700'}">${task.priority}</span>` : ''}
+              </div>
+            </div>
+          `;
+          
+          taskCard.addEventListener('click', () => editTask(task.id));
+          
+          // Add to appropriate column
+          if (statusColumns[task.status]) {
+            statusColumns[task.status].appendChild(taskCard);
+          }
+        });
       }
       
       // Search functionality for summary tasks table
@@ -3670,7 +3953,7 @@
       
       // Initialize scrollbar visibility for kanban columns
       function initializeKanbanScrollbars() {
-        const kanbanColumns = ['pending-tasks', 'inprogress-tasks', 'onhold-tasks', 'completed-tasks'];
+        const kanbanColumns = ['pending-tasks', 'inprogress-tasks', 'completed-tasks'];
         kanbanColumns.forEach(columnId => {
           const column = document.getElementById(columnId);
           if (column) {
@@ -3888,43 +4171,7 @@
                 createdAt: '2026-01-12T12:00:00Z',
                 updatedAt: '2026-01-14T11:00:00Z'
               },
-              
-              // Parent Task 5 - On Hold
-              {
-                id: 'task-005',
-                parentId: null,
-                reportName: 'Market Trends Analysis',
-                description: 'Analyze market trends and competitor positioning',
-                dateReceived: '2026-01-12',
-                maker: 'Emma Williams',
-                requestor: 'John Smith',
-                status: 'On Hold',
-                timeSpent: 2.0,
-                region: 'APAC',
-                requestorRegion: 'NAM',
-                priority: 'Low',
-                createdAt: '2026-01-12T10:00:00Z',
-                updatedAt: '2026-01-13T15:00:00Z'
-              },
-              
-              // Parent Task 6 - Cancelled
-              {
-                id: 'task-006',
-                parentId: null,
-                reportName: 'Legacy System Migration Plan',
-                description: 'Create migration plan for legacy reporting system',
-                dateReceived: '2026-01-13',
-                maker: 'Lisa Anderson',
-                requestor: 'Michael Chen',
-                status: 'Cancelled',
-                timeSpent: 1.5,
-                region: 'EMEA',
-                requestorRegion: 'APAC',
-                priority: 'Low',
-                createdAt: '2026-01-13T08:00:00Z',
-                updatedAt: '2026-01-13T16:00:00Z'
-              },
-              
+
               // Parent Task 7 with many children
               {
                 id: 'task-007',
@@ -4114,6 +4361,9 @@
           // ============================================
 
           filteredTasks = [...tasks];
+          
+          // Populate maker filter dropdown
+          populateMakerFilter();
           
           // Set default date to today
           const today = new Date().toISOString().split('T')[0];
