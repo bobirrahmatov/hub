@@ -3541,11 +3541,14 @@
         document.getElementById('sick-leave-count').textContent = `${sickMembersCount} (${sickDays}d)`;
         document.getElementById('public-leave-count').textContent = publicCount;
         
-        // Calculate percentages based on total team members
+        // Calculate percentages based on total team members for Annual/Sick
+        // For Public holidays, calculate as percentage of all events
         const totalMembers = teamMembers.length;
+        const totalAllEvents = events.length; // Includes both public and non-public events
+        
         const annualPercentage = totalMembers > 0 ? Math.round((annualMembersCount / totalMembers) * 100) : 0;
         const sickPercentage = totalMembers > 0 ? Math.round((sickMembersCount / totalMembers) * 100) : 0;
-        const publicPercentage = totalCount > 0 ? Math.round((publicCount / totalCount) * 100) : 0;
+        const publicPercentage = totalAllEvents > 0 ? Math.round((publicCount / totalAllEvents) * 100) : 0;
         
         document.getElementById('annual-percentage').textContent = annualPercentage + '%';
         document.getElementById('sick-percentage').textContent = sickPercentage + '%';
