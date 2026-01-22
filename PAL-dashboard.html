@@ -2706,8 +2706,10 @@
                                 </div>
                             </div>
 
-                            <!-- Key Metrics Card - Full Width -->
-                            <div class="mb-6 rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                            <!-- Key Metrics and Relationship Presence Grid -->
+                            <div class="mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <!-- Key Metrics Card - 1 Column -->
+                                <div class="lg:col-span-1 rounded-2xl border border-gray-200 bg-white overflow-hidden">
                                 <!-- Header -->
                                 <div class="px-6 py-4 border-b border-gray-200">
                                     <h3 class="!text-lg font-semibold text-gray-800">Key Metrics</h3>
@@ -2860,8 +2862,8 @@
                                 </div>
                             </div>
 
-                            <!-- Relationship Presence Details - Full Width -->
-                            <div class="mb-6 rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <!-- Relationship Presence Details - 2 Columns -->
+                                <div class="lg:col-span-2 rounded-2xl border border-gray-200 bg-white overflow-hidden">
                                 <!-- Header -->
                                 <div class="px-6 py-4 border-b border-gray-200">
                                     <div class="flex items-center justify-between">
@@ -2934,7 +2936,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                </div>
                             </div>
+                            <!-- End Key Metrics and Relationship Presence Grid -->
 
                             <!-- Facilities Details Table -->
                             <div class="mb-6 rounded-2xl border border-gray-200 bg-white overflow-hidden">
@@ -2965,29 +2969,27 @@
                                                     Region</th>
                                                 <th
                                                     class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Facility id</th>
+                                                    Fac ID</th>
                                                 <th
                                                     class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Product Program</th>
+                                                    Prod Program</th>
                                                 <th
                                                     class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
                                                     Facility Type</th>
                                                 <th
                                                     class="px-4 py-3 text-center !text-base font-semibold text-gray-600 leading-tight">
-                                                    <div class="leading-tight text-center">Management<br />Status</div>
+                                                    <div class="leading-tight text-center">DM/CM</div>
                                                 </th>
                                                 <th
                                                     class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
                                                     Maturity Date</th>
                                                 <th
                                                     class="px-4 py-3 text-center !text-base font-semibold text-gray-600 leading-tight">
-                                                    <div class="leading-tight text-center">Credit<br />Classification
-                                                    </div>
+                                                    <div class="leading-tight text-center">Credit<br />Classification</div>
                                                 </th>
                                                 <th
                                                     class="px-4 py-3 text-center !text-base font-semibold text-gray-600 leading-tight">
-                                                    <div class="leading-tight text-center">Facility<br />Approved Amount
-                                                    </div>
+                                                    <div class="leading-tight text-center">Facility Amount</div>
                                                 </th>
                                                 <th
                                                     class="px-4 py-3 text-right !text-base font-semibold text-gray-600 whitespace-nowrap">
@@ -3007,7 +3009,8 @@
                                         <tbody id="deepDiveFacilitiesDetailsTable" class="divide-y divide-gray-200">
                                             <tr>
                                                 <td colspan="12" class="px-6 py-8 text-center text-gray-400">
-                                                    <p class="text-base">Select a relationship to view facility details</p>
+                                                    <p class="text-base">Select a relationship to view facility details
+                                                    </p>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -3021,37 +3024,157 @@
                                         <div class="flex items-center gap-6">
                                             <div class="text-right">
                                                 <span class="!text-base text-gray-500">Approved:</span>
-                                                <span class="ml-2 font-bold text-gray-900" id="deepDiveFacilitiesFooterApproved">$0</span>
+                                                <span class="ml-2 font-bold text-gray-900"
+                                                    id="deepDiveFacilitiesFooterApproved">$0</span>
                                             </div>
                                             <div class="text-right">
                                                 <span class="!text-base text-gray-500">Loan O/S:</span>
-                                                <span class="ml-2 font-semibold text-gray-900" id="deepDiveFacilitiesFooterLoanOS">$0</span>
+                                                <span class="ml-2 font-semibold text-gray-900"
+                                                    id="deepDiveFacilitiesFooterLoanOS">$0</span>
                                             </div>
                                             <div class="text-right">
                                                 <span class="!text-base text-gray-500">LC O/S:</span>
-                                                <span class="ml-2 font-semibold text-gray-900" id="deepDiveFacilitiesFooterLCOS">$0</span>
+                                                <span class="ml-2 font-semibold text-gray-900"
+                                                    id="deepDiveFacilitiesFooterLCOS">$0</span>
                                             </div>
                                             <div class="text-right">
                                                 <span class="!text-base text-gray-500">Unused:</span>
-                                                <span class="ml-2 font-semibold text-gray-900" id="deepDiveFacilitiesFooterUnused">$0</span>
+                                                <span class="ml-2 font-semibold text-gray-900"
+                                                    id="deepDiveFacilitiesFooterUnused">$0</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            </table>
+
+                            <!-- Trends Table for Relationship -->
+                            <div class="mb-6 rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="px-6 py-4 border-b border-gray-100">
+                                    <h3 class="!text-xl font-bold text-gray-900">Relationship Trend Analysis</h3>
+                                    <p class="!text-base font-medium text-gray-500 mt-1">Historical trends for this relationship by region and product</p>
+                                </div>
+
+                                <div class="custom-scrollbar overflow-x-auto">
+                                    <table class="min-w-full" id="deepDiveTrendsTable">
+                                        <thead id="deepDiveTrendsTableHead">
+                                            <tr class="bg-gray-50">
+                                                <th class="px-6 py-4 text-left text-base font-medium whitespace-nowrap text-gray-500 sticky left-0 bg-gray-50 z-10">
+                                                    Product Category
+                                                </th>
+                                                <!-- Dynamic date columns will be inserted here -->
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="divide-y divide-gray-100" id="deepDiveTrendsTableBody">
+                                            <tr>
+                                                <td colspan="10" class="px-6 py-8 text-center text-gray-400">
+                                                    <div class="flex flex-col items-center gap-2">
+                                                        <svg class="h-8 w-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                                            </path>
+                                                        </svg>
+                                                        <p class="!text-base">Select a relationship to view trend data</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Covenants Table -->
+                            <div class="mb-6 rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <!-- Table Header -->
+                                <div class="px-6 py-4 border-b border-gray-200">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="!text-lg font-semibold text-gray-800">Covenants</h3>
+                                        <span
+                                            class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 !text-base font-medium text-blue-700">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                                                </path>
+                                            </svg>
+                                            <span id="deepDiveCovenantsCount">0</span> Covenants
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Table Content -->
+                                <div class="overflow-x-auto">
+                                    <table class="w-full">
+                                        <thead>
+                                            <tr class="border-b border-gray-200 bg-gray-50">
+                                                <th
+                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
+                                                    Region</th>
+                                                <th
+                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
+                                                    Fac ID</th>
+                                                <th
+                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
+                                                    Prod Program</th>
+                                                <th
+                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
+                                                    Covenant Number</th>
+                                                <th
+                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
+                                                    Covenant Due Date</th>
+                                                <th
+                                                    class="px-4 py-3 text-center !text-base font-semibold text-gray-600 whitespace-nowrap">
+                                                    Past due Days</th>
+                                                <th
+                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
+                                                    Covenant Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="deepDiveCovenantsTable" class="divide-y divide-gray-200">
+                                            <tr>
+                                                <td colspan="7" class="px-6 py-8 text-center text-gray-400">
+                                                    <p class="text-base">Select a relationship to view covenants</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Table Footer (dynamically updated) -->
+                                <div class="px-6 py-3 border-t border-gray-200 bg-gray-50" id="deepDiveCovenantsTableFooter"
+                                    style="display: none;">
+                                    <div class="flex items-center justify-between !text-base">
+                                        <span class="font-medium text-gray-600">Total Covenants</span>
+                                        <div class="flex items-center gap-6">
+                                            <div class="text-right">
+                                                <span class="!text-base text-gray-500">Total:</span>
+                                                <span class="ml-2 font-bold text-gray-900"
+                                                    id="deepDiveTotalCovenants">0</span>
+                                            </div>
+                                            <div class="text-right">
+                                                <span class="!text-base text-gray-500">Past Due:</span>
+                                                <span class="ml-2 font-semibold text-red-600"
+                                                    id="deepDivePastDueCovenantsFooter">0</span>
+                                            </div>
+                                            <div class="text-right">
+                                                <span class="!text-base text-gray-500">Current:</span>
+                                                <span class="ml-2 font-semibold text-green-600"
+                                                    id="deepDiveCurrentCovenants">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
+                        <!-- End Deep Dive Tab Content -->
                     </div>
+                    <!-- End Tab Content Container -->
                 </div>
-                </div>
+                <!-- End Tabs Container -->
             </div>
-            <!-- End Deep Dive Tab Content -->
-            <!-- End Tab Content Container -->
-            </div>
-            <!-- End Tabs Container -->
+            <!-- End Dashboard Container -->
         </div>
-        <!-- End Dashboard Container -->
-    </div>
 
     <script>
         // ===== PORTFOLIO ANALYTICS CONFIGURATION =====
@@ -4469,7 +4592,7 @@
             const notification = document.createElement("div");
 
             // Create notification with TailAdmin alert styling with solid background
-            notification.className = `fixed top-6 right-6 z-9999 max-w-md rounded-xl border ${config.borderColor} bg-white p-4 shadow-lg transform transition-all duration-300 ease-out`;
+            notification.className = `fixed top-6 right-6 z-[9999] max-w-md rounded-xl border ${config.borderColor} bg-white p-4 shadow-lg transform transition-all duration-300 ease-out`;
             notification.style.animation = 'slideInRight 0.3s ease-out';
 
             // Add background color overlay as inline style for solid appearance
@@ -29554,7 +29677,7 @@
         // Populate Deep Dive Facilities Details Table (filtered by relationship ID)
         function populateDeepDiveFacilitiesTable(fullRelationshipData) {
             const tbody = document.getElementById("deepDiveFacilitiesDetailsTable");
-            
+
             if (!tbody || !fullRelationshipData || fullRelationshipData.length === 0) {
                 if (tbody) {
                     tbody.innerHTML = `
@@ -29570,7 +29693,7 @@
 
             let html = "";
             const currentDate = new Date();
-            
+
             fullRelationshipData.forEach((facility) => {
                 const region = facility.Region || "-";
                 const facilityId = facility.Facility_ID || facility.Facility_id || "-";
@@ -29580,14 +29703,14 @@
                 const status = facility.Status || "Active";
                 const maturityDate = facility.Maturity_Date || facility.CA_Expiration_Date || "-";
                 const riskRating = facility.Risk_Rating || facility.Rating || "Pass";
-                
+
                 // Financial values
                 const facAmount = parseNumber(facility.Fac_Amount || facility.Facility_Amount);
                 const osuc = parseNumber(facility.OSUC || facility.Outstanding_UC);
                 const loanOS = parseNumber(facility.Loan_OS || facility.Loan_Outstanding);
                 const lcOS = parseNumber(facility.LC_OS || facility.LC_Outstanding);
                 const unused = parseNumber(facility.Unused_Commitment || facility.Unused);
-                
+
                 // Region badge colors
                 const regionColors = {
                     'APAC': 'bg-emerald-100 text-emerald-700',
@@ -29596,7 +29719,7 @@
                     'LATAM': 'bg-blue-100 text-blue-700'
                 };
                 const regionColor = regionColors[region] || 'bg-gray-100 text-gray-700';
-                
+
                 // Facility type badge colors
                 const typeColors = {
                     'Revolving': 'bg-blue-50 text-blue-700',
@@ -29604,7 +29727,7 @@
                     'Letter of Credit': 'bg-purple-50 text-purple-700'
                 };
                 const typeColor = typeColors[facilityType] || 'bg-gray-50 text-gray-700';
-                
+
                 // Status badge colors
                 const statusColors = {
                     'Active': 'bg-green-50 text-green-700',
@@ -29612,7 +29735,7 @@
                     'Pending': 'bg-yellow-50 text-yellow-700'
                 };
                 const statusColor = statusColors[status] || 'bg-gray-50 text-gray-700';
-                
+
                 // Risk rating badge colors
                 const ratingColors = {
                     'Pass': 'bg-gray-100 text-gray-700',
@@ -29621,7 +29744,7 @@
                     'Doubtful': 'bg-red-100 text-red-700'
                 };
                 const ratingColor = ratingColors[riskRating] || 'bg-gray-100 text-gray-700';
-                
+
                 html += `
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-4 py-3">
@@ -29668,7 +29791,7 @@
                     </tr>
                 `;
             });
-            
+
             tbody.innerHTML = html;
 
             // Update footer totals
@@ -29790,8 +29913,12 @@
 
             tbody.innerHTML = html;
 
+            // Update header badge count
+            const badgeCount = document.getElementById("deepDiveCovenantsCount");
+            if (badgeCount) badgeCount.textContent = relationshipCovenants.length;
+
             // Update footer counts
-            const footer = document.getElementById("deepDiveCovenantsFooter");
+            const footer = document.getElementById("deepDiveCovenantsTableFooter");
             if (footer) {
                 footer.style.display = "block";
                 const totalCov = relationshipCovenants.length;
@@ -29801,9 +29928,9 @@
                 }).length;
                 const currentCov = totalCov - pastDueCov;
 
-                const totalEl = document.getElementById("deepDiveCovenantsTotal");
-                const pastDueEl = document.getElementById("deepDiveCovenantsPastDue");
-                const currentEl = document.getElementById("deepDiveCovenantsCurrent");
+                const totalEl = document.getElementById("deepDiveTotalCovenants");
+                const pastDueEl = document.getElementById("deepDivePastDueCovenantsFooter");
+                const currentEl = document.getElementById("deepDiveCurrentCovenants");
 
                 if (totalEl) totalEl.textContent = totalCov;
                 if (pastDueEl) pastDueEl.textContent = pastDueCov;
@@ -30584,8 +30711,12 @@
                 `;
             }
 
+            // Reset covenants badge count
+            const covenantsBadgeCount = document.getElementById("deepDiveCovenantsCount");
+            if (covenantsBadgeCount) covenantsBadgeCount.textContent = "0";
+
             // Hide covenants footer
-            const covenantsFooter = document.getElementById("deepDiveCovenantsFooter");
+            const covenantsFooter = document.getElementById("deepDiveCovenantsTableFooter");
             if (covenantsFooter) {
                 covenantsFooter.style.display = "none";
             }
