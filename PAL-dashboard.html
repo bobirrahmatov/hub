@@ -2707,9 +2707,9 @@
                             </div>
 
                             <!-- Key Metrics and Relationship Presence Grid -->
-                            <div class="mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <!-- Relationship Presence Details - 1 Column -->
-                                <div class="lg:col-span-1 rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
                                 <!-- Header -->
                                 <div class="px-6 py-4 border-b border-gray-200">
                                     <div class="flex items-center justify-between">
@@ -2784,26 +2784,22 @@
                                 </div>
                                 </div>
 
-                                <!-- Key Metrics Card - 2 Columns -->
-                                <div class="lg:col-span-2 rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <!-- Key Metrics Card - 1 Column -->
+                                <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden h-full flex flex-col">
                                 <!-- Header -->
                                 <div class="px-6 py-4 border-b border-gray-200">
                                     <h3 class="!text-lg font-semibold text-gray-800">Key Metrics</h3>
                                 </div>
 
                                 <!-- Content -->
-                                <div class="p-6">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div class="p-5 flex-1 flex flex-col justify-between">
+                                    <div>
                                         <!-- CA Expired -->
-                                        <div
-                                            class="flex flex-col justify-between border border-gray-200 rounded-xl p-4">
-                                            <div class="flex items-center gap-3 mb-3">
-                                                <div
-                                                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-gray-300">
-                                                    <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
+                                        <div class="flex items-center justify-between border-b border-gray-100 py-3 last:border-b-0">
+                                            <div class="flex items-center gap-3">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-gray-300">
+                                                    <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                                         </path>
                                                     </svg>
@@ -2813,104 +2809,81 @@
                                                 </div>
                                             </div>
 
-                                            <div class="flex items-center justify-between">
-                                                <p class="!text-2xl font-bold text-gray-900">
+                                            <div class="flex items-center gap-3">
+                                                <p class="!text-base font-semibold text-gray-900 min-w-[24px]">
                                                     <span id="deepDiveCAExpired">0</span>
                                                 </p>
-                                                <div class="flex items-center gap-2">
-                                                    <div class="relative block h-2 w-[60px] rounded-sm bg-gray-200">
+                                                <div class="relative block h-2 w-[80px] rounded-sm bg-gray-200">
                                                         <div id="deepDiveCAExpiredBar"
                                                             class="absolute left-0 top-0 flex h-full w-[0%] items-center justify-center rounded-sm bg-blue-500 !text-base font-medium text-white">
                                                         </div>
                                                     </div>
-                                                    <p class="!text-base font-medium text-gray-700 min-w-[32px]"
-                                                        id="deepDiveCAExpiredPct">0%</p>
-                                                </div>
+                                                <p class="!text-base font-medium text-gray-700 min-w-[32px]" id="deepDiveCAExpiredPct">0%</p>
                                             </div>
                                         </div>
 
                                         <!-- Facilities Expired -->
-                                        <div
-                                            class="flex flex-col justify-between border border-gray-200 rounded-xl p-4">
-                                            <div class="flex items-center gap-3 mb-3">
-                                                <div
-                                                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-gray-300">
-                                                    <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
+                                        <div class="flex items-center justify-between border-b border-gray-100 py-3 last:border-b-0">
+                                            <div class="flex items-center gap-3">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-gray-300">
+                                                    <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                             d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
                                                         </path>
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <p class="!text-base font-medium text-gray-700">Facilities Expired
-                                                    </p>
+                                                    <p class="!text-base font-medium text-gray-700">Facilities Expired</p>
                                                 </div>
                                             </div>
 
-                                            <div class="flex items-center justify-between">
-                                                <p class="!text-2xl font-bold text-gray-900">
+                                            <div class="flex items-center gap-3">
+                                                <p class="!text-base font-semibold text-gray-900 min-w-[24px]">
                                                     <span id="deepDiveFacilitiesExpired">0</span>
                                                 </p>
-                                                <div class="flex items-center gap-2">
-                                                    <div class="relative block h-2 w-[60px] rounded-sm bg-gray-200">
+                                                <div class="relative block h-2 w-[80px] rounded-sm bg-gray-200">
                                                         <div id="deepDiveFacilitiesExpiredBar"
                                                             class="absolute left-0 top-0 flex h-full w-[0%] items-center justify-center rounded-sm bg-blue-500 !text-base font-medium text-white">
                                                         </div>
                                                     </div>
-                                                    <p class="!text-base font-medium text-gray-700 min-w-[32px]"
-                                                        id="deepDiveFacilitiesExpiredPct">0%</p>
-                                                </div>
+                                                <p class="!text-base font-medium text-gray-700 min-w-[32px]" id="deepDiveFacilitiesExpiredPct">0%</p>
                                             </div>
                                         </div>
 
                                         <!-- Past Due Covenants -->
-                                        <div
-                                            class="flex flex-col justify-between border border-gray-200 rounded-xl p-4">
-                                            <div class="flex items-center gap-3 mb-3">
-                                                <div
-                                                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-gray-300">
-                                                    <svg class="h-5 w-5 text-blue-700" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
+                                        <div class="flex items-center justify-between border-b border-gray-100 py-3 last:border-b-0">
+                                            <div class="flex items-center gap-3">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-gray-300">
+                                                    <svg class="h-5 w-5 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
                                                         </path>
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <p class="!text-base font-medium text-gray-700">Past Due Covenants
-                                                    </p>
+                                                    <p class="!text-base font-medium text-gray-700">Past Due Covenants</p>
                                                 </div>
                                             </div>
 
-                                            <div class="flex items-center justify-between">
-                                                <p class="!text-2xl font-bold text-gray-900">
+                                            <div class="flex items-center gap-3">
+                                                <p class="!text-base font-semibold text-gray-900 min-w-[24px]">
                                                     <span id="deepDivePastDueCovenants">0</span>
                                                 </p>
-                                                <div class="flex items-center gap-2">
-                                                    <div class="relative block h-2 w-[60px] rounded-sm bg-gray-200">
+                                                <div class="relative block h-2 w-[80px] rounded-sm bg-gray-200">
                                                         <div id="deepDivePastDueCovenantsBar"
                                                             class="absolute left-0 top-0 flex h-full w-[0%] items-center justify-center rounded-sm bg-blue-500 !text-base font-medium text-white">
                                                         </div>
                                                     </div>
-                                                    <p class="!text-base font-medium text-gray-700 min-w-[32px]"
-                                                        id="deepDivePastDueCovenantsPct">0%</p>
-                                                </div>
+                                                <p class="!text-base font-medium text-gray-700 min-w-[32px]" id="deepDivePastDueCovenantsPct">0%</p>
                                             </div>
                                         </div>
 
                                         <!-- Past Due CCM -->
-                                        <div
-                                            class="flex flex-col justify-between border border-gray-200 rounded-xl p-4">
-                                            <div class="flex items-center gap-3 mb-3">
-                                                <div
-                                                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-gray-300">
-                                                    <svg class="h-5 w-5 text-blue-800" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
+                                        <div class="flex items-center justify-between border-b border-gray-100 py-3 last:border-b-0">
+                                            <div class="flex items-center gap-3">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-gray-300">
+                                                    <svg class="h-5 w-5 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                     </svg>
                                                 </div>
@@ -2919,19 +2892,16 @@
                                                 </div>
                                             </div>
 
-                                            <div class="flex items-center justify-between">
-                                                <p class="!text-2xl font-bold text-gray-900">
+                                            <div class="flex items-center gap-3">
+                                                <p class="!text-base font-semibold text-gray-900 min-w-[24px]">
                                                     <span id="deepDivePastDueCCM">0</span>
                                                 </p>
-                                                <div class="flex items-center gap-2">
-                                                    <div class="relative block h-2 w-[60px] rounded-sm bg-gray-200">
+                                                <div class="relative block h-2 w-[80px] rounded-sm bg-gray-200">
                                                         <div id="deepDivePastDueCCMBar"
                                                             class="absolute left-0 top-0 flex h-full w-[0%] items-center justify-center rounded-sm bg-blue-500 !text-base font-medium text-white">
                                                         </div>
                                                     </div>
-                                                    <p class="!text-base font-medium text-gray-700 min-w-[32px]"
-                                                        id="deepDivePastDueCCMPct">0%</p>
-                                                </div>
+                                                <p class="!text-base font-medium text-gray-700 min-w-[32px]" id="deepDivePastDueCCMPct">0%</p>
                                             </div>
                                         </div>
                                     </div>
@@ -2941,69 +2911,30 @@
                             <!-- End Key Metrics and Relationship Presence Grid -->
 
                             <!-- Facilities Details Table -->
-                            <div class="mb-6 rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                            <div class="mb-6 rounded-2xl border border-gray-200 bg-white">
                                 <!-- Table Header -->
-                                <div class="px-6 py-4 border-b border-gray-200">
-                                    <div class="flex items-center justify-between">
+                                <div class="px-6 py-4">
                                         <h3 class="!text-lg font-semibold text-gray-800">Facility Details</h3>
-                                        <span
-                                            class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 !text-base font-medium text-blue-700">
-                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                                </path>
-                                            </svg>
-                                            12 Facilities
-                                        </span>
-                                    </div>
+                                    <p class="!text-base font-medium text-gray-500 mt-1">Complete facility breakdown</p>
                                 </div>
 
                                 <!-- Table Content -->
-                                <div class="overflow-x-auto">
-                                    <table class="w-full">
+                                <div class="custom-scrollbar overflow-x-auto">
+                                    <table class="min-w-full">
                                         <thead>
-                                            <tr class="border-b border-gray-200 bg-gray-50">
-                                                <th
-                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Region</th>
-                                                <th
-                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Fac ID</th>
-                                                <th
-                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Prod Program</th>
-                                                <th
-                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Facility Type</th>
-                                                <th
-                                                    class="px-4 py-3 text-center !text-base font-semibold text-gray-600 leading-tight">
-                                                    <div class="leading-tight text-center">DM/CM</div>
-                                                </th>
-                                                <th
-                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Maturity Date</th>
-                                                <th
-                                                    class="px-4 py-3 text-center !text-base font-semibold text-gray-600 leading-tight">
-                                                    <div class="leading-tight text-center">Credit<br />Classification</div>
-                                                </th>
-                                                <th
-                                                    class="px-4 py-3 text-center !text-base font-semibold text-gray-600 leading-tight">
-                                                    <div class="leading-tight text-center">Facility Amount</div>
-                                                </th>
-                                                <th
-                                                    class="px-4 py-3 text-right !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Loan O/S</th>
-                                                <th
-                                                    class="px-4 py-3 text-right !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    LC O/S</th>
-                                                <th
-                                                    class="px-4 py-3 text-right !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    PSE O/S</th>
-                                                <th
-                                                    class="px-4 py-3 text-center !text-base font-semibold text-gray-600 leading-tight">
-                                                    <div class="leading-tight text-center">Unused<br />Commitment</div>
-                                                </th>
+                                            <tr class="bg-gray-50">
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Region</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Fac ID</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Prod Program</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Facility Type</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">DM/CM</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Maturity Date</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Credit Classification</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Facility Amount</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Loan O/S</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">LC O/S</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">PSE O/S</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Unused Commitment</th>
                                             </tr>
                                         </thead>
                                         <tbody id="deepDiveFacilitiesDetailsTable" class="divide-y divide-gray-200">
@@ -3017,55 +2948,27 @@
                                     </table>
                                 </div>
 
-                                <!-- Table Footer -->
-                                <div class="px-6 py-3 border-t border-gray-200 bg-gray-50">
-                                    <div class="flex items-center justify-between !text-base">
-                                        <span class="font-medium text-gray-600">Total Portfolio</span>
-                                        <div class="flex items-center gap-6">
-                                            <div class="text-right">
-                                                <span class="!text-base text-gray-500">Approved:</span>
-                                                <span class="ml-2 font-bold text-gray-900"
-                                                    id="deepDiveFacilitiesFooterApproved">$0</span>
-                                            </div>
-                                            <div class="text-right">
-                                                <span class="!text-base text-gray-500">Loan O/S:</span>
-                                                <span class="ml-2 font-semibold text-gray-900"
-                                                    id="deepDiveFacilitiesFooterLoanOS">$0</span>
-                                            </div>
-                                            <div class="text-right">
-                                                <span class="!text-base text-gray-500">LC O/S:</span>
-                                                <span class="ml-2 font-semibold text-gray-900"
-                                                    id="deepDiveFacilitiesFooterLCOS">$0</span>
-                                            </div>
-                                            <div class="text-right">
-                                                <span class="!text-base text-gray-500">Unused:</span>
-                                                <span class="ml-2 font-semibold text-gray-900"
-                                                    id="deepDiveFacilitiesFooterUnused">$0</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                             <!-- Trends Table for Relationship -->
-                            <div class="mb-6 rounded-2xl border border-gray-200 bg-white overflow-hidden">
-                                <div class="px-6 py-4 border-b border-gray-100">
-                                    <h3 class="!text-xl font-bold text-gray-900">Relationship Trend Analysis</h3>
-                                    <p class="!text-base font-medium text-gray-500 mt-1">Historical trends for this relationship by region and product</p>
+                            <div class="mb-6 rounded-2xl border border-gray-200 bg-white">
+                                <div class="px-6 py-4">
+                                    <h3 class="!text-lg font-semibold text-gray-800">Historical Trends</h3>
+                                    <p class="!text-base font-medium text-gray-500 mt-1">Historical trends analysis by product category</p>
                                 </div>
 
                                 <div class="custom-scrollbar overflow-x-auto">
                                     <table class="min-w-full" id="deepDiveTrendsTable">
                                         <thead id="deepDiveTrendsTableHead">
                                             <tr class="bg-gray-50">
-                                                <th class="px-6 py-4 text-left text-base font-medium whitespace-nowrap text-gray-500 sticky left-0 bg-gray-50 z-10">
+                                                <th class="px-6 py-4 text-center text-base font-medium whitespace-nowrap text-gray-500 sticky left-0 bg-gray-50 z-10">
                                                     Product Category
                                                 </th>
                                                 <!-- Dynamic date columns will be inserted here -->
                                             </tr>
                                         </thead>
 
-                                        <tbody class="divide-y divide-gray-100" id="deepDiveTrendsTableBody">
+                                        <tbody class="divide-y divide-gray-200" id="deepDiveTrendsTableBody">
                                             <tr>
                                                 <td colspan="10" class="px-6 py-8 text-center text-gray-400">
                                                     <div class="flex flex-col items-center gap-2">
@@ -3084,50 +2987,25 @@
                             </div>
 
                             <!-- Covenants Table -->
-                            <div class="mb-6 rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                            <div class="mb-6 rounded-2xl border border-gray-200 bg-white">
                                 <!-- Table Header -->
-                                <div class="px-6 py-4 border-b border-gray-200">
-                                    <div class="flex items-center justify-between">
+                                <div class="px-6 py-4">
                                         <h3 class="!text-lg font-semibold text-gray-800">Covenants</h3>
-                                        <span
-                                            class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 !text-base font-medium text-blue-700">
-                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
-                                                </path>
-                                            </svg>
-                                            <span id="deepDiveCovenantsCount">0</span> Covenants
-                                        </span>
-                                    </div>
+                                    <p class="!text-base font-medium text-gray-500 mt-1">Covenant tracking and due dates</p>
                                 </div>
 
                                 <!-- Table Content -->
-                                <div class="overflow-x-auto">
-                                    <table class="w-full">
+                                <div class="custom-scrollbar overflow-x-auto">
+                                    <table class="min-w-full">
                                         <thead>
-                                            <tr class="border-b border-gray-200 bg-gray-50">
-                                                <th
-                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Region</th>
-                                                <th
-                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Fac ID</th>
-                                                <th
-                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Prod Program</th>
-                                                <th
-                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Covenant Number</th>
-                                                <th
-                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Covenant Due Date</th>
-                                                <th
-                                                    class="px-4 py-3 text-center !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Past due Days</th>
-                                                <th
-                                                    class="px-4 py-3 text-left !text-base font-semibold text-gray-600 whitespace-nowrap">
-                                                    Covenant Description</th>
+                                            <tr class="bg-gray-50">
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Region</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Fac ID</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Prod Program</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Covenant Number</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Covenant Due Date</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Status</th>
+                                                <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Covenant Description</th>
                                             </tr>
                                         </thead>
                                         <tbody id="deepDiveCovenantsTable" class="divide-y divide-gray-200">
@@ -3140,30 +3018,6 @@
                                     </table>
                                 </div>
 
-                                <!-- Table Footer (dynamically updated) -->
-                                <div class="px-6 py-3 border-t border-gray-200 bg-gray-50" id="deepDiveCovenantsTableFooter"
-                                    style="display: none;">
-                                    <div class="flex items-center justify-between !text-base">
-                                        <span class="font-medium text-gray-600">Total Covenants</span>
-                                        <div class="flex items-center gap-6">
-                                            <div class="text-right">
-                                                <span class="!text-base text-gray-500">Total:</span>
-                                                <span class="ml-2 font-bold text-gray-900"
-                                                    id="deepDiveTotalCovenants">0</span>
-                                            </div>
-                                            <div class="text-right">
-                                                <span class="!text-base text-gray-500">Past Due:</span>
-                                                <span class="ml-2 font-semibold text-red-600"
-                                                    id="deepDivePastDueCovenantsFooter">0</span>
-                                            </div>
-                                            <div class="text-right">
-                                                <span class="!text-base text-gray-500">Current:</span>
-                                                <span class="ml-2 font-semibold text-green-600"
-                                                    id="deepDiveCurrentCovenants">0</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                         </div>
@@ -29752,48 +29606,38 @@
                 const ratingColor = ratingColors[riskRating] || 'bg-gray-100 text-gray-700';
 
                 html += `
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-4 py-3">
-                            <span class="inline-flex items-center gap-1 rounded-md ${regionColor} px-2 py-0.5 !text-base font-medium">
-                                <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                                </svg>
+                    <tr>
+                        <td class="px-6 py-4 text-center">
+                            <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
                                 ${region}
                             </span>
                         </td>
-                        <td class="px-4 py-3">
-                            <span class="!text-base font-mono font-medium text-gray-900">${facilityId}</span>
-                        </td>
-                        <td class="px-4 py-3">
+                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">${facilityId}</td>
+                        <td class="px-6 py-4 text-center">
                             ${subProduct ? `
                                 <div class="space-y-1">
                                     <div class="!text-base font-medium text-gray-900">${productProgram}</div>
-                                    <div class="flex items-center gap-1.5 !text-base font-medium text-gray-600">
-                                        <svg class="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                        ${subProduct}
-                                    </div>
+                                    <div class="!text-base text-gray-600">${subProduct}</div>
                                 </div>
                             ` : `
                                 <span class="!text-base font-medium text-gray-900">${productProgram}</span>
                             `}
                         </td>
-                        <td class="px-4 py-3">
-                            <span class="inline-flex items-center rounded-md ${typeColor} px-2 py-1 !text-base font-medium">${facilityType}</span>
+                        <td class="px-6 py-4 text-center">
+                            <span class="${typeColor} rounded-full px-2 py-0.5 !text-base font-medium">${facilityType}</span>
                         </td>
-                        <td class="px-4 py-3 text-center">
-                            <span class="inline-flex items-center rounded-md ${managementStatusColor} px-2 py-1 !text-base font-medium">${managementStatus}</span>
+                        <td class="px-6 py-4 text-center">
+                            <span class="${managementStatusColor} rounded-full px-2 py-0.5 !text-base font-medium">${managementStatus}</span>
                         </td>
-                        <td class="px-4 py-3 !text-base text-gray-700">${formatDateShort(parseDate(maturityDate)) || maturityDate}</td>
-                        <td class="px-4 py-3">
-                            <span class="inline-flex items-center rounded-md ${ratingColor} px-2 py-1 !text-base font-medium">${riskRating}</span>
+                        <td class="px-6 py-4 text-center !text-base text-gray-700">${formatDateShort(parseDate(maturityDate)) || maturityDate}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="${ratingColor} rounded-full px-2 py-0.5 !text-base font-medium">${riskRating}</span>
                         </td>
-                        <td class="px-4 py-3 text-right !text-base font-semibold text-gray-900">${formatCurrency(facAmount)}</td>
-                        <td class="px-4 py-3 text-right !text-base font-medium text-gray-700">${formatCurrency(osuc)}</td>
-                        <td class="px-4 py-3 text-right !text-base font-medium text-gray-700">${formatCurrency(loanOS)}</td>
-                        <td class="px-4 py-3 text-right !text-base font-medium text-gray-700">${formatCurrency(lcOS)}</td>
-                        <td class="px-4 py-3 text-right !text-base font-medium text-gray-700">${formatCurrency(unused)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(facAmount)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(osuc)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(loanOS)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(lcOS)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(unused)}</td>
                     </tr>
                 `;
             });
@@ -29877,7 +29721,7 @@
                         // Past Due
                         pastDueDays = daysDiff;
                         status = "Past Due";
-                        isPastDue = true;
+                    isPastDue = true;
                     } else {
                         // Coming Due
                         status = "Coming Due";
@@ -29894,43 +29738,33 @@
                 const regionColor = regionColors[region] || 'bg-gray-100 text-gray-700';
 
                 html += `
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-4 py-3">
-                            <span class="inline-flex items-center gap-1 rounded-md ${regionColor} px-2 py-0.5 !text-base font-medium">
-                                <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                                </svg>
+                    <tr>
+                        <td class="px-6 py-4 text-center">
+                            <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
                                 ${region}
                             </span>
                         </td>
-                        <td class="px-4 py-3">
-                            <span class="!text-base font-mono font-medium text-gray-900">${facilityId}</span>
-                        </td>
-                        <td class="px-4 py-3">
+                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">${facilityId}</td>
+                        <td class="px-6 py-4 text-center">
+                            ${subProduct ? `
                             <div class="space-y-1">
                                 <div class="!text-base font-medium text-gray-900">${productProgram}</div>
-                                ${subProduct ? `
-                                    <div class="flex items-center gap-1.5 !text-base font-medium text-gray-600">
-                                        <svg class="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                        ${subProduct}
+                                    <div class="!text-base text-gray-600">${subProduct}</div>
                                     </div>
-                                ` : ''}
-                            </div>
-                        </td>
-                        <td class="px-4 py-3">
-                            <span class="!text-base font-medium text-gray-900">${covenantNumber}</span>
-                        </td>
-                        <td class="px-4 py-3 !text-base text-gray-700">${formatDateToDDMMYYYY(dueDate) || covenantDueDate}</td>
-                        <td class="px-4 py-3 text-center">
-                            ${isPastDue ? `
-                                <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 !text-base font-semibold text-red-700">Past Due (${pastDueDays}d)</span>
                             ` : `
-                                <span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 !text-base font-semibold text-yellow-700">Coming Due</span>
+                                <span class="!text-base font-medium text-gray-900">${productProgram}</span>
                             `}
                         </td>
-                        <td class="px-4 py-3 !text-base text-gray-700">${covenantDescription}</td>
+                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">${covenantNumber}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatDateToDDMMYYYY(dueDate) || covenantDueDate}</td>
+                        <td class="px-6 py-4 text-center">
+                            ${isPastDue ? `
+                                <span class="bg-red-50 text-red-600 rounded-full px-2 py-0.5 !text-base font-medium">Past Due (${pastDueDays}d)</span>
+                            ` : `
+                                <span class="bg-yellow-50 text-yellow-600 rounded-full px-2 py-0.5 !text-base font-medium">Coming Due</span>
+                            `}
+                        </td>
+                        <td class="px-6 py-4 text-center !text-base text-gray-700">${covenantDescription}</td>
                     </tr>
                 `;
             });
@@ -30553,52 +30387,48 @@
                     safeSetText("deepDiveSummaryRegions", regions.length);
                     safeSetText("deepDiveSummaryTFA", formatCurrency(totalTFA));
 
-                    // Generate dynamic region cards - Always show 5 cards: APAC, EMEA, LATAM, NAM, and one more
+                    // Generate dynamic region cards - Only show regions with data
                     const regionalCardsContainer = document.getElementById("deepDiveRegionalCards");
                     if (regionalCardsContainer) {
                         regionalCardsContainer.innerHTML = "";
 
-                        // Always use 5 columns grid for 5 cards
-                        regionalCardsContainer.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4";
+                        // Get only regions that have data
+                        const regionsWithData = [...new Set(fullRelationshipData.map(r => r.Region).filter(Boolean))];
+                        
+                        // Use a 6-column grid for flexible layouts
+                        regionalCardsContainer.className = "grid grid-cols-6 gap-4";
 
-                        // Define the 5 regions to always show
-                        const allRegions = ["APAC", "EMEA", "LATAM", "NAM"];
-                        // Get the 5th region from actual data if available, otherwise use the first available region or "All"
-                        const availableRegions = [...new Set(fullRelationshipData.map(r => r.Region).filter(Boolean))];
-                        const fifthRegion = availableRegions.find(r => !allRegions.includes(r)) || (availableRegions.length > 0 ? availableRegions[0] : "All");
-                        const regionsToShow = [...allRegions, fifthRegion];
-
-                        regionsToShow.forEach(region => {
+                        regionsWithData.forEach((region, index) => {
                             // Filter data for this region
                             const regionData = fullRelationshipData.filter(r => r.Region === region);
                             const regionFacilitiesCount = regionData.length;
-                            const hasData = regionData.length > 0;
 
                             // Create region card with white background and subtle grey border
                             const regionCard = document.createElement("div");
-                            regionCard.className = "rounded-xl border border-gray-200 bg-white p-5";
-
-                            if (!hasData) {
-                                // Show "no data available" message
-                                regionCard.innerHTML = `
-                                    <div class="flex items-center justify-between mb-4">
-                                        <span class="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 !text-base font-semibold text-gray-700">
-                                            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                                            </svg>
-                                            ${region}
-                                        </span>
-                                    </div>
-                                    <div class="flex items-center justify-center py-8">
-                                        <div class="text-center">
-                                            <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                            </svg>
-                                            <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No data available</p>
-                                        </div>
-                                    </div>
-                                `;
-                            } else {
+                            
+                            // Determine column span based on total regions and position
+                            const totalRegions = regionsWithData.length;
+                            let colSpan = "col-span-6"; // default full width
+                            
+                            if (totalRegions === 1) {
+                                // 1 region: full width
+                                colSpan = "col-span-6";
+                            } else if (totalRegions === 2) {
+                                // 2 cards: half width each (2 columns)
+                                colSpan = "col-span-3";
+                            } else if (totalRegions === 3) {
+                                // 3 cards: 2 on top row (half width each), 1 below (full width)
+                                colSpan = index < 2 ? "col-span-3" : "col-span-6";
+                            } else if (totalRegions === 4) {
+                                // 4 cards: 2x2 grid (half width each)
+                                colSpan = "col-span-3";
+                            } else if (totalRegions >= 5) {
+                                // 5+ regions: first 2 cards half width, remaining cards third width
+                                colSpan = index < 2 ? "col-span-3" : "col-span-2";
+                            }
+                            
+                            regionCard.className = `rounded-xl border border-gray-200 bg-white p-5 ${colSpan}`;
+                            // Get UW and TL for this region
                             // Get UW and TL for this region
                             const uw = regionData.map(r => r.Lead_Underwriter).filter(Boolean)[0] || "-";
                             const tl = regionData.map(r => r.Underwriting_Team_Lead).filter(Boolean)[0] || "-";
@@ -30655,7 +30485,6 @@
                             </div>
                         </div>
                     `;
-                            }
 
                             regionalCardsContainer.appendChild(regionCard);
                         });
