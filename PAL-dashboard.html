@@ -2708,8 +2708,84 @@
 
                             <!-- Key Metrics and Relationship Presence Grid -->
                             <div class="mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                <!-- Key Metrics Card - 1 Column -->
+                                <!-- Relationship Presence Details - 1 Column -->
                                 <div class="lg:col-span-1 rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <!-- Header -->
+                                <div class="px-6 py-4 border-b border-gray-200">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="!text-lg font-semibold text-gray-800">Relationship Presence</h3>
+                                        <span
+                                            class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 !text-base font-medium text-blue-700">
+                                            <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span id="deepDiveRegionCount">0</span> Regions
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Content -->
+                                <div class="p-6 space-y-6">
+                                    <!-- Regional Breakdown - Dynamically Generated -->
+                                    <div id="deepDiveRegionalCards">
+                                        <!-- Region cards will be dynamically inserted here with dynamic grid layout -->
+                                    </div>
+
+                                    <!-- Summary Stats -->
+                                    <div class="rounded-xl bg-gray-50 p-5">
+                                        <div class="grid grid-cols-3 gap-6">
+                                            <div class="text-center">
+                                                <div class="flex items-center justify-center gap-2 mb-2">
+                                                    <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                                        </path>
+                                                    </svg>
+                                                    <p class="!text-2xl font-bold text-gray-900"
+                                                        id="deepDiveSummaryFacilities">0</p>
+                                                </div>
+                                                <p class="!text-base font-medium text-gray-500">Total Facilities</p>
+                                            </div>
+
+                                            <div class="text-center">
+                                                <div class="flex items-center justify-center gap-2 mb-2">
+                                                    <svg class="h-5 w-5 text-emerald-600" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                    <p class="!text-2xl font-bold text-gray-900"
+                                                        id="deepDiveSummaryRegions">0</p>
+                                                </div>
+                                                <p class="!text-base font-medium text-gray-500">Active Regions</p>
+                                            </div>
+
+                                            <div class="text-center">
+                                                <div class="flex items-center justify-center gap-2 mb-2">
+                                                    <svg class="h-5 w-5 text-purple-600" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                        </path>
+                                                    </svg>
+                                                    <p class="!text-2xl font-bold text-gray-900"
+                                                        id="deepDiveSummaryTFA">$0.00</p>
+                                                </div>
+                                                <p class="!text-base font-medium text-gray-500">Total TFA</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+
+                                <!-- Key Metrics Card - 2 Columns -->
+                                <div class="lg:col-span-2 rounded-2xl border border-gray-200 bg-white overflow-hidden">
                                 <!-- Header -->
                                 <div class="px-6 py-4 border-b border-gray-200">
                                     <h3 class="!text-lg font-semibold text-gray-800">Key Metrics</h3>
@@ -2856,82 +2932,6 @@
                                                     <p class="!text-base font-medium text-gray-700 min-w-[32px]"
                                                         id="deepDivePastDueCCMPct">0%</p>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                                <!-- Relationship Presence Details - 2 Columns -->
-                                <div class="lg:col-span-2 rounded-2xl border border-gray-200 bg-white overflow-hidden">
-                                <!-- Header -->
-                                <div class="px-6 py-4 border-b border-gray-200">
-                                    <div class="flex items-center justify-between">
-                                        <h3 class="!text-lg font-semibold text-gray-800">Relationship Presence</h3>
-                                        <span
-                                            class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 !text-base font-medium text-blue-700">
-                                            <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd"
-                                                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                            <span id="deepDiveRegionCount">0</span> Regions
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Content -->
-                                <div class="p-6 space-y-6">
-                                    <!-- Regional Breakdown - Dynamically Generated -->
-                                    <div id="deepDiveRegionalCards">
-                                        <!-- Region cards will be dynamically inserted here with dynamic grid layout -->
-                                    </div>
-
-                                    <!-- Summary Stats -->
-                                    <div class="rounded-xl bg-gray-50 p-5">
-                                        <div class="grid grid-cols-3 gap-6">
-                                            <div class="text-center">
-                                                <div class="flex items-center justify-center gap-2 mb-2">
-                                                    <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                                                        </path>
-                                                    </svg>
-                                                    <p class="!text-2xl font-bold text-gray-900"
-                                                        id="deepDiveSummaryFacilities">0</p>
-                                                </div>
-                                                <p class="!text-base font-medium text-gray-500">Total Facilities</p>
-                                            </div>
-
-                                            <div class="text-center">
-                                                <div class="flex items-center justify-center gap-2 mb-2">
-                                                    <svg class="h-5 w-5 text-emerald-600" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd"
-                                                            d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                    <p class="!text-2xl font-bold text-gray-900"
-                                                        id="deepDiveSummaryRegions">0</p>
-                                                </div>
-                                                <p class="!text-base font-medium text-gray-500">Active Regions</p>
-                                            </div>
-
-                                            <div class="text-center">
-                                                <div class="flex items-center justify-center gap-2 mb-2">
-                                                    <svg class="h-5 w-5 text-purple-600" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                        </path>
-                                                    </svg>
-                                                    <p class="!text-2xl font-bold text-gray-900"
-                                                        id="deepDiveSummaryTFA">$0.00</p>
-                                                </div>
-                                                <p class="!text-base font-medium text-gray-500">Total TFA</p>
                                             </div>
                                         </div>
                                     </div>
@@ -29682,8 +29682,15 @@
                 if (tbody) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="12" class="px-6 py-8 text-center text-gray-400">
-                                <p class="text-base">No facilities found for this relationship</p>
+                            <td colspan="12" class="px-6 py-8">
+                                <div class="flex items-center justify-center py-20">
+                                    <div class="text-center">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                        </svg>
+                                        <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No data available</p>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     `;
@@ -29700,7 +29707,7 @@
                 const productProgram = facility.Product_Program || facility.Product || "-";
                 const subProduct = facility.Sub_Product || facility.Sub_product || "";
                 const facilityType = facility.Facility_Type || "-";
-                const status = facility.Status || "Active";
+                const managementStatus = facility.Management_Status || facility['DM/CM'] || facility.DM_CM || "-";
                 const maturityDate = facility.Maturity_Date || facility.CA_Expiration_Date || "-";
                 const riskRating = facility.Risk_Rating || facility.Rating || "Pass";
 
@@ -29728,13 +29735,12 @@
                 };
                 const typeColor = typeColors[facilityType] || 'bg-gray-50 text-gray-700';
 
-                // Status badge colors
-                const statusColors = {
-                    'Active': 'bg-green-50 text-green-700',
-                    'Inactive': 'bg-red-50 text-red-700',
-                    'Pending': 'bg-yellow-50 text-yellow-700'
+                // Management Status badge colors
+                const managementStatusColors = {
+                    'DM': 'bg-blue-50 text-blue-700',
+                    'CM': 'bg-purple-50 text-purple-700'
                 };
-                const statusColor = statusColors[status] || 'bg-gray-50 text-gray-700';
+                const managementStatusColor = managementStatusColors[managementStatus] || 'bg-gray-50 text-gray-700';
 
                 // Risk rating badge colors
                 const ratingColors = {
@@ -29776,8 +29782,8 @@
                         <td class="px-4 py-3">
                             <span class="inline-flex items-center rounded-md ${typeColor} px-2 py-1 !text-base font-medium">${facilityType}</span>
                         </td>
-                        <td class="px-4 py-3">
-                            <span class="inline-flex items-center rounded-md ${statusColor} px-2 py-1 !text-base font-medium">${status}</span>
+                        <td class="px-4 py-3 text-center">
+                            <span class="inline-flex items-center rounded-md ${managementStatusColor} px-2 py-1 !text-base font-medium">${managementStatus}</span>
                         </td>
                         <td class="px-4 py-3 !text-base text-gray-700">${formatDateShort(parseDate(maturityDate)) || maturityDate}</td>
                         <td class="px-4 py-3">
@@ -29830,8 +29836,15 @@
             if (!relationshipCovenants || relationshipCovenants.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="px-6 py-8 text-center text-gray-400">
-                            <p class="text-base">No covenants found for this relationship</p>
+                        <td colspan="7" class="px-6 py-8">
+                            <div class="flex items-center justify-center py-20">
+                                <div class="text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                    <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No data available</p>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -29851,13 +29864,24 @@
                 const covenantDueDate = cov.Due_Date || cov.Covenant_Due_Date || "-";
                 const covenantDescription = cov.Covenant_Description || cov.Description || "-";
 
-                // Calculate past due days
+                // Calculate past due days using reportingMonth
                 const dueDate = parseDate(covenantDueDate);
+                const compareDate = reportingMonth || new Date();
                 let pastDueDays = 0;
+                let status = "Coming Due";
                 let isPastDue = false;
-                if (dueDate && dueDate < currentDate) {
-                    pastDueDays = Math.floor((currentDate - dueDate) / (1000 * 60 * 60 * 24));
-                    isPastDue = true;
+                
+                if (dueDate) {
+                    const daysDiff = Math.floor((compareDate - dueDate) / (1000 * 60 * 60 * 24));
+                    if (daysDiff > 0) {
+                        // Past Due
+                        pastDueDays = daysDiff;
+                        status = "Past Due";
+                        isPastDue = true;
+                    } else {
+                        // Coming Due
+                        status = "Coming Due";
+                    }
                 }
 
                 // Region badge color
@@ -29901,9 +29925,9 @@
                         <td class="px-4 py-3 !text-base text-gray-700">${formatDateToDDMMYYYY(dueDate) || covenantDueDate}</td>
                         <td class="px-4 py-3 text-center">
                             ${isPastDue ? `
-                                <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 !text-base font-semibold text-red-700">${pastDueDays}</span>
+                                <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 !text-base font-semibold text-red-700">Past Due (${pastDueDays}d)</span>
                             ` : `
-                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 !text-base font-semibold text-green-700">Current</span>
+                                <span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 !text-base font-semibold text-yellow-700">Coming Due</span>
                             `}
                         </td>
                         <td class="px-4 py-3 !text-base text-gray-700">${covenantDescription}</td>
@@ -29922,9 +29946,10 @@
             if (footer) {
                 footer.style.display = "block";
                 const totalCov = relationshipCovenants.length;
+                const compareDate = reportingMonth || new Date();
                 const pastDueCov = relationshipCovenants.filter(cov => {
                     const dueDate = parseDate(cov.Due_Date || cov.Covenant_Due_Date);
-                    return dueDate && dueDate < currentDate;
+                    return dueDate && dueDate < compareDate;
                 }).length;
                 const currentCov = totalCov - pastDueCov;
 
@@ -29947,8 +29972,15 @@
                 if (tbody) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="10" class="px-6 py-8 text-center text-gray-400">
-                                <p class="text-base">Select a relationship to view trend data</p>
+                            <td colspan="10" class="px-6 py-8">
+                                <div class="flex items-center justify-center py-20">
+                                    <div class="text-center">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                        </svg>
+                                        <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No data available</p>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     `;
@@ -29964,8 +29996,15 @@
             if (!relationshipTrendsData || relationshipTrendsData.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="10" class="px-6 py-8 text-center text-gray-400">
-                            <p class="text-base">No trend data available for this relationship</p>
+                        <td colspan="10" class="px-6 py-8">
+                            <div class="flex items-center justify-center py-20">
+                                <div class="text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                    <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No data available</p>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -30373,10 +30412,10 @@
                 );
                 const facilitiesCount = new Set(fullRelationshipData.map(r => r.Facility_ID)).size;
 
-                // Calculate average ROTCE
+                // Calculate average ROTCE (already in percentage format in the file)
                 const rotceValues = fullRelationshipData
                     .map(row => parseNumber(row.ROTCE))
-                    .filter(val => val > 0);
+                    .filter(val => !isNaN(val) && val > 0);
                 const avgROTCE = rotceValues.length > 0
                     ? rotceValues.reduce((sum, val) => sum + val, 0) / rotceValues.length
                     : 0;
@@ -30405,16 +30444,16 @@
                     safeSetText("deepDiveFacilities", facilitiesCount.toLocaleString());
                     safeSetText("deepDiveROTCE", avgROTCE.toFixed(2) + "%");
 
-                    // Calculate expired counts and other metrics
-                    const currentDate = new Date();
+                    // Calculate expired counts and other metrics using reportingMonth
+                    const compareDate = reportingMonth || new Date();
                     const casExpired = fullRelationshipData.filter(row => {
                         const caDate = parseDate(row.CA_Expiration_Date);
-                        return caDate && caDate < currentDate;
+                        return caDate && caDate < compareDate;
                     }).length;
 
                     const facilitiesExpired = fullRelationshipData.filter(row => {
                         const maturityDate = parseDate(row.Maturity_Date);
-                        return maturityDate && maturityDate < currentDate;
+                        return maturityDate && maturityDate < compareDate;
                     }).length;
 
                     // Calculate covenants past due from covenantsData
@@ -30428,7 +30467,7 @@
                             if (!matchesRelationship) return false;
 
                             const dueDate = parseDate(cov.Due_Date || cov.Covenant_Due_Date);
-                            return dueDate && dueDate < currentDate;
+                            return dueDate && dueDate < compareDate;
                         }).length;
                     }
 
@@ -30443,7 +30482,7 @@
                             if (!matchesRelationship) return false;
 
                             const dueDate = parseDate(ccm.Due_Date || ccm.Review_Due_Date);
-                            return dueDate && dueDate < currentDate;
+                            return dueDate && dueDate < compareDate;
                         }).length;
                     }
 
@@ -30514,36 +30553,52 @@
                     safeSetText("deepDiveSummaryRegions", regions.length);
                     safeSetText("deepDiveSummaryTFA", formatCurrency(totalTFA));
 
-                    // Generate dynamic region cards
+                    // Generate dynamic region cards - Always show 5 cards: APAC, EMEA, LATAM, NAM, and one more
                     const regionalCardsContainer = document.getElementById("deepDiveRegionalCards");
                     if (regionalCardsContainer) {
                         regionalCardsContainer.innerHTML = "";
 
-                        // Dynamically set grid columns based on number of regions
-                        // Cards will fill the container width based on region count
-                        const regionCount = regions.length;
-                        let gridClass = "";
-                        if (regionCount === 1) {
-                            gridClass = "grid grid-cols-1 gap-4";
-                        } else if (regionCount === 2) {
-                            gridClass = "grid grid-cols-2 gap-4";
-                        } else if (regionCount === 3) {
-                            gridClass = "grid grid-cols-3 gap-4";
-                        } else if (regionCount === 4) {
-                            gridClass = "grid grid-cols-2 lg:grid-cols-4 gap-4";
-                        } else if (regionCount === 5) {
-                            gridClass = "grid grid-cols-2 lg:grid-cols-5 gap-4";
-                        } else {
-                            // 6+ regions: use 3 columns on large screens
-                            gridClass = "grid grid-cols-2 lg:grid-cols-3 gap-4";
-                        }
-                        regionalCardsContainer.className = gridClass;
+                        // Always use 5 columns grid for 5 cards
+                        regionalCardsContainer.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4";
 
-                        regions.forEach(region => {
+                        // Define the 5 regions to always show
+                        const allRegions = ["APAC", "EMEA", "LATAM", "NAM"];
+                        // Get the 5th region from actual data if available, otherwise use the first available region or "All"
+                        const availableRegions = [...new Set(fullRelationshipData.map(r => r.Region).filter(Boolean))];
+                        const fifthRegion = availableRegions.find(r => !allRegions.includes(r)) || (availableRegions.length > 0 ? availableRegions[0] : "All");
+                        const regionsToShow = [...allRegions, fifthRegion];
+
+                        regionsToShow.forEach(region => {
                             // Filter data for this region
                             const regionData = fullRelationshipData.filter(r => r.Region === region);
                             const regionFacilitiesCount = regionData.length;
+                            const hasData = regionData.length > 0;
 
+                            // Create region card with white background and subtle grey border
+                            const regionCard = document.createElement("div");
+                            regionCard.className = "rounded-xl border border-gray-200 bg-white p-5";
+
+                            if (!hasData) {
+                                // Show "no data available" message
+                                regionCard.innerHTML = `
+                                    <div class="flex items-center justify-between mb-4">
+                                        <span class="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 !text-base font-semibold text-gray-700">
+                                            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                            </svg>
+                                            ${region}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-center py-8">
+                                        <div class="text-center">
+                                            <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                            </svg>
+                                            <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No data available</p>
+                                        </div>
+                                    </div>
+                                `;
+                            } else {
                             // Get UW and TL for this region
                             const uw = regionData.map(r => r.Lead_Underwriter).filter(Boolean)[0] || "-";
                             const tl = regionData.map(r => r.Underwriting_Team_Lead).filter(Boolean)[0] || "-";
@@ -30553,9 +30608,6 @@
                                 sum + parseNumber(row.Fac_Amount || row.Facility_Amount), 0
                             );
 
-                            // Create region card with white background and subtle grey border
-                            const regionCard = document.createElement("div");
-                            regionCard.className = "rounded-xl border border-gray-200 bg-white p-5";
                             regionCard.innerHTML = `
                         <div class="flex items-center justify-between mb-4">
                             <span class="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 !text-base font-semibold text-gray-700">
@@ -30603,6 +30655,7 @@
                             </div>
                         </div>
                     `;
+                            }
 
                             regionalCardsContainer.appendChild(regionCard);
                         });
