@@ -270,15 +270,27 @@
         .loading-text {
             animation: pulse 1.5s ease-in-out infinite;
         }
+
+        /* Cursor-following Tooltip Styles */
+        #cursorTooltip {
+            position: fixed;
+            z-index: 99999;
+            pointer-events: none;
+            display: none;
+        }
+
+        #cursorTooltip.show {
+            display: block;
+        }
     </style>
 </head>
 
 <body class="bg-gray-50">
     <!-- Cursor-following Tooltip -->
-    <div id="cursorTooltip" style="position: fixed; z-index: 99999; pointer-events: none; display: none;">
-        <div style="position: relative;">
-            <div id="cursorTooltipContent" class="rounded-lg bg-white border border-gray-200 px-3 py-2 text-xs font-medium text-gray-700 shadow-lg" style="white-space: nowrap;"></div>
-            <div style="position: absolute; bottom: -4px; left: 50%; width: 12px; height: 12px; transform: translateX(-50%) rotate(45deg); background-color: white; border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb;"></div>
+    <div id="cursorTooltip">
+        <div class="relative">
+            <div id="cursorTooltipContent" class="rounded-lg bg-white border border-gray-200 px-3 py-2 text-xs font-medium text-gray-700 shadow-lg whitespace-nowrap"></div>
+            <div class="absolute -bottom-1 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-white border-r border-b border-gray-200"></div>
         </div>
     </div>
 
@@ -29562,9 +29574,13 @@
                 const tooltip = document.getElementById('cursorTooltip');
                 const tooltipContent = document.getElementById('cursorTooltipContent');
                 
-                if (!tooltip || !tooltipContent) return;
+                if (!tooltip || !tooltipContent) {
+                    console.warn('Tooltip elements not found');
+                    return;
+                }
                 
                 const rows = document.querySelectorAll(selector);
+                console.log(`Initializing tooltips for ${rows.length} rows with selector: ${selector}`);
                 
                 rows.forEach(row => {
                     row.addEventListener('mouseenter', function(e) {
@@ -29584,14 +29600,16 @@
                         }
                         
                         tooltipContent.innerHTML = content;
-                        tooltip.style.display = 'block';
+                        tooltip.classList.add('show');
                         updateCursorTooltipPosition(e);
                     });
                     
                     row.addEventListener('mousemove', updateCursorTooltipPosition);
                     
                     row.addEventListener('mouseleave', function() {
-                        tooltip.style.display = 'none';
+                        tooltip.classList.remove('show');
+                        tooltipContent.style.maxWidth = '';
+                        tooltipContent.style.whiteSpace = 'nowrap';
                     });
                 });
             }
@@ -29742,8 +29760,10 @@
 
                 tbody.innerHTML = html;
 
-                // Initialize cursor-following tooltips for facility rows
-                initializeCursorTooltips('#deepDiveFacilitiesDetailsTable tr[data-facility-type]', 'facility-type');
+                // Initialize cursor-following tooltips for facility rows (with small delay to ensure DOM is ready)
+                setTimeout(() => {
+                    initializeCursorTooltips('#deepDiveFacilitiesDetailsTable tr[data-facility-type]', 'facility-type');
+                }, 50);
 
                 // Update footer totals
                 const totalFacAmount = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Fac_Amount || f.Facility_Amount), 0);
@@ -29872,8 +29892,8 @@
 
                 tbody.innerHTML = html;
 
-                // Initialize cursor-following tooltips for covenant rows
-                initializeCursorTooltips('#deepDiveCovenantsTable tr[data-covenant-description]', 'covenant-description');
+         // Initialize cursor-following tooltips for covenant rows
+         initializeCursorTooltips('#deepDiveCovenantsTable tr[data-covenant-description]', 'covenant-description');
 
                 // Update header badge count
                 const badgeCount = document.getElementById("deepDiveCovenantsCount");
@@ -30513,4 +30533,4 @@
         </script>
 </body>
 
-</html
+</html>
