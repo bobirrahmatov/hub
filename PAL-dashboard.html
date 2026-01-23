@@ -3043,6 +3043,18 @@
                                                 </td>
                                             </tr>
                                         </tbody>
+                                        <tfoot class="bg-gray-50 border-t-2 border-gray-300">
+                                            <tr>
+                                                <td colspan="5" class="px-6 py-4 text-right !text-base font-bold text-gray-900">
+                                                    Total:
+                                                </td>
+                                                <td id="facilitiesTotalAmount" class="px-6 py-4 text-center !text-base font-bold text-gray-900">$0</td>
+                                                <td id="facilitiesTotalLoanOS" class="px-6 py-4 text-center !text-base font-bold text-gray-900">$0</td>
+                                                <td id="facilitiesTotalLCOS" class="px-6 py-4 text-center !text-base font-bold text-gray-900">$0</td>
+                                                <td id="facilitiesTotalPSEOS" class="px-6 py-4 text-center !text-base font-bold text-gray-900">$0</td>
+                                                <td id="facilitiesTotalUnused" class="px-6 py-4 text-center !text-base font-bold text-gray-900">$0</td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -3088,6 +3100,18 @@
                                                 </td>
                                             </tr>
                                         </tbody>
+                                        <tfoot class="bg-gray-50 border-t-2 border-gray-300">
+                                            <tr>
+                                                <td colspan="4" class="px-6 py-4 text-right !text-base font-bold text-gray-900">
+                                                    Total Covenants:
+                                                </td>
+                                                <td id="covenantsTotalCount" class="px-6 py-4 text-center !text-base font-bold text-gray-900">0</td>
+                                                <td colspan="2" class="px-6 py-4 text-center !text-base font-medium text-gray-700">
+                                                    <span id="covenantsPastDueCount" class="text-red-600 font-bold">0</span> Past Due | 
+                                                    <span id="covenantsComingDueCount" class="text-yellow-600 font-bold">0</span> Coming Due
+                                                </td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -29718,22 +29742,29 @@
 
                 tbody.innerHTML = html;
 
+                // Initialize tooltips after table is populated
+                initializeTableTooltips();
+
                 // Update footer totals
                 const totalFacAmount = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Fac_Amount || f.Facility_Amount), 0);
                 const totalOSUC = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.OSUC || f.Outstanding_UC), 0);
                 const totalLoanOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Loan_OS || f.Loan_Outstanding), 0);
                 const totalLCOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.LC_OS || f.LC_Outstanding), 0);
+                const totalPSEOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.PSE_OS || f.PSE_Outstanding), 0);
                 const totalUnused = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Unused_Commitment || f.Unused), 0);
 
-                const footerApproved = document.getElementById("deepDiveFacilitiesFooterApproved");
-                const footerLoanOS = document.getElementById("deepDiveFacilitiesFooterLoanOS");
-                const footerLCOS = document.getElementById("deepDiveFacilitiesFooterLCOS");
-                const footerUnused = document.getElementById("deepDiveFacilitiesFooterUnused");
+                // Update table footer totals
+                const totalAmountEl = document.getElementById("facilitiesTotalAmount");
+                const totalLoanOSEl = document.getElementById("facilitiesTotalLoanOS");
+                const totalLCOSEl = document.getElementById("facilitiesTotalLCOS");
+                const totalPSEOSEl = document.getElementById("facilitiesTotalPSEOS");
+                const totalUnusedEl = document.getElementById("facilitiesTotalUnused");
 
-                if (footerApproved) footerApproved.textContent = formatCurrency(totalFacAmount);
-                if (footerLoanOS) footerLoanOS.textContent = formatCurrency(totalLoanOS);
-                if (footerLCOS) footerLCOS.textContent = formatCurrency(totalLCOS);
-                if (footerUnused) footerUnused.textContent = formatCurrency(totalUnused);
+                if (totalAmountEl) totalAmountEl.textContent = formatCurrency(totalFacAmount);
+                if (totalLoanOSEl) totalLoanOSEl.textContent = formatCurrency(totalLoanOS);
+                if (totalLCOSEl) totalLCOSEl.textContent = formatCurrency(totalLCOS);
+                if (totalPSEOSEl) totalPSEOSEl.textContent = formatCurrency(totalPSEOS);
+                if (totalUnusedEl) totalUnusedEl.textContent = formatCurrency(totalUnused);
             }
 
             // Populate Deep Dive Covenants Table (filtered by relationship ID)
@@ -29852,30 +29883,29 @@
 
                 tbody.innerHTML = html;
 
+                // Initialize tooltips after table is populated
+                initializeTableTooltips();
+
                 // Update header badge count
                 const badgeCount = document.getElementById("deepDiveCovenantsCount");
                 if (badgeCount) badgeCount.textContent = relationshipCovenants.length;
 
-                // Update footer counts
-                const footer = document.getElementById("deepDiveCovenantsTableFooter");
-                if (footer) {
-                    footer.style.display = "block";
-                    const totalCov = relationshipCovenants.length;
-                    const compareDate = reportingMonth || new Date();
-                    const pastDueCov = relationshipCovenants.filter(cov => {
-                        const dueDate = parseDate(cov.Due_Date || cov.Covenant_Due_Date);
-                        return dueDate && dueDate < compareDate;
-                    }).length;
-                    const currentCov = totalCov - pastDueCov;
+                // Update table footer counts
+                const totalCov = relationshipCovenants.length;
+                const compareDate = reportingMonth || new Date();
+                const pastDueCov = relationshipCovenants.filter(cov => {
+                    const dueDate = parseDate(cov.Due_Date || cov.Covenant_Due_Date);
+                    return dueDate && dueDate < compareDate;
+                }).length;
+                const comingDueCov = totalCov - pastDueCov;
 
-                    const totalEl = document.getElementById("deepDiveTotalCovenants");
-                    const pastDueEl = document.getElementById("deepDivePastDueCovenantsFooter");
-                    const currentEl = document.getElementById("deepDiveCurrentCovenants");
+                const totalCountEl = document.getElementById("covenantsTotalCount");
+                const pastDueCountEl = document.getElementById("covenantsPastDueCount");
+                const comingDueCountEl = document.getElementById("covenantsComingDueCount");
 
-                    if (totalEl) totalEl.textContent = totalCov;
-                    if (pastDueEl) pastDueEl.textContent = pastDueCov;
-                    if (currentEl) currentEl.textContent = currentCov;
-                }
+                if (totalCountEl) totalCountEl.textContent = totalCov;
+                if (pastDueCountEl) pastDueCountEl.textContent = pastDueCov;
+                if (comingDueCountEl) comingDueCountEl.textContent = comingDueCov;
             }
 
 
@@ -30686,10 +30716,21 @@
             // Initialize tooltip element and event listeners on page load
             document.addEventListener('DOMContentLoaded', () => {
                 initTooltip();
-                // Initialize tooltips for both tables
-                addFacilityTooltips();
-                addCovenantTooltips();
+                // Initialize tooltips for both tables (with delay for Alpine to render)
+                setTimeout(() => {
+                    addFacilityTooltips();
+                    addCovenantTooltips();
+                }, 1000);
             });
+
+            // Also initialize when tab changes or data loads
+            // This ensures tooltips work even if tables are rendered after page load
+            function initializeTableTooltips() {
+                setTimeout(() => {
+                    addFacilityTooltips();
+                    addCovenantTooltips();
+                }, 100);
+            }
         </script>
 </body>
 
