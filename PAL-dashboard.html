@@ -248,61 +248,8 @@
             }
         }
 
-        /* Custom Table Tooltip Styles - Matching ApexCharts Tooltips */
-        .custom-tooltip {
-            position: fixed;
-            background: #ffffff;
-            color: #1f2937;
-            padding: 0;
-            border-radius: 8px;
-            font-size: 13px;
-            line-height: 1.4;
-            max-width: 320px;
-            z-index: 10000;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.15s ease-in-out;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            border: 1px solid #e5e7eb;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .custom-tooltip.show {
-            opacity: 1;
-        }
-
-        .custom-tooltip-title {
-            background: #f9fafb;
-            border-bottom: 1px solid #e5e7eb;
-            color: #1f2937;
-            padding: 8px 12px;
-            font-weight: 600;
-            font-size: 12px;
-            border-radius: 8px 8px 0 0;
-        }
-
-        .custom-tooltip-content {
-            padding: 8px 12px;
-            color: #374151;
-            font-size: 13px;
-        }
-
-        .custom-tooltip-content strong {
-            color: #1f2937;
-            font-weight: 600;
-        }
-
-        .custom-tooltip-row {
-            padding: 4px 0;
-        }
-
-        .custom-tooltip-row:first-child {
-            padding-top: 0;
-        }
-
-        .custom-tooltip-row:last-child {
-            padding-bottom: 0;
-        }
+        /* Pure CSS Tooltips using Tailwind (no custom CSS needed!) */
+        /* Based on TailAdmin tooltip pattern - tooltips are inline in HTML */
 
         @keyframes pulse {
 
@@ -327,6 +274,14 @@
 </head>
 
 <body class="bg-gray-50">
+    <!-- Cursor-following Tooltip -->
+    <div id="cursorTooltip" style="position: fixed; z-index: 99999; pointer-events: none; display: none;">
+        <div style="position: relative;">
+            <div id="cursorTooltipContent" class="rounded-lg bg-white border border-gray-200 px-3 py-2 text-xs font-medium text-gray-700 shadow-lg" style="white-space: nowrap;"></div>
+            <div style="position: absolute; bottom: -4px; left: 50%; width: 12px; height: 12px; transform: translateX(-50%) rotate(45deg); background-color: white; border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb;"></div>
+        </div>
+    </div>
+
     <!-- Loading Overlay -->
     <div id="loadingOverlay"
         class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[10000] flex items-center justify-center hidden">
@@ -29602,6 +29557,78 @@
                 tbody.innerHTML = html;
             }
 
+            // Initialize cursor-following tooltips for table rows
+            function initializeCursorTooltips(selector, type) {
+                const tooltip = document.getElementById('cursorTooltip');
+                const tooltipContent = document.getElementById('cursorTooltipContent');
+                
+                if (!tooltip || !tooltipContent) return;
+                
+                const rows = document.querySelectorAll(selector);
+                
+                rows.forEach(row => {
+                    row.addEventListener('mouseenter', function(e) {
+                        let content = '';
+                        
+                        if (type === 'facility-type') {
+                            const facilityType = this.getAttribute('data-facility-type');
+                            const riskRating = this.getAttribute('data-risk-rating');
+                            content = `<strong>Facility Type:</strong> ${facilityType}<br><strong>Credit Classification:</strong> ${riskRating}`;
+                            tooltipContent.style.whiteSpace = 'nowrap';
+                            tooltipContent.style.maxWidth = '';
+                        } else if (type === 'covenant-description') {
+                            const description = this.getAttribute('data-covenant-description');
+                            content = `<strong>Description:</strong> ${description}`;
+                            tooltipContent.style.whiteSpace = 'normal';
+                            tooltipContent.style.maxWidth = '300px';
+                        }
+                        
+                        tooltipContent.innerHTML = content;
+                        tooltip.style.display = 'block';
+                        updateCursorTooltipPosition(e);
+                    });
+                    
+                    row.addEventListener('mousemove', updateCursorTooltipPosition);
+                    
+                    row.addEventListener('mouseleave', function() {
+                        tooltip.style.display = 'none';
+                    });
+                });
+            }
+            
+            // Update cursor tooltip position
+            function updateCursorTooltipPosition(e) {
+                const tooltip = document.getElementById('cursorTooltip');
+                if (!tooltip) return;
+                
+                const offsetY = 20; // Distance above cursor
+                
+                const tooltipRect = tooltip.getBoundingClientRect();
+                
+                // Center the tooltip horizontally on the cursor
+                let left = e.clientX - (tooltipRect.width / 2);
+                // Position above the cursor
+                let top = e.clientY - tooltipRect.height - offsetY;
+                
+                // Adjust if tooltip goes off left edge
+                if (left < 10) {
+                    left = 10;
+                }
+                
+                // Adjust if tooltip goes off right edge
+                if (left + tooltipRect.width > window.innerWidth - 10) {
+                    left = window.innerWidth - tooltipRect.width - 10;
+                }
+                
+                // Adjust if tooltip goes off top edge
+                if (top < 10) {
+                    top = e.clientY + 20; // Position below cursor instead
+                }
+                
+                tooltip.style.left = left + 'px';
+                tooltip.style.top = top + 'px';
+            }
+
             // Populate Deep Dive Facilities Details Table (filtered by relationship ID)
             function populateDeepDiveFacilitiesTable(fullRelationshipData) {
                 const tbody = document.getElementById("deepDiveFacilitiesDetailsTable");
@@ -29679,16 +29706,9 @@
                     };
                     const ratingColor = ratingColors[riskRating] || 'bg-gray-100 text-gray-700';
 
-                    // Create comprehensive tooltip for facility row (moved to custom tooltip)
-                    const tooltipText = `Facility Type: ${facilityType}`;
-
                     html += `
-                    <tr class="hover:bg-gray-50 cursor-pointer" 
-                        data-facility-type="${facilityType}" 
-                        data-region="${region}" 
-                        data-maturity="${formatDateShort(parseDate(maturityDate)) || maturityDate}" 
-                        data-rating="${riskRating}">
-                        <td class="px-6 py-4 text-center" title="${region}">
+                    <tr class="hover:bg-gray-50 cursor-pointer" data-facility-type="${facilityType}" data-risk-rating="${riskRating}">
+                        <td class="px-6 py-4 text-center">
                             <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
                                 ${region}
                             </span>
@@ -29711,21 +29731,19 @@
                         <td class="px-6 py-4 text-center" title="Credit Classification: ${riskRating}">
                             <span class="${ratingColor} rounded-full px-2 py-0.5 !text-base font-medium">${riskRating}</span>
                         </td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="Facility Amount: ${formatCurrency(facAmount)}">${formatCurrency(facAmount)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="Loan O/S: ${formatCurrency(loanOS)}">${formatCurrency(loanOS)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="LC O/S: ${formatCurrency(lcOS)}">${formatCurrency(lcOS)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="PSE O/S: ${formatCurrency(osuc)}">${formatCurrency(osuc)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="Unused Commitment: ${formatCurrency(unused)}">${formatCurrency(unused)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(facAmount)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(loanOS)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(lcOS)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(osuc)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(unused)}</td>
                     </tr>
                 `;
                 });
 
                 tbody.innerHTML = html;
 
-                // Initialize tooltips for the newly added rows
-                setTimeout(() => {
-                    addFacilityTooltips();
-                }, 100);
+                // Initialize cursor-following tooltips for facility rows
+                initializeCursorTooltips('#deepDiveFacilitiesDetailsTable tr[data-facility-type]', 'facility-type');
 
                 // Update footer totals
                 const totalFacAmount = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Fac_Amount || f.Facility_Amount), 0);
@@ -29821,16 +29839,9 @@
                     };
                     const regionColor = regionColors[region] || 'bg-gray-100 text-gray-700';
 
-                    // Create comprehensive tooltip for covenant row (moved to custom tooltip)
-                    const tooltipText = covenantDescription;
-
                     html += `
-                    <tr class="hover:bg-gray-50 cursor-pointer" 
-                        data-covenant-description="${covenantDescription}" 
-                        data-covenant-number="${covenantNumber}" 
-                        data-due-date="${formatDateToDDMMYYYY(dueDate) || covenantDueDate}" 
-                        data-status="${status}">
-                        <td class="px-6 py-4 text-center" title="${region}">
+                    <tr class="hover:bg-gray-50 cursor-pointer" data-covenant-description="${covenantDescription}">
+                        <td class="px-6 py-4 text-center">
                             <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
                                 ${region}
                             </span>
@@ -29848,7 +29859,7 @@
                         </td>
                         <td class="px-6 py-4 text-center !text-base font-medium text-gray-900" title="Covenant Number: ${covenantNumber}">${covenantNumber}</td>
                         <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="Due Date: ${formatDateToDDMMYYYY(dueDate) || covenantDueDate}">${formatDateToDDMMYYYY(dueDate) || covenantDueDate}</td>
-                        <td class="px-6 py-4 text-center" title="${covenantDescription}">
+                        <td class="px-6 py-4 text-center">
                             ${isPastDue ? `
                                 <span class="bg-red-50 text-red-600 rounded-full px-2 py-0.5 !text-base font-medium">${status}</span>
                             ` : `
@@ -29861,10 +29872,8 @@
 
                 tbody.innerHTML = html;
 
-                // Initialize tooltips for the newly added rows
-                setTimeout(() => {
-                    addCovenantTooltips();
-                }, 100);
+                // Initialize cursor-following tooltips for covenant rows
+                initializeCursorTooltips('#deepDiveCovenantsTable tr[data-covenant-description]', 'covenant-description');
 
                 // Update header badge count
                 const badgeCount = document.getElementById("deepDiveCovenantsCount");
@@ -30498,171 +30507,10 @@
                 }
             }
 
-            // ===== CUSTOM TOOLTIP FUNCTIONALITY =====
-            // Create and manage custom tooltips for table rows
-
-            let tooltipElement = null;
-
-            // Initialize tooltip element
-            function initTooltip() {
-                if (!tooltipElement) {
-                    tooltipElement = document.createElement('div');
-                    tooltipElement.className = 'custom-tooltip';
-                    document.body.appendChild(tooltipElement);
-                }
-            }
-
-            // Show tooltip with content
-            function showTooltip(element, content) {
-                if (!tooltipElement) initTooltip();
-
-                tooltipElement.innerHTML = content;
-                tooltipElement.classList.add('show');
-
-                // Position tooltip
-                positionTooltip(element);
-            }
-
-            // Hide tooltip
-            function hideTooltip() {
-                if (tooltipElement) {
-                    tooltipElement.classList.remove('show');
-                }
-            }
-
-            // Position tooltip relative to element
-            function positionTooltip(element) {
-                const rect = element.getBoundingClientRect();
-                const tooltipRect = tooltipElement.getBoundingClientRect();
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-
-                // Calculate position (show above element)
-                let top = rect.top + scrollTop - tooltipRect.height - 8;
-                let left = rect.left + scrollLeft + (rect.width / 2) - (tooltipRect.width / 2);
-
-                // Check if tooltip goes off screen
-                if (top < scrollTop) {
-                    // Show below if no space above
-                    top = rect.bottom + scrollTop + 8;
-                }
-
-                // Prevent going off left edge
-                if (left < 10) {
-                    left = 10;
-                }
-
-                // Prevent going off right edge
-                const maxLeft = window.innerWidth - tooltipRect.width - 10;
-                if (left > maxLeft) {
-                    left = maxLeft;
-                }
-
-                tooltipElement.style.top = top + 'px';
-                tooltipElement.style.left = left + 'px';
-            }
-
-            // Add tooltip event listeners using event delegation (works with dynamic content)
-            function addFacilityTooltips() {
-                const tbody = document.getElementById('deepDiveFacilitiesDetailsTable');
-                if (!tbody) return;
-
-                // Remove any existing listeners to avoid duplicates
-                tbody.removeEventListener('mouseenter', handleFacilityRowEnter, true);
-                tbody.removeEventListener('mouseleave', handleFacilityRowLeave, true);
-                tbody.removeEventListener('mousemove', handleRowMove, true);
-
-                // Add event delegation listeners
-                tbody.addEventListener('mouseenter', handleFacilityRowEnter, true);
-                tbody.addEventListener('mouseleave', handleFacilityRowLeave, true);
-                tbody.addEventListener('mousemove', handleRowMove, true);
-            }
-
-            // Event handler for facility row enter
-            function handleFacilityRowEnter(e) {
-                const row = e.target.closest('tr[data-facility-type]');
-                if (!row) return;
-
-                const facilityType = row.getAttribute('data-facility-type');
-                const region = row.getAttribute('data-region');
-                const maturity = row.getAttribute('data-maturity');
-                const rating = row.getAttribute('data-rating');
-
-                if (facilityType) {
-                    const content = `
-                        <div class="custom-tooltip-title">Facility Details</div>
-                        <div class="custom-tooltip-content">
-                            <div class="custom-tooltip-row"><strong>Facility Type:</strong> ${facilityType}</div>
-                        </div>
-                    `;
-                    showTooltip(row, content);
-                }
-            }
-
-            // Event handler for facility row leave
-            function handleFacilityRowLeave(e) {
-                const row = e.target.closest('tr[data-facility-type]');
-                if (!row) return;
-                hideTooltip();
-            }
-
-            // Add tooltip event listeners for covenant table using event delegation
-            function addCovenantTooltips() {
-                const tbody = document.getElementById('deepDiveCovenantsTable');
-                if (!tbody) return;
-
-                // Remove any existing listeners to avoid duplicates
-                tbody.removeEventListener('mouseenter', handleCovenantRowEnter, true);
-                tbody.removeEventListener('mouseleave', handleCovenantRowLeave, true);
-                tbody.removeEventListener('mousemove', handleRowMove, true);
-
-                // Add event delegation listeners
-                tbody.addEventListener('mouseenter', handleCovenantRowEnter, true);
-                tbody.addEventListener('mouseleave', handleCovenantRowLeave, true);
-                tbody.addEventListener('mousemove', handleRowMove, true);
-            }
-
-            // Event handler for covenant row enter
-            function handleCovenantRowEnter(e) {
-                const row = e.target.closest('tr[data-covenant-description]');
-                if (!row) return;
-
-                const description = row.getAttribute('data-covenant-description');
-                
-                if (description) {
-                    const content = `
-                        <div class="custom-tooltip-title">Covenant Details</div>
-                        <div class="custom-tooltip-content">
-                            <div class="custom-tooltip-row"><strong>Description:</strong> ${description}</div>
-                        </div>
-                    `;
-                    showTooltip(row, content);
-                }
-            }
-
-            // Event handler for covenant row leave
-            function handleCovenantRowLeave(e) {
-                const row = e.target.closest('tr[data-covenant-description]');
-                if (!row) return;
-                hideTooltip();
-            }
-
-            // Generic event handler for row mouse move
-            function handleRowMove(e) {
-                const row = e.target.closest('tr[data-facility-type], tr[data-covenant-description]');
-                if (row && tooltipElement && tooltipElement.classList.contains('show')) {
-                    positionTooltip(row);
-                }
-            }
-
-            // Initialize tooltip element and event listeners on page load
-            document.addEventListener('DOMContentLoaded', () => {
-                initTooltip();
-                // Initialize tooltips for both tables
-                addFacilityTooltips();
-                addCovenantTooltips();
-            });
+            // ===== CSS-BASED TOOLTIPS (No JavaScript needed!) =====
+            // Tooltips are now pure CSS using Tailwind's group-hover
+            // Based on TailAdmin tooltip pattern - much simpler and more reliable!
         </script>
 </body>
 
-</html>
+</html
