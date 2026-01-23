@@ -3037,46 +3037,6 @@
                                 </div>
                             </div>
 
-                            <!-- Trends Table for Relationship -->
-                            <div class="mb-6 rounded-2xl border border-gray-200 bg-white">
-                                <div class="px-6 py-4">
-                                    <h3 class="!text-lg font-semibold text-gray-800">Portfolio Trends</h3>
-                                    <p class="!text-base font-medium text-gray-500 mt-1">Portfolio trends analysis by
-                                        product category</p>
-                                </div>
-
-                                <div class="custom-scrollbar overflow-x-auto">
-                                    <table class="min-w-full" id="deepDiveTrendsTable">
-                                        <thead id="deepDiveTrendsTableHead">
-                                            <tr class="bg-gray-50">
-                                                <th
-                                                    class="px-6 py-4 text-center text-base font-medium whitespace-nowrap text-gray-500 sticky left-0 bg-gray-50 z-10">
-                                                    Product Category
-                                                </th>
-                                                <!-- Dynamic date columns will be inserted here -->
-                                            </tr>
-                                        </thead>
-
-                                        <tbody class="divide-y divide-gray-200" id="deepDiveTrendsTableBody">
-                                            <tr>
-                                                <td colspan="10" class="px-6 py-8 text-center text-gray-400">
-                                                    <div class="flex flex-col items-center gap-2">
-                                                        <svg class="h-8 w-8 text-gray-300" fill="none"
-                                                            stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                                                            </path>
-                                                        </svg>
-                                                        <p class="!text-base">Select a relationship to view trend data
-                                                        </p>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
 
                         </div>
                         <!-- End Deep Dive Tab Content -->
@@ -29663,15 +29623,18 @@
                     };
                     const ratingColor = ratingColors[riskRating] || 'bg-gray-100 text-gray-700';
 
+                    // Create comprehensive tooltip for facility row
+                    const tooltipText = `Facility Type: ${facilityType} | Region: ${region} | Maturity: ${formatDateShort(parseDate(maturityDate)) || maturityDate} | Risk Rating: ${riskRating}`;
+
                     html += `
-                    <tr class="hover:bg-gray-50 cursor-pointer" title="Facility Type: ${facilityType}">
-                        <td class="px-6 py-4 text-center">
+                    <tr class="hover:bg-gray-50 cursor-pointer" title="${tooltipText}">
+                        <td class="px-6 py-4 text-center" title="${region}">
                             <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
                                 ${region}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">${facilityId}</td>
-                        <td class="px-6 py-4 text-center">
+                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900" title="Facility ID: ${facilityId}">${facilityId}</td>
+                        <td class="px-6 py-4 text-center" title="${productProgram}${subProduct ? ' - ' + subProduct : ''}">
                             ${subProduct ? `
                                 <div class="space-y-1">
                                     <div class="!text-base font-medium text-gray-900">${productProgram}</div>
@@ -29681,18 +29644,18 @@
                                 <span class="!text-base font-medium text-gray-900">${productProgram}</span>
                             `}
                         </td>
-                        <td class="px-6 py-4 text-center">
+                        <td class="px-6 py-4 text-center" title="Management Status: ${managementStatus}">
                             <span class="${managementStatusColor} rounded-full px-2 py-0.5 !text-base font-medium">${managementStatus}</span>
                         </td>
-                        <td class="px-6 py-4 text-center !text-base text-gray-700">${formatDateShort(parseDate(maturityDate)) || maturityDate}</td>
-                        <td class="px-6 py-4 text-center">
+                        <td class="px-6 py-4 text-center !text-base text-gray-700" title="Maturity Date: ${formatDateShort(parseDate(maturityDate)) || maturityDate}">${formatDateShort(parseDate(maturityDate)) || maturityDate}</td>
+                        <td class="px-6 py-4 text-center" title="Credit Classification: ${riskRating}">
                             <span class="${ratingColor} rounded-full px-2 py-0.5 !text-base font-medium">${riskRating}</span>
                         </td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(facAmount)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(osuc)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(loanOS)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(lcOS)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(unused)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="Facility Amount: ${formatCurrency(facAmount)}">${formatCurrency(facAmount)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="Loan O/S: ${formatCurrency(loanOS)}">${formatCurrency(loanOS)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="LC O/S: ${formatCurrency(lcOS)}">${formatCurrency(lcOS)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="PSE O/S: ${formatCurrency(osuc)}">${formatCurrency(osuc)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="Unused Commitment: ${formatCurrency(unused)}">${formatCurrency(unused)}</td>
                     </tr>
                 `;
                 });
@@ -29793,15 +29756,18 @@
                     };
                     const regionColor = regionColors[region] || 'bg-gray-100 text-gray-700';
 
+                    // Create comprehensive tooltip for covenant row
+                    const tooltipText = `${covenantDescription} | Covenant #: ${covenantNumber} | Due: ${formatDateToDDMMYYYY(dueDate) || covenantDueDate} | Status: ${status}`;
+
                     html += `
-                    <tr class="hover:bg-gray-50 cursor-pointer" title="${covenantDescription}">
-                        <td class="px-6 py-4 text-center">
+                    <tr class="hover:bg-gray-50 cursor-pointer" title="${tooltipText}">
+                        <td class="px-6 py-4 text-center" title="${region}">
                             <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
                                 ${region}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">${facilityId}</td>
-                        <td class="px-6 py-4 text-center">
+                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900" title="Facility ID: ${facilityId}">${facilityId}</td>
+                        <td class="px-6 py-4 text-center" title="${productProgram}${subProduct ? ' - ' + subProduct : ''}">
                             ${subProduct ? `
                             <div class="space-y-1">
                                 <div class="!text-base font-medium text-gray-900">${productProgram}</div>
@@ -29811,9 +29777,9 @@
                                 <span class="!text-base font-medium text-gray-900">${productProgram}</span>
                             `}
                         </td>
-                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">${covenantNumber}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatDateToDDMMYYYY(dueDate) || covenantDueDate}</td>
-                        <td class="px-6 py-4 text-center">
+                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900" title="Covenant Number: ${covenantNumber}">${covenantNumber}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="Due Date: ${formatDateToDDMMYYYY(dueDate) || covenantDueDate}">${formatDateToDDMMYYYY(dueDate) || covenantDueDate}</td>
+                        <td class="px-6 py-4 text-center" title="${covenantDescription}">
                             ${isPastDue ? `
                                 <span class="bg-red-50 text-red-600 rounded-full px-2 py-0.5 !text-base font-medium">${status}</span>
                             ` : `
@@ -29852,239 +29818,6 @@
                 }
             }
 
-            // Populate Deep Dive Trends Table (filtered by relationship ID)
-            function populateDeepDiveTrendsTable(relationshipId) {
-                const thead = document.getElementById("deepDiveTrendsTableHead");
-                const tbody = document.getElementById("deepDiveTrendsTableBody");
-
-                if (!tbody || !thead || !relationshipId) {
-                    if (tbody) {
-                        tbody.innerHTML = `
-                        <tr>
-                            <td colspan="10" class="px-6 py-8">
-                                <div class="flex items-center justify-center py-20">
-                                    <div class="text-center">
-                                        <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                        </svg>
-                                        <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No data available</p>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                    }
-                    return;
-                }
-
-                // Filter historical trends data by relationship ID
-                const relationshipTrendsData = historicalTrendsData.filter(row =>
-                    row.Relationship_ID === relationshipId || row.Relationship_Name === relationshipId
-                );
-
-                if (!relationshipTrendsData || relationshipTrendsData.length === 0) {
-                    tbody.innerHTML = `
-                    <tr>
-                        <td colspan="10" class="px-6 py-8">
-                            <div class="flex items-center justify-center py-20">
-                                <div class="text-center">
-                                    <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                    </svg>
-                                    <p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No data available</p>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                    return;
-                }
-
-                // Get all unique dates and sort them
-                const dateMap = new Map();
-                relationshipTrendsData.forEach((row) => {
-                    const dateObj = parseDate(row.Report_Date);
-                    if (dateObj) {
-                        const timestamp = dateObj.getTime();
-                        dateMap.set(timestamp, formatDateToDDMMYYYY(dateObj));
-                    }
-                });
-
-                const availableDates = Array.from(dateMap.keys()).sort((a, b) => a - b);
-
-                // Build table header with dynamic date columns
-                let headerHTML = `
-                <tr class="bg-gray-50">
-                    <th class="px-6 py-4 text-left text-base font-medium whitespace-nowrap text-gray-500 sticky left-0 bg-gray-50 z-10">
-                        Product Category
-                    </th>`;
-
-                // Add date columns (show up to 4 periods: most recent)
-                const maxDateColumns = Math.min(4, availableDates.length);
-                const displayDates = availableDates.slice(-maxDateColumns);
-
-                for (let i = 0; i < displayDates.length; i++) {
-                    const timestamp = displayDates[i];
-                    const dateObj = new Date(timestamp);
-                    const dateLabel = formatDateShort(dateObj);
-                    headerHTML += `
-                    <th class="px-6 py-4 text-center text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
-                        ${dateLabel}
-                    </th>`;
-                }
-
-                // Add variance columns
-                headerHTML += `
-                <th class="px-6 py-4 text-center text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">MoM Variance</th>
-                <th class="px-6 py-4 text-center text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">QoQ Variance</th>
-                <th class="px-6 py-4 text-center text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">YoY Variance</th>
-            </tr>`;
-
-                thead.innerHTML = headerHTML;
-
-                // Aggregate by Product
-                const productAggregations = {};
-
-                relationshipTrendsData.forEach((row) => {
-                    const product = row.Product_Program || row.Product || "Unknown";
-
-                    if (!productAggregations[product]) {
-                        productAggregations[product] = {
-                            product,
-                            periodData: new Map(),
-                        };
-                    }
-
-                    const dateObj = parseDate(row.Report_Date);
-                    if (!dateObj) return;
-
-                    const timestamp = dateObj.getTime();
-
-                    if (!productAggregations[product].periodData.has(timestamp)) {
-                        productAggregations[product].periodData.set(timestamp, {
-                            TFA: 0,
-                            OSUC: 0,
-                            Outstanding: 0,
-                        });
-                    }
-
-                    const periodData = productAggregations[product].periodData.get(timestamp);
-                    periodData.TFA += parseFloat(row.TFA || 0);
-                    periodData.OSUC += parseFloat(row.OSUC || 0);
-                    periodData.Outstanding += parseFloat(row.Total_OS || 0);
-                });
-
-                // Sort products by most recent period value (using TFA)
-                const sortedProducts = Object.values(productAggregations).sort((a, b) => {
-                    const latestTimestamp = displayDates[displayDates.length - 1];
-                    const aData = a.periodData.get(latestTimestamp);
-                    const bData = b.periodData.get(latestTimestamp);
-                    const aValue = aData ? aData.TFA : 0;
-                    const bValue = bData ? bData.TFA : 0;
-                    return bValue - aValue;
-                });
-
-                // Generate table rows
-                let html = "";
-                const totals = {
-                    periods: new Array(displayDates.length).fill(0)
-                };
-
-                sortedProducts.forEach((agg) => {
-                    html += '<tr>';
-
-                    html += `
-                    <td class="px-6 py-4 text-left text-base font-medium text-gray-900 sticky left-0 bg-white z-10">
-                        ${agg.product}
-                    </td>`;
-
-                    const periodValues = [];
-                    for (let i = 0; i < displayDates.length; i++) {
-                        const timestamp = displayDates[i];
-                        const data = agg.periodData.get(timestamp);
-                        const value = data ? data.TFA : 0;  // Always show TFA for deep dive
-                        periodValues.push(value);
-                        totals.periods[i] += value;
-
-                        html += `
-                        <td class="px-6 py-4 text-center text-base whitespace-nowrap text-gray-700">
-                            ${formatCurrency(value)}
-                        </td>`;
-                    }
-
-                    // MoM Variance
-                    const mostRecent = periodValues[periodValues.length - 1];
-                    const previousMonth = periodValues[periodValues.length - 2];
-                    const momVariance = periodValues.length >= 2 && previousMonth > 0
-                        ? (((mostRecent - previousMonth) / previousMonth) * 100).toFixed(1)
-                        : 0;
-                    html += `
-                    <td class="px-6 py-4 text-center text-base">
-                        ${periodValues.length >= 2 ? formatGrowthBadge(momVariance) : '<span class="text-gray-400">--</span>'}
-                    </td>`;
-
-                    // QoQ Variance
-                    const threeMonthsAgo = periodValues[periodValues.length - 4];
-                    const qoqVariance = periodValues.length >= 4 && threeMonthsAgo > 0
-                        ? (((mostRecent - threeMonthsAgo) / threeMonthsAgo) * 100).toFixed(1)
-                        : 0;
-                    html += `
-                    <td class="px-6 py-4 text-center text-base">
-                        ${periodValues.length >= 4 ? formatGrowthBadge(qoqVariance) : '<span class="text-gray-400">--</span>'}
-                    </td>`;
-
-                    // YoY Variance (not applicable for trends data)
-                    html += `
-                    <td class="px-6 py-4 text-center text-base">
-                        <span class="text-gray-400">--</span>
-                    </td>`;
-
-                    html += '</tr>';
-                });
-
-                // Add total row
-                html += '<tr class="bg-gray-50 font-semibold border-t-2 border-gray-300">';
-                html += `
-                <td class="px-6 py-4 text-left text-base font-bold text-gray-900 sticky left-0 bg-gray-50 z-10 rounded-bl-2xl">
-                    Total
-                </td>`;
-
-                for (let i = 0; i < totals.periods.length; i++) {
-                    html += `
-                    <td class="px-6 py-4 text-center text-base font-bold text-gray-900">
-                        ${formatCurrency(totals.periods[i])}
-                    </td>`;
-                }
-
-                // Total row variance columns
-                const totalMostRecent = totals.periods[totals.periods.length - 1];
-                const totalPreviousMonth = totals.periods[totals.periods.length - 2];
-                const totalMomVariance = totals.periods.length >= 2 && totalPreviousMonth > 0
-                    ? (((totalMostRecent - totalPreviousMonth) / totalPreviousMonth) * 100).toFixed(1)
-                    : 0;
-
-                html += `
-                <td class="px-6 py-4 text-center text-base">
-                    ${totals.periods.length >= 2 ? formatGrowthBadge(totalMomVariance) : '<span class="text-gray-400">--</span>'}
-                </td>`;
-
-                const totalThreeMonthsAgo = totals.periods[totals.periods.length - 4];
-                const totalQoqVariance = totals.periods.length >= 4 && totalThreeMonthsAgo > 0
-                    ? (((totalMostRecent - totalThreeMonthsAgo) / totalThreeMonthsAgo) * 100).toFixed(1)
-                    : 0;
-
-                html += `
-                <td class="px-6 py-4 text-center text-base">
-                    ${totals.periods.length >= 4 ? formatGrowthBadge(totalQoqVariance) : '<span class="text-gray-400">--</span>'}
-                </td>
-                <td class="px-6 py-4 text-center text-base rounded-br-2xl">
-                    <span class="text-gray-400">--</span>
-                </td>`;
-
-                html += '</tr>';
-
-                tbody.innerHTML = html;
-            }
 
             function updateTrendsDateRangeDisplay(text) {
                 const infoDateRangeEl = document.getElementById("trendsInfoDateRange");
@@ -30301,9 +30034,13 @@
                     );
                     const facilitiesCount = new Set(fullRelationshipData.map(r => r.Facility_ID)).size;
 
-                    // Calculate average ROTCE (already in percentage format in the file)
+                    // Calculate average ROTCE (data is already in percentage format, no need to divide)
                     const rotceValues = fullRelationshipData
-                        .map(row => parseNumber(row.ROTCE))
+                        .map(row => {
+                            const val = parseNumber(row.ROTCE);
+                            // Data is already in correct percentage format (e.g., 12.5 means 12.5%)
+                            return val;
+                        })
                         .filter(val => !isNaN(val) && val > 0);
                     const avgROTCE = rotceValues.length > 0
                         ? rotceValues.reduce((sum, val) => sum + val, 0) / rotceValues.length
@@ -30550,9 +30287,6 @@
 
                         // Populate the deep dive covenants table with relationship data
                         populateDeepDiveCovenantsTable(relationshipId, relationshipName);
-
-                        // Populate the deep dive trends table with relationship data
-                        populateDeepDiveTrendsTable(relationshipId);
 
                         console.log('Alpine state updated:', {
                             isLoading: alpineData.isLoading,
