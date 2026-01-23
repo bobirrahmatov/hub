@@ -248,6 +248,62 @@
             }
         }
 
+        /* Custom Table Tooltip Styles - Matching ApexCharts Tooltips */
+        .custom-tooltip {
+            position: fixed;
+            background: #ffffff;
+            color: #1f2937;
+            padding: 0;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.4;
+            max-width: 320px;
+            z-index: 10000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .custom-tooltip.show {
+            opacity: 1;
+        }
+
+        .custom-tooltip-title {
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            color: #1f2937;
+            padding: 8px 12px;
+            font-weight: 600;
+            font-size: 12px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .custom-tooltip-content {
+            padding: 8px 12px;
+            color: #374151;
+            font-size: 13px;
+        }
+
+        .custom-tooltip-content strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        .custom-tooltip-row {
+            padding: 4px 0;
+        }
+
+        .custom-tooltip-row:first-child {
+            padding-top: 0;
+        }
+
+        .custom-tooltip-row:last-child {
+            padding-bottom: 0;
+        }
+
         @keyframes pulse {
 
             0%,
@@ -29623,11 +29679,15 @@
                     };
                     const ratingColor = ratingColors[riskRating] || 'bg-gray-100 text-gray-700';
 
-                    // Create comprehensive tooltip for facility row
-                    const tooltipText = `Facility Type: ${facilityType} | Region: ${region} | Maturity: ${formatDateShort(parseDate(maturityDate)) || maturityDate} | Risk Rating: ${riskRating}`;
+                    // Create comprehensive tooltip for facility row (moved to custom tooltip)
+                    const tooltipText = `Facility Type: ${facilityType}`;
 
                     html += `
-                    <tr class="hover:bg-gray-50 cursor-pointer" title="${tooltipText}">
+                    <tr class="hover:bg-gray-50 cursor-pointer" 
+                        data-facility-type="${facilityType}" 
+                        data-region="${region}" 
+                        data-maturity="${formatDateShort(parseDate(maturityDate)) || maturityDate}" 
+                        data-rating="${riskRating}">
                         <td class="px-6 py-4 text-center" title="${region}">
                             <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
                                 ${region}
@@ -29661,6 +29721,11 @@
                 });
 
                 tbody.innerHTML = html;
+
+                // Initialize tooltips for the newly added rows
+                setTimeout(() => {
+                    addFacilityTooltips();
+                }, 100);
 
                 // Update footer totals
                 const totalFacAmount = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Fac_Amount || f.Facility_Amount), 0);
@@ -29756,11 +29821,15 @@
                     };
                     const regionColor = regionColors[region] || 'bg-gray-100 text-gray-700';
 
-                    // Create comprehensive tooltip for covenant row
-                    const tooltipText = `${covenantDescription} | Covenant #: ${covenantNumber} | Due: ${formatDateToDDMMYYYY(dueDate) || covenantDueDate} | Status: ${status}`;
+                    // Create comprehensive tooltip for covenant row (moved to custom tooltip)
+                    const tooltipText = covenantDescription;
 
                     html += `
-                    <tr class="hover:bg-gray-50 cursor-pointer" title="${tooltipText}">
+                    <tr class="hover:bg-gray-50 cursor-pointer" 
+                        data-covenant-description="${covenantDescription}" 
+                        data-covenant-number="${covenantNumber}" 
+                        data-due-date="${formatDateToDDMMYYYY(dueDate) || covenantDueDate}" 
+                        data-status="${status}">
                         <td class="px-6 py-4 text-center" title="${region}">
                             <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
                                 ${region}
@@ -29791,6 +29860,11 @@
                 });
 
                 tbody.innerHTML = html;
+
+                // Initialize tooltips for the newly added rows
+                setTimeout(() => {
+                    addCovenantTooltips();
+                }, 100);
 
                 // Update header badge count
                 const badgeCount = document.getElementById("deepDiveCovenantsCount");
@@ -30034,11 +30108,11 @@
                     );
                     const facilitiesCount = new Set(fullRelationshipData.map(r => r.Facility_ID)).size;
 
-                    // Calculate average ROTCE (data is already in percentage format, no need to divide)
+                    // Calculate average ROTCE using parsePercentage to handle both decimal and percentage formats
                     const rotceValues = fullRelationshipData
                         .map(row => {
-                            const val = parseNumber(row.ROTCE);
-                            // Data is already in correct percentage format (e.g., 12.5 means 12.5%)
+                            const val = parsePercentage(row.ROTCE);
+                            // parsePercentage converts decimal (0.09) to percentage (9) automatically
                             return val;
                         })
                         .filter(val => !isNaN(val) && val > 0);
@@ -30069,6 +30143,18 @@
                         safeSetText("deepDiveOutstanding", formatCurrency(totalOutstanding));
                         safeSetText("deepDiveFacilities", facilitiesCount.toLocaleString());
                         safeSetText("deepDiveROTCE", avgROTCE.toFixed(2) + "%");
+
+                        // Add color coding to ROTCE value based on target (12%)
+                        const rotceElement = document.getElementById("deepDiveROTCE");
+                        if (rotceElement) {
+                            if (avgROTCE < 12) {
+                                rotceElement.classList.remove('text-gray-900', 'text-green-600');
+                                rotceElement.classList.add('text-red-600');
+                            } else {
+                                rotceElement.classList.remove('text-gray-900', 'text-red-600');
+                                rotceElement.classList.add('text-green-600');
+                            }
+                        }
 
                         // Calculate expired counts and other metrics using reportingMonth
                         const compareDate = reportingMonth || new Date();
@@ -30411,6 +30497,134 @@
                 `;
                 }
             }
+
+            // ===== CUSTOM TOOLTIP FUNCTIONALITY =====
+            // Create and manage custom tooltips for table rows
+
+            let tooltipElement = null;
+
+            // Initialize tooltip element
+            function initTooltip() {
+                if (!tooltipElement) {
+                    tooltipElement = document.createElement('div');
+                    tooltipElement.className = 'custom-tooltip';
+                    document.body.appendChild(tooltipElement);
+                }
+            }
+
+            // Show tooltip with content
+            function showTooltip(element, content) {
+                if (!tooltipElement) initTooltip();
+
+                tooltipElement.innerHTML = content;
+                tooltipElement.classList.add('show');
+
+                // Position tooltip
+                positionTooltip(element);
+            }
+
+            // Hide tooltip
+            function hideTooltip() {
+                if (tooltipElement) {
+                    tooltipElement.classList.remove('show');
+                }
+            }
+
+            // Position tooltip relative to element
+            function positionTooltip(element) {
+                const rect = element.getBoundingClientRect();
+                const tooltipRect = tooltipElement.getBoundingClientRect();
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+                // Calculate position (show above element)
+                let top = rect.top + scrollTop - tooltipRect.height - 8;
+                let left = rect.left + scrollLeft + (rect.width / 2) - (tooltipRect.width / 2);
+
+                // Check if tooltip goes off screen
+                if (top < scrollTop) {
+                    // Show below if no space above
+                    top = rect.bottom + scrollTop + 8;
+                }
+
+                // Prevent going off left edge
+                if (left < 10) {
+                    left = 10;
+                }
+
+                // Prevent going off right edge
+                const maxLeft = window.innerWidth - tooltipRect.width - 10;
+                if (left > maxLeft) {
+                    left = maxLeft;
+                }
+
+                tooltipElement.style.top = top + 'px';
+                tooltipElement.style.left = left + 'px';
+            }
+
+            // Add tooltip event listeners to facility table rows
+            function addFacilityTooltips() {
+                const tbody = document.getElementById('deepDiveFacilitiesDetailsTable');
+                if (!tbody) return;
+
+                const rows = tbody.querySelectorAll('tr[data-facility-type]');
+                rows.forEach(row => {
+                    const facilityType = row.getAttribute('data-facility-type');
+                    const region = row.getAttribute('data-region');
+                    const maturity = row.getAttribute('data-maturity');
+                    const rating = row.getAttribute('data-rating');
+
+                    if (facilityType) {
+                        const content = `
+                            <div class="custom-tooltip-title">Facility Details</div>
+                            <div class="custom-tooltip-content">
+                                <div class="custom-tooltip-row"><strong>Facility Type:</strong> ${facilityType}</div>
+                            </div>
+                        `;
+                        
+                        row.addEventListener('mouseenter', () => showTooltip(row, content));
+                        row.addEventListener('mouseleave', hideTooltip);
+                        row.addEventListener('mousemove', (e) => {
+                            if (tooltipElement && tooltipElement.classList.contains('show')) {
+                                positionTooltip(row);
+                            }
+                        });
+                    }
+                });
+            }
+
+            // Add tooltip event listeners to covenant table rows
+            function addCovenantTooltips() {
+                const tbody = document.getElementById('deepDiveCovenantsTable');
+                if (!tbody) return;
+
+                const rows = tbody.querySelectorAll('tr[data-covenant-description]');
+                rows.forEach(row => {
+                    const description = row.getAttribute('data-covenant-description');
+                    
+                    if (description) {
+                        const content = `
+                            <div class="custom-tooltip-title">Covenant Details</div>
+                            <div class="custom-tooltip-content">
+                                <div class="custom-tooltip-row"><strong>Description:</strong> ${description}</div>
+                            </div>
+                        `;
+                        
+                        row.addEventListener('mouseenter', () => showTooltip(row, content));
+                        row.addEventListener('mouseleave', hideTooltip);
+                        row.addEventListener('mousemove', (e) => {
+                            if (tooltipElement && tooltipElement.classList.contains('show')) {
+                                positionTooltip(row);
+                            }
+                        });
+                    }
+                });
+            }
+
+            // Initialize tooltip element on page load
+            document.addEventListener('DOMContentLoaded', () => {
+                initTooltip();
+            });
         </script>
 </body>
 
