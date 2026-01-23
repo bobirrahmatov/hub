@@ -30562,68 +30562,105 @@
                 tooltipElement.style.left = left + 'px';
             }
 
-            // Add tooltip event listeners to facility table rows
+            // Add tooltip event listeners using event delegation (works with dynamic content)
             function addFacilityTooltips() {
                 const tbody = document.getElementById('deepDiveFacilitiesDetailsTable');
                 if (!tbody) return;
 
-                const rows = tbody.querySelectorAll('tr[data-facility-type]');
-                rows.forEach(row => {
-                    const facilityType = row.getAttribute('data-facility-type');
-                    const region = row.getAttribute('data-region');
-                    const maturity = row.getAttribute('data-maturity');
-                    const rating = row.getAttribute('data-rating');
+                // Remove any existing listeners to avoid duplicates
+                tbody.removeEventListener('mouseenter', handleFacilityRowEnter, true);
+                tbody.removeEventListener('mouseleave', handleFacilityRowLeave, true);
+                tbody.removeEventListener('mousemove', handleRowMove, true);
 
-                    if (facilityType) {
-                        const content = `
-                            <div class="custom-tooltip-title">Facility Details</div>
-                            <div class="custom-tooltip-content">
-                                <div class="custom-tooltip-row"><strong>Facility Type:</strong> ${facilityType}</div>
-                            </div>
-                        `;
-                        
-                        row.addEventListener('mouseenter', () => showTooltip(row, content));
-                        row.addEventListener('mouseleave', hideTooltip);
-                        row.addEventListener('mousemove', (e) => {
-                            if (tooltipElement && tooltipElement.classList.contains('show')) {
-                                positionTooltip(row);
-                            }
-                        });
-                    }
-                });
+                // Add event delegation listeners
+                tbody.addEventListener('mouseenter', handleFacilityRowEnter, true);
+                tbody.addEventListener('mouseleave', handleFacilityRowLeave, true);
+                tbody.addEventListener('mousemove', handleRowMove, true);
             }
 
-            // Add tooltip event listeners to covenant table rows
+            // Event handler for facility row enter
+            function handleFacilityRowEnter(e) {
+                const row = e.target.closest('tr[data-facility-type]');
+                if (!row) return;
+
+                const facilityType = row.getAttribute('data-facility-type');
+                const region = row.getAttribute('data-region');
+                const maturity = row.getAttribute('data-maturity');
+                const rating = row.getAttribute('data-rating');
+
+                if (facilityType) {
+                    const content = `
+                        <div class="custom-tooltip-title">Facility Details</div>
+                        <div class="custom-tooltip-content">
+                            <div class="custom-tooltip-row"><strong>Facility Type:</strong> ${facilityType}</div>
+                        </div>
+                    `;
+                    showTooltip(row, content);
+                }
+            }
+
+            // Event handler for facility row leave
+            function handleFacilityRowLeave(e) {
+                const row = e.target.closest('tr[data-facility-type]');
+                if (!row) return;
+                hideTooltip();
+            }
+
+            // Add tooltip event listeners for covenant table using event delegation
             function addCovenantTooltips() {
                 const tbody = document.getElementById('deepDiveCovenantsTable');
                 if (!tbody) return;
 
-                const rows = tbody.querySelectorAll('tr[data-covenant-description]');
-                rows.forEach(row => {
-                    const description = row.getAttribute('data-covenant-description');
-                    
-                    if (description) {
-                        const content = `
-                            <div class="custom-tooltip-title">Covenant Details</div>
-                            <div class="custom-tooltip-content">
-                                <div class="custom-tooltip-row"><strong>Description:</strong> ${description}</div>
-                            </div>
-                        `;
-                        
-                        row.addEventListener('mouseenter', () => showTooltip(row, content));
-                        row.addEventListener('mouseleave', hideTooltip);
-                        row.addEventListener('mousemove', (e) => {
-                            if (tooltipElement && tooltipElement.classList.contains('show')) {
-                                positionTooltip(row);
-                            }
-                        });
-                    }
-                });
+                // Remove any existing listeners to avoid duplicates
+                tbody.removeEventListener('mouseenter', handleCovenantRowEnter, true);
+                tbody.removeEventListener('mouseleave', handleCovenantRowLeave, true);
+                tbody.removeEventListener('mousemove', handleRowMove, true);
+
+                // Add event delegation listeners
+                tbody.addEventListener('mouseenter', handleCovenantRowEnter, true);
+                tbody.addEventListener('mouseleave', handleCovenantRowLeave, true);
+                tbody.addEventListener('mousemove', handleRowMove, true);
             }
 
-            // Initialize tooltip element on page load
+            // Event handler for covenant row enter
+            function handleCovenantRowEnter(e) {
+                const row = e.target.closest('tr[data-covenant-description]');
+                if (!row) return;
+
+                const description = row.getAttribute('data-covenant-description');
+                
+                if (description) {
+                    const content = `
+                        <div class="custom-tooltip-title">Covenant Details</div>
+                        <div class="custom-tooltip-content">
+                            <div class="custom-tooltip-row"><strong>Description:</strong> ${description}</div>
+                        </div>
+                    `;
+                    showTooltip(row, content);
+                }
+            }
+
+            // Event handler for covenant row leave
+            function handleCovenantRowLeave(e) {
+                const row = e.target.closest('tr[data-covenant-description]');
+                if (!row) return;
+                hideTooltip();
+            }
+
+            // Generic event handler for row mouse move
+            function handleRowMove(e) {
+                const row = e.target.closest('tr[data-facility-type], tr[data-covenant-description]');
+                if (row && tooltipElement && tooltipElement.classList.contains('show')) {
+                    positionTooltip(row);
+                }
+            }
+
+            // Initialize tooltip element and event listeners on page load
             document.addEventListener('DOMContentLoaded', () => {
                 initTooltip();
+                // Initialize tooltips for both tables
+                addFacilityTooltips();
+                addCovenantTooltips();
             });
         </script>
 </body>
