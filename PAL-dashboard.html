@@ -169,7 +169,7 @@
         .apexcharts-tooltip-text-y-label,
         .apexcharts-tooltip-text-y-value {
             color: #374151 !important;
-            font-family: 'Outfit', sans-serif !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !important;
         }
 
         .apexcharts-tooltip-series-group {
@@ -207,7 +207,7 @@
             border-radius: 12px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             overflow: hidden;
-            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
         .tooltip-header {
@@ -218,13 +218,13 @@
 
         .tooltip-title {
             font-weight: 600;
-            font-size: 15px;
+            font-size: 16px;
             color: #111827;
             margin-bottom: 4px;
         }
 
         .tooltip-subtitle {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 500;
             color: #6B7280;
         }
@@ -258,7 +258,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 11px;
+            font-size: 14px;
             color: #6B7280;
             font-weight: 500;
             margin-bottom: 6px;
@@ -271,11 +271,11 @@
         }
 
         .tooltip-widget-value.medium {
-            font-size: 16px;
+            font-size: 18px;
         }
 
         .tooltip-widget-value.small {
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .tooltip-section-title {
@@ -283,7 +283,7 @@
             align-items: center;
             gap: 6px;
             margin-bottom: 8px;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 600;
             color: #374151;
         }
@@ -300,7 +300,7 @@
         .tooltip-table th {
             padding: 6px 8px;
             text-align: left;
-            font-size: 10px;
+            font-size: 12px;
             color: #6B7280;
             font-weight: 600;
             text-transform: uppercase;
@@ -312,7 +312,7 @@
 
         .tooltip-table td {
             padding: 6px 8px;
-            font-size: 11px;
+            font-size: 14px;
             color: #6B7280;
             font-weight: 500;
         }
@@ -6036,7 +6036,7 @@
                     ],
                     colors: ["#93a8ff", "#465fff"],
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "bar",
                         stacked: false,
                         height: "100%",
@@ -6091,7 +6091,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                     },
@@ -6099,7 +6099,7 @@
                         show: true,
                         position: "top",
                         horizontalAlign: "center",
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         fontSize: "12px",
                         markers: {
                             width: 12,
@@ -6119,7 +6119,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                     },
@@ -6150,7 +6150,7 @@
                         offsetY: 0,
                         style: {
                             fontSize: "12px",
-                            fontFamily: "Outfit, sans-serif",
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         },
                         x: {
                             show: false,
@@ -6163,9 +6163,9 @@
                     },
                 };
 
-                const chartElement = document.querySelector("#facilityMaturityChart");
+                const chartElement = document.querySelector("#facilityTrendChart");
                 if (!chartElement) {
-                    console.error("Facility maturity chart element not found");
+                    console.error("Facility trend chart element not found");
                     return;
                 }
 
@@ -6175,18 +6175,18 @@
                 }
 
                 try {
-                    if (facilityMaturityChartInstance) {
-                        facilityMaturityChartInstance.destroy();
-                        facilityMaturityChartInstance = null;
+                    if (facilityTrendChartInstance) {
+                        facilityTrendChartInstance.destroy();
+                        facilityTrendChartInstance = null;
                     }
 
                     chartElement.innerHTML = "";
 
-                    facilityMaturityChartInstance = new ApexCharts(chartElement, options);
-                    facilityMaturityChartInstance.render();
+                    facilityTrendChartInstance = new ApexCharts(chartElement, options);
+                    facilityTrendChartInstance.render();
                 } catch (error) {
                     console.error(
-                        "❌ Error rendering filtered facility maturity chart:",
+                        "❌ Error rendering filtered facility trend chart:",
                         error
                     );
                 }
@@ -6406,7 +6406,7 @@
                     ],
                     colors: ["#465fff"],
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "bar",
                         height: calculatedHeight,
                         toolbar: {
@@ -6462,7 +6462,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                         axisBorder: {
@@ -6480,7 +6480,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                     },
@@ -6488,7 +6488,7 @@
                         show: true,
                         position: "top",
                         horizontalAlign: "left",
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         fontSize: "12px",
                         markers: {
                             radius: 12,
@@ -6602,7 +6602,7 @@
                                 min-width: 360px;
                                 max-width: 400px;
                                 overflow: hidden;
-                                font-family: Outfit, sans-serif;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                                 position: relative;
                                 z-index: 99999;
                             ">
@@ -9029,7 +9029,7 @@
                     colors: colors,
                     labels: labels,
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "donut",
                         width: 280,
                         height: 280,
@@ -9115,7 +9115,7 @@
                                 min-width: 280px;
                                 max-width: 320px;
                                 overflow: hidden;
-                                font-family: Outfit, sans-serif;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                                 position: relative;
                                 z-index: 99999;
                             ">
@@ -9644,7 +9644,7 @@
                     series: series,
                     colors: ["#2a31d8", "#465fff", "#7592ff"],
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "bar",
                         stacked: true,
                         height: "100%",
@@ -9690,7 +9690,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                     },
@@ -9698,7 +9698,7 @@
                         show: true,
                         position: "top",
                         horizontalAlign: "center",
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         fontSize: "12px",
                         markers: {
                             width: 12,
@@ -9718,7 +9718,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                     },
@@ -9774,7 +9774,7 @@
                                 min-width: 300px;
                                 max-width: 340px;
                                 overflow: hidden;
-                                font-family: Outfit, sans-serif;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                                 position: relative;
                                 z-index: 99999;
                             ">
@@ -10293,7 +10293,7 @@
                     ],
                     colors: ["#93a8ff", "#465fff"],
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "bar",
                         stacked: false,
                         height: "100%",
@@ -10348,7 +10348,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                     },
@@ -10356,7 +10356,7 @@
                         show: true,
                         position: "top",
                         horizontalAlign: "center",
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         fontSize: "12px",
                         markers: {
                             width: 12,
@@ -10376,7 +10376,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                     },
@@ -10407,7 +10407,7 @@
                         offsetY: 0,
                         style: {
                             fontSize: "12px",
-                            fontFamily: "Outfit, sans-serif",
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         },
                         x: {
                             show: false,
@@ -10631,7 +10631,7 @@
                     ],
                     colors: ["#C2D6FF", "#465FFF"],
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "bar",
                         stacked: false,
                         height: "100%",
@@ -10714,7 +10714,7 @@
                         show: true,
                         position: "top",
                         horizontalAlign: "center",
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         fontSize: "12px",
                         markers: {
                             width: 12,
@@ -10835,7 +10835,7 @@
                                 min-width: 420px;
                                 max-width: 460px;
                                 overflow: hidden;
-                                font-family: Outfit, sans-serif;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                             ">
                                 <!-- Header with border -->
                                 <div style="
@@ -11406,7 +11406,7 @@
                     ],
                     colors: ["#C2D6FF", "#465FFF"],
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "bar",
                         stacked: false,
                         height: "100%",
@@ -11487,7 +11487,7 @@
                         show: true,
                         position: "top",
                         horizontalAlign: "center",
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         fontSize: "12px",
                         markers: {
                             width: 12,
@@ -11608,7 +11608,7 @@
                                 min-width: 420px;
                                 max-width: 460px;
                                 overflow: hidden;
-                                font-family: Outfit, sans-serif;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                             ">
                                 <!-- Header with border -->
                                 <div style="
@@ -12401,7 +12401,7 @@
                     ],
                     colors: ["#465fff"],
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "bar",
                         height: calculatedHeight,
                         toolbar: {
@@ -12457,7 +12457,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                         axisBorder: {
@@ -12475,7 +12475,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                     },
@@ -12483,7 +12483,7 @@
                         show: true,
                         position: "top",
                         horizontalAlign: "left",
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         fontSize: "12px",
                         markers: {
                             radius: 12,
@@ -12597,7 +12597,7 @@
                                 min-width: 360px;
                                 max-width: 400px;
                                 overflow: hidden;
-                                font-family: Outfit, sans-serif;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                                 position: relative;
                                 z-index: 99999;
                             ">
@@ -13113,7 +13113,7 @@
                     colors: colors.slice(0, labels.length),
                     labels: labels,
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "donut",
                         width: 280,
                         height: 280,
@@ -13210,7 +13210,7 @@
                                 min-width: 360px;
                                 max-width: 400px;
                                 overflow: hidden;
-                                font-family: Outfit, sans-serif;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                                 position: relative;
                                 z-index: 99999;
                             ">
@@ -13719,7 +13719,7 @@
                     colors: colors.slice(0, labels.length),
                     labels: labels,
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "donut",
                         width: 280,
                         height: 280,
@@ -13816,7 +13816,7 @@
                                 min-width: 360px;
                                 max-width: 400px;
                                 overflow: hidden;
-                                font-family: Outfit, sans-serif;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                                 position: relative;
                                 z-index: 99999;
                             ">
@@ -14346,7 +14346,7 @@
                         type: "bar",
                         height: calculatedHeight,
                         toolbar: { show: false },
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                     },
                     colors: barColors,
                     plotOptions: {
@@ -14367,7 +14367,7 @@
                         },
                         style: {
                             fontSize: "12px",
-                            fontFamily: "Outfit, sans-serif",
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             colors: ["#fff"],
                             fontWeight: "bold",
                         },
@@ -14384,7 +14384,7 @@
                                         color: "#fff",
                                         background: "#f59e0b",
                                         fontSize: "12px",
-                                        fontFamily: "Outfit, sans-serif",
+                                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                         fontWeight: "bold",
                                     },
                                     text: "Target: 12%",
@@ -14398,7 +14398,7 @@
                             style: {
                                 color: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                         labels: {
@@ -14408,7 +14408,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                     },
@@ -14419,7 +14419,7 @@
                             style: {
                                 colors: relationships.map(() => "#6B7280"),
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                             maxWidth: 200,
                         },
@@ -14497,7 +14497,7 @@
                                 min-width: 320px;
                                 max-width: 360px;
                                 overflow: hidden;
-                                font-family: Outfit, sans-serif;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                                 position: relative;
                                 z-index: 99999;
                             ">
@@ -14943,7 +14943,7 @@
                         type: "bar",
                         height: calculatedHeight,
                         toolbar: { show: false },
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                     },
                     colors: barColors,
                     plotOptions: {
@@ -14964,7 +14964,7 @@
                         },
                         style: {
                             fontSize: "12px",
-                            fontFamily: "Outfit, sans-serif",
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             colors: ["#fff"],
                             fontWeight: "bold",
                         },
@@ -14981,7 +14981,7 @@
                                         color: "#fff",
                                         background: "#f59e0b",
                                         fontSize: "12px",
-                                        fontFamily: "Outfit, sans-serif",
+                                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                         fontWeight: "bold",
                                     },
                                     text: "Target: 12%",
@@ -14995,7 +14995,7 @@
                             style: {
                                 color: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                         labels: {
@@ -15005,7 +15005,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                         },
                     },
@@ -15016,7 +15016,7 @@
                             style: {
                                 colors: relationships.map(() => "#6B7280"),
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             },
                             maxWidth: 200,
                         },
@@ -15094,7 +15094,7 @@
                                 min-width: 320px;
                                 max-width: 360px;
                                 overflow: hidden;
-                                font-family: Outfit, sans-serif;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                                 position: relative;
                                 z-index: 99999;
                             ">
@@ -16612,7 +16612,7 @@
                     colors: donutColors.slice(0, programLabels.length),
                     labels: programLabels,
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "donut",
                         width: 300,
                         height: 300,
@@ -16800,7 +16800,7 @@
                     colors: donutColors.slice(0, programLabels.length),
                     labels: programLabels,
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "donut",
                         width: 300,
                         height: 300,
@@ -16984,7 +16984,7 @@
                     colors: donutColors.slice(0, programLabels.length),
                     labels: programLabels,
                     chart: {
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         type: "donut",
                         width: 300,
                         height: 300,
@@ -17090,7 +17090,7 @@
                         toolbar: {
                             show: false
                         },
-                        fontFamily: "Outfit, sans-serif"
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                     },
                     plotOptions: {
                         bar: {
@@ -17107,7 +17107,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif"
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                             }
                         }
                     },
@@ -17119,14 +17119,14 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif"
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                             }
                         }
                     },
                     legend: {
                         position: 'top',
                         horizontalAlign: 'left',
-                        fontFamily: "Outfit, sans-serif",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                         fontSize: "12px",
                         markers: {
                             radius: 12,
@@ -17191,7 +17191,7 @@
                         toolbar: {
                             show: false
                         },
-                        fontFamily: "Outfit, sans-serif"
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                     },
                     plotOptions: {
                         bar: {
@@ -17210,7 +17210,7 @@
                             fontSize: "11px",
                             fontWeight: 500,
                             colors: ['#374151'],
-                            fontFamily: "Outfit, sans-serif"
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                         },
                         background: {
                             enabled: true,
@@ -17231,7 +17231,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif"
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                             }
                         }
                     },
@@ -17241,7 +17241,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "11px",
-                                fontFamily: "Outfit, sans-serif"
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                             },
                             formatter: function (val, opts) {
                                 // opts.dataPointIndex gives us the index for ranking
@@ -17326,7 +17326,7 @@
                         toolbar: {
                             show: false
                         },
-                        fontFamily: "Outfit, sans-serif"
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                     },
                     plotOptions: {
                         bar: {
@@ -17347,7 +17347,7 @@
                             fontSize: "11px",
                             fontWeight: 500,
                             colors: ['#374151'],
-                            fontFamily: "Outfit, sans-serif"
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                         },
                         background: {
                             enabled: true,
@@ -17368,7 +17368,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif"
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                             }
                         }
                     },
@@ -17380,7 +17380,7 @@
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
-                                fontFamily: "Outfit, sans-serif"
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                             }
                         }
                     },
@@ -21385,7 +21385,7 @@
                                 chart: {
                                     type: 'bar',
                                     height: 340,
-                                    fontFamily: 'Outfit, sans-serif',
+                                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                                     toolbar: { show: false },
                                     parentHeightOffset: 0
                                 },
@@ -21424,7 +21424,7 @@
                                         style: {
                                             colors: "#6B7280",
                                             fontSize: "12px",
-                                            fontFamily: "Outfit, sans-serif",
+                                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                         },
                                     },
                                     axisBorder: { show: false },
@@ -21435,7 +21435,7 @@
                                         style: {
                                             colors: "#6B7280",
                                             fontSize: "12px",
-                                            fontFamily: "Outfit, sans-serif",
+                                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                         },
                                     },
                                 },
@@ -21504,7 +21504,7 @@
                                 colors: donutColors.slice(0, productLabels.length),
                                 labels: productLabels,
                                 chart: {
-                                    fontFamily: "Outfit, sans-serif",
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                     type: "donut",
                                     width: 300,
                                     height: 300,
@@ -21711,7 +21711,7 @@
                             chart: {
                                 type: 'bar',
                                 height: chartHeight,
-                                fontFamily: 'Outfit, sans-serif',
+                                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                                 toolbar: { show: false },
                                 parentHeightOffset: 0
                             },
@@ -21753,7 +21753,7 @@
                                     style: {
                                         colors: "#6B7280",
                                         fontSize: "12px",
-                                        fontFamily: "Outfit, sans-serif",
+                                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                     },
                                 },
                                 axisBorder: { show: false },
@@ -21766,7 +21766,7 @@
                                     style: {
                                         colors: "#6B7280",
                                         fontSize: "12px",
-                                        fontFamily: "Outfit, sans-serif",
+                                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                     },
                                     maxWidth: 200
                                 },
@@ -21879,7 +21879,7 @@
                         chart: {
                             type: 'bar',
                             height: productChartHeight,
-                            fontFamily: 'Outfit, sans-serif',
+                            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                             toolbar: { show: false },
                             parentHeightOffset: 0
                         },
@@ -21924,7 +21924,7 @@
                                 style: {
                                     colors: "#6B7280",
                                     fontSize: "12px",
-                                    fontFamily: "Outfit, sans-serif",
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                 },
                             },
                             axisBorder: { show: false },
@@ -21937,7 +21937,7 @@
                                 style: {
                                     colors: "#6B7280",
                                     fontSize: "12px",
-                                    fontFamily: "Outfit, sans-serif",
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                 },
                                 maxWidth: 180
                             },
@@ -22163,7 +22163,7 @@
                         chart: {
                             type: 'bar',
                             height: 300,
-                            fontFamily: 'Outfit, sans-serif',
+                            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                             toolbar: { show: false },
                             parentHeightOffset: 0
                         },
@@ -22202,7 +22202,7 @@
                                 style: {
                                     colors: "#6B7280",
                                     fontSize: "12px",
-                                    fontFamily: "Outfit, sans-serif",
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                 },
                             },
                             axisBorder: { show: false },
@@ -22213,7 +22213,7 @@
                                 style: {
                                     colors: "#6B7280",
                                     fontSize: "12px",
-                                    fontFamily: "Outfit, sans-serif",
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                 },
                             },
                         },
@@ -22268,7 +22268,7 @@
                         colors: colors.slice(0, topProducts.length),
                         labels: topProducts.map(p => p.name),
                         chart: {
-                            fontFamily: "Outfit, sans-serif",
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             type: "donut",
                             width: 300,
                             height: 300,
@@ -22379,7 +22379,7 @@
                         colors: colors,
                         labels: topProducts.map(p => p.name),
                         chart: {
-                            fontFamily: "Outfit, sans-serif",
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             type: "donut",
                             width: 300,
                             height: 300,
@@ -22712,7 +22712,7 @@
                         chart: {
                             type: 'bar',
                             height: 300,
-                            fontFamily: 'Outfit, sans-serif',
+                            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                             toolbar: { show: false },
                             parentHeightOffset: 0
                         },
@@ -22751,7 +22751,7 @@
                                 style: {
                                     colors: "#6B7280",
                                     fontSize: "12px",
-                                    fontFamily: "Outfit, sans-serif",
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                 },
                             },
                             axisBorder: { show: false },
@@ -22762,7 +22762,7 @@
                                 style: {
                                     colors: "#6B7280",
                                     fontSize: "12px",
-                                    fontFamily: "Outfit, sans-serif",
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                 },
                             },
                         },
@@ -22817,7 +22817,7 @@
                         colors: colors.slice(0, topProducts.length),
                         labels: topProducts.map(p => p.name),
                         chart: {
-                            fontFamily: "Outfit, sans-serif",
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             type: "donut",
                             width: 300,
                             height: 300,
@@ -22928,7 +22928,7 @@
                         colors: colors,
                         labels: topProducts.map(p => p.name),
                         chart: {
-                            fontFamily: "Outfit, sans-serif",
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             type: "donut",
                             width: 300,
                             height: 300,
@@ -23118,7 +23118,7 @@
                         colors: colors.slice(0, topProducts.length),
                         labels: topProducts.map(p => p.name),
                         chart: {
-                            fontFamily: "Outfit, sans-serif",
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             type: "donut",
                             width: 300,
                             height: 300,
@@ -23226,7 +23226,7 @@
                         colors: colors.slice(0, topProducts.length),
                         labels: topProducts.map(p => p.name),
                         chart: {
-                            fontFamily: "Outfit, sans-serif",
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                             type: "donut",
                             width: 300,
                             height: 300,
@@ -23630,7 +23630,7 @@
                         chart: {
                             type: 'bar',
                             height: 300,
-                            fontFamily: 'Outfit, sans-serif',
+                            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                             toolbar: { show: false }
                         },
                         colors: ['#f59e0b'],
@@ -23744,7 +23744,7 @@
                         chart: {
                             type: 'bar',
                             height: 300,
-                            fontFamily: 'Outfit, sans-serif',
+                            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                             toolbar: { show: false }
                         },
                         colors: ['#6366f1'],
@@ -24047,7 +24047,7 @@
                             colors: colors.slice(0, productChartData.length),
                             labels: productChartData.map(p => p.product),
                             chart: {
-                                fontFamily: "Outfit, sans-serif",
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                 type: "donut",
                                 width: 300,
                                 height: 300,
@@ -24310,7 +24310,7 @@
                             chart: {
                                 type: 'bar',
                                 height: Math.max(300, belowTargetRelationships.length * 40),
-                                fontFamily: 'Outfit, sans-serif',
+                                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                                 toolbar: { show: false },
                                 parentHeightOffset: 0
                             },
@@ -24346,7 +24346,7 @@
                                     style: {
                                         colors: "#6B7280",
                                         fontSize: "12px",
-                                        fontFamily: "Outfit, sans-serif",
+                                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                     }
                                 },
                                 axisBorder: { show: false },
@@ -24359,7 +24359,7 @@
                                     style: {
                                         colors: "#6B7280",
                                         fontSize: "12px",
-                                        fontFamily: "Outfit, sans-serif",
+                                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                     },
                                     maxWidth: 180
                                 }
@@ -24578,7 +24578,7 @@
                             chart: {
                                 type: 'donut',
                                 height: 300,
-                                fontFamily: 'Outfit, sans-serif',
+                                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                             },
                             plotOptions: {
                                 pie: {
@@ -24619,7 +24619,7 @@
                             legend: {
                                 position: 'bottom',
                                 horizontalAlign: 'center',
-                                fontFamily: 'Outfit, sans-serif',
+                                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                                 fontSize: '12px',
                                 fontWeight: 500,
                                 markers: {
@@ -24658,7 +24658,7 @@
                             chart: {
                                 type: 'bar',
                                 height: chartHeight,
-                                fontFamily: 'Outfit, sans-serif',
+                                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                                 toolbar: { show: false }
                             },
                             colors: ['#3b82f6'],
@@ -27076,7 +27076,7 @@
                                 labels: productData.map(p => p[0]),
                                 colors: colors.slice(0, productData.length),
                                 chart: {
-                                    fontFamily: "Outfit, sans-serif",
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
                                     type: "donut",
                                     width: 300,
                                     height: 300,
@@ -27664,7 +27664,7 @@
                                 ],
                                 colors: ['#93a8ff', '#465fff'],
                                 chart: {
-                                    fontFamily: 'Outfit, sans-serif',
+                                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                                     type: 'bar',
                                     height: 340,
                                     toolbar: { show: false },
@@ -30608,7 +30608,7 @@
                         tooltipContent = document.createElement('div');
                         tooltipContent.className = 'tooltip-content';
                         tooltipContent.id = 'tooltipContent';
-                        tooltipContent.style.cssText = 'background: #ffffff; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); overflow: hidden; font-family: Outfit, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;';
+                        tooltipContent.style.cssText = 'background: #ffffff; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;';
                         
                         tooltip.appendChild(tooltipContent);
                         
@@ -30915,7 +30915,7 @@
                                 border-radius: 8px;
                                 padding: 10px;
                                 border: 1px solid #E5E7EB;
-                                font-size: 11px;
+                                font-size: 14px;
                                 color: #374151;
                                 line-height: 1.5;
                             ">${covenantDescription}</div>
