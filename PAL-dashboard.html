@@ -188,6 +188,153 @@
             color: #374151 !important;
         }
 
+        /* Enhanced Row Tooltip Styles */
+        #enhancedTooltip {
+            position: fixed;
+            z-index: 99999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+            max-width: 400px;
+        }
+
+        #enhancedTooltip.show {
+            opacity: 1;
+        }
+
+        .tooltip-content {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .tooltip-header {
+            border-bottom: 1px solid #E5E7EB;
+            padding: 16px 16px 12px 16px;
+            margin-bottom: 14px;
+        }
+
+        .tooltip-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .tooltip-subtitle {
+            font-size: 12px;
+            font-weight: 500;
+            color: #6B7280;
+        }
+
+        .tooltip-body {
+            padding: 0 16px 16px 16px;
+        }
+
+        .tooltip-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .tooltip-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .tooltip-widget {
+            background: #F9FAFB;
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .tooltip-widget-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #6B7280;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .tooltip-widget-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .tooltip-widget-value.medium {
+            font-size: 16px;
+        }
+
+        .tooltip-widget-value.small {
+            font-size: 14px;
+        }
+
+        .tooltip-section-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .tooltip-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tooltip-table thead tr {
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .tooltip-table th {
+            padding: 6px 8px;
+            text-align: left;
+            font-size: 10px;
+            color: #6B7280;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .tooltip-table th.text-right {
+            text-align: right;
+        }
+
+        .tooltip-table td {
+            padding: 6px 8px;
+            font-size: 11px;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .tooltip-table td.value {
+            text-align: right;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        /* Row hover effect for tables with tooltips */
+        #deepDiveFacilitiesDetailsTable tr,
+        #deepDiveCovenantsTable tr {
+            transition: background-color 0.15s ease;
+            cursor: pointer;
+        }
+
+        #deepDiveFacilitiesDetailsTable tr:hover,
+        #deepDiveCovenantsTable tr:hover {
+            background-color: #F9FAFB !important;
+        }
+
         /* Fix tooltip overflow for relationship and ROTCE charts */
         #relationshipChart,
         #rotceChart,
@@ -246,64 +393,6 @@
             to {
                 transform: rotate(360deg);
             }
-        }
-
-        /* Custom Table Tooltip Styles - Matching ApexCharts Tooltips */
-        .custom-tooltip {
-            position: fixed;
-            background: #ffffff;
-            color: #1f2937;
-            padding: 0;
-            border-radius: 8px;
-            font-size: 13px;
-            line-height: 1.4;
-            max-width: 320px;
-            z-index: 99999;
-            pointer-events: none;
-            opacity: 0;
-            transform: translateY(-5px);
-            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e5e7eb;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .custom-tooltip.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .custom-tooltip-title {
-            background: #f9fafb;
-            border-bottom: 1px solid #e5e7eb;
-            color: #1f2937;
-            padding: 8px 12px;
-            font-weight: 600;
-            font-size: 12px;
-            border-radius: 8px 8px 0 0;
-        }
-
-        .custom-tooltip-content {
-            padding: 8px 12px;
-            color: #374151;
-            font-size: 13px;
-        }
-
-        .custom-tooltip-content strong {
-            color: #1f2937;
-            font-weight: 600;
-        }
-
-        .custom-tooltip-row {
-            padding: 4px 0;
-        }
-
-        .custom-tooltip-row:first-child {
-            padding-top: 0;
-        }
-
-        .custom-tooltip-row:last-child {
-            padding-bottom: 0;
         }
 
         @keyframes pulse {
@@ -3020,6 +3109,9 @@
                                                     Maturity Date</th>
                                                 <th
                                                     class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
+                                                    Credit Classification</th>
+                                                <th
+                                                    class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
                                                     Facility Amount</th>
                                                 <th
                                                     class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
@@ -3037,24 +3129,12 @@
                                         </thead>
                                         <tbody id="deepDiveFacilitiesDetailsTable" class="divide-y divide-gray-200">
                                             <tr>
-                                                <td colspan="11" class="px-6 py-8 text-center text-gray-400">
+                                                <td colspan="12" class="px-6 py-8 text-center text-gray-400">
                                                     <p class="text-base">Select a relationship to view facility details
                                                     </p>
                                                 </td>
                                             </tr>
                                         </tbody>
-                                        <tfoot class="bg-gray-50 border-t-2 border-gray-300">
-                                            <tr>
-                                                <td colspan="5" class="px-6 py-4 text-right !text-base font-bold text-gray-900">
-                                                    Total:
-                                                </td>
-                                                <td id="facilitiesTotalAmount" class="px-6 py-4 text-center !text-base font-bold text-gray-900">$0</td>
-                                                <td id="facilitiesTotalLoanOS" class="px-6 py-4 text-center !text-base font-bold text-gray-900">$0</td>
-                                                <td id="facilitiesTotalLCOS" class="px-6 py-4 text-center !text-base font-bold text-gray-900">$0</td>
-                                                <td id="facilitiesTotalPSEOS" class="px-6 py-4 text-center !text-base font-bold text-gray-900">$0</td>
-                                                <td id="facilitiesTotalUnused" class="px-6 py-4 text-center !text-base font-bold text-gray-900">$0</td>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -3100,18 +3180,6 @@
                                                 </td>
                                             </tr>
                                         </tbody>
-                                        <tfoot class="bg-gray-50 border-t-2 border-gray-300">
-                                            <tr>
-                                                <td colspan="4" class="px-6 py-4 text-right !text-base font-bold text-gray-900">
-                                                    Total Covenants:
-                                                </td>
-                                                <td id="covenantsTotalCount" class="px-6 py-4 text-center !text-base font-bold text-gray-900">0</td>
-                                                <td colspan="2" class="px-6 py-4 text-center !text-base font-medium text-gray-700">
-                                                    <span id="covenantsPastDueCount" class="text-red-600 font-bold">0</span> Past Due | 
-                                                    <span id="covenantsComingDueCount" class="text-yellow-600 font-bold">0</span> Coming Due
-                                                </td>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -29626,6 +29694,9 @@
             }
 
             // Populate Deep Dive Facilities Details Table (filtered by relationship ID)
+            let currentDeepDiveFacilities = []; // Store for tooltips
+            let currentDeepDiveCovenants = []; // Store for tooltips
+            
             function populateDeepDiveFacilitiesTable(fullRelationshipData) {
                 const tbody = document.getElementById("deepDiveFacilitiesDetailsTable");
 
@@ -29649,10 +29720,13 @@
                     return;
                 }
 
+                // Store facilities data for tooltips
+                currentDeepDiveFacilities = fullRelationshipData;
+
                 let html = "";
                 const currentDate = new Date();
 
-                fullRelationshipData.forEach((facility) => {
+                fullRelationshipData.forEach((facility, index) => {
                     const region = facility.Region || "-";
                     const facilityId = facility.Facility_ID || facility.Facility_id || "-";
                     const productProgram = facility.Product_Program || facility.Product || "-";
@@ -29702,22 +29776,19 @@
                     };
                     const ratingColor = ratingColors[riskRating] || 'bg-gray-100 text-gray-700';
 
-                    // Create comprehensive tooltip for facility row (moved to custom tooltip)
-                    const tooltipText = `Facility Type: ${facilityType}`;
-
                     html += `
-                    <tr class="hover:bg-gray-50 cursor-pointer" 
-                        data-facility-type="${facilityType}" 
-                        data-region="${region}" 
-                        data-maturity="${formatDateShort(parseDate(maturityDate)) || maturityDate}" 
-                        data-rating="${riskRating}">
-                        <td class="px-6 py-4 text-center" title="${region}">
+                    <tr class="hover:bg-gray-50" 
+                        data-facility-index="${index}"
+                        onmouseenter="showFacilityTooltip(event, ${index})"
+                        onmousemove="moveEnhancedTooltip(event)"
+                        onmouseleave="hideEnhancedTooltip()">
+                        <td class="px-6 py-4 text-center">
                             <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
                                 ${region}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900" title="Facility ID: ${facilityId}">${facilityId}</td>
-                        <td class="px-6 py-4 text-center" title="${productProgram}${subProduct ? ' - ' + subProduct : ''}">
+                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">${facilityId}</td>
+                        <td class="px-6 py-4 text-center">
                             ${subProduct ? `
                                 <div class="space-y-1">
                                     <div class="!text-base font-medium text-gray-900">${productProgram}</div>
@@ -29727,44 +29798,40 @@
                                 <span class="!text-base font-medium text-gray-900">${productProgram}</span>
                             `}
                         </td>
-                        <td class="px-6 py-4 text-center" title="Management Status: ${managementStatus}">
+                        <td class="px-6 py-4 text-center">
                             <span class="${managementStatusColor} rounded-full px-2 py-0.5 !text-base font-medium">${managementStatus}</span>
                         </td>
-                        <td class="px-6 py-4 text-center !text-base text-gray-700" title="Maturity Date: ${formatDateShort(parseDate(maturityDate)) || maturityDate}">${formatDateShort(parseDate(maturityDate)) || maturityDate}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="Facility Amount: ${formatCurrency(facAmount)}">${formatCurrency(facAmount)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="Loan O/S: ${formatCurrency(loanOS)}">${formatCurrency(loanOS)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="LC O/S: ${formatCurrency(lcOS)}">${formatCurrency(lcOS)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="PSE O/S: ${formatCurrency(osuc)}">${formatCurrency(osuc)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="Unused Commitment: ${formatCurrency(unused)}">${formatCurrency(unused)}</td>
+                        <td class="px-6 py-4 text-center !text-base text-gray-700">${formatDateShort(parseDate(maturityDate)) || maturityDate}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="${ratingColor} rounded-full px-2 py-0.5 !text-base font-medium">${riskRating}</span>
+                        </td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(facAmount)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(loanOS)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(lcOS)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(osuc)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(unused)}</td>
                     </tr>
                 `;
                 });
 
                 tbody.innerHTML = html;
 
-                // Initialize tooltips after table is populated
-                initializeTableTooltips();
-
                 // Update footer totals
                 const totalFacAmount = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Fac_Amount || f.Facility_Amount), 0);
                 const totalOSUC = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.OSUC || f.Outstanding_UC), 0);
                 const totalLoanOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Loan_OS || f.Loan_Outstanding), 0);
                 const totalLCOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.LC_OS || f.LC_Outstanding), 0);
-                const totalPSEOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.PSE_OS || f.PSE_Outstanding), 0);
                 const totalUnused = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Unused_Commitment || f.Unused), 0);
 
-                // Update table footer totals
-                const totalAmountEl = document.getElementById("facilitiesTotalAmount");
-                const totalLoanOSEl = document.getElementById("facilitiesTotalLoanOS");
-                const totalLCOSEl = document.getElementById("facilitiesTotalLCOS");
-                const totalPSEOSEl = document.getElementById("facilitiesTotalPSEOS");
-                const totalUnusedEl = document.getElementById("facilitiesTotalUnused");
+                const footerApproved = document.getElementById("deepDiveFacilitiesFooterApproved");
+                const footerLoanOS = document.getElementById("deepDiveFacilitiesFooterLoanOS");
+                const footerLCOS = document.getElementById("deepDiveFacilitiesFooterLCOS");
+                const footerUnused = document.getElementById("deepDiveFacilitiesFooterUnused");
 
-                if (totalAmountEl) totalAmountEl.textContent = formatCurrency(totalFacAmount);
-                if (totalLoanOSEl) totalLoanOSEl.textContent = formatCurrency(totalLoanOS);
-                if (totalLCOSEl) totalLCOSEl.textContent = formatCurrency(totalLCOS);
-                if (totalPSEOSEl) totalPSEOSEl.textContent = formatCurrency(totalPSEOS);
-                if (totalUnusedEl) totalUnusedEl.textContent = formatCurrency(totalUnused);
+                if (footerApproved) footerApproved.textContent = formatCurrency(totalFacAmount);
+                if (footerLoanOS) footerLoanOS.textContent = formatCurrency(totalLoanOS);
+                if (footerLCOS) footerLCOS.textContent = formatCurrency(totalLCOS);
+                if (footerUnused) footerUnused.textContent = formatCurrency(totalUnused);
             }
 
             // Populate Deep Dive Covenants Table (filtered by relationship ID)
@@ -29781,6 +29848,9 @@
                     const covRelName = (cov.Relationship_Name || "");
                     return covRelId === relationshipId || covRelName === relationshipName;
                 });
+
+                // Store covenants data for tooltips
+                currentDeepDiveCovenants = relationshipCovenants;
 
                 if (!relationshipCovenants || relationshipCovenants.length === 0) {
                     tbody.innerHTML = `
@@ -29804,7 +29874,7 @@
                 const currentDate = new Date();
                 let html = "";
 
-                relationshipCovenants.forEach((cov) => {
+                relationshipCovenants.forEach((cov, index) => {
                     const region = cov.Region || "-";
                     const facilityId = cov.Facility_Number || cov.Facility_ID || cov.Facility_id || "-";
                     const productProgram = cov.Product_Program_Name || cov.Product_Program || cov.Product || "-";
@@ -29843,22 +29913,19 @@
                     };
                     const regionColor = regionColors[region] || 'bg-gray-100 text-gray-700';
 
-                    // Create comprehensive tooltip for covenant row (moved to custom tooltip)
-                    const tooltipText = covenantDescription;
-
                     html += `
-                    <tr class="hover:bg-gray-50 cursor-pointer" 
-                        data-covenant-description="${covenantDescription}" 
-                        data-covenant-number="${covenantNumber}" 
-                        data-due-date="${formatDateToDDMMYYYY(dueDate) || covenantDueDate}" 
-                        data-status="${status}">
-                        <td class="px-6 py-4 text-center" title="${region}">
+                    <tr class="hover:bg-gray-50" 
+                        data-covenant-index="${index}"
+                        onmouseenter="showCovenantTooltip(event, ${index})"
+                        onmousemove="moveEnhancedTooltip(event)"
+                        onmouseleave="hideEnhancedTooltip()">
+                        <td class="px-6 py-4 text-center">
                             <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
                                 ${region}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900" title="Facility ID: ${facilityId}">${facilityId}</td>
-                        <td class="px-6 py-4 text-center" title="${productProgram}${subProduct ? ' - ' + subProduct : ''}">
+                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">${facilityId}</td>
+                        <td class="px-6 py-4 text-center">
                             ${subProduct ? `
                             <div class="space-y-1">
                                 <div class="!text-base font-medium text-gray-900">${productProgram}</div>
@@ -29868,9 +29935,9 @@
                                 <span class="!text-base font-medium text-gray-900">${productProgram}</span>
                             `}
                         </td>
-                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900" title="Covenant Number: ${covenantNumber}">${covenantNumber}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700" title="Due Date: ${formatDateToDDMMYYYY(dueDate) || covenantDueDate}">${formatDateToDDMMYYYY(dueDate) || covenantDueDate}</td>
-                        <td class="px-6 py-4 text-center" title="${covenantDescription}">
+                        <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">${covenantNumber}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatDateToDDMMYYYY(dueDate) || covenantDueDate}</td>
+                        <td class="px-6 py-4 text-center">
                             ${isPastDue ? `
                                 <span class="bg-red-50 text-red-600 rounded-full px-2 py-0.5 !text-base font-medium">${status}</span>
                             ` : `
@@ -29883,29 +29950,30 @@
 
                 tbody.innerHTML = html;
 
-                // Initialize tooltips after table is populated
-                initializeTableTooltips();
-
                 // Update header badge count
                 const badgeCount = document.getElementById("deepDiveCovenantsCount");
                 if (badgeCount) badgeCount.textContent = relationshipCovenants.length;
 
-                // Update table footer counts
-                const totalCov = relationshipCovenants.length;
-                const compareDate = reportingMonth || new Date();
-                const pastDueCov = relationshipCovenants.filter(cov => {
-                    const dueDate = parseDate(cov.Due_Date || cov.Covenant_Due_Date);
-                    return dueDate && dueDate < compareDate;
-                }).length;
-                const comingDueCov = totalCov - pastDueCov;
+                // Update footer counts
+                const footer = document.getElementById("deepDiveCovenantsTableFooter");
+                if (footer) {
+                    footer.style.display = "block";
+                    const totalCov = relationshipCovenants.length;
+                    const compareDate = reportingMonth || new Date();
+                    const pastDueCov = relationshipCovenants.filter(cov => {
+                        const dueDate = parseDate(cov.Due_Date || cov.Covenant_Due_Date);
+                        return dueDate && dueDate < compareDate;
+                    }).length;
+                    const currentCov = totalCov - pastDueCov;
 
-                const totalCountEl = document.getElementById("covenantsTotalCount");
-                const pastDueCountEl = document.getElementById("covenantsPastDueCount");
-                const comingDueCountEl = document.getElementById("covenantsComingDueCount");
+                    const totalEl = document.getElementById("deepDiveTotalCovenants");
+                    const pastDueEl = document.getElementById("deepDivePastDueCovenantsFooter");
+                    const currentEl = document.getElementById("deepDiveCurrentCovenants");
 
-                if (totalCountEl) totalCountEl.textContent = totalCov;
-                if (pastDueCountEl) pastDueCountEl.textContent = pastDueCov;
-                if (comingDueCountEl) comingDueCountEl.textContent = comingDueCov;
+                    if (totalEl) totalEl.textContent = totalCov;
+                    if (pastDueEl) pastDueEl.textContent = pastDueCov;
+                    if (currentEl) currentEl.textContent = currentCov;
+                }
             }
 
 
@@ -30454,7 +30522,7 @@
                 if (facilitiesTableBody) {
                     facilitiesTableBody.innerHTML = `
                     <tr>
-                        <td colspan="11" class="px-6 py-8 text-center text-gray-400">
+                        <td colspan="12" class="px-6 py-8 text-center text-gray-400">
                             <p class="text-base">Select a relationship to view facility details</p>
                         </td>
                     </tr>
@@ -30514,224 +30582,683 @@
                 }
             }
 
-            // ===== CUSTOM TOOLTIP FUNCTIONALITY =====
-            // Create and manage custom tooltips for table rows
+            // ===== ENHANCED TOOLTIP FUNCTIONS FOR DEEP DIVE TABLES =====
+            
+            let tooltipTimeout = null;
+            const tooltip = document.getElementById('enhancedTooltip');
+            const tooltipContent = document.getElementById('tooltipContent');
 
-            let tooltipElement = null;
-            let currentRow = null;
-            let hideTimeout = null;
-
-            // Initialize tooltip element
-            function initTooltip() {
-                if (!tooltipElement) {
-                    tooltipElement = document.createElement('div');
-                    tooltipElement.className = 'custom-tooltip';
-                    document.body.appendChild(tooltipElement);
-                }
-            }
-
-            // Show tooltip with content
-            function showTooltip(element, content) {
-                if (!tooltipElement) initTooltip();
-
-                // Clear any pending hide timeout
-                if (hideTimeout) {
-                    clearTimeout(hideTimeout);
-                    hideTimeout = null;
+            // Show Facility Tooltip
+            function showFacilityTooltip(event, facilityIndex) {
+                if (tooltipTimeout) {
+                    clearTimeout(tooltipTimeout);
                 }
 
-                currentRow = element;
-                tooltipElement.innerHTML = content;
+                const facility = currentDeepDiveFacilities[facilityIndex];
+                if (!facility) return;
+
+                // Extract facility details using actual column names
+                const region = facility.Region || "-";
+                const relationshipName = facility.Relationship_Name || "Unknown Relationship";
+                const relationshipId = facility.Relationship_ID || "-";
+                const facilityId = facility.Facility_ID || "-";
+                const parentFacilityId = facility.Parent_Facility_ID || "-";
+                const productProgram = facility.Product_Program || "-";
+                const productSubProgram = facility.Product_Sub_Program || "";
+                const facilityType = facility.Facility_Type || "-";
+                const managementStatus = facility.Management_Status || "-";
+                const committedUncommitted = facility.Committed_Uncommitted || "-";
+                const riskCategory = facility.Risk_Category || "-";
+                const creditClassification = facility.Credit_Classification || "-";
+                const pseNonPse = facility.PSE_non_PSE || "-";
                 
-                // Use requestAnimationFrame to ensure DOM is ready
-                requestAnimationFrame(() => {
-                    tooltipElement.classList.add('show');
-                    positionTooltip(element);
-                });
+                // Dates
+                const maturityDate = facility.Maturity_Date || "-";
+                const renewalDate = facility.Renewal_Date || "-";
+                const caExpirationDate = facility.CA_Expiration_Date || "-";
+                const facilityFirstApprovalDate = facility.Facility_First_Approval_Date || "-";
+                const originationDate = facility.Origination_Date || "-";
+                
+                // People/Units
+                const caId = facility.CAID || "-";
+                const leadUnderwriter = facility.Lead_Underwriter || "-";
+                const underwritingTeamLead = facility.Underwriting_Team_Lead || "-";
+                const productUnderwriter = facility.Product_Underwriter || "-";
+                const controlUnit = facility.Control_Unit || "-";
+                const caReview = facility.CA_Review || "-";
+                
+                // Financial values
+                const facAmount = parseNumber(facility.Fac_Amount);
+                const directOS = parseNumber(facility.Direct_OS);
+                const contingentOS = parseNumber(facility.Contingent_OS);
+                const pseOS = parseNumber(facility.PSE_OS);
+                const totalCommExposure = parseNumber(facility.Total_Comm_Exposure);
+                const osuc = parseNumber(facility.OSUC);
+                const totalOS = parseNumber(facility.Total_OS);
+                const totalUnusedExposure = parseNumber(facility.Total_Unused_Exposure);
+                const totalUndrawn = parseNumber(facility.Total_Undrawn);
+                const rotce = facility.ROTCE || "-";
+                
+                const utilizationRate = facAmount > 0 ? ((osuc / facAmount) * 100).toFixed(1) : 0;
+
+                // Build tooltip HTML
+                const tooltipHTML = `
+                    <div class="tooltip-header">
+                        <div class="tooltip-title">${facilityId}</div>
+                        <div class="tooltip-subtitle">${relationshipName}</div>
+                    </div>
+                    
+                    <div class="tooltip-body">
+                        <!-- Financial Metrics Grid -->
+                        <div class="tooltip-grid-3">
+                            <!-- Facility Amount -->
+                            <div class="tooltip-widget">
+                                <div class="tooltip-widget-label">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                    Fac Amount
+                                </div>
+                                <div class="tooltip-widget-value small">${formatCurrency(facAmount)}</div>
+                            </div>
+                            
+                            <!-- Total Comm Exposure -->
+                            <div class="tooltip-widget">
+                                <div class="tooltip-widget-label">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M12 6v6l4 2"></path>
+                                    </svg>
+                                    Total Exposure
+                                </div>
+                                <div class="tooltip-widget-value small">${formatCurrency(totalCommExposure)}</div>
+                            </div>
+                            
+                            <!-- Utilization -->
+                            <div class="tooltip-widget">
+                                <div class="tooltip-widget-label">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                    </svg>
+                                    Utilization
+                                </div>
+                                <div class="tooltip-widget-value medium">${utilizationRate}%</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Facility Classification -->
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                Facility Classification
+                            </div>
+                            <table class="tooltip-table">
+                                <tbody>
+                                    <tr>
+                                        <td>Facility Type</td>
+                                        <td class="value">${facilityType}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Management Status</td>
+                                        <td class="value">${managementStatus}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Risk Category</td>
+                                        <td class="value">${riskCategory}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Credit Classification</td>
+                                        <td class="value">${creditClassification}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Committed/Uncommitted</td>
+                                        <td class="value">${committedUncommitted}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>PSE/Non-PSE</td>
+                                        <td class="value">${pseNonPse}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Exposure Breakdown -->
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                                </svg>
+                                Exposure Breakdown
+                            </div>
+                            <table class="tooltip-table">
+                                <tbody>
+                                    <tr>
+                                        <td>Direct O/S</td>
+                                        <td class="value">${formatCurrency(directOS)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Contingent O/S</td>
+                                        <td class="value">${formatCurrency(contingentOS)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>PSE O/S</td>
+                                        <td class="value">${formatCurrency(pseOS)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>OSUC</td>
+                                        <td class="value">${formatCurrency(osuc)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total O/S</td>
+                                        <td class="value">${formatCurrency(totalOS)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Unused</td>
+                                        <td class="value">${formatCurrency(totalUnusedExposure)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Undrawn</td>
+                                        <td class="value">${formatCurrency(totalUndrawn)}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Key Dates -->
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                Key Dates
+                            </div>
+                            <table class="tooltip-table">
+                                <tbody>
+                                    ${maturityDate !== '-' ? `
+                                    <tr>
+                                        <td>Maturity Date</td>
+                                        <td class="value">${formatDateShort(parseDate(maturityDate)) || maturityDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${renewalDate !== '-' ? `
+                                    <tr>
+                                        <td>Renewal Date</td>
+                                        <td class="value">${formatDateShort(parseDate(renewalDate)) || renewalDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${caExpirationDate !== '-' ? `
+                                    <tr>
+                                        <td>CA Expiration</td>
+                                        <td class="value">${formatDateShort(parseDate(caExpirationDate)) || caExpirationDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${originationDate !== '-' ? `
+                                    <tr>
+                                        <td>Origination Date</td>
+                                        <td class="value">${formatDateShort(parseDate(originationDate)) || originationDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${facilityFirstApprovalDate !== '-' ? `
+                                    <tr>
+                                        <td>First Approval</td>
+                                        <td class="value">${formatDateShort(parseDate(facilityFirstApprovalDate)) || facilityFirstApprovalDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Team & Review Information -->
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                Team & Review
+                            </div>
+                            <table class="tooltip-table">
+                                <tbody>
+                                    ${leadUnderwriter !== '-' ? `
+                                    <tr>
+                                        <td>Lead Underwriter</td>
+                                        <td class="value">${leadUnderwriter}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${underwritingTeamLead !== '-' ? `
+                                    <tr>
+                                        <td>UW Team Lead</td>
+                                        <td class="value">${underwritingTeamLead}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${productUnderwriter !== '-' ? `
+                                    <tr>
+                                        <td>Product UW</td>
+                                        <td class="value">${productUnderwriter}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${controlUnit !== '-' ? `
+                                    <tr>
+                                        <td>Control Unit</td>
+                                        <td class="value">${controlUnit}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${caId !== '-' ? `
+                                    <tr>
+                                        <td>CA ID</td>
+                                        <td class="value">${caId}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${caReview !== '-' ? `
+                                    <tr>
+                                        <td>CA Review</td>
+                                        <td class="value">${caReview}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${parentFacilityId !== '-' ? `
+                                    <tr>
+                                        <td>Parent Facility ID</td>
+                                        <td class="value">${parentFacilityId}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${rotce !== '-' ? `
+                                    <tr>
+                                        <td>ROTCE</td>
+                                        <td class="value">${rotce}</td>
+                                    </tr>
+                                    ` : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+
+                tooltipContent.innerHTML = tooltipHTML;
+                
+                tooltipTimeout = setTimeout(() => {
+                    tooltip.classList.add('show');
+                }, 150);
+
+                moveEnhancedTooltip(event);
             }
 
-            // Hide tooltip with delay
-            function hideTooltip() {
-                // Clear any existing timeout
-                if (hideTimeout) {
-                    clearTimeout(hideTimeout);
+            // Show Covenant Tooltip
+            function showCovenantTooltip(event, covenantIndex) {
+                if (tooltipTimeout) {
+                    clearTimeout(tooltipTimeout);
                 }
 
-                // Add a small delay before hiding to prevent flickering
-                hideTimeout = setTimeout(() => {
-                    if (tooltipElement) {
-                        tooltipElement.classList.remove('show');
-                        currentRow = null;
+                const covenant = currentDeepDiveCovenants[covenantIndex];
+                if (!covenant) return;
+
+                // Extract covenant details using actual column names
+                const reportDate = covenant.Report_Date || "-";
+                const region = covenant.Region || "-";
+                const originationUnit = covenant.Origination_Unit || "-";
+                const underwritingTeamLead = covenant.Underwriting_Team_Lead || "-";
+                const leadUnderwriter = covenant.Lead_Underwriter || "-";
+                const productUnderwriter = covenant.Product_Underwriter || "-";
+                const ouExpenseCode = covenant.OU_Expense_Code || "-";
+                const cuExpenseCode = covenant.CU_Expense_Code || "-";
+                
+                const relationshipId = covenant.Relationship_ID || "-";
+                const relationshipName = covenant.Relationship_Name || "Unknown Relationship";
+                const borrowersName = covenant.Borrowers_Name || "-";
+                const caNumber = covenant.CA_Number || "-";
+                const facilityNumber = covenant.Facility_Number || "-";
+                const productProgramName = covenant.Product_Program_Name || "-";
+                const facilityType = covenant.Facility_Type || "-";
+                
+                const covenantNumber = covenant.Covenant_Number || "-";
+                const periodicFrequency = covenant.Periodic_Frequency || "-";
+                const covenantDueDate = covenant.Covenant_Due_Date || "-";
+                const covenantDeferredDate = covenant.Covenant_Deferred_Date || "-";
+                const daysPastDue = covenant.Days_Past_Due || "-";
+                const comingDuePastDue = covenant.Coming_Due_Past_Due || "-";
+                const pastDueCategory = covenant.Past_Due_Category || "-";
+                const covenantDescription = covenant.Covenant_Description || "-";
+                const covenantRemarks = covenant.Covenant_Remarks || "-";
+                const fortyFiveDaysPastDueDate = covenant['45_Days_Past_Due_Date'] || "-";
+                const controlUnit = covenant.Control_Unit || "-";
+
+                // Calculate status
+                const dueDate = parseDate(covenantDueDate);
+                const reportingMonth = new Date();
+                let pastDueDays = 0;
+                let daysUntilDue = 0;
+                let status = "Coming Due";
+                let isPastDue = false;
+
+                if (dueDate) {
+                    const daysDiff = Math.floor((reportingMonth - dueDate) / (1000 * 60 * 60 * 24));
+                    if (daysDiff > 0) {
+                        pastDueDays = daysDiff;
+                        status = "Past Due";
+                        isPastDue = true;
+                    } else {
+                        daysUntilDue = Math.abs(daysDiff);
+                        status = "Coming Due";
                     }
-                }, 100); // 100ms delay
-            }
-
-            // Position tooltip relative to element
-            function positionTooltip(element) {
-                const rect = element.getBoundingClientRect();
-                
-                // Force the tooltip to be visible first to get accurate measurements
-                tooltipElement.style.visibility = 'hidden';
-                tooltipElement.style.display = 'block';
-                
-                const tooltipRect = tooltipElement.getBoundingClientRect();
-                
-                tooltipElement.style.visibility = '';
-                tooltipElement.style.display = '';
-
-                // Use viewport coordinates (fixed positioning)
-                // Calculate position (show above element by default)
-                let top = rect.top - tooltipRect.height - 8;
-                let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-
-                // Check if tooltip goes off screen top
-                if (top < 10) {
-                    // Show below if no space above
-                    top = rect.bottom + 8;
                 }
 
-                // Prevent going off left edge
-                if (left < 10) {
-                    left = 10;
-                }
-
-                // Prevent going off right edge
-                const maxLeft = window.innerWidth - tooltipRect.width - 10;
-                if (left > maxLeft) {
-                    left = maxLeft;
-                }
-
-                tooltipElement.style.top = top + 'px';
-                tooltipElement.style.left = left + 'px';
-            }
-
-            // Add tooltip event listeners using event delegation (works with dynamic content)
-            function addFacilityTooltips() {
-                const tbody = document.getElementById('deepDiveFacilitiesDetailsTable');
-                if (!tbody) return;
-
-                // Remove any existing listeners to avoid duplicates
-                tbody.removeEventListener('mouseenter', handleFacilityRowEnter, true);
-                tbody.removeEventListener('mouseleave', handleFacilityRowLeave, true);
-                tbody.removeEventListener('mousemove', handleRowMove, true);
-
-                // Add event delegation listeners
-                tbody.addEventListener('mouseenter', handleFacilityRowEnter, true);
-                tbody.addEventListener('mouseleave', handleFacilityRowLeave, true);
-                tbody.addEventListener('mousemove', handleRowMove, true);
-            }
-
-            // Event handler for facility row enter
-            function handleFacilityRowEnter(e) {
-                const row = e.target.closest('tr[data-facility-type]');
-                if (!row) return;
-                
-                // Prevent duplicate events for the same row
-                if (currentRow === row) return;
-
-                const facilityType = row.getAttribute('data-facility-type');
-                const region = row.getAttribute('data-region');
-                const maturity = row.getAttribute('data-maturity');
-                const rating = row.getAttribute('data-rating');
-
-                if (facilityType) {
-                    const content = `
-                        <div class="custom-tooltip-title">Facility Details</div>
-                        <div class="custom-tooltip-content">
-                            <div class="custom-tooltip-row"><strong>Facility Type:</strong> ${facilityType}</div>
-                            <div class="custom-tooltip-row"><strong>Credit Classification:</strong> ${rating}</div>
+                // Build tooltip HTML
+                const tooltipHTML = `
+                    <div class="tooltip-header">
+                        <div class="tooltip-title">${covenantNumber}</div>
+                        <div class="tooltip-subtitle">${relationshipName}</div>
+                    </div>
+                    
+                    <div class="tooltip-body">
+                        <!-- Status and Days Grid -->
+                        <div class="tooltip-grid">
+                            <!-- Status Widget -->
+                            <div class="tooltip-widget">
+                                <div class="tooltip-widget-label">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M12 6v6l4 2"></path>
+                                    </svg>
+                                    Status
+                                </div>
+                                <div class="tooltip-widget-value medium" style="color: ${isPastDue ? '#DC2626' : '#D97706'};">
+                                    ${comingDuePastDue || status}
+                                </div>
+                            </div>
+                            
+                            <!-- Days Widget -->
+                            <div class="tooltip-widget">
+                                <div class="tooltip-widget-label">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    ${isPastDue ? 'Days Past Due' : 'Days Until Due'}
+                                </div>
+                                <div class="tooltip-widget-value">${daysPastDue !== '-' ? daysPastDue : (isPastDue ? pastDueDays : daysUntilDue)}</div>
+                            </div>
                         </div>
-                    `;
-                    showTooltip(row, content);
-                }
-            }
-
-            // Event handler for facility row leave
-            function handleFacilityRowLeave(e) {
-                const row = e.target.closest('tr[data-facility-type]');
-                if (!row) return;
-                
-                // Only hide if we're leaving the current row
-                if (currentRow === row) {
-                    hideTooltip();
-                }
-            }
-
-            // Add tooltip event listeners for covenant table using event delegation
-            function addCovenantTooltips() {
-                const tbody = document.getElementById('deepDiveCovenantsTable');
-                if (!tbody) return;
-
-                // Remove any existing listeners to avoid duplicates
-                tbody.removeEventListener('mouseenter', handleCovenantRowEnter, true);
-                tbody.removeEventListener('mouseleave', handleCovenantRowLeave, true);
-                tbody.removeEventListener('mousemove', handleRowMove, true);
-
-                // Add event delegation listeners
-                tbody.addEventListener('mouseenter', handleCovenantRowEnter, true);
-                tbody.addEventListener('mouseleave', handleCovenantRowLeave, true);
-                tbody.addEventListener('mousemove', handleRowMove, true);
-            }
-
-            // Event handler for covenant row enter
-            function handleCovenantRowEnter(e) {
-                const row = e.target.closest('tr[data-covenant-description]');
-                if (!row) return;
-                
-                // Prevent duplicate events for the same row
-                if (currentRow === row) return;
-
-                const description = row.getAttribute('data-covenant-description');
-                
-                if (description) {
-                    const content = `
-                        <div class="custom-tooltip-title">Covenant Details</div>
-                        <div class="custom-tooltip-content">
-                            <div class="custom-tooltip-row"><strong>Description:</strong> ${description}</div>
+                        
+                        <!-- Covenant Details -->
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                                Covenant Details
+                            </div>
+                            <table class="tooltip-table">
+                                <tbody>
+                                    <tr>
+                                        <td>Region</td>
+                                        <td class="value">${region}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Relationship ID</td>
+                                        <td class="value">${relationshipId}</td>
+                                    </tr>
+                                    ${borrowersName !== '-' ? `
+                                    <tr>
+                                        <td>Borrower Name</td>
+                                        <td class="value">${borrowersName}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${caNumber !== '-' ? `
+                                    <tr>
+                                        <td>CA Number</td>
+                                        <td class="value">${caNumber}</td>
+                                    </tr>
+                                    ` : ''}
+                                    <tr>
+                                        <td>Facility Number</td>
+                                        <td class="value">${facilityNumber}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Product Program</td>
+                                        <td class="value">${productProgramName}</td>
+                                    </tr>
+                                    ${facilityType !== '-' ? `
+                                    <tr>
+                                        <td>Facility Type</td>
+                                        <td class="value">${facilityType}</td>
+                                    </tr>
+                                    ` : ''}
+                                    <tr>
+                                        <td>Periodic Frequency</td>
+                                        <td class="value">${periodicFrequency}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Due Date</td>
+                                        <td class="value">${formatDateToDDMMYYYY(dueDate) || covenantDueDate}</td>
+                                    </tr>
+                                    ${covenantDeferredDate !== '-' ? `
+                                    <tr>
+                                        <td>Deferred Date</td>
+                                        <td class="value">${covenantDeferredDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${pastDueCategory !== '-' ? `
+                                    <tr>
+                                        <td>Past Due Category</td>
+                                        <td class="value">${pastDueCategory}</td>
+                                    </tr>
+                                    ` : ''}
+                                </tbody>
+                            </table>
                         </div>
-                    `;
-                    showTooltip(row, content);
-                }
-            }
+                        
+                        <!-- Team & Units -->
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                Team & Organization
+                            </div>
+                            <table class="tooltip-table">
+                                <tbody>
+                                    ${originationUnit !== '-' ? `
+                                    <tr>
+                                        <td>Origination Unit</td>
+                                        <td class="value">${originationUnit}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${leadUnderwriter !== '-' ? `
+                                    <tr>
+                                        <td>Lead Underwriter</td>
+                                        <td class="value">${leadUnderwriter}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${underwritingTeamLead !== '-' ? `
+                                    <tr>
+                                        <td>UW Team Lead</td>
+                                        <td class="value">${underwritingTeamLead}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${productUnderwriter !== '-' ? `
+                                    <tr>
+                                        <td>Product UW</td>
+                                        <td class="value">${productUnderwriter}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${controlUnit !== '-' ? `
+                                    <tr>
+                                        <td>Control Unit</td>
+                                        <td class="value">${controlUnit}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${ouExpenseCode !== '-' ? `
+                                    <tr>
+                                        <td>OU Expense Code</td>
+                                        <td class="value">${ouExpenseCode}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${cuExpenseCode !== '-' ? `
+                                    <tr>
+                                        <td>CU Expense Code</td>
+                                        <td class="value">${cuExpenseCode}</td>
+                                    </tr>
+                                    ` : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Key Dates -->
+                        ${(reportDate !== '-' || fortyFiveDaysPastDueDate !== '-') ? `
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                Additional Dates
+                            </div>
+                            <table class="tooltip-table">
+                                <tbody>
+                                    ${reportDate !== '-' ? `
+                                    <tr>
+                                        <td>Report Date</td>
+                                        <td class="value">${reportDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${fortyFiveDaysPastDueDate !== '-' ? `
+                                    <tr>
+                                        <td>45 Days Past Due Date</td>
+                                        <td class="value">${fortyFiveDaysPastDueDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Description Section -->
+                        ${covenantDescription !== '-' ? `
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                Covenant Description
+                            </div>
+                            <div style="
+                                background: #F9FAFB;
+                                border-radius: 8px;
+                                padding: 10px;
+                                border: 1px solid #E5E7EB;
+                                font-size: 11px;
+                                color: #374151;
+                                line-height: 1.5;
+                            ">${covenantDescription}</div>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Remarks Section -->
+                        ${covenantRemarks !== '-' ? `
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                                Remarks
+                            </div>
+                            <div style="
+                                background: #FFFBEB;
+                                border-radius: 8px;
+                                padding: 10px;
+                                border: 1px solid #FDE68A;
+                                font-size: 11px;
+                                color: #92400E;
+                                line-height: 1.5;
+                            ">${covenantRemarks}</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
 
-            // Event handler for covenant row leave
-            function handleCovenantRowLeave(e) {
-                const row = e.target.closest('tr[data-covenant-description]');
-                if (!row) return;
+                tooltipContent.innerHTML = tooltipHTML;
                 
-                // Only hide if we're leaving the current row
-                if (currentRow === row) {
-                    hideTooltip();
-                }
+                tooltipTimeout = setTimeout(() => {
+                    tooltip.classList.add('show');
+                }, 150);
+
+                moveEnhancedTooltip(event);
             }
 
-            // Generic event handler for row mouse move
-            function handleRowMove(e) {
-                const row = e.target.closest('tr[data-facility-type], tr[data-covenant-description]');
-                if (row && tooltipElement && tooltipElement.classList.contains('show')) {
-                    positionTooltip(row);
+            // Move tooltip with cursor
+            function moveEnhancedTooltip(event) {
+                if (!tooltip.classList.contains('show') && !tooltipTimeout) return;
+
+                const padding = 20;
+                const tooltipWidth = tooltip.offsetWidth || 400;
+                const tooltipHeight = tooltip.offsetHeight || 500;
+                
+                let left = event.clientX + padding;
+                let top = event.clientY + padding;
+
+                // Check right boundary
+                if (left + tooltipWidth > window.innerWidth) {
+                    left = event.clientX - tooltipWidth - padding;
                 }
+
+                // Check bottom boundary
+                if (top + tooltipHeight > window.innerHeight) {
+                    top = event.clientY - tooltipHeight - padding;
+                }
+
+                // Check top boundary
+                if (top < 0) {
+                    top = padding;
+                }
+
+                // Check left boundary
+                if (left < 0) {
+                    left = padding;
+                }
+
+                tooltip.style.left = left + 'px';
+                tooltip.style.top = top + 'px';
             }
 
-            // Initialize tooltip element and event listeners on page load
-            document.addEventListener('DOMContentLoaded', () => {
-                initTooltip();
-                // Initialize tooltips for both tables (with delay for Alpine to render)
-                setTimeout(() => {
-                    addFacilityTooltips();
-                    addCovenantTooltips();
-                }, 1000);
-            });
-
-            // Also initialize when tab changes or data loads
-            // This ensures tooltips work even if tables are rendered after page load
-            function initializeTableTooltips() {
-                setTimeout(() => {
-                    addFacilityTooltips();
-                    addCovenantTooltips();
-                }, 100);
+            // Hide tooltip
+            function hideEnhancedTooltip() {
+                if (tooltipTimeout) {
+                    clearTimeout(tooltipTimeout);
+                    tooltipTimeout = null;
+                }
+                
+                tooltip.classList.remove('show');
             }
         </script>
+
+    <!-- Enhanced Tooltip for Deep Dive Tables -->
+    <div id="enhancedTooltip">
+        <div class="tooltip-content" id="tooltipContent"></div>
+    </div>
+
 </body>
 
 </html>
