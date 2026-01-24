@@ -2879,55 +2879,6 @@
                                         <div id="deepDiveRegionalCards">
                                             <!-- Region cards will be dynamically inserted here with dynamic grid layout -->
                                         </div>
-
-                                        <!-- Summary Stats -->
-                                        <div class="rounded-xl bg-gray-50 p-5">
-                                            <div class="grid grid-cols-3 gap-6">
-                                                <div class="text-center">
-                                                    <div class="flex items-center justify-center gap-2 mb-2">
-                                                        <svg class="h-5 w-5 text-blue-600" fill="none"
-                                                            stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                                                            </path>
-                                                        </svg>
-                                                        <p class="!text-2xl font-bold text-gray-900"
-                                                            id="deepDiveSummaryFacilities">0</p>
-                                                    </div>
-                                                    <p class="!text-base font-medium text-gray-500">Total Facilities</p>
-                                                </div>
-
-                                                <div class="text-center">
-                                                    <div class="flex items-center justify-center gap-2 mb-2">
-                                                        <svg class="h-5 w-5 text-emerald-600" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd"
-                                                                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                                                                clip-rule="evenodd" />
-                                                        </svg>
-                                                        <p class="!text-2xl font-bold text-gray-900"
-                                                            id="deepDiveSummaryRegions">0</p>
-                                                    </div>
-                                                    <p class="!text-base font-medium text-gray-500">Active Regions</p>
-                                                </div>
-
-                                                <div class="text-center">
-                                                    <div class="flex items-center justify-center gap-2 mb-2">
-                                                        <svg class="h-5 w-5 text-purple-600" fill="none"
-                                                            stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                            </path>
-                                                        </svg>
-                                                        <p class="!text-2xl font-bold text-gray-900"
-                                                            id="deepDiveSummaryTFA">$0.00</p>
-                                                    </div>
-                                                    <p class="!text-base font-medium text-gray-500">Total TFA</p>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
 
@@ -8879,22 +8830,22 @@
                 // Use covenant data if available, otherwise fallback to portfolio data
                 const dataSource = covenantsData.length > 0 ? covenantsData : (filteredData.length > 0 ? filteredData : portfolioData);
 
-                // Initialize category buckets - Breakdown shows ALL categories
+                // Initialize category buckets with regional breakdown
                 const pastDueBuckets = {
-                    '1-45 Days': { count: 0 },
-                    '46-90 Days': { count: 0 },
-                    '>90 Days': { count: 0 }
+                    '1-45 Days': { count: 0, regionalBreakdown: { NAM: 0, LATAM: 0, EMEA: 0, APAC: 0 } },
+                    '46-90 Days': { count: 0, regionalBreakdown: { NAM: 0, LATAM: 0, EMEA: 0, APAC: 0 } },
+                    '>90 Days': { count: 0, regionalBreakdown: { NAM: 0, LATAM: 0, EMEA: 0, APAC: 0 } }
                 };
 
                 // For gauge - only track 46-90 and >90
                 const pastDueGaugeBuckets = {
-                    '46-90 Days': { count: 0 },
-                    '>90 Days': { count: 0 }
+                    '46-90 Days': { count: 0, regionalBreakdown: { NAM: 0, LATAM: 0, EMEA: 0, APAC: 0 } },
+                    '>90 Days': { count: 0, regionalBreakdown: { NAM: 0, LATAM: 0, EMEA: 0, APAC: 0 } }
                 };
 
                 // Coming Due only shows next 30 days
                 const comingDueBuckets = {
-                    'Next 30 Days': { count: 0 }
+                    'Next 30 Days': { count: 0, regionalBreakdown: { NAM: 0, LATAM: 0, EMEA: 0, APAC: 0 } }
                 };
 
                 let pastDueTotalAll = 0;  // Total including 1-45 days (for breakdown)
@@ -8906,6 +8857,9 @@
                     const status = String(row.Coming_Due_Past_Due || "").trim().toLowerCase();
                     const pastDueCategory = String(row.Past_Due_Category || "").trim();
                     const region = String(row.Region || "").trim().toUpperCase();
+
+                    // Skip if region is not valid
+                    if (!['NAM', 'LATAM', 'EMEA', 'APAC'].includes(region)) return;
 
                     // Apply region filter if active (legacy single-select)
                     if (selectedRegion !== 'all' && region !== selectedRegion.toUpperCase()) return;
@@ -8945,15 +8899,20 @@
                         // Use Past_Due_Category from dataLoader (normalized categories: "0-30 Days", "31-45 Days", "46-60 Days", "61-90 Days", ">90 Days")
                         if (pastDueCategory === '>90 Days') {
                             pastDueBuckets['>90 Days'].count++;
+                            pastDueBuckets['>90 Days'].regionalBreakdown[region]++;
                             pastDueGaugeBuckets['>90 Days'].count++;
+                            pastDueGaugeBuckets['>90 Days'].regionalBreakdown[region]++;
                             pastDueTotalGauge++;
                         } else if (pastDueCategory === '61-90 Days' || pastDueCategory === '46-60 Days') {
                             pastDueBuckets['46-90 Days'].count++;
+                            pastDueBuckets['46-90 Days'].regionalBreakdown[region]++;
                             pastDueGaugeBuckets['46-90 Days'].count++;
+                            pastDueGaugeBuckets['46-90 Days'].regionalBreakdown[region]++;
                             pastDueTotalGauge++;
                         } else if (pastDueCategory === '0-30 Days' || pastDueCategory === '31-45 Days') {
                             // 1-45 days - only in breakdown, not in gauge
                             pastDueBuckets['1-45 Days'].count++;
+                            pastDueBuckets['1-45 Days'].regionalBreakdown[region]++;
                         } else {
                             // Catch any unmatched categories
                             if (pastDueTotalAll <= 5) {
@@ -8965,6 +8924,7 @@
                     // Process Coming Due covenants (only next 30 days)
                     if (status === 'coming due' && isWithinNext30Days(row.Covenant_Due_Date)) {
                         comingDueBuckets['Next 30 Days'].count++;
+                        comingDueBuckets['Next 30 Days'].regionalBreakdown[region]++;
                         comingDueTotal++;
                     }
                 });
@@ -8973,20 +8933,23 @@
                 const pastDueCategories = Object.entries(pastDueBuckets).map(([label, data]) => ({
                     label: label,
                     count: data.count,
-                    percentage: pastDueTotalAll > 0 ? parseFloat(((data.count / pastDueTotalAll) * 100).toFixed(1)) : 0
+                    percentage: pastDueTotalAll > 0 ? parseFloat(((data.count / pastDueTotalAll) * 100).toFixed(1)) : 0,
+                    regionalBreakdown: data.regionalBreakdown
                 }));
 
                 // Gauge data for donut chart (only 46-90 and >90)
                 const pastDueGaugeCategories = Object.entries(pastDueGaugeBuckets).map(([label, data]) => ({
                     label: label,
                     count: data.count,
-                    percentage: pastDueTotalGauge > 0 ? parseFloat(((data.count / pastDueTotalGauge) * 100).toFixed(1)) : 0
+                    percentage: pastDueTotalGauge > 0 ? parseFloat(((data.count / pastDueTotalGauge) * 100).toFixed(1)) : 0,
+                    regionalBreakdown: data.regionalBreakdown
                 }));
 
                 const comingDueCategories = Object.entries(comingDueBuckets).map(([label, data]) => ({
                     label: label,
                     count: data.count,
-                    percentage: comingDueTotal > 0 ? parseFloat(((data.count / comingDueTotal) * 100).toFixed(1)) : 0
+                    percentage: comingDueTotal > 0 ? parseFloat(((data.count / comingDueTotal) * 100).toFixed(1)) : 0,
+                    regionalBreakdown: data.regionalBreakdown
                 }));
 
                 // Update global covenant data
@@ -30381,11 +30344,8 @@
                         safeSetText("deepDiveRegion", regions.join(", ") || "-");
                         safeSetText("deepDiveFacilityCount", facilitiesCount.toLocaleString());
 
-                        // Update summary stats
+                        // Update regional presence count
                         safeSetText("deepDiveRegionCount", regions.length);
-                        safeSetText("deepDiveSummaryFacilities", facilitiesCount.toLocaleString());
-                        safeSetText("deepDiveSummaryRegions", regions.length);
-                        safeSetText("deepDiveSummaryTFA", formatCurrency(totalTFA));
 
                         // Generate dynamic region cards - Only show regions with data
                         const regionalCardsContainer = document.getElementById("deepDiveRegionalCards");
@@ -30542,11 +30502,8 @@
                 safeSetText("deepDiveRegion", "-");
                 safeSetText("deepDiveFacilityCount", "0");
 
-                // Clear summary stats
+                // Clear regional presence count
                 safeSetText("deepDiveRegionCount", "0");
-                safeSetText("deepDiveSummaryFacilities", "0");
-                safeSetText("deepDiveSummaryRegions", "0");
-                safeSetText("deepDiveSummaryTFA", "$0");
 
                 // Clear dynamic region cards
                 const regionalCardsContainer = document.getElementById("deepDiveRegionalCards");
@@ -30644,25 +30601,22 @@
                         
                         tooltip = document.createElement('div');
                         tooltip.id = 'enhancedTooltip';
-                        tooltip.style.position = 'fixed';
-                        tooltip.style.zIndex = '999999';
-                        tooltip.style.pointerEvents = 'none';
-                        tooltip.style.opacity = '0';
-                        tooltip.style.transition = 'opacity 0.2s ease-in-out';
-                        tooltip.style.maxWidth = '400px';
-                        tooltip.style.left = '0';
-                        tooltip.style.top = '0';
+                        
+                        // Apply styles directly for maximum compatibility
+                        tooltip.style.cssText = 'position: fixed !important; z-index: 999999 !important; pointer-events: none !important; opacity: 0 !important; transition: opacity 0.2s ease-in-out !important; max-width: 400px !important; left: 0 !important; top: 0 !important; display: block !important;';
                         
                         tooltipContent = document.createElement('div');
                         tooltipContent.className = 'tooltip-content';
                         tooltipContent.id = 'tooltipContent';
+                        tooltipContent.style.cssText = 'background: #ffffff; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); overflow: hidden; font-family: Outfit, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;';
                         
                         tooltip.appendChild(tooltipContent);
                         
                         // Append to actual document body (not the injected content container)
-                        document.body.appendChild(tooltip);
+                        // Use top-level document to ensure we escape Confluence containers
+                        (window.top || window).document.body.appendChild(tooltip);
                         
-                        console.log('Tooltip element created and appended to document.body');
+                        console.log('Tooltip element created and appended to top-level document.body');
                     } else {
                         tooltipContent = document.getElementById('tooltipContent');
                     }
@@ -30783,6 +30737,16 @@
                             <table class="tooltip-table">
                                 <tbody>
                                     <tr>
+                                        <td>Product Program</td>
+                                        <td class="value">${productProgram}</td>
+                                    </tr>
+                                    ${productSubProgram && productSubProgram !== '-' ? `
+                                    <tr>
+                                        <td>Product Sub Program</td>
+                                        <td class="value">${productSubProgram}</td>
+                                    </tr>
+                                    ` : ''}
+                                    <tr>
                                         <td>Facility Type</td>
                                         <td class="value">${facilityType}</td>
                                     </tr>
@@ -30793,10 +30757,6 @@
                                     <tr>
                                         <td>Credit Classification</td>
                                         <td class="value">${creditClassification}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Risk Category</td>
-                                        <td class="value">${riskCategory}</td>
                                     </tr>
                                     <tr>
                                         <td>Committed/Uncommitted</td>
@@ -30914,12 +30874,6 @@
                             </div>
                             <table class="tooltip-table">
                                 <tbody>
-                                    ${leadUnderwriter !== '-' ? `
-                                    <tr>
-                                        <td>Lead Underwriter</td>
-                                        <td class="value">${leadUnderwriter}</td>
-                                    </tr>
-                                    ` : ''}
                                     ${underwritingTeamLead !== '-' ? `
                                     <tr>
                                         <td>UW Team Lead</td>
@@ -31168,12 +31122,6 @@
                                     <tr>
                                         <td>Origination Unit</td>
                                         <td class="value">${originationUnit}</td>
-                                    </tr>
-                                    ` : ''}
-                                    ${leadUnderwriter !== '-' ? `
-                                    <tr>
-                                        <td>Lead Underwriter</td>
-                                        <td class="value">${leadUnderwriter}</td>
                                     </tr>
                                     ` : ''}
                                     ${underwritingTeamLead !== '-' ? `
