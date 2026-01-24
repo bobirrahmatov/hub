@@ -3194,7 +3194,7 @@
                                         </thead>
                                         <tbody id="deepDiveCovenantsTable" class="divide-y divide-gray-200">
                                             <tr>
-                                                <td colspan="7" class="px-6 py-8 text-center text-gray-400">
+                                                <td colspan="6" class="px-6 py-8 text-center text-gray-400">
                                                     <p class="text-base">Select a relationship to view covenants</p>
                                                 </td>
                                             </tr>
@@ -30589,7 +30589,7 @@
                 if (covenantsTableBody) {
                     covenantsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="px-6 py-8 text-center text-gray-400">
+                        <td colspan="6" class="px-6 py-8 text-center text-gray-400">
                             <p class="text-base">Select a relationship to view covenants</p>
                         </td>
                     </tr>
@@ -30629,11 +30629,22 @@
             // ===== ENHANCED TOOLTIP FUNCTIONS FOR DEEP DIVE TABLES =====
             
             let tooltipTimeout = null;
-            const tooltip = document.getElementById('enhancedTooltip');
-            const tooltipContent = document.getElementById('tooltipContent');
+            let tooltip = null;
+            let tooltipContent = null;
+
+            // Initialize tooltip elements when DOM is ready
+            function initTooltipElements() {
+                if (!tooltip) {
+                    tooltip = document.getElementById('enhancedTooltip');
+                    tooltipContent = document.getElementById('tooltipContent');
+                }
+                return tooltip && tooltipContent;
+            }
 
             // Show Facility Tooltip
             function showFacilityTooltip(event, facilityIndex) {
+                if (!initTooltipElements()) return;
+                
                 if (tooltipTimeout) {
                     clearTimeout(tooltipTimeout);
                 }
@@ -30939,6 +30950,8 @@
 
             // Show Covenant Tooltip
             function showCovenantTooltip(event, covenantIndex) {
+                if (!initTooltipElements()) return;
+                
                 if (tooltipTimeout) {
                     clearTimeout(tooltipTimeout);
                 }
@@ -31254,6 +31267,7 @@
 
             // Move tooltip with cursor
             function moveEnhancedTooltip(event) {
+                if (!initTooltipElements()) return;
                 if (!tooltip.classList.contains('show') && !tooltipTimeout) return;
 
                 const padding = 20;
@@ -31289,6 +31303,8 @@
 
             // Hide tooltip
             function hideEnhancedTooltip() {
+                if (!initTooltipElements()) return;
+                
                 if (tooltipTimeout) {
                     clearTimeout(tooltipTimeout);
                     tooltipTimeout = null;
