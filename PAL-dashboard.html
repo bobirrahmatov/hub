@@ -3115,16 +3115,16 @@
                                                     Facility Amount</th>
                                                 <th
                                                     class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
-                                                    Loan O/S</th>
+                                                    Direct O/S</th>
                                                 <th
                                                     class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
-                                                    LC O/S</th>
+                                                    Contingent O/S</th>
                                                 <th
                                                     class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
                                                     PSE O/S</th>
                                                 <th
                                                     class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
-                                                    Unused Commitment</th>
+                                                    Total Unused</th>
                                             </tr>
                                         </thead>
                                         <tbody id="deepDiveFacilitiesDetailsTable" class="divide-y divide-gray-200">
@@ -3135,6 +3135,28 @@
                                                 </td>
                                             </tr>
                                         </tbody>
+                                        <tfoot id="deepDiveFacilitiesTableFooter" style="display: none;">
+                                            <tr class="bg-gray-50 border-t-2 border-gray-300">
+                                                <td colspan="6" class="px-6 py-4 text-right !text-base font-bold text-gray-900">
+                                                    TOTALS:
+                                                </td>
+                                                <td class="px-6 py-4 text-center !text-base font-bold text-gray-900">
+                                                    <span id="deepDiveFacilitiesFooterFacAmount">$0</span>
+                                                </td>
+                                                <td class="px-6 py-4 text-center !text-base font-bold text-gray-900">
+                                                    <span id="deepDiveFacilitiesFooterDirectOS">$0</span>
+                                                </td>
+                                                <td class="px-6 py-4 text-center !text-base font-bold text-gray-900">
+                                                    <span id="deepDiveFacilitiesFooterContingentOS">$0</span>
+                                                </td>
+                                                <td class="px-6 py-4 text-center !text-base font-bold text-gray-900">
+                                                    <span id="deepDiveFacilitiesFooterPSEOS">$0</span>
+                                                </td>
+                                                <td class="px-6 py-4 text-center !text-base font-bold text-gray-900">
+                                                    <span id="deepDiveFacilitiesFooterTotalUnused">$0</span>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -3180,6 +3202,30 @@
                                                 </td>
                                             </tr>
                                         </tbody>
+                                        <tfoot id="deepDiveCovenantsTableFooter" style="display: none;">
+                                            <tr class="bg-gray-50 border-t-2 border-gray-300">
+                                                <td colspan="3" class="px-6 py-4 text-right !text-base font-bold text-gray-900">
+                                                    TOTALS:
+                                                </td>
+                                                <td class="px-6 py-4 text-center !text-base font-bold text-gray-900">
+                                                    <span id="deepDiveTotalCovenants">0</span> Covenants
+                                                </td>
+                                                <td colspan="2" class="px-6 py-4 text-center">
+                                                    <div class="flex items-center justify-center gap-4">
+                                                        <div class="text-center">
+                                                            <span class="bg-red-50 text-red-600 rounded-full px-3 py-1 !text-base font-bold">
+                                                                <span id="deepDivePastDueCovenantsFooter">0</span> Past Due
+                                                            </span>
+                                                        </div>
+                                                        <div class="text-center">
+                                                            <span class="bg-yellow-50 text-yellow-600 rounded-full px-3 py-1 !text-base font-bold">
+                                                                <span id="deepDiveCurrentCovenants">0</span> Coming Due
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -29806,10 +29852,10 @@
                             <span class="${ratingColor} rounded-full px-2 py-0.5 !text-base font-medium">${riskRating}</span>
                         </td>
                         <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(facAmount)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(loanOS)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(lcOS)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(osuc)}</td>
-                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(unused)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(directOS)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(contingentOS)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(pseOS)}</td>
+                        <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(totalUnusedExposure)}</td>
                     </tr>
                 `;
                 });
@@ -29817,21 +29863,28 @@
                 tbody.innerHTML = html;
 
                 // Update footer totals
+                const footer = document.getElementById("deepDiveFacilitiesTableFooter");
+                if (footer) {
+                    footer.style.display = "table-footer-group";
+                }
+
                 const totalFacAmount = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Fac_Amount || f.Facility_Amount), 0);
-                const totalOSUC = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.OSUC || f.Outstanding_UC), 0);
-                const totalLoanOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Loan_OS || f.Loan_Outstanding), 0);
-                const totalLCOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.LC_OS || f.LC_Outstanding), 0);
-                const totalUnused = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Unused_Commitment || f.Unused), 0);
+                const totalDirectOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Direct_OS), 0);
+                const totalContingentOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Contingent_OS), 0);
+                const totalPSEOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.PSE_OS), 0);
+                const totalUnused = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Total_Unused_Exposure || f.Total_Undrawn), 0);
 
-                const footerApproved = document.getElementById("deepDiveFacilitiesFooterApproved");
-                const footerLoanOS = document.getElementById("deepDiveFacilitiesFooterLoanOS");
-                const footerLCOS = document.getElementById("deepDiveFacilitiesFooterLCOS");
-                const footerUnused = document.getElementById("deepDiveFacilitiesFooterUnused");
+                const footerFacAmount = document.getElementById("deepDiveFacilitiesFooterFacAmount");
+                const footerDirectOS = document.getElementById("deepDiveFacilitiesFooterDirectOS");
+                const footerContingentOS = document.getElementById("deepDiveFacilitiesFooterContingentOS");
+                const footerPSEOS = document.getElementById("deepDiveFacilitiesFooterPSEOS");
+                const footerTotalUnused = document.getElementById("deepDiveFacilitiesFooterTotalUnused");
 
-                if (footerApproved) footerApproved.textContent = formatCurrency(totalFacAmount);
-                if (footerLoanOS) footerLoanOS.textContent = formatCurrency(totalLoanOS);
-                if (footerLCOS) footerLCOS.textContent = formatCurrency(totalLCOS);
-                if (footerUnused) footerUnused.textContent = formatCurrency(totalUnused);
+                if (footerFacAmount) footerFacAmount.textContent = formatCurrency(totalFacAmount);
+                if (footerDirectOS) footerDirectOS.textContent = formatCurrency(totalDirectOS);
+                if (footerContingentOS) footerContingentOS.textContent = formatCurrency(totalContingentOS);
+                if (footerPSEOS) footerPSEOS.textContent = formatCurrency(totalPSEOS);
+                if (footerTotalUnused) footerTotalUnused.textContent = formatCurrency(totalUnused);
             }
 
             // Populate Deep Dive Covenants Table (filtered by relationship ID)
@@ -30539,6 +30592,12 @@
                 if (footerLoanOS) footerLoanOS.textContent = "$0";
                 if (footerLCOS) footerLCOS.textContent = "$0";
                 if (footerUnused) footerUnused.textContent = "$0";
+
+                // Hide facilities footer
+                const facilitiesFooter = document.getElementById("deepDiveFacilitiesTableFooter");
+                if (facilitiesFooter) {
+                    facilitiesFooter.style.display = "none";
+                }
 
                 // Clear covenants table
                 const covenantsTableBody = document.getElementById("deepDiveCovenantsTable");
