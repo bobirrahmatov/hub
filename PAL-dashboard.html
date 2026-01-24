@@ -29774,11 +29774,8 @@
                     const managementStatusColor = managementStatusColors[managementStatus] || 'bg-gray-50 text-gray-700';
 
                     html += `
-                    <tr class="hover:bg-gray-50" 
-                        data-facility-index="${index}"
-                        onmouseenter="showFacilityTooltip(event, ${index})"
-                        onmousemove="moveEnhancedTooltip(event)"
-                        onmouseleave="hideEnhancedTooltip()">
+                    <tr class="hover:bg-gray-50 deep-dive-facility-row" 
+                        data-facility-index="${index}">
                         <td class="px-6 py-4 text-center">
                             <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
                                 ${region}
@@ -29915,11 +29912,8 @@
                     const regionColor = regionColors[region] || 'bg-gray-100 text-gray-700';
 
                     html += `
-                    <tr class="hover:bg-gray-50" 
-                        data-covenant-index="${index}"
-                        onmouseenter="showCovenantTooltip(event, ${index})"
-                        onmousemove="moveEnhancedTooltip(event)"
-                        onmouseleave="hideEnhancedTooltip()">
+                    <tr class="hover:bg-gray-50 deep-dive-covenant-row" 
+                        data-covenant-index="${index}">
                         <td class="px-6 py-4 text-center">
                             <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
                                 ${region}
@@ -30984,6 +30978,123 @@
                 // Fallback for when CSS class doesn't work (Confluence)
                 tooltip.style.opacity = '0';
             }
+
+            // ===== EVENT DELEGATION FOR CONFLUENCE COMPATIBILITY =====
+            // This approach works when HTML is injected via innerHTML
+            
+            function attachDeepDiveTooltipListeners() {
+                // Get the table bodies
+                const facilitiesTableBody = document.getElementById('deepDiveFacilitiesDetailsTable');
+                const covenantsTableBody = document.getElementById('deepDiveCovenantsTable');
+                
+                // Remove any existing listeners by cloning and replacing (prevents duplicates)
+                if (facilitiesTableBody && !facilitiesTableBody.dataset.tooltipAttached) {
+                    facilitiesTableBody.dataset.tooltipAttached = 'true';
+                    
+                    facilitiesTableBody.addEventListener('mouseenter', function(e) {
+                        const row = e.target.closest('.deep-dive-facility-row');
+                        if (row) {
+                            const index = parseInt(row.dataset.facilityIndex);
+                            if (!isNaN(index)) {
+                                showFacilityTooltip(e, index);
+                            }
+                        }
+                    }, true);
+                    
+                    facilitiesTableBody.addEventListener('mousemove', function(e) {
+                        const row = e.target.closest('.deep-dive-facility-row');
+                        if (row) {
+                            moveEnhancedTooltip(e);
+                        }
+                    }, true);
+                    
+                    facilitiesTableBody.addEventListener('mouseleave', function(e) {
+                        const row = e.target.closest('.deep-dive-facility-row');
+                        if (row && !facilitiesTableBody.contains(e.relatedTarget)) {
+                            hideEnhancedTooltip();
+                        }
+                    }, true);
+                }
+                
+                if (covenantsTableBody && !covenantsTableBody.dataset.tooltipAttached) {
+                    covenantsTableBody.dataset.tooltipAttached = 'true';
+                    
+                    covenantsTableBody.addEventListener('mouseenter', function(e) {
+                        const row = e.target.closest('.deep-dive-covenant-row');
+                        if (row) {
+                            const index = parseInt(row.dataset.covenantIndex);
+                            if (!isNaN(index)) {
+                                showCovenantTooltip(e, index);
+                            }
+                        }
+                    }, true);
+                    
+                    covenantsTableBody.addEventListener('mousemove', function(e) {
+                        const row = e.target.closest('.deep-dive-covenant-row');
+                        if (row) {
+                            moveEnhancedTooltip(e);
+                        }
+                    }, true);
+                    
+                    covenantsTableBody.addEventListener('mouseleave', function(e) {
+                        const row = e.target.closest('.deep-dive-covenant-row');
+                        if (row && !covenantsTableBody.contains(e.relatedTarget)) {
+                            hideEnhancedTooltip();
+                        }
+                    }, true);
+                }
+            }
+            
+            // Auto-reinitialization: Watch for table changes and reattach listeners
+            function initDeepDiveTooltipObserver() {
+                const config = { childList: true, subtree: true };
+                
+                const observer = new MutationObserver(function(mutations) {
+                    for (let mutation of mutations) {
+                        if (mutation.type === 'childList') {
+                            // Check if table rows were added
+                            const facilitiesTable = document.getElementById('deepDiveFacilitiesDetailsTable');
+                            const covenantsTable = document.getElementById('deepDiveCovenantsTable');
+                            
+                            if (facilitiesTable || covenantsTable) {
+                                // Reset flags to allow reattachment
+                                if (facilitiesTable) facilitiesTable.dataset.tooltipAttached = '';
+                                if (covenantsTable) covenantsTable.dataset.tooltipAttached = '';
+                                
+                                // Reattach listeners
+                                attachDeepDiveTooltipListeners();
+                                break;
+                            }
+                        }
+                    }
+                });
+                
+                // Start observing the deep dive section
+                const deepDiveSection = document.getElementById('deepDiveTab');
+                if (deepDiveSection) {
+                    observer.observe(deepDiveSection, config);
+                }
+                
+                // Also observe document body for when content is injected
+                observer.observe(document.body, config);
+            }
+            
+            // Initialize on DOM ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    attachDeepDiveTooltipListeners();
+                    initDeepDiveTooltipObserver();
+                });
+            } else {
+                // DOM already loaded
+                attachDeepDiveTooltipListeners();
+                initDeepDiveTooltipObserver();
+            }
+            
+            // For Confluence: Also try after a short delay to catch dynamically injected content
+            setTimeout(function() {
+                attachDeepDiveTooltipListeners();
+            }, 1000);
         </script>
 
     <!-- Enhanced Tooltip for Deep Dive Tables -->
