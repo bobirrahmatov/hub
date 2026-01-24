@@ -1231,47 +1231,14 @@
                                     </div>
                                     <div>
                                         <h3 class="!text-base font-medium text-gray-500">TFA</h3>
-                                        <p class="!text-base text-gray-400">(Total Facilities Approved)</p>
+                                        <p class="!text-base text-gray-400">(Total Facility Amount)</p>
                                     </div>
                                 </div>
                                 <p class="!text-2xl font-bold text-gray-900 text-center mt-3" id="totalFacAmount">$0.00
                                 </p>
                             </div>
 
-                            <!-- Card 2: Total $ of OSUC -->
-                            <div class="rounded-2xl border border-gray-200 bg-white p-5 flex flex-col relative">
-                                <!-- Action Buttons - Absolute Top Right -->
-                                <div class="absolute top-2 right-2 flex items-center gap-0.5">
-                                    <button onclick="openExpandModal('osuc')"
-                                        class="text-gray-600 hover:text-gray-900 transition-colors p-1" title="Expand">
-                                        <svg class="fill-current" width="18" height="18" viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg" stroke-width="0.5" stroke="currentColor">
-                                            <path
-                                                d="M4,7.5 C4,7.77614237 3.77614237,8 3.5,8 C3.22385763,8 3,7.77614237 3,7.5 L3,5.5 C3,4.11928813 4.11928813,3 5.5,3 L7.5,3 C7.77614237,3 8,3.22385763 8,3.5 C8,3.77614237 7.77614237,4 7.5,4 L5.5,4 C4.67157288,4 4,4.67157288 4,5.5 L4,7.5 Z M16.5,4 C16.2238576,4 16,3.77614237 16,3.5 C16,3.22385763 16.2238576,3 16.5,3 L18.5,3 C19.8807119,3 21,4.11928813 21,5.5 L21,7.5 C21,7.77614237 20.7761424,8 20.5,8 C20.2238576,8 20,7.77614237 20,7.5 L20,5.5 C20,4.67157288 19.3284271,4 18.5,4 L16.5,4 Z M20,16.5 C20,16.2238576 20.2238576,16 20.5,16 C20.7761424,16 21,16.2238576 21,16.5 L21,18.5 C21,19.8807119 19.8807119,21 18.5,21 L16.5,21 C16.2238576,21 16,20.7761424 16,20.5 C16,20.2238576 16.2238576,20 16.5,20 L18.5,20 C19.3284271,20 20,19.3284271 20,18.5 L20,16.5 Z M7.5,20 C7.77614237,20 8,20.2238576 8,20.5 C8,20.7761424 7.77614237,21 7.5,21 L5.5,21 C4.11928813,21 3,19.8807119 3,18.5 L3,16.5 C3,16.2238576 3.22385763,16 3.5,16 C3.77614237,16 4,16.2238576 4,16.5 L4,18.5 C4,19.3284271 4.67157288,20 5.5,20 L7.5,20 Z"
-                                                fill="" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div class="flex items-start gap-3 pr-14 flex-1">
-                                    <div
-                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-100">
-                                        <svg class="h-5 w-5 shrink-0 text-orange-600" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h3 class="!text-base font-medium text-gray-500">OSUC<sup
-                                                class="text-blue-600">*</sup></h3>
-                                        <p class="!text-base text-gray-400">(OS + Unused Commitment)</p>
-                                    </div>
-                                </div>
-                                <p class="!text-2xl font-bold text-gray-900 text-center mt-3" id="totalOSUC">$0.00</p>
-                            </div>
-
-                            <!-- Card 3: Total Outstanding -->
+                            <!-- Card 2: Total Outstanding -->
                             <div class="rounded-2xl border border-gray-200 bg-white p-5 flex flex-col relative">
                                 <!-- Action Buttons - Absolute Top Right -->
                                 <div class="absolute top-2 right-2 flex items-center gap-0.5">
@@ -1287,8 +1254,8 @@
                                 </div>
                                 <div class="flex items-start gap-3 pr-14 flex-1">
                                     <div
-                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-100">
-                                        <svg class="h-5 w-5 shrink-0 text-purple-600" fill="none" stroke="currentColor"
+                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-100">
+                                        <svg class="h-5 w-5 shrink-0 text-orange-600" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
@@ -1297,7 +1264,7 @@
                                     </div>
                                     <div>
                                         <h3 class="!text-base font-medium text-gray-500">Outstanding</h3>
-                                        <p class="!text-base text-gray-400">(Direct + Contingent + PSE)</p>
+                                        <p class="!text-base text-gray-400">(Total O/S)</p>
                                     </div>
                                 </div>
                                 <p class="!text-2xl font-bold text-gray-900 text-center mt-3" id="totalOutstanding">
@@ -1305,24 +1272,69 @@
                                 </p>
                             </div>
 
-                            <!-- Card 3.5: Unused Committed -->
+                            <!-- Card 3: Unused Commitment -->
                             <div class="rounded-2xl border border-gray-200 bg-white p-5 flex flex-col relative">
+                                <!-- Action Buttons - Absolute Top Right -->
+                                <div class="absolute top-2 right-2 flex items-center gap-0.5">
+                                    <button onclick="openExpandModal('unusedCommitment')"
+                                        class="text-gray-600 hover:text-gray-900 transition-colors p-1" title="Expand">
+                                        <svg class="fill-current" width="18" height="18" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg" stroke-width="0.5" stroke="currentColor">
+                                            <path
+                                                d="M4,7.5 C4,7.77614237 3.77614237,8 3.5,8 C3.22385763,8 3,7.77614237 3,7.5 L3,5.5 C3,4.11928813 4.11928813,3 5.5,3 L7.5,3 C7.77614237,3 8,3.22385763 8,3.5 C8,3.77614237 7.77614237,4 7.5,4 L5.5,4 C4.67157288,4 4,4.67157288 4,5.5 L4,7.5 Z M16.5,4 C16.2238576,4 16,3.77614237 16,3.5 C16,3.22385763 16.2238576,3 16.5,3 L18.5,3 C19.8807119,3 21,4.11928813 21,5.5 L21,7.5 C21,7.77614237 20.7761424,8 20.5,8 C20.2238576,8 20,7.77614237 20,7.5 L20,5.5 C20,4.67157288 19.3284271,4 18.5,4 L16.5,4 Z M20,16.5 C20,16.2238576 20.2238576,16 20.5,16 C20.7761424,16 21,16.2238576 21,16.5 L21,18.5 C21,19.8807119 19.8807119,21 18.5,21 L16.5,21 C16.2238576,21 16,20.7761424 16,20.5 C16,20.2238576 16.2238576,20 16.5,20 L18.5,20 C19.3284271,20 20,19.3284271 20,18.5 L20,16.5 Z M7.5,20 C7.77614237,20 8,20.2238576 8,20.5 C8,20.7761424 7.77614237,21 7.5,21 L5.5,21 C4.11928813,21 3,19.8807119 3,18.5 L3,16.5 C3,16.2238576 3.22385763,16 3.5,16 C3.77614237,16 4,16.2238576 4,16.5 L4,18.5 C4,19.3284271 4.67157288,20 5.5,20 L7.5,20 Z"
+                                                fill="" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="flex items-start gap-3 pr-14 flex-1">
+                                    <div
+                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-100">
+                                        <svg class="h-5 w-5 shrink-0 text-purple-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="!text-base font-medium text-gray-500">Unused Commitment</h3>
+                                        <p class="!text-base text-gray-400">(Total Unused Exposure)</p>
+                                    </div>
+                                </div>
+                                <p class="!text-2xl font-bold text-gray-900 text-center mt-3" id="totalUnusedCommitment">
+                                    $0.00</p>
+                            </div>
+
+                            <!-- Card 4: Unused Uncommitted -->
+                            <div class="rounded-2xl border border-gray-200 bg-white p-5 flex flex-col relative">
+                                <!-- Action Buttons - Absolute Top Right -->
+                                <div class="absolute top-2 right-2 flex items-center gap-0.5">
+                                    <button onclick="openExpandModal('unusedUncommitted')"
+                                        class="text-gray-600 hover:text-gray-900 transition-colors p-1" title="Expand">
+                                        <svg class="fill-current" width="18" height="18" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg" stroke-width="0.5" stroke="currentColor">
+                                            <path
+                                                d="M4,7.5 C4,7.77614237 3.77614237,8 3.5,8 C3.22385763,8 3,7.77614237 3,7.5 L3,5.5 C3,4.11928813 4.11928813,3 5.5,3 L7.5,3 C7.77614237,3 8,3.22385763 8,3.5 C8,3.77614237 7.77614237,4 7.5,4 L5.5,4 C4.67157288,4 4,4.67157288 4,5.5 L4,7.5 Z M16.5,4 C16.2238576,4 16,3.77614237 16,3.5 C16,3.22385763 16.2238576,3 16.5,3 L18.5,3 C19.8807119,3 21,4.11928813 21,5.5 L21,7.5 C21,7.77614237 20.7761424,8 20.5,8 C20.2238576,8 20,7.77614237 20,7.5 L20,5.5 C20,4.67157288 19.3284271,4 18.5,4 L16.5,4 Z M20,16.5 C20,16.2238576 20.2238576,16 20.5,16 C20.7761424,16 21,16.2238576 21,16.5 L21,18.5 C21,19.8807119 19.8807119,21 18.5,21 L16.5,21 C16.2238576,21 16,20.7761424 16,20.5 C16,20.2238576 16.2238576,20 16.5,20 L18.5,20 C19.3284271,20 20,19.3284271 20,18.5 L20,16.5 Z M7.5,20 C7.77614237,20 8,20.2238576 8,20.5 C8,20.7761424 7.77614237,21 7.5,21 L5.5,21 C4.11928813,21 3,19.8807119 3,18.5 L3,16.5 C3,16.2238576 3.22385763,16 3.5,16 C3.77614237,16 4,16.2238576 4,16.5 L4,18.5 C4,19.3284271 4.67157288,20 5.5,20 L7.5,20 Z"
+                                                fill="" />
+                                        </svg>
+                                    </button>
+                                </div>
                                 <div class="flex items-start gap-3 pr-14 flex-1">
                                     <div
                                         class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-100">
                                         <svg class="h-5 w-5 shrink-0 text-teal-600" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7">
+                                                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
                                             </path>
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 class="!text-base font-medium text-gray-500">Unused Committed</h3>
-                                        <p class="!text-base text-gray-400">(Available Commitment)</p>
+                                        <h3 class="!text-base font-medium text-gray-500">Unused Uncommitted</h3>
+                                        <p class="!text-base text-gray-400">(Total Undrawn - Unused Exposure)</p>
                                     </div>
                                 </div>
-                                <p class="!text-2xl font-bold text-gray-900 text-center mt-3" id="totalUnusedCommitted">
+                                <p class="!text-2xl font-bold text-gray-900 text-center mt-3" id="totalUnusedUncommitted">
                                     $0.00</p>
                             </div>
 
@@ -5706,9 +5718,9 @@
                 const startTime = performance.now();
 
                 let totalFacAmount = 0;
-                let totalOSUC = 0;
                 let totalOutstanding = 0;
-                let totalUnusedCommitted = 0;
+                let totalUnusedCommitment = 0;
+                let totalUnusedUncommitted = 0;
                 const relationships = new Set();
                 const facilities = new Set();
 
@@ -5717,13 +5729,17 @@
                     const row = filteredData[i];
 
                     totalFacAmount += parseNumber(row.Fac_Amount);
-                    totalOSUC += parseNumber(row.OSUC);
 
                     // Total Outstanding from Total_OS column
                     totalOutstanding += parseNumber(row.Total_OS);
 
-                    // Total Unused Committed from Unused_Committed column
-                    totalUnusedCommitted += parseNumber(row.Unused_Committed);
+                    // Total Unused Commitment from Total_Unused_Exposure column
+                    totalUnusedCommitment += parseNumber(row.Total_Unused_Exposure);
+
+                    // Total Unused Uncommitted = Total_Undrawn - Total_Unused_Exposure
+                    const totalUndrawn = parseNumber(row.Total_Undrawn);
+                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    totalUnusedUncommitted += (totalUndrawn - unusedExposure);
 
                     // Use Relationship_ID for unique count (not Relationship_Name which may have duplicates)
                     if (row.Relationship_ID) relationships.add(row.Relationship_ID);
@@ -5736,14 +5752,14 @@
                     relationships.size.toLocaleString();
                 document.getElementById("facilitiesTotalCount").textContent =
                     facilities.size.toLocaleString();
-                document.getElementById("totalOSUC").textContent =
-                    formatCurrency(totalOSUC);
                 document.getElementById("totalFacAmount").textContent =
                     formatCurrency(totalFacAmount);
                 document.getElementById("totalOutstanding").textContent =
                     formatCurrency(totalOutstanding);
-                document.getElementById("totalUnusedCommitted").textContent =
-                    formatCurrency(totalUnusedCommitted);
+                document.getElementById("totalUnusedCommitment").textContent =
+                    formatCurrency(totalUnusedCommitment);
+                document.getElementById("totalUnusedUncommitted").textContent =
+                    formatCurrency(totalUnusedUncommitted);
 
                 // Calculate expired metrics from filtered data
                 calculateExpiredMetricsFromFiltered();
@@ -7632,24 +7648,23 @@
                     document.getElementById("facilitiesTotalCount").textContent =
                         cached.facilities.toLocaleString();
 
-                    document.getElementById("totalOSUC").textContent = formatCurrency(
-                        cached.osuc
-                    );
                     document.getElementById("totalFacAmount").textContent =
                         formatCurrency(cached.facAmount);
                     document.getElementById("totalOutstanding").textContent =
                         formatCurrency(cached.outstanding);
-                    document.getElementById("totalUnusedCommitted").textContent =
-                        formatCurrency(cached.unusedCommitted);
+                    document.getElementById("totalUnusedCommitment").textContent =
+                        formatCurrency(cached.unusedCommitment);
+                    document.getElementById("totalUnusedUncommitted").textContent =
+                        formatCurrency(cached.unusedUncommitted);
                     return;
                 }
 
                 const startTime = performance.now();
 
                 let totalFacAmount = 0;
-                let totalOSUC = 0;
                 let totalOutstanding = 0;
-                let totalUnusedCommitted = 0;
+                let totalUnusedCommitment = 0;
+                let totalUnusedUncommitted = 0;
                 const relationships = new Set();
                 const facilities = new Set();
 
@@ -7658,13 +7673,17 @@
                     const row = portfolioData[i];
 
                     totalFacAmount += parseNumber(row.Fac_Amount);
-                    totalOSUC += parseNumber(row.OSUC);
 
                     // Total Outstanding from Total_OS column
                     totalOutstanding += parseNumber(row.Total_OS);
 
-                    // Total Unused Committed from Unused_Committed column
-                    totalUnusedCommitted += parseNumber(row.Unused_Committed);
+                    // Total Unused Commitment from Total_Unused_Exposure column
+                    totalUnusedCommitment += parseNumber(row.Total_Unused_Exposure);
+
+                    // Total Unused Uncommitted = Total_Undrawn - Total_Unused_Exposure
+                    const totalUndrawn = parseNumber(row.Total_Undrawn);
+                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    totalUnusedUncommitted += (totalUndrawn - unusedExposure);
 
                     // Use Relationship_ID for unique count (not Relationship_Name which may have duplicates)
                     if (row.Relationship_ID) relationships.add(row.Relationship_ID);
@@ -7675,10 +7694,10 @@
                 const metrics = {
                     relationships: relationships.size,
                     facilities: facilities.size,
-                    osuc: totalOSUC,
                     facAmount: totalFacAmount,
                     outstanding: totalOutstanding,
-                    unusedCommitted: totalUnusedCommitted,
+                    unusedCommitment: totalUnusedCommitment,
+                    unusedUncommitted: totalUnusedUncommitted,
                 };
 
                 // Cache the results
@@ -7690,16 +7709,15 @@
                 document.getElementById("facilitiesTotalCount").textContent =
                     metrics.facilities.toLocaleString();
 
-                document.getElementById("totalOSUC").textContent = formatCurrency(
-                    metrics.osuc
-                );
                 document.getElementById("totalFacAmount").textContent = formatCurrency(
                     metrics.facAmount
                 );
                 document.getElementById("totalOutstanding").textContent =
                     formatCurrency(metrics.outstanding);
-                document.getElementById("totalUnusedCommitted").textContent =
-                    formatCurrency(metrics.unusedCommitted);
+                document.getElementById("totalUnusedCommitment").textContent =
+                    formatCurrency(metrics.unusedCommitment);
+                document.getElementById("totalUnusedUncommitted").textContent =
+                    formatCurrency(metrics.unusedUncommitted);
 
 
                 // Calculate expired metrics
@@ -15903,10 +15921,12 @@
                 switch (chartType) {
                     case 'tfa':
                         return generateTFAExpandedView(dataSource);
-                    case 'osuc':
-                        return generateOSUCExpandedView(dataSource);
                     case 'outstanding':
                         return generateOutstandingExpandedView(dataSource);
+                    case 'unusedCommitment':
+                        return generateUnusedCommitmentExpandedView(dataSource);
+                    case 'unusedUncommitted':
+                        return generateUnusedUncommittedExpandedView(dataSource);
                     case 'facilities':
                         return generateFacilitiesExpandedView(dataSource);
                     case 'relationships':
@@ -16365,8 +16385,10 @@
             function initializeExpandCharts(chartType, dataSource) {
                 if (chartType === 'tfa') {
                     initializeTFAChart(dataSource);
-                } else if (chartType === 'osuc') {
-                    initializeOSUCChart(dataSource);
+                } else if (chartType === 'unusedCommitment') {
+                    initializeUnusedCommitmentChart(dataSource);
+                } else if (chartType === 'unusedUncommitted') {
+                    initializeUnusedUncommittedChart(dataSource);
                 } else if (chartType === 'outstanding') {
                     initializeOutstandingChart(dataSource);
                 } else if (chartType === 'facilities') {
@@ -16583,34 +16605,34 @@
             }
 
             // Initialize OSUC Charts
-            function initializeOSUCChart(dataSource) {
+            function initializeUnusedCommitmentChart(dataSource) {
                 // 1. Regional Distribution Table
                 const regionalData = {
-                    APAC: { count: 0, osuc: 0 },
-                    EMEA: { count: 0, osuc: 0 },
-                    NAM: { count: 0, osuc: 0 },
-                    LATAM: { count: 0, osuc: 0 }
+                    APAC: { count: 0, unusedCommitment: 0 },
+                    EMEA: { count: 0, unusedCommitment: 0 },
+                    NAM: { count: 0, unusedCommitment: 0 },
+                    LATAM: { count: 0, unusedCommitment: 0 }
                 };
 
                 dataSource.forEach(row => {
                     const region = (row.Region || 'Unknown').toUpperCase();
-                    const amount = parseNumber(row.OSUC);
+                    const amount = parseNumber(row.Total_Unused_Exposure);
 
                     if (regionalData[region]) {
                         regionalData[region].count += 1;
-                        regionalData[region].osuc += amount;
+                        regionalData[region].unusedCommitment += amount;
                     }
                 });
 
                 // Render Regional Distribution Table
-                const regionalTableEl = document.getElementById('osucRegionalTable');
+                const regionalTableEl = document.getElementById('unusedCommitmentRegionalTable');
                 if (regionalTableEl) {
                     const regionEntries = [
                         { name: 'APAC', ...regionalData.APAC },
                         { name: 'EMEA', ...regionalData.EMEA },
                         { name: 'NAM', ...regionalData.NAM },
                         { name: 'LATAM', ...regionalData.LATAM }
-                    ].sort((a, b) => b.osuc - a.osuc);
+                    ].sort((a, b) => b.unusedCommitment - a.unusedCommitment);
 
                     let tableHTML = `
                     <table class="w-full h-full">
@@ -16618,7 +16640,7 @@
                             <tr class="border-b border-gray-200 bg-gray-50">
                                 <th class="px-6 py-4 text-left !text-base font-semibold text-gray-700">Region</th>
                                 <th class="px-6 py-4 text-right !text-base font-semibold text-gray-700">Facilities</th>
-                                <th class="px-6 py-4 text-right !text-base font-semibold text-gray-700">Total OSUC</th>
+                                <th class="px-6 py-4 text-right !text-base font-semibold text-gray-700">Total Unused Commitment</th>
                                 <th class="px-6 py-4 text-right !text-base font-semibold text-gray-700">Avg per Facility</th>
                                 <th class="px-6 py-4 text-right !text-base font-semibold text-gray-700">% of Total</th>
                             </tr>
@@ -16626,33 +16648,33 @@
                         <tbody class="divide-y divide-gray-100">
                 `;
 
-                    let totalCount = 0, totalOSUC = 0;
+                    let totalCount = 0, totalUnusedCommitment = 0;
                     regionEntries.forEach(region => {
                         totalCount += region.count;
-                        totalOSUC += region.osuc;
+                        totalUnusedCommitment += region.unusedCommitment;
                     });
 
                     regionEntries.forEach(region => {
-                        const avg = region.count > 0 ? region.osuc / region.count : 0;
-                        const percentage = totalOSUC > 0 ? (region.osuc / totalOSUC * 100) : 0;
+                        const avg = region.count > 0 ? region.unusedCommitment / region.count : 0;
+                        const percentage = totalUnusedCommitment > 0 ? (region.unusedCommitment / totalUnusedCommitment * 100) : 0;
 
                         tableHTML += `
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 !text-base font-medium text-gray-900">${region.name}</td>
                             <td class="px-6 py-4 !text-base text-right text-gray-700">${region.count}</td>
-                            <td class="px-6 py-4 !text-base text-right font-medium text-gray-900">${formatCurrency(region.osuc)}</td>
+                            <td class="px-6 py-4 !text-base text-right font-medium text-gray-900">${formatCurrency(region.unusedCommitment)}</td>
                             <td class="px-6 py-4 !text-base text-right text-gray-600">${formatCurrency(avg)}</td>
                             <td class="px-6 py-4 !text-base text-right text-gray-600">${percentage.toFixed(1)}%</td>
                         </tr>
                     `;
                     });
 
-                    const avgTotal = totalCount > 0 ? totalOSUC / totalCount : 0;
+                    const avgTotal = totalCount > 0 ? totalUnusedCommitment / totalCount : 0;
                     tableHTML += `
                         <tr class="bg-gray-50 font-semibold border-t-2 border-gray-300">
                             <td class="px-6 py-4 !text-base text-gray-900 rounded-bl-xl">Total</td>
                             <td class="px-6 py-4 !text-base text-right text-gray-900">${totalCount}</td>
-                            <td class="px-6 py-4 !text-base text-right text-gray-900">${formatCurrency(totalOSUC)}</td>
+                            <td class="px-6 py-4 !text-base text-right text-gray-900">${formatCurrency(totalUnusedCommitment)}</td>
                             <td class="px-6 py-4 !text-base text-right text-gray-900">${formatCurrency(avgTotal)}</td>
                             <td class="px-6 py-4 !text-base text-right text-gray-900 rounded-br-xl">100.0%</td>
                         </tr>
@@ -16663,12 +16685,12 @@
                     regionalTableEl.innerHTML = tableHTML;
                 }
 
-                // 2. OSUC by Product Program - Donut Chart (matching TFA style)
+                // 2. Unused Commitment by Product Program - Donut Chart
                 const byProgram = {};
                 dataSource.forEach(row => {
                     const program = row.Product_Program || 'Unknown';
                     if (!byProgram[program]) byProgram[program] = 0;
-                    byProgram[program] += parseNumber(row.OSUC);
+                    byProgram[program] += parseNumber(row.Total_Unused_Exposure);
                 });
 
                 const sortedPrograms = Object.entries(byProgram)
@@ -16676,9 +16698,9 @@
 
                 const programLabels = sortedPrograms.map(([name]) => name);
                 const programValues = sortedPrograms.map(([, amount]) => amount);
-                const totalOSUC = programValues.reduce((a, b) => a + b, 0);
+                const totalUnusedCommitment = programValues.reduce((a, b) => a + b, 0);
 
-                // Donut chart colors (matching TFA style)
+                // Donut chart colors
                 const donutColors = [
                     "#3641f5",  // Primary blue
                     "#7592ff",  // Light blue
@@ -16689,7 +16711,7 @@
                     "#c084fc",  // Purple
                 ];
 
-                // Program Donut Chart Options (matching TFA style)
+                // Program Donut Chart Options
                 const programChartOptions = {
                     series: programValues,
                     colors: donutColors.slice(0, programLabels.length),
@@ -16727,11 +16749,11 @@
                                     },
                                     total: {
                                         show: true,
-                                        label: "Total OSUC",
+                                        label: "Total",
                                         color: "#1D2939",
                                         fontSize: "14px",
                                         fontWeight: "600",
-                                        formatter: () => formatCurrency(totalOSUC),
+                                        formatter: () => formatCurrency(totalUnusedCommitment),
                                     },
                                 },
                             },
@@ -16758,7 +16780,194 @@
                 };
 
                 // Render program donut chart
-                const programChartEl = document.getElementById('osucProgramDonutChart');
+                const programChartEl = document.getElementById('unusedCommitmentProgramDonutChart');
+
+                if (programChartEl && typeof ApexCharts !== 'undefined') {
+                    const programChart = new ApexCharts(programChartEl, programChartOptions);
+                    programChart.render();
+                }
+            }
+
+            function initializeUnusedUncommittedChart(dataSource) {
+                // 1. Regional Distribution Table
+                const regionalData = {
+                    APAC: { count: 0, unusedUncommitted: 0 },
+                    EMEA: { count: 0, unusedUncommitted: 0 },
+                    NAM: { count: 0, unusedUncommitted: 0 },
+                    LATAM: { count: 0, unusedUncommitted: 0 }
+                };
+
+                dataSource.forEach(row => {
+                    const region = (row.Region || 'Unknown').toUpperCase();
+                    const totalUndrawn = parseNumber(row.Total_Undrawn);
+                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    const amount = totalUndrawn - unusedExposure;
+
+                    if (regionalData[region]) {
+                        regionalData[region].count += 1;
+                        regionalData[region].unusedUncommitted += amount;
+                    }
+                });
+
+                // Render Regional Distribution Table
+                const regionalTableEl = document.getElementById('unusedUncommittedRegionalTable');
+                if (regionalTableEl) {
+                    const regionEntries = [
+                        { name: 'APAC', ...regionalData.APAC },
+                        { name: 'EMEA', ...regionalData.EMEA },
+                        { name: 'NAM', ...regionalData.NAM },
+                        { name: 'LATAM', ...regionalData.LATAM }
+                    ].sort((a, b) => b.unusedUncommitted - a.unusedUncommitted);
+
+                    let tableHTML = `
+                    <table class="w-full h-full">
+                        <thead>
+                            <tr class="border-b border-gray-200 bg-gray-50">
+                                <th class="px-6 py-4 text-left !text-base font-semibold text-gray-700">Region</th>
+                                <th class="px-6 py-4 text-right !text-base font-semibold text-gray-700">Facilities</th>
+                                <th class="px-6 py-4 text-right !text-base font-semibold text-gray-700">Total Unused Uncommitted</th>
+                                <th class="px-6 py-4 text-right !text-base font-semibold text-gray-700">Avg per Facility</th>
+                                <th class="px-6 py-4 text-right !text-base font-semibold text-gray-700">% of Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                `;
+
+                    let totalCount = 0, totalUnusedUncommitted = 0;
+                    regionEntries.forEach(region => {
+                        totalCount += region.count;
+                        totalUnusedUncommitted += region.unusedUncommitted;
+                    });
+
+                    regionEntries.forEach(region => {
+                        const avg = region.count > 0 ? region.unusedUncommitted / region.count : 0;
+                        const percentage = totalUnusedUncommitted > 0 ? (region.unusedUncommitted / totalUnusedUncommitted * 100) : 0;
+
+                        tableHTML += `
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 !text-base font-medium text-gray-900">${region.name}</td>
+                            <td class="px-6 py-4 !text-base text-right text-gray-700">${region.count}</td>
+                            <td class="px-6 py-4 !text-base text-right font-medium text-gray-900">${formatCurrency(region.unusedUncommitted)}</td>
+                            <td class="px-6 py-4 !text-base text-right text-gray-600">${formatCurrency(avg)}</td>
+                            <td class="px-6 py-4 !text-base text-right text-gray-600">${percentage.toFixed(1)}%</td>
+                        </tr>
+                    `;
+                    });
+
+                    const avgTotal = totalCount > 0 ? totalUnusedUncommitted / totalCount : 0;
+                    tableHTML += `
+                        <tr class="bg-gray-50 font-semibold border-t-2 border-gray-300">
+                            <td class="px-6 py-4 !text-base text-gray-900 rounded-bl-xl">Total</td>
+                            <td class="px-6 py-4 !text-base text-right text-gray-900">${totalCount}</td>
+                            <td class="px-6 py-4 !text-base text-right text-gray-900">${formatCurrency(totalUnusedUncommitted)}</td>
+                            <td class="px-6 py-4 !text-base text-right text-gray-900">${formatCurrency(avgTotal)}</td>
+                            <td class="px-6 py-4 !text-base text-right text-gray-900 rounded-br-xl">100.0%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                `;
+
+                    regionalTableEl.innerHTML = tableHTML;
+                }
+
+                // 2. Unused Uncommitted by Product Program - Donut Chart
+                const byProgram = {};
+                dataSource.forEach(row => {
+                    const program = row.Product_Program || 'Unknown';
+                    if (!byProgram[program]) byProgram[program] = 0;
+                    const totalUndrawn = parseNumber(row.Total_Undrawn);
+                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    byProgram[program] += (totalUndrawn - unusedExposure);
+                });
+
+                const sortedPrograms = Object.entries(byProgram)
+                    .sort((a, b) => b[1] - a[1]);
+
+                const programLabels = sortedPrograms.map(([name]) => name);
+                const programValues = sortedPrograms.map(([, amount]) => amount);
+                const totalUnusedUncommitted = programValues.reduce((a, b) => a + b, 0);
+
+                // Donut chart colors
+                const donutColors = [
+                    "#3641f5",  // Primary blue
+                    "#7592ff",  // Light blue
+                    "#a8c5ff",  // Lighter blue
+                    "#ff6b6b",  // Red
+                    "#ffd93d",  // Yellow
+                    "#6bcf7f",  // Green
+                    "#c084fc",  // Purple
+                ];
+
+                // Program Donut Chart Options
+                const programChartOptions = {
+                    series: programValues,
+                    colors: donutColors.slice(0, programLabels.length),
+                    labels: programLabels,
+                    chart: {
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
+                        type: "donut",
+                        width: 300,
+                        height: 300,
+                    },
+                    stroke: {
+                        show: false,
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                size: "65%",
+                                background: "transparent",
+                                labels: {
+                                    show: true,
+                                    name: {
+                                        show: true,
+                                        offsetY: -10,
+                                        color: "#1D2939",
+                                        fontSize: "14px",
+                                        fontWeight: "600",
+                                    },
+                                    value: {
+                                        show: true,
+                                        offsetY: 10,
+                                        color: "#667085",
+                                        fontSize: "16px",
+                                        fontWeight: "700",
+                                        formatter: (val) => formatCurrency(val),
+                                    },
+                                    total: {
+                                        show: true,
+                                        label: "Total",
+                                        color: "#1D2939",
+                                        fontSize: "14px",
+                                        fontWeight: "600",
+                                        formatter: () => formatCurrency(totalUnusedUncommitted),
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    dataLabels: {
+                        enabled: false,
+                    },
+                    legend: {
+                        show: false, // We use custom legend in HTML
+                    },
+                    tooltip: {
+                        theme: "light",
+                        followCursor: false,
+                        fixed: {
+                            enabled: false,
+                        },
+                        offsetX: 0,
+                        offsetY: 0,
+                        y: {
+                            formatter: (val) => formatCurrency(val),
+                        },
+                    },
+                };
+
+                // Render program donut chart
+                const programChartEl = document.getElementById('unusedUncommittedProgramDonutChart');
 
                 if (programChartEl && typeof ApexCharts !== 'undefined') {
                     const programChart = new ApexCharts(programChartEl, programChartOptions);
@@ -18867,17 +19076,17 @@
             }
 
             // Placeholder functions for other chart types (to be implemented similarly)
-            function generateOSUCExpandedView(dataSource) {
-                // Calculate OSUC metrics matching TFA structure
-                const totalOSUC = dataSource.reduce((sum, row) => sum + parseNumber(row.OSUC), 0);
+            function generateUnusedCommitmentExpandedView(dataSource) {
+                // Calculate Unused Commitment metrics
+                const totalUnusedCommitment = dataSource.reduce((sum, row) => sum + parseNumber(row.Total_Unused_Exposure), 0);
                 const totalRelationships = new Set(dataSource.map(r => r.Relationship_Name || r.Relationship_ID).filter(Boolean)).size;
                 const totalFacilities = new Set(dataSource.map(r => r.Facility_ID).filter(Boolean)).size;
-                const avgOSUCPerRelationship = totalRelationships > 0 ? totalOSUC / totalRelationships : 0;
+                const avgUnusedCommitmentPerRelationship = totalRelationships > 0 ? totalUnusedCommitment / totalRelationships : 0;
 
                 // Find largest single facility
                 let largestFacility = 0;
                 dataSource.forEach(row => {
-                    const amount = parseNumber(row.OSUC);
+                    const amount = parseNumber(row.Total_Unused_Exposure);
                     if (amount > largestFacility) largestFacility = amount;
                 });
 
@@ -18886,20 +19095,20 @@
                 dataSource.forEach(row => {
                     const rel = row.Relationship_Name || row.Relationship_ID || 'Unknown';
                     if (!byRelationship[rel]) byRelationship[rel] = 0;
-                    byRelationship[rel] += parseNumber(row.OSUC);
+                    byRelationship[rel] += parseNumber(row.Total_Unused_Exposure);
                 });
                 const top10Total = Object.values(byRelationship)
                     .sort((a, b) => b - a)
                     .slice(0, 10)
                     .reduce((sum, val) => sum + val, 0);
-                const concentrationPct = totalOSUC > 0 ? (top10Total / totalOSUC * 100) : 0;
+                const concentrationPct = totalUnusedCommitment > 0 ? (top10Total / totalUnusedCommitment * 100) : 0;
 
                 // Group by Client (Relationship)
                 const byClient = {};
                 dataSource.forEach(row => {
                     const client = row.Relationship_Name || row.Relationship_ID || 'Unknown';
                     if (!byClient[client]) byClient[client] = 0;
-                    byClient[client] += parseNumber(row.OSUC);
+                    byClient[client] += parseNumber(row.Total_Unused_Exposure);
                 });
 
                 // Group by Product Program
@@ -18907,7 +19116,7 @@
                 dataSource.forEach(row => {
                     const program = row.Product_Program || 'Unknown';
                     if (!byProgram[program]) byProgram[program] = 0;
-                    byProgram[program] += parseNumber(row.OSUC);
+                    byProgram[program] += parseNumber(row.Total_Unused_Exposure);
                 });
 
                 // Get Top 10 clients
@@ -18929,13 +19138,13 @@
                         detailedData[underwriter] = {
                             underwriter,
                             region,
-                            osuc: 0,
+                            unusedCommitment: 0,
                             facilities: new Set(),
                             relationships: new Set()
                         };
                     }
 
-                    detailedData[underwriter].osuc += parseNumber(row.OSUC);
+                    detailedData[underwriter].unusedCommitment += parseNumber(row.Total_Unused_Exposure);
                     if (row.Facility_ID) detailedData[underwriter].facilities.add(row.Facility_ID);
                     if (row.Relationship_Name || row.Relationship_ID) {
                         detailedData[underwriter].relationships.add(row.Relationship_Name || row.Relationship_ID);
@@ -18943,7 +19152,7 @@
                 });
 
                 const tableRows = Object.values(detailedData)
-                    .sort((a, b) => b.osuc - a.osuc)
+                    .sort((a, b) => b.unusedCommitment - a.unusedCommitment)
                     .slice(0, 10); // Top 10 underwriters
 
                 return `
@@ -18957,10 +19166,10 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="!text-base font-medium text-gray-500">Total OSUC</p>
+                                <p class="!text-base font-medium text-gray-500">Total Unused Commitment</p>
                             </div>
                         </div>
-                        <h3 class="!text-2xl font-bold text-gray-900 text-center mt-3">${formatCurrency(totalOSUC)}</h3>
+                        <h3 class="!text-2xl font-bold text-gray-900 text-center mt-3">${formatCurrency(totalUnusedCommitment)}</h3>
                     </div>
                     
                     <div class="rounded-xl border border-gray-200 bg-white p-5 flex flex-col">
@@ -18971,10 +19180,10 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="!text-base font-medium text-gray-500">Avg OSUC / Relationship</p>
+                                <p class="!text-base font-medium text-gray-500">Avg / Relationship</p>
                             </div>
                         </div>
-                        <h3 class="!text-2xl font-bold text-gray-900 text-center mt-3">${formatCurrency(avgOSUCPerRelationship)}</h3>
+                        <h3 class="!text-2xl font-bold text-gray-900 text-center mt-3">${formatCurrency(avgUnusedCommitmentPerRelationship)}</h3>
                     </div>
                     
                     <div class="rounded-xl border border-gray-200 bg-white p-5 flex flex-col">
@@ -18985,7 +19194,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="!text-base font-medium text-gray-500">Largest Facility OSUC</p>
+                                <p class="!text-base font-medium text-gray-500">Largest Facility</p>
                             </div>
                         </div>
                         <h3 class="!text-2xl font-bold text-gray-900 text-center mt-3">${formatCurrency(largestFacility)}</h3>
@@ -19000,7 +19209,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="!text-base font-medium text-gray-500">Top 10 Concentration by OSUC</p>
+                                <p class="!text-base font-medium text-gray-500">Top 10 Concentration</p>
                             </div>
                         </div>
                         <h3 class="!text-2xl font-bold text-gray-900 text-center mt-3">${concentrationPct.toFixed(1)}%</h3>
@@ -19013,29 +19222,29 @@
                     <div class="rounded-xl border border-gray-200 bg-white flex flex-col">
                         <div class="border-b border-gray-200 px-6 py-4">
                             <h3 class="text-base font-semibold text-gray-900">Regional Distribution</h3>
-                            <p class="!text-base font-medium text-gray-500 mt-1">OSUC exposure by region</p>
+                            <p class="!text-base font-medium text-gray-500 mt-1">Unused Commitment by region</p>
                         </div>
                         <div class="flex-1 overflow-hidden">
-                            <div id="osucRegionalTable" class="h-full"></div>
+                            <div id="unusedCommitmentRegionalTable" class="h-full"></div>
                         </div>
                     </div>
                     
-                    <!-- OSUC by Product Program - Donut Chart with Legends -->
+                    <!-- Unused Commitment by Product Program - Donut Chart with Legends -->
                     <div class="rounded-xl border border-gray-200 bg-white">
                         <div class="border-b border-gray-200 px-6 py-4">
-                            <h3 class="text-base font-semibold text-gray-900">OSUC by Product Program</h3>
+                            <h3 class="text-base font-semibold text-gray-900">Unused Commitment by Product Program</h3>
                             <p class="!text-base font-medium text-gray-500 mt-1">Distribution across product programs</p>
                         </div>
                         <div class="p-6 flex items-center justify-center" style="min-height: 400px;">
                             <div class="flex flex-row items-center justify-center gap-8">
                                 <!-- Donut Chart -->
                                 <div class="flex-shrink-0">
-                                    <div id="osucProgramDonutChart"></div>
+                                    <div id="unusedCommitmentProgramDonutChart"></div>
                                 </div>
                                 
                                 <!-- Legend / Details List - Right Side -->
                                 <div class="flex-1 max-w-md">
-                                    <div id="osucProgramList" class="space-y-3">
+                                    <div id="unusedCommitmentProgramList" class="space-y-3">
                                         ${sortedPrograms.map(([program, amount], index) => {
                     const colors = ["#3641f5", "#7592ff", "#a8c5ff", "#ff6b6b", "#ffd93d", "#6bcf7f", "#c084fc"];
                     const color = colors[index % colors.length];
@@ -19043,7 +19252,7 @@
                         ? `$${(amount / 1000000000).toFixed(2)}B`
                         : `$${(amount / 1000000).toFixed(1)}M`;
                     // Calculate percentage
-                    const percentage = ((amount / totalOSUC) * 100).toFixed(1);
+                    const percentage = ((amount / totalUnusedCommitment) * 100).toFixed(1);
                     return `
                                                 <div class="flex items-center gap-3 py-2">
                                                     <div class="w-4 h-4 rounded-sm flex-shrink-0" style="background-color: ${color};"></div>
@@ -19062,7 +19271,7 @@
                 <!-- Detailed Table -->
                 <div class="rounded-2xl border border-gray-200 bg-white mt-6">
                     <div class="px-6 py-4">
-                        <h3 class="!text-lg font-semibold text-gray-800">OSUC by Underwriter (Top 10)</h3>
+                        <h3 class="!text-lg font-semibold text-gray-800">Unused Commitment by Underwriter (Top 10)</h3>
                         <p class="!text-base font-medium text-gray-500 mt-1">Underwriter portfolio breakdown</p>
                     </div>
                     <div class="custom-scrollbar overflow-x-auto">
@@ -19071,7 +19280,7 @@
                                 <tr class="bg-gray-50">
                                     <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Underwriter</th>
                                     <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Region</th>
-                                    <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">OSUC</th>
+                                    <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Unused Commitment</th>
                                     <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Share %</th>
                                     <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Facilities</th>
                                     <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Relationships</th>
@@ -19079,7 +19288,7 @@
                             </thead>
                             <tbody class="divide-y divide-gray-200">
                                 ${tableRows.map(row => {
-                    const sharePct = totalOSUC > 0 ? (row.osuc / totalOSUC * 100) : 0;
+                    const sharePct = totalUnusedCommitment > 0 ? (row.unusedCommitment / totalUnusedCommitment * 100) : 0;
                     const regionColors = {
                         'APAC': 'bg-blue-50 text-blue-600',
                         'EMEA': 'bg-green-50 text-green-600',
@@ -19096,7 +19305,281 @@
                                                     ${row.region}
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(row.osuc)}</td>
+                                            <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(row.unusedCommitment)}</td>
+                                            <td class="px-6 py-4 text-center">
+                                                <div class="flex items-center justify-center gap-2">
+                                                    <div class="flex-1 min-w-[80px] max-w-[120px]">
+                                                        <div class="relative w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                                                            <div class="absolute top-0 left-0 h-full bg-blue-500 rounded-full transition-all duration-300" style="width: ${Math.min(sharePct, 100)}%"></div>
+                                                        </div>
+                                                    </div>
+                                                    <span class="!text-base font-semibold text-gray-700 min-w-[40px]">${sharePct.toFixed(1)}%</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                <span class="bg-gray-100 text-gray-700 rounded-full px-2 py-0.5 !text-base font-medium">
+                                                    ${row.facilities.size}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                <span class="bg-blue-100 text-blue-700 rounded-full px-2 py-0.5 !text-base font-medium">
+                                                    ${row.relationships.size}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    `;
+                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            }
+
+            function generateUnusedUncommittedExpandedView(dataSource) {
+                // Calculate Unused Uncommitted metrics (Total_Undrawn - Total_Unused_Exposure)
+                const totalUnusedUncommitted = dataSource.reduce((sum, row) => {
+                    const totalUndrawn = parseNumber(row.Total_Undrawn);
+                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    return sum + (totalUndrawn - unusedExposure);
+                }, 0);
+                const totalRelationships = new Set(dataSource.map(r => r.Relationship_Name || r.Relationship_ID).filter(Boolean)).size;
+                const totalFacilities = new Set(dataSource.map(r => r.Facility_ID).filter(Boolean)).size;
+                const avgUnusedUncommittedPerRelationship = totalRelationships > 0 ? totalUnusedUncommitted / totalRelationships : 0;
+
+                // Find largest single facility
+                let largestFacility = 0;
+                dataSource.forEach(row => {
+                    const totalUndrawn = parseNumber(row.Total_Undrawn);
+                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    const amount = totalUndrawn - unusedExposure;
+                    if (amount > largestFacility) largestFacility = amount;
+                });
+
+                // Calculate concentration (top 10 relationships as % of total)
+                const byRelationship = {};
+                dataSource.forEach(row => {
+                    const rel = row.Relationship_Name || row.Relationship_ID || 'Unknown';
+                    if (!byRelationship[rel]) byRelationship[rel] = 0;
+                    const totalUndrawn = parseNumber(row.Total_Undrawn);
+                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    byRelationship[rel] += (totalUndrawn - unusedExposure);
+                });
+                const top10Total = Object.values(byRelationship)
+                    .sort((a, b) => b - a)
+                    .slice(0, 10)
+                    .reduce((sum, val) => sum + val, 0);
+                const concentrationPct = totalUnusedUncommitted > 0 ? (top10Total / totalUnusedUncommitted * 100) : 0;
+
+                // Group by Client (Relationship)
+                const byClient = {};
+                dataSource.forEach(row => {
+                    const client = row.Relationship_Name || row.Relationship_ID || 'Unknown';
+                    if (!byClient[client]) byClient[client] = 0;
+                    const totalUndrawn = parseNumber(row.Total_Undrawn);
+                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    byClient[client] += (totalUndrawn - unusedExposure);
+                });
+
+                // Group by Product Program
+                const byProgram = {};
+                dataSource.forEach(row => {
+                    const program = row.Product_Program || 'Unknown';
+                    if (!byProgram[program]) byProgram[program] = 0;
+                    const totalUndrawn = parseNumber(row.Total_Undrawn);
+                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    byProgram[program] += (totalUndrawn - unusedExposure);
+                });
+
+                // Get Top 10 clients
+                const topClients = Object.entries(byClient)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10);
+
+                // Get all programs sorted
+                const sortedPrograms = Object.entries(byProgram)
+                    .sort((a, b) => b[1] - a[1]);
+
+                // Group by Underwriter for detailed table
+                const detailedData = {};
+                dataSource.forEach(row => {
+                    const underwriter = row.Lead_Underwriter || 'Unknown';
+                    const region = row.Region || 'Unknown';
+
+                    if (!detailedData[underwriter]) {
+                        detailedData[underwriter] = {
+                            underwriter,
+                            region,
+                            unusedUncommitted: 0,
+                            facilities: new Set(),
+                            relationships: new Set()
+                        };
+                    }
+
+                    const totalUndrawn = parseNumber(row.Total_Undrawn);
+                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    detailedData[underwriter].unusedUncommitted += (totalUndrawn - unusedExposure);
+                    if (row.Facility_ID) detailedData[underwriter].facilities.add(row.Facility_ID);
+                    if (row.Relationship_Name || row.Relationship_ID) {
+                        detailedData[underwriter].relationships.add(row.Relationship_Name || row.Relationship_ID);
+                    }
+                });
+
+                const tableRows = Object.values(detailedData)
+                    .sort((a, b) => b.unusedUncommitted - a.unusedUncommitted)
+                    .slice(0, 10); // Top 10 underwriters
+
+                return `
+                <!-- Key Metrics Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div class="rounded-xl border border-gray-200 bg-white p-5 flex flex-col">
+                        <div class="flex items-start gap-3 flex-1">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100">
+                                <svg class="h-5 w-5 shrink-0 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="!text-base font-medium text-gray-500">Total Unused Uncommitted</p>
+                            </div>
+                        </div>
+                        <h3 class="!text-2xl font-bold text-gray-900 text-center mt-3">${formatCurrency(totalUnusedUncommitted)}</h3>
+                    </div>
+                    
+                    <div class="rounded-xl border border-gray-200 bg-white p-5 flex flex-col">
+                        <div class="flex items-start gap-3 flex-1">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-100">
+                                <svg class="h-5 w-5 shrink-0 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="!text-base font-medium text-gray-500">Avg / Relationship</p>
+                            </div>
+                        </div>
+                        <h3 class="!text-2xl font-bold text-gray-900 text-center mt-3">${formatCurrency(avgUnusedUncommittedPerRelationship)}</h3>
+                    </div>
+                    
+                    <div class="rounded-xl border border-gray-200 bg-white p-5 flex flex-col">
+                        <div class="flex items-start gap-3 flex-1">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-100">
+                                <svg class="h-5 w-5 shrink-0 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="!text-base font-medium text-gray-500">Largest Facility</p>
+                            </div>
+                        </div>
+                        <h3 class="!text-2xl font-bold text-gray-900 text-center mt-3">${formatCurrency(largestFacility)}</h3>
+                    </div>
+                    
+                    <div class="rounded-xl border border-gray-200 bg-white p-5 flex flex-col">
+                        <div class="flex items-start gap-3 flex-1">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-100">
+                                <svg class="h-5 w-5 shrink-0 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="!text-base font-medium text-gray-500">Top 10 Concentration</p>
+                            </div>
+                        </div>
+                        <h3 class="!text-2xl font-bold text-gray-900 text-center mt-3">${concentrationPct.toFixed(1)}%</h3>
+                    </div>
+                </div>
+                
+                <!-- Charts Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Regional Distribution -->
+                    <div class="rounded-xl border border-gray-200 bg-white flex flex-col">
+                        <div class="border-b border-gray-200 px-6 py-4">
+                            <h3 class="text-base font-semibold text-gray-900">Regional Distribution</h3>
+                            <p class="!text-base font-medium text-gray-500 mt-1">Unused Uncommitted by region</p>
+                        </div>
+                        <div class="flex-1 overflow-hidden">
+                            <div id="unusedUncommittedRegionalTable" class="h-full"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Unused Uncommitted by Product Program - Donut Chart with Legends -->
+                    <div class="rounded-xl border border-gray-200 bg-white">
+                        <div class="border-b border-gray-200 px-6 py-4">
+                            <h3 class="text-base font-semibold text-gray-900">Unused Uncommitted by Product Program</h3>
+                            <p class="!text-base font-medium text-gray-500 mt-1">Distribution across product programs</p>
+                        </div>
+                        <div class="p-6 flex items-center justify-center" style="min-height: 400px;">
+                            <div class="flex flex-row items-center justify-center gap-8">
+                                <!-- Donut Chart -->
+                                <div class="flex-shrink-0">
+                                    <div id="unusedUncommittedProgramDonutChart"></div>
+                                </div>
+                                
+                                <!-- Legend / Details List - Right Side -->
+                                <div class="flex-1 max-w-md">
+                                    <div id="unusedUncommittedProgramList" class="space-y-3">
+                                        ${sortedPrograms.map(([program, amount], index) => {
+                    const colors = ["#3641f5", "#7592ff", "#a8c5ff", "#ff6b6b", "#ffd93d", "#6bcf7f", "#c084fc"];
+                    const color = colors[index % colors.length];
+                    const formattedAmount = amount >= 1000000000
+                        ? `$${(amount / 1000000000).toFixed(2)}B`
+                        : `$${(amount / 1000000).toFixed(1)}M`;
+                    // Calculate percentage
+                    const percentage = ((amount / totalUnusedUncommitted) * 100).toFixed(1);
+                    return `
+                                                <div class="flex items-center gap-3 py-2">
+                                                    <div class="w-4 h-4 rounded-sm flex-shrink-0" style="background-color: ${color};"></div>
+                                                    <p class="!text-base font-medium text-gray-800 flex-1">${program}</p>
+                                                    <p class="!text-base font-semibold text-gray-900">${formattedAmount} <span class="text-gray-500 font-normal">• ${percentage}%</span></p>
+                                                </div>
+                                            `;
+                }).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Detailed Table -->
+                <div class="rounded-2xl border border-gray-200 bg-white mt-6">
+                    <div class="px-6 py-4">
+                        <h3 class="!text-lg font-semibold text-gray-800">Unused Uncommitted by Underwriter (Top 10)</h3>
+                        <p class="!text-base font-medium text-gray-500 mt-1">Underwriter portfolio breakdown</p>
+                    </div>
+                    <div class="custom-scrollbar overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Underwriter</th>
+                                    <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Region</th>
+                                    <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Unused Uncommitted</th>
+                                    <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Share %</th>
+                                    <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Facilities</th>
+                                    <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">Relationships</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                ${tableRows.map(row => {
+                    const sharePct = totalUnusedUncommitted > 0 ? (row.unusedUncommitted / totalUnusedUncommitted * 100) : 0;
+                    const regionColors = {
+                        'APAC': 'bg-blue-50 text-blue-600',
+                        'EMEA': 'bg-green-50 text-green-600',
+                        'NAM': 'bg-orange-50 text-orange-600',
+                        'LATAM': 'bg-purple-50 text-purple-600'
+                    };
+                    const regionColor = regionColors[row.region] || 'bg-gray-50 text-gray-600';
+
+                    return `
+                                        <tr>
+                                            <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">${row.underwriter}</td>
+                                            <td class="px-6 py-4 text-center">
+                                                <span class="${regionColor} rounded-full px-2 py-0.5 !text-base font-medium">
+                                                    ${row.region}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(row.unusedUncommitted)}</td>
                                             <td class="px-6 py-4 text-center">
                                                 <div class="flex items-center justify-center gap-2">
                                                     <div class="flex-1 min-w-[80px] max-w-[120px]">
