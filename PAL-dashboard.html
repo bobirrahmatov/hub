@@ -248,7 +248,7 @@
         }
 
         .tooltip-widget {
-            background: #F9FAFB;
+            background: transparent;
             border-radius: 8px;
             padding: 12px;
             border: 1px solid #E5E7EB;
@@ -258,24 +258,24 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 14px;
+            font-size: 14px !important;
             color: #6B7280;
             font-weight: 500;
             margin-bottom: 6px;
         }
 
         .tooltip-widget-value {
-            font-size: 20px;
+            font-size: 20px !important;
             font-weight: 700;
             color: #111827;
         }
 
         .tooltip-widget-value.medium {
-            font-size: 18px;
+            font-size: 18px !important;
         }
 
         .tooltip-widget-value.small {
-            font-size: 16px;
+            font-size: 16px !important;
         }
 
         .tooltip-section-title {
@@ -283,7 +283,7 @@
             align-items: center;
             gap: 6px;
             margin-bottom: 8px;
-            font-size: 14px;
+            font-size: 14px !important;
             font-weight: 600;
             color: #374151;
         }
@@ -300,7 +300,7 @@
         .tooltip-table th {
             padding: 6px 8px;
             text-align: left;
-            font-size: 12px;
+            font-size: 12px !important;
             color: #6B7280;
             font-weight: 600;
             text-transform: uppercase;
@@ -312,7 +312,7 @@
 
         .tooltip-table td {
             padding: 6px 8px;
-            font-size: 14px;
+            font-size: 14px !important;
             color: #6B7280;
             font-weight: 500;
         }
@@ -6586,9 +6586,9 @@
                                     const regionExposure = getRegionalExposure(regionData);
                                     regionalRows += `
                                     <tr>
-                                        <td style="padding: 6px 8px; text-align: left; font-size: 11px; color: #6B7280; font-weight: 500;">${region}</td>
-                                        <td style="padding: 6px 8px; text-align: center; font-size: 11px; color: #111827; font-weight: 600;">${regionData.count}</td>
-                                        <td style="padding: 6px 8px; text-align: right; font-size: 11px; color: #111827; font-weight: 600;">${formatCurrency(regionExposure)}</td>
+                                        <td style="padding: 6px 8px; text-align: left; font-size: 14px !important; color: #6B7280; font-weight: 500;">${region}</td>
+                                        <td style="padding: 6px 8px; text-align: center; font-size: 14px !important; color: #111827; font-weight: 600;">${regionData.count}</td>
+                                        <td style="padding: 6px 8px; text-align: right; font-size: 14px !important; color: #111827; font-weight: 600;">${formatCurrency(regionExposure)}</td>
                                     </tr>
                                 `;
                                 }
@@ -6636,7 +6636,7 @@
                                     ">
                                         <!-- Widget 1: Facility Count -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -6650,7 +6650,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                                                 </svg>
@@ -6665,7 +6665,7 @@
                                         
                                         <!-- Widget 2: Selected Exposure -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -6679,7 +6679,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <line x1="12" y1="1" x2="12" y2="23"></line>
                                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                                 </svg>
@@ -6694,7 +6694,7 @@
                                         
                                         <!-- Widget 3: % of Total -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -6708,7 +6708,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <circle cx="12" cy="12" r="10"></circle>
                                                     <polyline points="12 6 12 12 16 14"></polyline>
                                                 </svg>
@@ -6728,24 +6728,24 @@
                                         gap: 8px;
                                         margin-bottom: 16px;
                                         padding: 10px 12px;
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 6px;
                                         border: 1px solid #E5E7EB;
                                     ">
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">TFA</div>
-                                            <div style="font-size: 13px; font-weight: 600; color: #111827;">${formatCurrency(data.tfa)}</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">TFA</div>
+                                            <div style="font-size: 14px !important; font-weight: 600; color: #111827;">${formatCurrency(data.tfa)}</div>
                                         </div>
                                         <div style="width: 1px; background: #E5E7EB;"></div>
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Direct</div>
-                                            <div style="font-size: 13px; font-weight: 600; color: #111827;">${formatCurrency(data.direct)}</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Direct</div>
+                                            <div style="font-size: 14px !important; font-weight: 600; color: #111827;">${formatCurrency(data.direct)}</div>
                                         </div>
                                         ${data.osuc > 0 ? `
                                         <div style="width: 1px; background: #E5E7EB;"></div>
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">OSUC</div>
-                                            <div style="font-size: 13px; font-weight: 600; color: #111827;">${formatCurrency(data.osuc)}</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">OSUC</div>
+                                            <div style="font-size: 14px !important; font-weight: 600; color: #111827;">${formatCurrency(data.osuc)}</div>
                                         </div>
                                         ` : ''}
                                     </div>
@@ -6758,7 +6758,7 @@
                                             gap: 6px;
                                             margin-bottom: 8px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
                                                 <circle cx="12" cy="12" r="10"></circle>
                                                 <line x1="2" y1="12" x2="22" y2="12"></line>
                                                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -6778,7 +6778,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                ${regionalRows || '<tr><td colspan="3" style="padding: 8px; text-align: center; font-size: 11px; color: #9CA3AF;">No data</td></tr>'}
+                                                ${regionalRows || '<tr><td colspan="3" style="padding: 8px; text-align: center; font-size: 14px !important; color: #9CA3AF;">No data</td></tr>'}
                                             </tbody>
                                         </table>
                                     </div>
@@ -9100,8 +9100,8 @@
                                 if (regionCount > 0) {
                                     regionalRows += `
                                     <tr>
-                                        <td style="padding: 6px 8px; text-align: left; font-size: 11px; color: #6B7280; font-weight: 500;">${region}</td>
-                                        <td style="padding: 6px 8px; text-align: right; font-size: 11px; color: #111827; font-weight: 600;">${regionCount}</td>
+                                        <td style="padding: 6px 8px; text-align: left; font-size: 14px !important; color: #6B7280; font-weight: 500;">${region}</td>
+                                        <td style="padding: 6px 8px; text-align: right; font-size: 14px !important; color: #111827; font-weight: 600;">${regionCount}</td>
                                     </tr>
                                 `;
                                 }
@@ -9149,7 +9149,7 @@
                                     ">
                                         <!-- Widget 1: Count -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 12px;
                                             border: 1px solid #E5E7EB;
@@ -9158,12 +9158,12 @@
                                                 display: flex;
                                                 align-items: center;
                                                 gap: 6px;
-                                                font-size: 11px;
+                                                font-size: 14px !important;
                                                 color: #6B7280;
                                                 font-weight: 500;
                                                 margin-bottom: 6px;
                                             ">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <path d="M9 11l3 3L22 4"></path>
                                                     <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
                                                 </svg>
@@ -9178,7 +9178,7 @@
                                         
                                         <!-- Widget 2: % of Total -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 12px;
                                             border: 1px solid #E5E7EB;
@@ -9187,12 +9187,12 @@
                                                 display: flex;
                                                 align-items: center;
                                                 gap: 6px;
-                                                font-size: 11px;
+                                                font-size: 14px !important;
                                                 color: #6B7280;
                                                 font-weight: 500;
                                                 margin-bottom: 6px;
                                             ">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <circle cx="12" cy="12" r="10"></circle>
                                                     <path d="M12 6v6l4 2"></path>
                                                 </svg>
@@ -9214,7 +9214,7 @@
                                             gap: 6px;
                                             margin-bottom: 8px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
                                                 <circle cx="12" cy="12" r="10"></circle>
                                                 <line x1="2" y1="12" x2="22" y2="12"></line>
                                                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -9233,7 +9233,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                ${regionalRows || '<tr><td colspan="2" style="padding: 8px; text-align: center; font-size: 11px; color: #9CA3AF;">No data</td></tr>'}
+                                                ${regionalRows || '<tr><td colspan="2" style="padding: 8px; text-align: center; font-size: 14px !important; color: #9CA3AF;">No data</td></tr>'}
                                             </tbody>
                                         </table>
                                     </div>
@@ -9816,7 +9816,7 @@
                                 <div style="padding: 0 16px 16px 16px;">
                                     <!-- Total CCMs Widget -->
                                     <div style="
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 8px;
                                         padding: 12px;
                                         border: 1px solid #E5E7EB;
@@ -9824,7 +9824,7 @@
                                         text-align: center;
                                     ">
                                         <div style="
-                                            font-size: 11px;
+                                            font-size: 14px !important;
                                             color: #6B7280;
                                             font-weight: 500;
                                             margin-bottom: 6px;
@@ -9844,7 +9844,7 @@
                                             gap: 6px;
                                             margin-bottom: 8px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
                                                 <rect x="3" y="3" width="7" height="7"></rect>
                                                 <rect x="14" y="3" width="7" height="7"></rect>
                                                 <rect x="14" y="14" width="7" height="7"></rect>
@@ -9867,32 +9867,32 @@
                                             <tbody>
                                                 ${pastDue > 0 ? `
                                                     <tr>
-                                                        <td style="padding: 6px 8px; text-align: left; font-size: 11px; color: #6B7280; font-weight: 500;">
+                                                        <td style="padding: 6px 8px; text-align: left; font-size: 14px !important; color: #6B7280; font-weight: 500;">
                                                             <span style="display: inline-block; width: 8px; height: 8px; background: #2a31d8; border-radius: 2px; margin-right: 6px;"></span>
                                                             Past Due
                                                         </td>
-                                                        <td style="padding: 6px 8px; text-align: center; font-size: 11px; color: #111827; font-weight: 600;">${pastDue}</td>
-                                                        <td style="padding: 6px 8px; text-align: right; font-size: 11px; color: #111827; font-weight: 600;">${pastDuePct}%</td>
+                                                        <td style="padding: 6px 8px; text-align: center; font-size: 14px !important; color: #111827; font-weight: 600;">${pastDue}</td>
+                                                        <td style="padding: 6px 8px; text-align: right; font-size: 14px !important; color: #111827; font-weight: 600;">${pastDuePct}%</td>
                                                     </tr>
                                                 ` : ""}
                                                 ${comingDue > 0 ? `
                                                     <tr>
-                                                        <td style="padding: 6px 8px; text-align: left; font-size: 11px; color: #6B7280; font-weight: 500;">
+                                                        <td style="padding: 6px 8px; text-align: left; font-size: 14px !important; color: #6B7280; font-weight: 500;">
                                                             <span style="display: inline-block; width: 8px; height: 8px; background: #465fff; border-radius: 2px; margin-right: 6px;"></span>
                                                             Coming Due
                                                         </td>
-                                                        <td style="padding: 6px 8px; text-align: center; font-size: 11px; color: #111827; font-weight: 600;">${comingDue}</td>
-                                                        <td style="padding: 6px 8px; text-align: right; font-size: 11px; color: #111827; font-weight: 600;">${comingDuePct}%</td>
+                                                        <td style="padding: 6px 8px; text-align: center; font-size: 14px !important; color: #111827; font-weight: 600;">${comingDue}</td>
+                                                        <td style="padding: 6px 8px; text-align: right; font-size: 14px !important; color: #111827; font-weight: 600;">${comingDuePct}%</td>
                                                     </tr>
                                                 ` : ""}
                                                 ${open > 0 ? `
                                                     <tr>
-                                                        <td style="padding: 6px 8px; text-align: left; font-size: 11px; color: #6B7280; font-weight: 500;">
+                                                        <td style="padding: 6px 8px; text-align: left; font-size: 14px !important; color: #6B7280; font-weight: 500;">
                                                             <span style="display: inline-block; width: 8px; height: 8px; background: #7592ff; border-radius: 2px; margin-right: 6px;"></span>
                                                             Open
                                                         </td>
-                                                        <td style="padding: 6px 8px; text-align: center; font-size: 11px; color: #111827; font-weight: 600;">${open}</td>
-                                                        <td style="padding: 6px 8px; text-align: right; font-size: 11px; color: #111827; font-weight: 600;">${openPct}%</td>
+                                                        <td style="padding: 6px 8px; text-align: center; font-size: 14px !important; color: #111827; font-weight: 600;">${open}</td>
+                                                        <td style="padding: 6px 8px; text-align: right; font-size: 14px !important; color: #111827; font-weight: 600;">${openPct}%</td>
                                                     </tr>
                                                 ` : ""}
                                             </tbody>
@@ -10793,11 +10793,22 @@
                                     }
                                 });
                                 // Count unique relationships per region
+                                const countedRelationships = new Set();
                                 portfolioData.forEach((row) => {
                                     if (monthData.casComingDueByRelationship.has(row.Relationship_ID)) {
-                                        const region = (row.Region || "").toUpperCase();
-                                        if (regionalData[region]) {
-                                            regionalData[region].count++;
+                                        const caExpirationDate = row.CA_Expiration_Date;
+                                        const dateObj = parseDate(caExpirationDate);
+                                        if (dateObj) {
+                                            const year = dateObj.getFullYear();
+                                            const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+                                            const rowMonthKey = `${year}-${month}`;
+                                            if (rowMonthKey === monthKey) {
+                                                const region = (row.Region || "").toUpperCase();
+                                                if (regionalData[region] && !countedRelationships.has(row.Relationship_ID)) {
+                                                    regionalData[region].count++;
+                                                    countedRelationships.add(row.Relationship_ID);
+                                                }
+                                            }
                                         }
                                     }
                                 });
@@ -10871,7 +10882,7 @@
                                 ">
                                     <!-- Widget 1: Total Relationships -->
                                     <div style="
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 8px;
                                         padding: 12px;
                                         border: 1px solid #E5E7EB;
@@ -10880,12 +10891,12 @@
                                             display: flex;
                                             align-items: center;
                                             gap: 6px;
-                                            font-size: 11px;
+                                            font-size: 14px !important;
                                             color: #6B7280;
                                             font-weight: 500;
                                             margin-bottom: 6px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                                                 <circle cx="9" cy="7" r="4"></circle>
                                                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -10902,7 +10913,7 @@
                                     
                                     <!-- Widget 2: Total TFA -->
                                     <div style="
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 8px;
                                         padding: 12px;
                                         border: 1px solid #E5E7EB;
@@ -10911,12 +10922,12 @@
                                             display: flex;
                                             align-items: center;
                                             gap: 6px;
-                                            font-size: 11px;
+                                            font-size: 14px !important;
                                             color: #6B7280;
                                             font-weight: 500;
                                             margin-bottom: 6px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <line x1="12" y1="1" x2="12" y2="23"></line>
                                                 <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                             </svg>
@@ -10941,14 +10952,14 @@
                                         display: flex;
                                         align-items: center;
                                         gap: 6px;
-                                        font-size: 11px;
+                                        font-size: 14px !important;
                                         color: #6B7280;
                                         font-weight: 600;
                                         margin-bottom: 10px;
                                         text-transform: uppercase;
                                         letter-spacing: 0.5px;
                                     ">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <circle cx="12" cy="12" r="10"></circle>
                                             <line x1="2" y1="12" x2="22" y2="12"></line>
                                             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -11030,7 +11041,7 @@
                                 ">
                                     <!-- Widget 1: Total Facilities -->
                                     <div style="
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 8px;
                                         padding: 12px;
                                         border: 1px solid #E5E7EB;
@@ -11039,12 +11050,12 @@
                                             display: flex;
                                             align-items: center;
                                             gap: 6px;
-                                            font-size: 11px;
+                                            font-size: 14px !important;
                                             color: #6B7280;
                                             font-weight: 500;
                                             margin-bottom: 6px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
                                             </svg>
@@ -11059,7 +11070,7 @@
                                     
                                     <!-- Widget 2: Total TFA -->
                                     <div style="
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 8px;
                                         padding: 12px;
                                         border: 1px solid #E5E7EB;
@@ -11068,12 +11079,12 @@
                                             display: flex;
                                             align-items: center;
                                             gap: 6px;
-                                            font-size: 11px;
+                                            font-size: 14px !important;
                                             color: #6B7280;
                                             font-weight: 500;
                                             margin-bottom: 6px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <line x1="12" y1="1" x2="12" y2="23"></line>
                                                 <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                             </svg>
@@ -11098,14 +11109,14 @@
                                         display: flex;
                                         align-items: center;
                                         gap: 6px;
-                                        font-size: 11px;
+                                        font-size: 14px !important;
                                         color: #6B7280;
                                         font-weight: 600;
                                         margin-bottom: 10px;
                                         text-transform: uppercase;
                                         letter-spacing: 0.5px;
                                     ">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <circle cx="12" cy="12" r="10"></circle>
                                             <line x1="2" y1="12" x2="22" y2="12"></line>
                                             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -11644,7 +11655,7 @@
                                 ">
                                     <!-- Widget 1: Total Relationships -->
                                     <div style="
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 8px;
                                         padding: 12px;
                                         border: 1px solid #E5E7EB;
@@ -11653,12 +11664,12 @@
                                             display: flex;
                                             align-items: center;
                                             gap: 6px;
-                                            font-size: 11px;
+                                            font-size: 14px !important;
                                             color: #6B7280;
                                             font-weight: 500;
                                             margin-bottom: 6px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                                                 <circle cx="9" cy="7" r="4"></circle>
                                                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -11675,7 +11686,7 @@
                                     
                                     <!-- Widget 2: Total TFA -->
                                     <div style="
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 8px;
                                         padding: 12px;
                                         border: 1px solid #E5E7EB;
@@ -11684,12 +11695,12 @@
                                             display: flex;
                                             align-items: center;
                                             gap: 6px;
-                                            font-size: 11px;
+                                            font-size: 14px !important;
                                             color: #6B7280;
                                             font-weight: 500;
                                             margin-bottom: 6px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <line x1="12" y1="1" x2="12" y2="23"></line>
                                                 <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                             </svg>
@@ -11714,14 +11725,14 @@
                                         display: flex;
                                         align-items: center;
                                         gap: 6px;
-                                        font-size: 11px;
+                                        font-size: 14px !important;
                                         color: #6B7280;
                                         font-weight: 600;
                                         margin-bottom: 10px;
                                         text-transform: uppercase;
                                         letter-spacing: 0.5px;
                                     ">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <circle cx="12" cy="12" r="10"></circle>
                                             <line x1="2" y1="12" x2="22" y2="12"></line>
                                             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -11803,7 +11814,7 @@
                                 ">
                                     <!-- Widget 1: Total Facilities -->
                                     <div style="
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 8px;
                                         padding: 12px;
                                         border: 1px solid #E5E7EB;
@@ -11812,12 +11823,12 @@
                                             display: flex;
                                             align-items: center;
                                             gap: 6px;
-                                            font-size: 11px;
+                                            font-size: 14px !important;
                                             color: #6B7280;
                                             font-weight: 500;
                                             margin-bottom: 6px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
                                             </svg>
@@ -11832,7 +11843,7 @@
                                     
                                     <!-- Widget 2: Total TFA -->
                                     <div style="
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 8px;
                                         padding: 12px;
                                         border: 1px solid #E5E7EB;
@@ -11841,12 +11852,12 @@
                                             display: flex;
                                             align-items: center;
                                             gap: 6px;
-                                            font-size: 11px;
+                                            font-size: 14px !important;
                                             color: #6B7280;
                                             font-weight: 500;
                                             margin-bottom: 6px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <line x1="12" y1="1" x2="12" y2="23"></line>
                                                 <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                             </svg>
@@ -11871,14 +11882,14 @@
                                         display: flex;
                                         align-items: center;
                                         gap: 6px;
-                                        font-size: 11px;
+                                        font-size: 14px !important;
                                         color: #6B7280;
                                         font-weight: 600;
                                         margin-bottom: 10px;
                                         text-transform: uppercase;
                                         letter-spacing: 0.5px;
                                     ">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <circle cx="12" cy="12" r="10"></circle>
                                             <line x1="2" y1="12" x2="22" y2="12"></line>
                                             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -12581,9 +12592,9 @@
                                     const regionExposure = getRegionalExposure(regionData);
                                     regionalRows += `
                                     <tr>
-                                        <td style="padding: 6px 8px; text-align: left; font-size: 11px; color: #6B7280; font-weight: 500;">${region}</td>
-                                        <td style="padding: 6px 8px; text-align: center; font-size: 11px; color: #111827; font-weight: 600;">${regionData.count}</td>
-                                        <td style="padding: 6px 8px; text-align: right; font-size: 11px; color: #111827; font-weight: 600;">${formatCurrency(regionExposure)}</td>
+                                        <td style="padding: 6px 8px; text-align: left; font-size: 14px !important; color: #6B7280; font-weight: 500;">${region}</td>
+                                        <td style="padding: 6px 8px; text-align: center; font-size: 14px !important; color: #111827; font-weight: 600;">${regionData.count}</td>
+                                        <td style="padding: 6px 8px; text-align: right; font-size: 14px !important; color: #111827; font-weight: 600;">${formatCurrency(regionExposure)}</td>
                                     </tr>
                                 `;
                                 }
@@ -12631,7 +12642,7 @@
                                     ">
                                         <!-- Widget 1: Facility Count -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -12645,7 +12656,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                                                 </svg>
@@ -12660,7 +12671,7 @@
                                         
                                         <!-- Widget 2: Selected Exposure -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -12674,7 +12685,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <line x1="12" y1="1" x2="12" y2="23"></line>
                                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                                 </svg>
@@ -12689,7 +12700,7 @@
                                         
                                         <!-- Widget 3: % of Total -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -12703,7 +12714,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <circle cx="12" cy="12" r="10"></circle>
                                                     <polyline points="12 6 12 12 16 14"></polyline>
                                                 </svg>
@@ -12723,24 +12734,24 @@
                                         gap: 8px;
                                         margin-bottom: 16px;
                                         padding: 10px 12px;
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 6px;
                                         border: 1px solid #E5E7EB;
                                     ">
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">TFA</div>
-                                            <div style="font-size: 13px; font-weight: 600; color: #111827;">${formatCurrency(data.tfa)}</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">TFA</div>
+                                            <div style="font-size: 14px !important; font-weight: 600; color: #111827;">${formatCurrency(data.tfa)}</div>
                                         </div>
                                         <div style="width: 1px; background: #E5E7EB;"></div>
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Direct</div>
-                                            <div style="font-size: 13px; font-weight: 600; color: #111827;">${formatCurrency(data.direct)}</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Direct</div>
+                                            <div style="font-size: 14px !important; font-weight: 600; color: #111827;">${formatCurrency(data.direct)}</div>
                                         </div>
                                         ${data.osuc > 0 ? `
                                         <div style="width: 1px; background: #E5E7EB;"></div>
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">OSUC</div>
-                                            <div style="font-size: 13px; font-weight: 600; color: #111827;">${formatCurrency(data.osuc)}</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">OSUC</div>
+                                            <div style="font-size: 14px !important; font-weight: 600; color: #111827;">${formatCurrency(data.osuc)}</div>
                                         </div>
                                         ` : ''}
                                     </div>
@@ -12753,7 +12764,7 @@
                                             gap: 6px;
                                             margin-bottom: 8px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
                                                 <circle cx="12" cy="12" r="10"></circle>
                                                 <line x1="2" y1="12" x2="22" y2="12"></line>
                                                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -12773,7 +12784,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                ${regionalRows || '<tr><td colspan="3" style="padding: 8px; text-align: center; font-size: 11px; color: #9CA3AF;">No data</td></tr>'}
+                                                ${regionalRows || '<tr><td colspan="3" style="padding: 8px; text-align: center; font-size: 14px !important; color: #9CA3AF;">No data</td></tr>'}
                                             </tbody>
                                         </table>
                                     </div>
@@ -13025,7 +13036,7 @@
                     ) {
                         productNewFacilities.get(productProgram).add(facilityId);
                         totalNewCount++;
-                        const tfaAmount = parseNumber(row.Facility_Amount);
+                        const tfaAmount = parseNumber(row.Fac_Amount || row.Facility_Amount);
                         // Accumulate amounts for new facilities
                         const amounts = productAmounts.get(productProgram);
                         amounts.tfa += tfaAmount;
@@ -13194,9 +13205,9 @@
                                 if (regionData && regionData.count > 0) {
                                     regionalRows += `
                                     <tr>
-                                        <td style="padding: 6px 8px; text-align: left; font-size: 11px; color: #6B7280; font-weight: 500;">${region}</td>
-                                        <td style="padding: 6px 8px; text-align: center; font-size: 11px; color: #111827; font-weight: 600;">${regionData.count}</td>
-                                        <td style="padding: 6px 8px; text-align: right; font-size: 11px; color: #111827; font-weight: 600;">${formatCurrency(regionData.tfa)}</td>
+                                        <td style="padding: 6px 8px; text-align: left; font-size: 14px !important; color: #6B7280; font-weight: 500;">${region}</td>
+                                        <td style="padding: 6px 8px; text-align: center; font-size: 14px !important; color: #111827; font-weight: 600;">${regionData.count}</td>
+                                        <td style="padding: 6px 8px; text-align: right; font-size: 14px !important; color: #111827; font-weight: 600;">${formatCurrency(regionData.tfa)}</td>
                                     </tr>
                                 `;
                                 }
@@ -13244,7 +13255,7 @@
                                     ">
                                         <!-- Widget 1: Facility Count -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -13258,7 +13269,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                                                 </svg>
@@ -13273,7 +13284,7 @@
                                         
                                         <!-- Widget 2: TFA -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -13287,7 +13298,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <line x1="12" y1="1" x2="12" y2="23"></line>
                                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                                 </svg>
@@ -13302,7 +13313,7 @@
                                         
                                         <!-- Widget 3: % of Total -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -13316,7 +13327,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <circle cx="12" cy="12" r="10"></circle>
                                                     <polyline points="12 6 12 12 16 14"></polyline>
                                                 </svg>
@@ -13336,26 +13347,26 @@
                                         gap: 8px;
                                         margin-bottom: 16px;
                                         padding: 10px 12px;
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 6px;
                                         border: 1px solid #E5E7EB;
                                     ">
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Direct OS</div>
-                                            <div style="font-size: 13px; font-weight: 600; color: #111827;">${formatCurrency(amounts.direct)}</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Direct OS</div>
+                                            <div style="font-size: 14px !important; font-weight: 600; color: #111827;">${formatCurrency(amounts.direct)}</div>
                                         </div>
                                         ${amounts.contingent > 0 ? `
                                         <div style="width: 1px; background: #E5E7EB;"></div>
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Contingent</div>
-                                            <div style="font-size: 13px; font-weight: 600; color: #111827;">${formatCurrency(amounts.contingent)}</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Contingent</div>
+                                            <div style="font-size: 14px !important; font-weight: 600; color: #111827;">${formatCurrency(amounts.contingent)}</div>
                                         </div>
                                         ` : ''}
                                         ${amounts.pse > 0 ? `
                                         <div style="width: 1px; background: #E5E7EB;"></div>
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">PSE</div>
-                                            <div style="font-size: 13px; font-weight: 600; color: #111827;">${formatCurrency(amounts.pse)}</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">PSE</div>
+                                            <div style="font-size: 14px !important; font-weight: 600; color: #111827;">${formatCurrency(amounts.pse)}</div>
                                         </div>
                                         ` : ''}
                                     </div>
@@ -13368,7 +13379,7 @@
                                             gap: 6px;
                                             margin-bottom: 8px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
                                                 <circle cx="12" cy="12" r="10"></circle>
                                                 <line x1="2" y1="12" x2="22" y2="12"></line>
                                                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -13388,7 +13399,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                ${regionalRows || '<tr><td colspan="3" style="padding: 8px; text-align: center; font-size: 11px; color: #9CA3AF;">No data</td></tr>'}
+                                                ${regionalRows || '<tr><td colspan="3" style="padding: 8px; text-align: center; font-size: 14px !important; color: #9CA3AF;">No data</td></tr>'}
                                             </tbody>
                                         </table>
                                     </div>
@@ -13631,7 +13642,7 @@
                     ) {
                         productNewFacilities.get(productProgram).add(facilityId);
                         totalNewCount++;
-                        const tfaAmount = parseNumber(row.Facility_Amount);
+                        const tfaAmount = parseNumber(row.Fac_Amount || row.Facility_Amount);
                         // Accumulate amounts for new facilities
                         const amounts = productAmounts.get(productProgram);
                         amounts.tfa += tfaAmount;
@@ -13800,9 +13811,9 @@
                                 if (regionData && regionData.count > 0) {
                                     regionalRows += `
                                     <tr>
-                                        <td style="padding: 6px 8px; text-align: left; font-size: 11px; color: #6B7280; font-weight: 500;">${region}</td>
-                                        <td style="padding: 6px 8px; text-align: center; font-size: 11px; color: #111827; font-weight: 600;">${regionData.count}</td>
-                                        <td style="padding: 6px 8px; text-align: right; font-size: 11px; color: #111827; font-weight: 600;">${formatCurrency(regionData.tfa)}</td>
+                                        <td style="padding: 6px 8px; text-align: left; font-size: 14px !important; color: #6B7280; font-weight: 500;">${region}</td>
+                                        <td style="padding: 6px 8px; text-align: center; font-size: 14px !important; color: #111827; font-weight: 600;">${regionData.count}</td>
+                                        <td style="padding: 6px 8px; text-align: right; font-size: 14px !important; color: #111827; font-weight: 600;">${formatCurrency(regionData.tfa)}</td>
                                     </tr>
                                 `;
                                 }
@@ -13850,7 +13861,7 @@
                                     ">
                                         <!-- Widget 1: Facility Count -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -13864,7 +13875,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                                                 </svg>
@@ -13879,7 +13890,7 @@
                                         
                                         <!-- Widget 2: TFA -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -13893,7 +13904,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <line x1="12" y1="1" x2="12" y2="23"></line>
                                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                                 </svg>
@@ -13908,7 +13919,7 @@
                                         
                                         <!-- Widget 3: % of Total -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -13922,7 +13933,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <circle cx="12" cy="12" r="10"></circle>
                                                     <polyline points="12 6 12 12 16 14"></polyline>
                                                 </svg>
@@ -13942,26 +13953,26 @@
                                         gap: 8px;
                                         margin-bottom: 16px;
                                         padding: 10px 12px;
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 6px;
                                         border: 1px solid #E5E7EB;
                                     ">
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Direct OS</div>
-                                            <div style="font-size: 13px; font-weight: 600; color: #111827;">${formatCurrency(amounts.direct)}</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Direct OS</div>
+                                            <div style="font-size: 14px !important; font-weight: 600; color: #111827;">${formatCurrency(amounts.direct)}</div>
                                         </div>
                                         ${amounts.contingent > 0 ? `
                                         <div style="width: 1px; background: #E5E7EB;"></div>
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Contingent</div>
-                                            <div style="font-size: 13px; font-weight: 600; color: #111827;">${formatCurrency(amounts.contingent)}</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Contingent</div>
+                                            <div style="font-size: 14px !important; font-weight: 600; color: #111827;">${formatCurrency(amounts.contingent)}</div>
                                         </div>
                                         ` : ''}
                                         ${amounts.pse > 0 ? `
                                         <div style="width: 1px; background: #E5E7EB;"></div>
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">PSE</div>
-                                            <div style="font-size: 13px; font-weight: 600; color: #111827;">${formatCurrency(amounts.pse)}</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">PSE</div>
+                                            <div style="font-size: 14px !important; font-weight: 600; color: #111827;">${formatCurrency(amounts.pse)}</div>
                                         </div>
                                         ` : ''}
                                     </div>
@@ -13974,7 +13985,7 @@
                                             gap: 6px;
                                             margin-bottom: 8px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
                                                 <circle cx="12" cy="12" r="10"></circle>
                                                 <line x1="2" y1="12" x2="22" y2="12"></line>
                                                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -13994,7 +14005,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                ${regionalRows || '<tr><td colspan="3" style="padding: 8px; text-align: center; font-size: 11px; color: #9CA3AF;">No data</td></tr>'}
+                                                ${regionalRows || '<tr><td colspan="3" style="padding: 8px; text-align: center; font-size: 14px !important; color: #9CA3AF;">No data</td></tr>'}
                                             </tbody>
                                         </table>
                                     </div>
@@ -14481,9 +14492,9 @@
                                 if (regionData && regionData.count > 0) {
                                     regionalRows += `
                                     <tr>
-                                        <td style="padding: 6px 8px; text-align: left; font-size: 11px; color: #6B7280; font-weight: 500;">${regionKey}</td>
-                                        <td style="padding: 6px 8px; text-align: center; font-size: 11px; color: #111827; font-weight: 600;">${regionData.count}</td>
-                                        <td style="padding: 6px 8px; text-align: right; font-size: 11px; color: #111827; font-weight: 600;">${formatCurrency(regionData.tfa)}</td>
+                                        <td style="padding: 6px 8px; text-align: left; font-size: 14px !important; color: #6B7280; font-weight: 500;">${regionKey}</td>
+                                        <td style="padding: 6px 8px; text-align: center; font-size: 14px !important; color: #111827; font-weight: 600;">${regionData.count}</td>
+                                        <td style="padding: 6px 8px; text-align: right; font-size: 14px !important; color: #111827; font-weight: 600;">${formatCurrency(regionData.tfa)}</td>
                                     </tr>
                                 `;
                                 }
@@ -14560,7 +14571,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                                                 </svg>
                                                 ROTCE
@@ -14574,7 +14585,7 @@
                                         
                                         <!-- Widget 2: Facilities -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -14588,7 +14599,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                                                 </svg>
@@ -14603,7 +14614,7 @@
                                         
                                         <!-- Widget 3: TFA -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -14617,7 +14628,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <line x1="12" y1="1" x2="12" y2="23"></line>
                                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                                 </svg>
@@ -14637,22 +14648,22 @@
                                         gap: 8px;
                                         margin-bottom: 16px;
                                         padding: 10px 12px;
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 6px;
                                         border: 1px solid #E5E7EB;
                                     ">
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Status</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Status</div>
                                             <div style="font-size: 13px; font-weight: 600; color: ${rotceColor};">${rotceStatus}</div>
                                         </div>
                                         <div style="width: 1px; background: #E5E7EB;"></div>
                                         <div style="flex: 1; text-align: center;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Min ROTCE</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Min ROTCE</div>
                                             <div style="font-size: 13px; font-weight: 600; color: ${minROTCE >= 12 ? '#10B981' : '#EF4444'};">${minROTCE.toFixed(1)}%</div>
                                         </div>
                                         <div style="width: 1px; background: #E5E7EB;"></div>
                                         <div style="flex: 1; text-align: right;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Max ROTCE</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Max ROTCE</div>
                                             <div style="font-size: 13px; font-weight: 600; color: ${maxROTCE >= 12 ? '#10B981' : '#EF4444'};">${maxROTCE.toFixed(1)}%</div>
                                         </div>
                                     </div>
@@ -14665,7 +14676,7 @@
                                             gap: 6px;
                                             margin-bottom: 8px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
                                                 <circle cx="12" cy="12" r="10"></circle>
                                                 <line x1="2" y1="12" x2="22" y2="12"></line>
                                                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -14685,7 +14696,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                ${regionalRows || '<tr><td colspan="3" style="padding: 8px; text-align: center; font-size: 11px; color: #9CA3AF;">No data</td></tr>'}
+                                                ${regionalRows || '<tr><td colspan="3" style="padding: 8px; text-align: center; font-size: 14px !important; color: #9CA3AF;">No data</td></tr>'}
                                             </tbody>
                                         </table>
                                     </div>
@@ -15078,9 +15089,9 @@
                                 if (regionData && regionData.count > 0) {
                                     regionalRows += `
                                     <tr>
-                                        <td style="padding: 6px 8px; text-align: left; font-size: 11px; color: #6B7280; font-weight: 500;">${regionKey}</td>
-                                        <td style="padding: 6px 8px; text-align: center; font-size: 11px; color: #111827; font-weight: 600;">${regionData.count}</td>
-                                        <td style="padding: 6px 8px; text-align: right; font-size: 11px; color: #111827; font-weight: 600;">${formatCurrency(regionData.tfa)}</td>
+                                        <td style="padding: 6px 8px; text-align: left; font-size: 14px !important; color: #6B7280; font-weight: 500;">${regionKey}</td>
+                                        <td style="padding: 6px 8px; text-align: center; font-size: 14px !important; color: #111827; font-weight: 600;">${regionData.count}</td>
+                                        <td style="padding: 6px 8px; text-align: right; font-size: 14px !important; color: #111827; font-weight: 600;">${formatCurrency(regionData.tfa)}</td>
                                     </tr>
                                 `;
                                 }
@@ -15157,7 +15168,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                                                 </svg>
                                                 ROTCE
@@ -15171,7 +15182,7 @@
                                         
                                         <!-- Widget 2: Facilities -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -15185,7 +15196,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                                                 </svg>
@@ -15200,7 +15211,7 @@
                                         
                                         <!-- Widget 3: TFA -->
                                         <div style="
-                                            background: #F9FAFB;
+                                            background: transparent;
                                             border-radius: 8px;
                                             padding: 10px;
                                             border: 1px solid #E5E7EB;
@@ -15214,7 +15225,7 @@
                                                 font-weight: 500;
                                                 margin-bottom: 4px;
                                             ">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <line x1="12" y1="1" x2="12" y2="23"></line>
                                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                                 </svg>
@@ -15234,22 +15245,22 @@
                                         gap: 8px;
                                         margin-bottom: 16px;
                                         padding: 10px 12px;
-                                        background: #F9FAFB;
+                                        background: transparent;
                                         border-radius: 6px;
                                         border: 1px solid #E5E7EB;
                                     ">
                                         <div style="flex: 1;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Status</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Status</div>
                                             <div style="font-size: 13px; font-weight: 600; color: ${rotceColor};">${rotceStatus}</div>
                                         </div>
                                         <div style="width: 1px; background: #E5E7EB;"></div>
                                         <div style="flex: 1; text-align: center;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Min ROTCE</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Min ROTCE</div>
                                             <div style="font-size: 13px; font-weight: 600; color: ${minROTCE >= 12 ? '#10B981' : '#EF4444'};">${minROTCE.toFixed(1)}%</div>
                                         </div>
                                         <div style="width: 1px; background: #E5E7EB;"></div>
                                         <div style="flex: 1; text-align: right;">
-                                            <div style="font-size: 10px; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Max ROTCE</div>
+                                            <div style="font-size: 14px !important; color: #6B7280; font-weight: 500; margin-bottom: 2px;">Max ROTCE</div>
                                             <div style="font-size: 13px; font-weight: 600; color: ${maxROTCE >= 12 ? '#10B981' : '#EF4444'};">${maxROTCE.toFixed(1)}%</div>
                                         </div>
                                     </div>
@@ -15262,7 +15273,7 @@
                                             gap: 6px;
                                             margin-bottom: 8px;
                                         ">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
                                                 <circle cx="12" cy="12" r="10"></circle>
                                                 <line x1="2" y1="12" x2="22" y2="12"></line>
                                                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -15282,7 +15293,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                ${regionalRows || '<tr><td colspan="3" style="padding: 8px; text-align: center; font-size: 11px; color: #9CA3AF;">No data</td></tr>'}
+                                                ${regionalRows || '<tr><td colspan="3" style="padding: 8px; text-align: center; font-size: 14px !important; color: #9CA3AF;">No data</td></tr>'}
                                             </tbody>
                                         </table>
                                     </div>
@@ -30692,7 +30703,7 @@
                             <!-- Facility Amount -->
                             <div class="tooltip-widget">
                                 <div class="tooltip-widget-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <line x1="12" y1="1" x2="12" y2="23"></line>
                                         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                     </svg>
@@ -30704,7 +30715,7 @@
                             <!-- OSUC -->
                             <div class="tooltip-widget">
                                 <div class="tooltip-widget-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <circle cx="12" cy="12" r="10"></circle>
                                         <path d="M12 6v6l4 2"></path>
                                     </svg>
@@ -30717,7 +30728,7 @@
                         <!-- Facility Details -->
                         <div style="margin-top: 12px;">
                             <div class="tooltip-section-title">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                     <polyline points="14 2 14 8 20 8"></polyline>
                                 </svg>
@@ -30846,7 +30857,7 @@
                             <!-- Status Widget -->
                             <div class="tooltip-widget">
                                 <div class="tooltip-widget-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <circle cx="12" cy="12" r="10"></circle>
                                         <path d="M12 6v6l4 2"></path>
                                     </svg>
@@ -30860,7 +30871,7 @@
                             <!-- Days Widget -->
                             <div class="tooltip-widget">
                                 <div class="tooltip-widget-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                                         <line x1="16" y1="2" x2="16" y2="6"></line>
                                         <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -30875,7 +30886,7 @@
                         <!-- Covenant Details -->
                         <div style="margin-top: 12px;">
                             <div class="tooltip-section-title">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                     <polyline points="14 2 14 8 20 8"></polyline>
                                 </svg>
@@ -30903,7 +30914,7 @@
                         ${covenantDescription !== '-' ? `
                         <div style="margin-top: 12px;">
                             <div class="tooltip-section-title">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="12" y1="16" x2="12" y2="12"></line>
                                     <line x1="12" y1="8" x2="12.01" y2="8"></line>
