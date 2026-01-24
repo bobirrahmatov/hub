@@ -3109,22 +3109,19 @@
                                                     Maturity Date</th>
                                                 <th
                                                     class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
-                                                    Credit Classification</th>
-                                                <th
-                                                    class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
                                                     Facility Amount</th>
                                                 <th
                                                     class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
-                                                    Direct O/S</th>
+                                                    Loan O/S</th>
                                                 <th
                                                     class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
-                                                    Contingent O/S</th>
+                                                    LC O/S</th>
                                                 <th
                                                     class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
                                                     PSE O/S</th>
                                                 <th
                                                     class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
-                                                    Total Unused</th>
+                                                    Unused Commitment</th>
                                             </tr>
                                         </thead>
                                         <tbody id="deepDiveFacilitiesDetailsTable" class="divide-y divide-gray-200">
@@ -3137,7 +3134,7 @@
                                         </tbody>
                                         <tfoot id="deepDiveFacilitiesTableFooter" style="display: none;">
                                             <tr class="bg-gray-50 border-t-2 border-gray-300">
-                                                <td colspan="6" class="px-6 py-4 text-right !text-base font-bold text-gray-900">
+                                                <td colspan="5" class="px-6 py-4 text-right !text-base font-bold text-gray-900">
                                                     TOTALS:
                                                 </td>
                                                 <td class="px-6 py-4 text-center !text-base font-bold text-gray-900">
@@ -29776,18 +29773,18 @@
                     const region = facility.Region || "-";
                     const facilityId = facility.Facility_ID || facility.Facility_id || "-";
                     const productProgram = facility.Product_Program || facility.Product || "-";
-                    const subProduct = facility.Sub_Product || facility.Sub_product || "";
+                    const subProduct = facility.Product_Sub_Program || facility.Sub_Product || facility.Sub_product || "";
                     const facilityType = facility.Facility_Type || "-";
                     const managementStatus = facility.Management_Status || facility['DM/CM'] || facility.DM_CM || "-";
                     const maturityDate = facility.Maturity_Date || facility.CA_Expiration_Date || "-";
-                    const riskRating = facility.Risk_Rating || facility.Rating || "Pass";
+                    const creditClassification = facility.Credit_Classification || "-";
 
-                    // Financial values
-                    const facAmount = parseNumber(facility.Fac_Amount || facility.Facility_Amount);
-                    const osuc = parseNumber(facility.OSUC || facility.Outstanding_UC);
-                    const loanOS = parseNumber(facility.Loan_OS || facility.Loan_Outstanding);
-                    const lcOS = parseNumber(facility.LC_OS || facility.LC_Outstanding);
-                    const unused = parseNumber(facility.Unused_Commitment || facility.Unused);
+                    // Financial values - using correct Portfolio column names
+                    const facAmount = parseNumber(facility.Fac_Amount);
+                    const directOS = parseNumber(facility.Direct_OS);
+                    const contingentOS = parseNumber(facility.Contingent_OS);
+                    const pseOS = parseNumber(facility.PSE_OS);
+                    const totalUnusedExposure = parseNumber(facility.Total_Unused_Exposure);
 
                     // Region badge colors
                     const regionColors = {
@@ -29812,15 +29809,6 @@
                         'CM': 'bg-purple-50 text-purple-700'
                     };
                     const managementStatusColor = managementStatusColors[managementStatus] || 'bg-gray-50 text-gray-700';
-
-                    // Risk rating badge colors
-                    const ratingColors = {
-                        'Pass': 'bg-gray-100 text-gray-700',
-                        'Special Mention': 'bg-yellow-100 text-yellow-700',
-                        'Substandard': 'bg-orange-100 text-orange-700',
-                        'Doubtful': 'bg-red-100 text-red-700'
-                    };
-                    const ratingColor = ratingColors[riskRating] || 'bg-gray-100 text-gray-700';
 
                     html += `
                     <tr class="hover:bg-gray-50" 
@@ -29848,9 +29836,6 @@
                             <span class="${managementStatusColor} rounded-full px-2 py-0.5 !text-base font-medium">${managementStatus}</span>
                         </td>
                         <td class="px-6 py-4 text-center !text-base text-gray-700">${formatDateShort(parseDate(maturityDate)) || maturityDate}</td>
-                        <td class="px-6 py-4 text-center">
-                            <span class="${ratingColor} rounded-full px-2 py-0.5 !text-base font-medium">${riskRating}</span>
-                        </td>
                         <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(facAmount)}</td>
                         <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(directOS)}</td>
                         <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(contingentOS)}</td>
@@ -30766,12 +30751,12 @@
                                         <td class="value">${managementStatus}</td>
                                     </tr>
                                     <tr>
-                                        <td>Risk Category</td>
-                                        <td class="value">${riskCategory}</td>
-                                    </tr>
-                                    <tr>
                                         <td>Credit Classification</td>
                                         <td class="value">${creditClassification}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Risk Category</td>
+                                        <td class="value">${riskCategory}</td>
                                     </tr>
                                     <tr>
                                         <td>Committed/Uncommitted</td>
