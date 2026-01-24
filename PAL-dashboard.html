@@ -512,21 +512,22 @@
                                     </span>
                                     <input type="text" id="searchInput"
                                         placeholder="Search facilities, relationships, data..."
+                                        onkeyup="if(event.key === 'Enter') handleMainSearch(this.value)"
                                         class="h-10 w-full rounded-lg border border-gray-300 bg-white py-2.5 pr-4 pl-11 !text-base text-gray-800 placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 focus:outline-none shadow-sm" />
                                 </div>
 
                                 <!-- Center: Action Buttons -->
                                 <div class="flex items-center gap-2">
-                                    <!-- Refresh Button -->
-                                    <button onclick="loadDataFromCSV()"
+                                    <!-- Search Button -->
+                                    <button onclick="handleMainSearch(document.getElementById('searchInput').value)"
                                         class="flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                                        title="Refresh data">
+                                        title="Search">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z">
                                             </path>
                                         </svg>
-                                        <span>Refresh</span>
+                                        <span>Search</span>
                                     </button>
 
                                     <!-- More Filters Button -->
@@ -956,42 +957,10 @@
 
                                     <!-- Filter Grid -->
                                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                                        <!-- Product Program Filter -->
-                                        <div x-data="{ open: false, selected: 'All Programs', options: [] }"
-                                            x-init="options = Array.from(document.getElementById('filterProductProgram')?.options || []).map(o => ({value: o.value, text: o.text}))">
-                                            <label class="mb-1.5 block !text-base font-medium text-gray-700">
-                                                Product Program
-                                            </label>
-                                            <div class="relative">
-                                                <button @click="open = !open" type="button"
-                                                    class="inline-flex items-center justify-between w-full gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                                                    <span x-text="selected"></span>
-                                                    <svg class="h-4 w-4" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M19 9l-7 7-7-7" />
-                                                    </svg>
-                                                </button>
-                                                <div x-show="open" @click.outside="open = false" x-cloak
-                                                    class="absolute left-0 right-0 top-full z-[9999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2">
-                                                    <template x-for="option in options" :key="option.value">
-                                                        <button type="button"
-                                                            @click="selected = option.text; open = false; document.getElementById('filterProductProgram').value = option.value; applyFilters();"
-                                                            :class="selected === option.text ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'"
-                                                            class="flex w-full rounded-lg px-3 py-1.5 text-left !text-base font-medium transition-colors"
-                                                            x-text="option.text">
-                                                        </button>
-                                                    </template>
-                                                </div>
-                                                <select id="filterProductProgram" class="hidden">
-                                                    <option value="">All Programs</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
                                         <!-- Extending Unit Filter -->
                                         <div x-data="{ open: false, selected: 'All Units', options: [] }"
-                                            x-init="options = Array.from(document.getElementById('filterExtendingUnit')?.options || []).map(o => ({value: o.value, text: o.text}))">
+                                            x-init="options = Array.from(document.getElementById('filterExtendingUnit')?.options || []).map(o => ({value: o.value, text: o.text}))"
+                                            @options-updated.window="options = Array.from(document.getElementById('filterExtendingUnit')?.options || []).map(o => ({value: o.value, text: o.text}))">
                                             <label class="mb-1.5 block !text-base font-medium text-gray-700">
                                                 Extending Unit
                                             </label>
@@ -1016,7 +985,7 @@
                                                         </button>
                                                     </template>
                                                 </div>
-                                                <select id="filterExtendingUnit" class="hidden">
+                                                <select id="filterExtendingUnit" class="hidden" @options-updated="$el.closest('[x-data]').__x.$data.options = Array.from($el.options).map(o => ({value: o.value, text: o.text}))">
                                                     <option value="">All Units</option>
                                                 </select>
                                             </div>
@@ -1024,7 +993,8 @@
 
                                         <!-- Facility Type Filter -->
                                         <div x-data="{ open: false, selected: 'All Types', options: [] }"
-                                            x-init="options = Array.from(document.getElementById('filterFacilityType')?.options || []).map(o => ({value: o.value, text: o.text}))">
+                                            x-init="options = Array.from(document.getElementById('filterFacilityType')?.options || []).map(o => ({value: o.value, text: o.text}))"
+                                            @options-updated.window="options = Array.from(document.getElementById('filterFacilityType')?.options || []).map(o => ({value: o.value, text: o.text}))">
                                             <label class="mb-1.5 block !text-base font-medium text-gray-700">
                                                 Facility Type
                                             </label>
@@ -1049,7 +1019,7 @@
                                                         </button>
                                                     </template>
                                                 </div>
-                                                <select id="filterFacilityType" class="hidden">
+                                                <select id="filterFacilityType" class="hidden" @options-updated="$el.closest('[x-data]').__x.$data.options = Array.from($el.options).map(o => ({value: o.value, text: o.text}))">
                                                     <option value="">All Types</option>
                                                 </select>
                                             </div>
@@ -1057,7 +1027,8 @@
 
                                         <!-- Commitment Status Filter -->
                                         <div x-data="{ open: false, selected: 'All', options: [] }"
-                                            x-init="options = Array.from(document.getElementById('filterCommitment')?.options || []).map(o => ({value: o.value, text: o.text}))">
+                                            x-init="options = Array.from(document.getElementById('filterCommitment')?.options || []).map(o => ({value: o.value, text: o.text}))"
+                                            @options-updated.window="options = Array.from(document.getElementById('filterCommitment')?.options || []).map(o => ({value: o.value, text: o.text}))">
                                             <label class="mb-1.5 block !text-base font-medium text-gray-700">
                                                 Commitment Status
                                             </label>
@@ -1082,7 +1053,7 @@
                                                         </button>
                                                     </template>
                                                 </div>
-                                                <select id="filterCommitment" class="hidden">
+                                                <select id="filterCommitment" class="hidden" @options-updated="$el.closest('[x-data]').__x.$data.options = Array.from($el.options).map(o => ({value: o.value, text: o.text}))">
                                                     <option value="">All</option>
                                                 </select>
                                             </div>
@@ -1090,7 +1061,8 @@
 
                                         <!-- Team Lead Filter -->
                                         <div x-data="{ open: false, selected: 'All Team Leads', options: [] }"
-                                            x-init="options = Array.from(document.getElementById('filterTeamLead')?.options || []).map(o => ({value: o.value, text: o.text}))">
+                                            x-init="options = Array.from(document.getElementById('filterTeamLead')?.options || []).map(o => ({value: o.value, text: o.text}))"
+                                            @options-updated.window="options = Array.from(document.getElementById('filterTeamLead')?.options || []).map(o => ({value: o.value, text: o.text}))">
                                             <label class="mb-1.5 block !text-base font-medium text-gray-700">
                                                 Team Lead
                                             </label>
@@ -1115,41 +1087,8 @@
                                                         </button>
                                                     </template>
                                                 </div>
-                                                <select id="filterTeamLead" class="hidden">
+                                                <select id="filterTeamLead" class="hidden" @options-updated="$el.closest('[x-data]').__x.$data.options = Array.from($el.options).map(o => ({value: o.value, text: o.text}))">
                                                     <option value="">All Team Leads</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <!-- Underwriter Filter -->
-                                        <div x-data="{ open: false, selected: 'All Underwriters', options: [] }"
-                                            x-init="options = Array.from(document.getElementById('filterUnderwriter')?.options || []).map(o => ({value: o.value, text: o.text}))">
-                                            <label class="mb-1.5 block !text-base font-medium text-gray-700">
-                                                Underwriter
-                                            </label>
-                                            <div class="relative">
-                                                <button @click="open = !open" type="button"
-                                                    class="inline-flex items-center justify-between w-full gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                                                    <span x-text="selected"></span>
-                                                    <svg class="h-4 w-4" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M19 9l-7 7-7-7" />
-                                                    </svg>
-                                                </button>
-                                                <div x-show="open" @click.outside="open = false" x-cloak
-                                                    class="absolute left-0 right-0 top-full z-[9999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2">
-                                                    <template x-for="option in options" :key="option.value">
-                                                        <button type="button"
-                                                            @click="selected = option.text; open = false; document.getElementById('filterUnderwriter').value = option.value; applyFilters();"
-                                                            :class="selected === option.text ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'"
-                                                            class="flex w-full rounded-lg px-3 py-1.5 text-left !text-base font-medium transition-colors"
-                                                            x-text="option.text">
-                                                        </button>
-                                                    </template>
-                                                </div>
-                                                <select id="filterUnderwriter" class="hidden">
-                                                    <option value="">All Underwriters</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -2252,16 +2191,16 @@
 
                             <!-- Center: Action Buttons -->
                             <div class="flex items-center gap-2">
-                                <!-- Refresh Button -->
-                                <button onclick="loadHistoricalTrendsData(true)"
+                                <!-- Search Button -->
+                                <button onclick="filterTrendsTable()"
                                     class="flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                                    title="Refresh trends data">
+                                    title="Search">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z">
                                         </path>
                                     </svg>
-                                    <span>Refresh</span>
+                                    <span>Search</span>
                                 </button>
 
                                 <!-- Reset Filters Button -->
@@ -4786,14 +4725,6 @@
                     return;
                 }
 
-                // Product Program
-                const products = [
-                    ...new Set(
-                        portfolioData.map((row) => row.Product_Program).filter(Boolean)
-                    ),
-                ].sort();
-                populateSelect("filterProductProgram", products);
-
                 // Extending Unit (Control_Unit)
                 const units = [
                     ...new Set(
@@ -4829,14 +4760,6 @@
                     ),
                 ].sort();
                 populateSelect("filterTeamLead", teamLeads);
-
-                // Underwriter (Lead_Underwriter)
-                const underwriters = [
-                    ...new Set(
-                        portfolioData.map((row) => row.Lead_Underwriter).filter(Boolean)
-                    ),
-                ].sort();
-                populateSelect("filterUnderwriter", underwriters);
             }
 
             // Helper to populate a select element
@@ -4864,20 +4787,21 @@
                 if (currentValue && options.includes(currentValue)) {
                     select.value = currentValue;
                 }
+
+                // Dispatch custom event to notify Alpine.js to re-read options
+                select.dispatchEvent(new CustomEvent('options-updated', { bubbles: true }));
             }
 
             // Apply all filters (OPTIMIZED for 40K+ rows)
             function applyFilters() {
                 const startTime = performance.now();
 
-                // Get advanced filter values (excluding Region, Status, and Commitment Status which are in smart filters)
+                // Get advanced filter values (excluding Region, Status, Commitment Status, Product Program, and Underwriter which are in smart filters)
                 // Add safety checks for each element
                 const filters = {
-                    productProgram: document.getElementById("filterProductProgram")?.value || "",
                     extendingUnit: document.getElementById("filterExtendingUnit")?.value || "",
                     facilityType: document.getElementById("filterFacilityType")?.value || "",
                     teamLead: document.getElementById("filterTeamLead")?.value || "",
-                    underwriter: document.getElementById("filterUnderwriter")?.value || "",
                     caMaturity: document.getElementById("filterCAMaturity")?.value || "",
                     facilityMaturity: document.getElementById("filterFacilityMaturity")?.value || "",
                 };
@@ -4903,15 +4827,11 @@
                 if (selectedUnderwriters.length > 0)
                     activeFilters["Underwriter"] = selectedUnderwriters.join(", ");
 
-                if (filters.productProgram)
-                    activeFilters["Product Program"] = filters.productProgram;
                 if (filters.extendingUnit)
                     activeFilters["Extending Unit"] = filters.extendingUnit;
                 if (filters.facilityType)
                     activeFilters["Facility Type"] = filters.facilityType;
                 if (filters.teamLead) activeFilters["Team Lead"] = filters.teamLead;
-                if (filters.underwriter)
-                    activeFilters["Underwriter"] = filters.underwriter;
                 if (filters.caMaturity) {
                     const days = filters.caMaturity;
                     activeFilters["CAs Maturing"] =
@@ -5036,11 +4956,6 @@
 
                     // Fast path: Check advanced filter string filters (fastest to fail)
                     if (
-                        filters.productProgram &&
-                        row.Product_Program !== filters.productProgram
-                    )
-                        continue;
-                    if (
                         filters.extendingUnit &&
                         row.Control_Unit !== filters.extendingUnit
                     )
@@ -5053,11 +4968,6 @@
                     if (
                         filters.teamLead &&
                         row.Underwriting_Team_Lead !== filters.teamLead
-                    )
-                        continue;
-                    if (
-                        filters.underwriter &&
-                        row.Lead_Underwriter !== filters.underwriter
                     )
                         continue;
 
@@ -5154,13 +5064,11 @@
             function applyFiltersWithChartFilter() {
                 const startTime = performance.now();
 
-                // Get advanced filter values (excluding Region, Status, and Commitment Status which are in smart filters)
+                // Get advanced filter values (excluding Region, Status, Commitment Status, Product Program, and Underwriter which are in smart filters)
                 const filters = {
-                    productProgram: document.getElementById("filterProductProgram").value,
                     extendingUnit: document.getElementById("filterExtendingUnit").value,
                     facilityType: document.getElementById("filterFacilityType").value,
                     teamLead: document.getElementById("filterTeamLead").value,
-                    underwriter: document.getElementById("filterUnderwriter").value,
                     caMaturity: document.getElementById("filterCAMaturity").value,
                     facilityMaturity: document.getElementById("filterFacilityMaturity")
                         .value,
@@ -5179,15 +5087,11 @@
                 if (selectedPSE !== 'all')
                     activeFilters["PSE"] = selectedPSE;
 
-                if (filters.productProgram)
-                    activeFilters["Product Program"] = filters.productProgram;
                 if (filters.extendingUnit)
                     activeFilters["Extending Unit"] = filters.extendingUnit;
                 if (filters.facilityType)
                     activeFilters["Facility Type"] = filters.facilityType;
                 if (filters.teamLead) activeFilters["Team Lead"] = filters.teamLead;
-                if (filters.underwriter)
-                    activeFilters["Underwriter"] = filters.underwriter;
                 if (filters.caMaturity) {
                     const days = filters.caMaturity;
                     activeFilters["CAs Maturing"] =
@@ -5333,11 +5237,6 @@
 
                     // Fast path: Check advanced filter string filters (fastest to fail)
                     if (
-                        filters.productProgram &&
-                        row.Product_Program !== filters.productProgram
-                    )
-                        continue;
-                    if (
                         filters.extendingUnit &&
                         row.Control_Unit !== filters.extendingUnit
                     )
@@ -5350,11 +5249,6 @@
                     if (
                         filters.teamLead &&
                         row.Underwriting_Team_Lead !== filters.teamLead
-                    )
-                        continue;
-                    if (
-                        filters.underwriter &&
-                        row.Lead_Underwriter !== filters.underwriter
                     )
                         continue;
 
@@ -5691,9 +5585,8 @@
                     return;
                 }
 
-                // Handle advanced filters
+                // Handle advanced filters (Product Program and Underwriter are now in global filters)
                 const filterMap = {
-                    "Product Program": "filterProductProgram",
                     "Extending Unit": "filterExtendingUnit",
                     "Facility Type": "filterFacilityType",
                     "Team Lead": "filterTeamLead",
@@ -5715,13 +5608,11 @@
 
             // Clear all filters
             function clearAllFilters() {
-                // Clear only advanced filter fields (Region and Status are managed by smart filters)
-                document.getElementById("filterProductProgram").value = "";
+                // Clear only advanced filter fields (Region, Status, Product Program, and Underwriter are managed by smart filters)
                 document.getElementById("filterExtendingUnit").value = "";
                 document.getElementById("filterFacilityType").value = "";
                 document.getElementById("filterCommitment").value = "";
                 document.getElementById("filterTeamLead").value = "";
-                document.getElementById("filterUnderwriter").value = "";
                 document.getElementById("filterCAMaturity").value = "";
                 document.getElementById("filterFacilityMaturity").value = "";
 
@@ -5740,15 +5631,12 @@
             function toggleFilterPopover() {
                 const popover = document.getElementById("filterPopover");
                 if (popover.classList.contains("hidden")) {
-                    // Opening popover - save current filter state (excluding smart filters)
+                    // Opening popover - save current filter state (excluding smart filters and fields that are now in smart filters)
                     tempFilterState = {
-                        productProgram: document.getElementById("filterProductProgram")
-                            .value,
                         extendingUnit: document.getElementById("filterExtendingUnit").value,
                         facilityType: document.getElementById("filterFacilityType").value,
                         commitment: document.getElementById("filterCommitment").value,
                         teamLead: document.getElementById("filterTeamLead").value,
-                        underwriter: document.getElementById("filterUnderwriter").value,
                         caMaturity: document.getElementById("filterCAMaturity").value,
                         facilityMaturity: document.getElementById("filterFacilityMaturity")
                             .value,
@@ -5758,8 +5646,6 @@
                     document.body.style.overflow = "hidden"; // Prevent background scrolling
                 } else {
                     // Closing popover - restore previous filter state (cancel changes)
-                    document.getElementById("filterProductProgram").value =
-                        tempFilterState.productProgram || "";
                     document.getElementById("filterExtendingUnit").value =
                         tempFilterState.extendingUnit || "";
                     document.getElementById("filterFacilityType").value =
@@ -5768,8 +5654,6 @@
                         tempFilterState.commitment || "";
                     document.getElementById("filterTeamLead").value =
                         tempFilterState.teamLead || "";
-                    document.getElementById("filterUnderwriter").value =
-                        tempFilterState.underwriter || "";
                     document.getElementById("filterCAMaturity").value =
                         tempFilterState.caMaturity || "";
                     document.getElementById("filterFacilityMaturity").value =
@@ -7465,10 +7349,10 @@
                 const underwriterSearch = document.getElementById('underwriterFilterSearch');
                 if (underwriterSearch) underwriterSearch.value = '';
 
-                // Reset advanced filter dropdowns
+                // Reset advanced filter dropdowns (Product Program and Underwriter are now in global filters)
                 const filterIds = [
-                    "filterProductProgram", "filterExtendingUnit", "filterFacilityType",
-                    "filterCommitment", "filterTeamLead", "filterUnderwriter",
+                    "filterExtendingUnit", "filterFacilityType",
+                    "filterCommitment", "filterTeamLead",
                     "filterCAMaturity", "filterFacilityMaturity"
                 ];
                 filterIds.forEach(id => {
@@ -8984,7 +8868,7 @@
                     const categories = data.categories || [];
                     // Color mapping for each category
                     const colorMap = {
-                        '1-45 Days': "#dde9ff",
+                        '1-45 Days': "#a8c5ff",
                         '46-90 Days': "#7592ff",
                         '>90 Days': "#3641f5"
                     };
@@ -13112,7 +12996,7 @@
                 const colors = [
                     "#3641f5",
                     "#7592ff",
-                    "#dde9ff",
+                    "#a8c5ff",
                     "#ff6b6b",
                     "#ffd93d",
                     "#6bcf7f",
@@ -13718,7 +13602,7 @@
                 const colors = [
                     "#3641f5",
                     "#7592ff",
-                    "#dde9ff",
+                    "#a8c5ff",
                     "#ff6b6b",
                     "#ffd93d",
                     "#6bcf7f",
@@ -16386,7 +16270,7 @@
                                 <div class="flex-1 max-w-md">
                                     <div id="tfaProgramList" class="space-y-3">
                                         ${sortedPrograms.map(([program, amount], index) => {
-                    const colors = ["#3641f5", "#7592ff", "#dde9ff", "#ff6b6b", "#ffd93d", "#6bcf7f", "#c084fc"];
+                    const colors = ["#3641f5", "#7592ff", "#a8c5ff", "#ff6b6b", "#ffd93d", "#6bcf7f", "#c084fc"];
                     const color = colors[index % colors.length];
                     // Format amount in billions or millions
                     const formattedAmount = amount >= 1000000000
@@ -16610,7 +16494,7 @@
                 const donutColors = [
                     "#3641f5",  // Primary blue
                     "#7592ff",  // Light blue
-                    "#dde9ff",  // Lighter blue
+                    "#a8c5ff",  // Lighter blue
                     "#ff6b6b",  // Red
                     "#ffd93d",  // Yellow
                     "#6bcf7f",  // Green
@@ -16798,7 +16682,7 @@
                 const donutColors = [
                     "#3641f5",  // Primary blue
                     "#7592ff",  // Light blue
-                    "#dde9ff",  // Lighter blue
+                    "#a8c5ff",  // Lighter blue
                     "#ff6b6b",  // Red
                     "#ffd93d",  // Yellow
                     "#6bcf7f",  // Green
@@ -16982,7 +16866,7 @@
                 const donutColors = [
                     "#3641f5",  // Primary blue
                     "#7592ff",  // Light blue
-                    "#dde9ff",  // Lighter blue
+                    "#a8c5ff",  // Lighter blue
                     "#ff6b6b",  // Red
                     "#ffd93d",  // Yellow
                     "#6bcf7f",  // Green
@@ -19153,7 +19037,7 @@
                                 <div class="flex-1 max-w-md">
                                     <div id="osucProgramList" class="space-y-3">
                                         ${sortedPrograms.map(([program, amount], index) => {
-                    const colors = ["#3641f5", "#7592ff", "#dde9ff", "#ff6b6b", "#ffd93d", "#6bcf7f", "#c084fc"];
+                    const colors = ["#3641f5", "#7592ff", "#a8c5ff", "#ff6b6b", "#ffd93d", "#6bcf7f", "#c084fc"];
                     const color = colors[index % colors.length];
                     const formattedAmount = amount >= 1000000000
                         ? `$${(amount / 1000000000).toFixed(2)}B`
@@ -19412,7 +19296,7 @@
                                 <div class="flex-1 max-w-md">
                                     <div id="outstandingProgramList" class="space-y-3">
                                         ${sortedPrograms.map(([program, amount], index) => {
-                    const colors = ["#3641f5", "#7592ff", "#dde9ff", "#ff6b6b", "#ffd93d", "#6bcf7f", "#c084fc"];
+                    const colors = ["#3641f5", "#7592ff", "#a8c5ff", "#ff6b6b", "#ffd93d", "#6bcf7f", "#c084fc"];
                     const color = colors[index % colors.length];
                     const formattedAmount = amount >= 1000000000
                         ? `$${(amount / 1000000000).toFixed(2)}B`
@@ -21528,7 +21412,7 @@
                             const donutColors = [
                                 "#3641f5",  // Primary blue
                                 "#7592ff",  // Light blue
-                                "#dde9ff",  // Lighter blue
+                                "#a8c5ff",  // Lighter blue
                                 "#ff6b6b",  // Red
                                 "#ffd93d",  // Yellow
                                 "#6bcf7f",  // Green
@@ -22290,7 +22174,7 @@
                     const colors = [
                         "#3641f5",  // Primary blue
                         "#7592ff",  // Light blue
-                        "#dde9ff",  // Lighter blue
+                        "#a8c5ff",  // Lighter blue
                         "#ff6b6b",  // Red
                         "#ffd93d",  // Yellow
                         "#6bcf7f",  // Green
@@ -22401,7 +22285,7 @@
                     const colors = [
                         "#3641f5",  // Primary blue
                         "#7592ff",  // Light blue
-                        "#dde9ff",  // Lighter blue
+                        "#a8c5ff",  // Lighter blue
                         "#ff6b6b",  // Red
                         "#ffd93d",  // Yellow
                         "#6bcf7f",  // Green
@@ -22839,7 +22723,7 @@
                     const colors = [
                         "#3641f5",  // Primary blue
                         "#7592ff",  // Light blue
-                        "#dde9ff",  // Lighter blue
+                        "#a8c5ff",  // Lighter blue
                         "#ff6b6b",  // Red
                         "#ffd93d",  // Yellow
                         "#6bcf7f",  // Green
@@ -22950,7 +22834,7 @@
                     const colors = [
                         "#3641f5",  // Primary blue
                         "#7592ff",  // Light blue
-                        "#dde9ff",  // Lighter blue
+                        "#a8c5ff",  // Lighter blue
                         "#ff6b6b",  // Red
                         "#ffd93d",  // Yellow
                         "#6bcf7f",  // Green
@@ -23150,7 +23034,7 @@
                     const colors = [
                         "#3641f5",  // Primary blue
                         "#7592ff",  // Light blue
-                        "#dde9ff",  // Lighter blue
+                        "#a8c5ff",  // Lighter blue
                         "#ff6b6b",  // Red
                         "#ffd93d",  // Yellow
                         "#6bcf7f",  // Green
@@ -23258,7 +23142,7 @@
                     const colors = [
                         "#3641f5",  // Primary blue
                         "#7592ff",  // Light blue
-                        "#dde9ff",  // Lighter blue
+                        "#a8c5ff",  // Lighter blue
                         "#ff6b6b",  // Red
                         "#ffd93d",  // Yellow
                         "#6bcf7f",  // Green
@@ -24079,7 +23963,7 @@
                         const colors = [
                             "#3641f5",  // Primary blue
                             "#7592ff",  // Light blue
-                            "#dde9ff",  // Lighter blue
+                            "#a8c5ff",  // Lighter blue
                             "#ff6b6b",  // Red
                             "#ffd93d",  // Yellow
                             "#6bcf7f",  // Green
@@ -27031,7 +26915,7 @@
                                 <div class="flex-1 max-w-md">
                                     <div id="covenantProductList" class="space-y-3">
                                         ${sortedProducts.map(([program, count], index) => {
-                    const colors = ["#3641f5", "#7592ff", "#dde9ff", "#ff6b6b", "#ffd93d", "#6bcf7f", "#c084fc"];
+                    const colors = ["#3641f5", "#7592ff", "#a8c5ff", "#ff6b6b", "#ffd93d", "#6bcf7f", "#c084fc"];
                     const color = colors[index % colors.length];
                     const percentage = ((count / totalCovenants) * 100).toFixed(1);
                     return `
@@ -27117,7 +27001,7 @@
                         // Chart 1: Product Program Donut (Matching TFA style exactly)
                         const donutEl = document.getElementById('covenantProductDonutChart');
                         if (donutEl && productData.length > 0) {
-                            const colors = ["#3641f5", "#7592ff", "#dde9ff", "#ff6b6b", "#ffd93d", "#6bcf7f", "#c084fc"];
+                            const colors = ["#3641f5", "#7592ff", "#a8c5ff", "#ff6b6b", "#ffd93d", "#6bcf7f", "#c084fc"];
                             const donutOptions = {
                                 series: productData.map(p => p[1]),
                                 labels: productData.map(p => p[0]),
