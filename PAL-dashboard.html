@@ -30632,11 +30632,40 @@
             let tooltip = null;
             let tooltipContent = null;
 
-            // Initialize tooltip elements when DOM is ready
+            // Initialize tooltip elements - create and append to document body if not exists
             function initTooltipElements() {
                 if (!tooltip) {
+                    // Try to find existing tooltip first
                     tooltip = document.getElementById('enhancedTooltip');
-                    tooltipContent = document.getElementById('tooltipContent');
+                    
+                    // If not found, create it and append to document body (for Confluence compatibility)
+                    if (!tooltip) {
+                        console.log('Creating tooltip element dynamically for Confluence compatibility');
+                        
+                        tooltip = document.createElement('div');
+                        tooltip.id = 'enhancedTooltip';
+                        tooltip.style.position = 'fixed';
+                        tooltip.style.zIndex = '999999';
+                        tooltip.style.pointerEvents = 'none';
+                        tooltip.style.opacity = '0';
+                        tooltip.style.transition = 'opacity 0.2s ease-in-out';
+                        tooltip.style.maxWidth = '400px';
+                        tooltip.style.left = '0';
+                        tooltip.style.top = '0';
+                        
+                        tooltipContent = document.createElement('div');
+                        tooltipContent.className = 'tooltip-content';
+                        tooltipContent.id = 'tooltipContent';
+                        
+                        tooltip.appendChild(tooltipContent);
+                        
+                        // Append to actual document body (not the injected content container)
+                        document.body.appendChild(tooltip);
+                        
+                        console.log('Tooltip element created and appended to document.body');
+                    } else {
+                        tooltipContent = document.getElementById('tooltipContent');
+                    }
                 }
                 return tooltip && tooltipContent;
             }
@@ -30654,7 +30683,7 @@
 
                 // Extract facility details using actual column names
                 const region = facility.Region || "-";
-                const relationshipName = facility.Relationship_Name || "Unknown Relationship";
+                const relationshipName = facility.Relationship_Name || "";
                 const relationshipId = facility.Relationship_ID || "-";
                 const facilityId = facility.Facility_ID || "-";
                 const parentFacilityId = facility.Parent_Facility_ID || "-";
@@ -30687,7 +30716,7 @@
                 const directOS = parseNumber(facility.Direct_OS);
                 const contingentOS = parseNumber(facility.Contingent_OS);
                 const pseOS = parseNumber(facility.PSE_OS);
-                const totalCommExposure = parseNumber(facility.Total_Comm_Exposure);
+                const totalCommExposure = parseNumber(facility.OSUC);
                 const osuc = parseNumber(facility.OSUC);
                 const totalOS = parseNumber(facility.Total_OS);
                 const totalUnusedExposure = parseNumber(facility.Total_Unused_Exposure);
@@ -30696,7 +30725,7 @@
                 
                 const utilizationRate = facAmount > 0 ? ((osuc / facAmount) * 100).toFixed(1) : 0;
 
-                // Build simplified tooltip HTML
+                // Build tooltip HTML
                 const tooltipHTML = `
                     <div class="tooltip-header">
                         <div class="tooltip-title">${facilityId}</div>
@@ -30704,25 +30733,62 @@
                     </div>
                     
                     <div class="tooltip-body">
-                        <!-- Financial Metrics -->
-                        <div class="tooltip-grid">
+                        <!-- Financial Metrics Grid -->
+                        <div class="tooltip-grid-3">
+                            <!-- Facility Amount -->
                             <div class="tooltip-widget">
-                                <div class="tooltip-widget-label">Fac Amount</div>
+                                <div class="tooltip-widget-label">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                    Fac Amount
+                                </div>
                                 <div class="tooltip-widget-value small">${formatCurrency(facAmount)}</div>
                             </div>
+                            
+                            <!-- Total Comm Exposure -->
                             <div class="tooltip-widget">
-                                <div class="tooltip-widget-label">Total Exposure</div>
+                                <div class="tooltip-widget-label">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M12 6v6l4 2"></path>
+                                    </svg>
+                                    Total Exposure
+                                </div>
                                 <div class="tooltip-widget-value small">${formatCurrency(totalCommExposure)}</div>
+                            </div>
+                            
+                            <!-- Utilization -->
+                            <div class="tooltip-widget">
+                                <div class="tooltip-widget-label">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                    </svg>
+                                    Utilization
+                                </div>
+                                <div class="tooltip-widget-value medium">${utilizationRate}%</div>
                             </div>
                         </div>
                         
-                        <!-- Key Info -->
+                        <!-- Facility Classification -->
                         <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                Facility Classification
+                            </div>
                             <table class="tooltip-table">
                                 <tbody>
                                     <tr>
                                         <td>Facility Type</td>
                                         <td class="value">${facilityType}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Management Status</td>
+                                        <td class="value">${managementStatus}</td>
                                     </tr>
                                     <tr>
                                         <td>Credit Classification</td>
@@ -30732,16 +30798,168 @@
                                         <td>Risk Category</td>
                                         <td class="value">${riskCategory}</td>
                                     </tr>
+                                    <tr>
+                                        <td>Committed/Uncommitted</td>
+                                        <td class="value">${committedUncommitted}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>PSE/Non-PSE</td>
+                                        <td class="value">${pseNonPse}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Exposure Breakdown -->
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                                </svg>
+                                Exposure Breakdown
+                            </div>
+                            <table class="tooltip-table">
+                                <tbody>
+                                    <tr>
+                                        <td>Direct O/S</td>
+                                        <td class="value">${formatCurrency(directOS)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Contingent O/S</td>
+                                        <td class="value">${formatCurrency(contingentOS)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>PSE O/S</td>
+                                        <td class="value">${formatCurrency(pseOS)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>OSUC</td>
+                                        <td class="value">${formatCurrency(osuc)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total O/S</td>
+                                        <td class="value">${formatCurrency(totalOS)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Unused</td>
+                                        <td class="value">${formatCurrency(totalUnusedExposure)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Undrawn</td>
+                                        <td class="value">${formatCurrency(totalUndrawn)}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Key Dates -->
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                Key Dates
+                            </div>
+                            <table class="tooltip-table">
+                                <tbody>
                                     ${maturityDate !== '-' ? `
                                     <tr>
                                         <td>Maturity Date</td>
                                         <td class="value">${formatDateShort(parseDate(maturityDate)) || maturityDate}</td>
                                     </tr>
                                     ` : ''}
+                                    ${renewalDate !== '-' ? `
+                                    <tr>
+                                        <td>Renewal Date</td>
+                                        <td class="value">${formatDateShort(parseDate(renewalDate)) || renewalDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${caExpirationDate !== '-' ? `
+                                    <tr>
+                                        <td>CA Expiration</td>
+                                        <td class="value">${formatDateShort(parseDate(caExpirationDate)) || caExpirationDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${originationDate !== '-' ? `
+                                    <tr>
+                                        <td>Origination Date</td>
+                                        <td class="value">${formatDateShort(parseDate(originationDate)) || originationDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${facilityFirstApprovalDate !== '-' ? `
+                                    <tr>
+                                        <td>First Approval</td>
+                                        <td class="value">${formatDateShort(parseDate(facilityFirstApprovalDate)) || facilityFirstApprovalDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Team & Review Information -->
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                Team & Review
+                            </div>
+                            <table class="tooltip-table">
+                                <tbody>
                                     ${leadUnderwriter !== '-' ? `
                                     <tr>
                                         <td>Lead Underwriter</td>
                                         <td class="value">${leadUnderwriter}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${underwritingTeamLead !== '-' ? `
+                                    <tr>
+                                        <td>UW Team Lead</td>
+                                        <td class="value">${underwritingTeamLead}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${productUnderwriter !== '-' ? `
+                                    <tr>
+                                        <td>Product UW</td>
+                                        <td class="value">${productUnderwriter}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${controlUnit !== '-' ? `
+                                    <tr>
+                                        <td>Control Unit</td>
+                                        <td class="value">${controlUnit}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${caId !== '-' ? `
+                                    <tr>
+                                        <td>CA ID</td>
+                                        <td class="value">${caId}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${caReview !== '-' ? `
+                                    <tr>
+                                        <td>CA Review</td>
+                                        <td class="value">${caReview}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${parentFacilityId !== '-' ? `
+                                    <tr>
+                                        <td>Parent Facility ID</td>
+                                        <td class="value">${parentFacilityId}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${rotce !== '-' ? `
+                                    <tr>
+                                        <td>ROTCE</td>
+                                        <td class="value">${rotce}</td>
                                     </tr>
                                     ` : ''}
                                 </tbody>
@@ -30754,6 +30972,8 @@
                 
                 tooltipTimeout = setTimeout(() => {
                     tooltip.classList.add('show');
+                    // Fallback for when CSS class doesn't work (Confluence)
+                    tooltip.style.opacity = '1';
                 }, 150);
 
                 moveEnhancedTooltip(event);
@@ -30781,7 +31001,7 @@
                 const cuExpenseCode = covenant.CU_Expense_Code || "-";
                 
                 const relationshipId = covenant.Relationship_ID || "-";
-                const relationshipName = covenant.Relationship_Name || "Unknown Relationship";
+                const relationshipName = covenant.Relationship_Name || "";
                 const borrowersName = covenant.Borrowers_Name || "-";
                 const caNumber = covenant.CA_Number || "-";
                 const facilityNumber = covenant.Facility_Number || "-";
@@ -30820,7 +31040,7 @@
                     }
                 }
 
-                // Build simplified tooltip HTML
+                // Build tooltip HTML
                 const tooltipHTML = `
                     <div class="tooltip-header">
                         <div class="tooltip-title">${covenantNumber}</div>
@@ -30828,50 +31048,240 @@
                     </div>
                     
                     <div class="tooltip-body">
-                        <!-- Status -->
+                        <!-- Status and Days Grid -->
                         <div class="tooltip-grid">
+                            <!-- Status Widget -->
                             <div class="tooltip-widget">
-                                <div class="tooltip-widget-label">Status</div>
+                                <div class="tooltip-widget-label">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M12 6v6l4 2"></path>
+                                    </svg>
+                                    Status
+                                </div>
                                 <div class="tooltip-widget-value medium" style="color: ${isPastDue ? '#DC2626' : '#D97706'};">
                                     ${comingDuePastDue || status}
                                 </div>
                             </div>
+                            
+                            <!-- Days Widget -->
                             <div class="tooltip-widget">
-                                <div class="tooltip-widget-label">${isPastDue ? 'Days Past Due' : 'Days Until Due'}</div>
+                                <div class="tooltip-widget-label">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    ${isPastDue ? 'Days Past Due' : 'Days Until Due'}
+                                </div>
                                 <div class="tooltip-widget-value">${daysPastDue !== '-' ? daysPastDue : (isPastDue ? pastDueDays : daysUntilDue)}</div>
                             </div>
                         </div>
                         
-                        <!-- Key Info -->
+                        <!-- Covenant Details -->
                         <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                                Covenant Details
+                            </div>
                             <table class="tooltip-table">
                                 <tbody>
+                                    <tr>
+                                        <td>Region</td>
+                                        <td class="value">${region}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Relationship ID</td>
+                                        <td class="value">${relationshipId}</td>
+                                    </tr>
+                                    ${borrowersName !== '-' ? `
+                                    <tr>
+                                        <td>Borrower Name</td>
+                                        <td class="value">${borrowersName}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${caNumber !== '-' ? `
+                                    <tr>
+                                        <td>CA Number</td>
+                                        <td class="value">${caNumber}</td>
+                                    </tr>
+                                    ` : ''}
                                     <tr>
                                         <td>Facility Number</td>
                                         <td class="value">${facilityNumber}</td>
                                     </tr>
                                     <tr>
+                                        <td>Product Program</td>
+                                        <td class="value">${productProgramName}</td>
+                                    </tr>
+                                    ${facilityType !== '-' ? `
+                                    <tr>
                                         <td>Facility Type</td>
                                         <td class="value">${facilityType}</td>
                                     </tr>
+                                    ` : ''}
                                     <tr>
                                         <td>Periodic Frequency</td>
                                         <td class="value">${periodicFrequency}</td>
                                     </tr>
-                                    ${leadUnderwriter !== '-' ? `
                                     <tr>
-                                        <td>Lead Underwriter</td>
-                                        <td class="value">${leadUnderwriter}</td>
+                                        <td>Due Date</td>
+                                        <td class="value">${formatDateToDDMMYYYY(dueDate) || covenantDueDate}</td>
+                                    </tr>
+                                    ${covenantDeferredDate !== '-' ? `
+                                    <tr>
+                                        <td>Deferred Date</td>
+                                        <td class="value">${covenantDeferredDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${pastDueCategory !== '-' ? `
+                                    <tr>
+                                        <td>Past Due Category</td>
+                                        <td class="value">${pastDueCategory}</td>
                                     </tr>
                                     ` : ''}
                                 </tbody>
                             </table>
                         </div>
                         
+                        <!-- Team & Units -->
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                Team & Organization
+                            </div>
+                            <table class="tooltip-table">
+                                <tbody>
+                                    ${originationUnit !== '-' ? `
+                                    <tr>
+                                        <td>Origination Unit</td>
+                                        <td class="value">${originationUnit}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${leadUnderwriter !== '-' ? `
+                                    <tr>
+                                        <td>Lead Underwriter</td>
+                                        <td class="value">${leadUnderwriter}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${underwritingTeamLead !== '-' ? `
+                                    <tr>
+                                        <td>UW Team Lead</td>
+                                        <td class="value">${underwritingTeamLead}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${productUnderwriter !== '-' ? `
+                                    <tr>
+                                        <td>Product UW</td>
+                                        <td class="value">${productUnderwriter}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${controlUnit !== '-' ? `
+                                    <tr>
+                                        <td>Control Unit</td>
+                                        <td class="value">${controlUnit}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${ouExpenseCode !== '-' ? `
+                                    <tr>
+                                        <td>OU Expense Code</td>
+                                        <td class="value">${ouExpenseCode}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${cuExpenseCode !== '-' ? `
+                                    <tr>
+                                        <td>CU Expense Code</td>
+                                        <td class="value">${cuExpenseCode}</td>
+                                    </tr>
+                                    ` : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Key Dates -->
+                        ${(reportDate !== '-' || fortyFiveDaysPastDueDate !== '-') ? `
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                Additional Dates
+                            </div>
+                            <table class="tooltip-table">
+                                <tbody>
+                                    ${reportDate !== '-' ? `
+                                    <tr>
+                                        <td>Report Date</td>
+                                        <td class="value">${reportDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${fortyFiveDaysPastDueDate !== '-' ? `
+                                    <tr>
+                                        <td>45 Days Past Due Date</td>
+                                        <td class="value">${fortyFiveDaysPastDueDate}</td>
+                                    </tr>
+                                    ` : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Description Section -->
                         ${covenantDescription !== '-' ? `
                         <div style="margin-top: 12px;">
-                            <div style="font-size: 11px; font-weight: 600; color: #374151; margin-bottom: 6px;">Description</div>
-                            <div style="background: #F9FAFB; border-radius: 8px; padding: 10px; border: 1px solid #E5E7EB; font-size: 11px; color: #374151; line-height: 1.5;">${covenantDescription}</div>
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                Covenant Description
+                            </div>
+                            <div style="
+                                background: #F9FAFB;
+                                border-radius: 8px;
+                                padding: 10px;
+                                border: 1px solid #E5E7EB;
+                                font-size: 11px;
+                                color: #374151;
+                                line-height: 1.5;
+                            ">${covenantDescription}</div>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Remarks Section -->
+                        ${covenantRemarks !== '-' ? `
+                        <div style="margin-top: 12px;">
+                            <div class="tooltip-section-title">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                                Remarks
+                            </div>
+                            <div style="
+                                background: #FFFBEB;
+                                border-radius: 8px;
+                                padding: 10px;
+                                border: 1px solid #FDE68A;
+                                font-size: 11px;
+                                color: #92400E;
+                                line-height: 1.5;
+                            ">${covenantRemarks}</div>
                         </div>
                         ` : ''}
                     </div>
@@ -30881,6 +31291,8 @@
                 
                 tooltipTimeout = setTimeout(() => {
                     tooltip.classList.add('show');
+                    // Fallback for when CSS class doesn't work (Confluence)
+                    tooltip.style.opacity = '1';
                 }, 150);
 
                 moveEnhancedTooltip(event);
@@ -30932,6 +31344,8 @@
                 }
                 
                 tooltip.classList.remove('show');
+                // Fallback for when CSS class doesn't work (Confluence)
+                tooltip.style.opacity = '0';
             }
         </script>
 
