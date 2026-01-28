@@ -2548,6 +2548,15 @@
                                     <td class="px-2 py-1 font-mono text-gray-600">Origination Date <span
                                             class="text-cyan-500">→ DD/MM/YYYY</span></td>
                                 </tr>
+                                <tr class="hover:bg-gray-50 bg-cyan-50/30">
+                                    <td class="px-2 py-1 font-mono font-medium">Renewal_Date</td>
+                                    <td class="px-2 py-1 font-mono text-blue-700">Renewal Date <span
+                                            class="text-cyan-500">→ DD/MM/YYYY</span></td>
+                                    <td class="px-2 py-1 font-mono text-brand-600">Renewal Date <span
+                                            class="text-cyan-500">→ DD/MM/YYYY</span></td>
+                                    <td class="px-2 py-1 font-mono text-gray-600">Renewal Date <span
+                                            class="text-cyan-500">→ DD/MM/YYYY</span></td>
+                                </tr>
                                 <tr class="hover:bg-gray-50 bg-green-50/30">
                                     <td class="px-2 py-1 font-mono font-medium">CA_Review</td>
                                     <td class="px-2 py-1 font-mono text-blue-700">CA Review Y/N <span
@@ -7899,6 +7908,7 @@
                         SFT_Facility: this.determineSFT('', facilityType, 'emea'),
                         Facility_First_Approval_Date: this.formatDateSafe(row['Facility First Approval Date']),
                         Origination_Date: this.formatDateSafe(row['Origination Date']),
+                        Renewal_Date: this.formatDateSafe(row['Renewal Date']),
                         CA_Review: caReview,
                         OSUC: 0,
                         Total_OS: 0,
@@ -7952,6 +7962,7 @@
                         SFT_Facility: this.determineSFT('', facilityType, 'apac'),
                         Facility_First_Approval_Date: '',
                         Origination_Date: this.formatDateSafe(row['Original Origination Date']),
+                        Renewal_Date: this.formatDateSafe(row['Renewal Date']),
                         CA_Review: '',
                         OSUC: 0,
                         Total_OS: 0,
@@ -8014,6 +8025,7 @@
                             this.getColumnValue(row, ['Origination Date', 'OriginationDate', 'Origination_Date',
                                 'Original Origination Date', 'Orig Date'])
                         ),
+                        Renewal_Date: this.formatDateSafe(row['Renewal Date']),
                         CA_Review: '',
                         OSUC: this.parseNumeric(row['Total Comm Exposure (Fac Lvl)'] || row['OSUC']),
                         Total_OS: 0,
