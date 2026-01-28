@@ -4537,6 +4537,7 @@
                         return await parseCSVBlob(blob);
                     } else if (
                         CONFLUENCE_FILE_NAME.endsWith(".xlsx") ||
+                        CONFLUENCE_FILE_NAME.endsWith(".xlsb")  || 
                         CONFLUENCE_FILE_NAME.endsWith(".xls")
                     ) {
                         progressCallback("Preparing to parse Excel...");
@@ -7890,8 +7891,8 @@
 
             function exportToExcel() {
                 try {
-                    // Prepare data for export
-                    const exportData = filteredData.map((row) => ({
+                    // Prepare data for export - Export entire portfolio database
+                    const exportData = portfolioData.map((row) => ({
                         "Report Date": formatDate(row.Report_Date),
                         Region: row.Region || "",
                         "Facility ID": row.Facility_ID || "",
@@ -8231,7 +8232,10 @@
                     const pseValue = String(pseColumn).trim().toUpperCase();
                     if (pseValue === "PSE") continue;
 
-                    const approvalDate = parseDate(row.Origination_Date);
+                    // Check both Origination_Date and Renewal_Date
+                    const originationDate = parseDate(row.Origination_Date);
+                    const renewalDate = parseDate(row.Renewal_Date);
+                    const approvalDate = originationDate || renewalDate; // Use whichever is available
                     const facilityId = row.Facility_ID;
                     const facAmount = parseNumber(row.Fac_Amount || row.Facility_Amount);
 
@@ -31498,7 +31502,8 @@
                 }
 
                 try {
-                    const dataToExport = trendsFilteredData.length > 0 ? trendsFilteredData : historicalTrendsData;
+                    // Export entire historical trends database
+                    const dataToExport = historicalTrendsData;
 
                     const ws = XLSX.utils.json_to_sheet(dataToExport);
                     const wb = XLSX.utils.book_new();
