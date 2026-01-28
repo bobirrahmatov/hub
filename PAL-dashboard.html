@@ -414,6 +414,62 @@
         .loading-text {
             animation: pulse 1.5s ease-in-out infinite;
         }
+
+        /* Bar chart styles for Portfolio Summary table */
+        .bar-chart-container {
+            position: relative;
+            width: 100%;
+            height: 24px;
+            background-color: #f3f4f6;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .bar-chart-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        .bar-chart-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            font-weight: 500;
+            color: #1f2937;
+            z-index: 1;
+            line-height: 1.5;
+        }
+
+        /* Custom scrollbar styles - override Confluence global CSS */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px !important;
+            height: 8px !important;
+            display: block !important;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            border-radius: 9999px !important;
+            background-color: #f3f4f6 !important;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            border-radius: 9999px !important;
+            background-color: #9ca3af !important;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: #6b7280 !important;
+        }
+
+        /* Force scrollbar visibility - Firefox and other browsers */
+        .custom-scrollbar {
+            scrollbar-width: thin !important;
+            scrollbar-color: #9ca3af #f3f4f6 !important;
+        }
     </style>
 </head>
 
@@ -706,6 +762,32 @@
                                                         </svg>
                                                     </div>
                                                 </div>
+                                                <div class="filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150"
+                                                    data-value="SARG" onclick="toggleFilterItem(this, 'region')">
+                                                    <span class="pr-4 !text-base">SARG</span>
+                                                    <div class="w-5 h-5 check-icon hidden">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="w-5 h-5 text-blue-600" viewBox="0 0 20 20"
+                                                            fill="currentColor">
+                                                            <path fill-rule="evenodd"
+                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                clip-rule="evenodd" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div class="filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150"
+                                                    data-value="IPB" onclick="toggleFilterItem(this, 'region')">
+                                                    <span class="pr-4 !text-base">IPB</span>
+                                                    <div class="w-5 h-5 check-icon hidden">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="w-5 h-5 text-blue-600" viewBox="0 0 20 20"
+                                                            fill="currentColor">
+                                                            <path fill-rule="evenodd"
+                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                clip-rule="evenodd" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <!-- Apply Button -->
                                             <div class="p-3 border-t border-gray-100 bg-gray-50">
@@ -920,10 +1002,14 @@
                             </div>
 
                             <!-- Footnote -->
-                            <p class="!text-base text-gray-400 mt-4 pt-3 border-t border-gray-100">
-                                <span class="italic">Note:</span> OSUC and Outstanding balances are from regional credit
-                                platforms.
-                            </p>
+                            <div class="mt-4 pt-3 border-t border-gray-100">
+                                <p class="!text-xs text-gray-400 italic">
+                                    <span class="font-semibold">Note:</span> OSUC and Outstanding balances are from regional credit platforms. 
+                                    • <span class="font-semibold">UC:</span> Undrawn portion of committed facility 
+                                    • <span class="font-semibold">OS:</span> Drawn amount or calculated exposure 
+                                    • <span class="font-semibold">OSUC:</span> For committed facilities: OS + UC; For uncommitted: OS only
+                                </p>
+                            </div>
                         </div>
 
                         <!-- Advanced Filters Modal -->
@@ -1370,6 +1456,135 @@
                                     id="facilitiesExpiredCountMetric">
                                     0
                                 </p>
+                            </div>
+                        </div>
+
+                        <!-- Securities Based Lending SFT Facility View -->
+                        <div id="sblSftFacilityView" class="mb-6 rounded-2xl border border-gray-200 bg-white" style="display: none;">
+                            <div class="px-6 py-4">
+                                <h3 class="!text-lg font-semibold text-gray-800">
+                                    Securities Based Lending SFT Facility View
+                                </h3>
+                                <p class="!text-base font-medium text-gray-500 mt-1">
+                                    Breakdown of SFT vs Non-SFT facilities
+                                </p>
+                            </div>
+                            <div class="custom-scrollbar overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
+                                                SBL Facilities
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
+                                                TFA
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
+                                                Outstanding
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
+                                                Unused Commitment
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
+                                                Unused Uncommitted
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
+                                                Facilities
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        <!-- SFT Facilities Row -->
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">
+                                                SBL SFT Facilities
+                                            </td>
+                                            <td id="sblSftTfa" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help" 
+                                                onmouseenter="showSBLTooltip(event, 'SFT', 'TFA')"
+                                                onmouseleave="hideSBLTooltip()">
+                                                $0.0M
+                                            </td>
+                                            <td id="sblSftOutstanding" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                                onmouseenter="showSBLTooltip(event, 'SFT', 'Outstanding')"
+                                                onmouseleave="hideSBLTooltip()">
+                                                $0.0M
+                                            </td>
+                                            <td id="sblSftUnusedCommitment" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                                onmouseenter="showSBLTooltip(event, 'SFT', 'Unused Commitment')"
+                                                onmouseleave="hideSBLTooltip()">
+                                                $0.0M
+                                            </td>
+                                            <td id="sblSftUnusedUncommitted" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                                onmouseenter="showSBLTooltip(event, 'SFT', 'Unused Uncommitted')"
+                                                onmouseleave="hideSBLTooltip()">
+                                                $0.0M
+                                            </td>
+                                            <td class="px-6 py-4 text-center cursor-help"
+                                                onmouseenter="showSBLTooltip(event, 'SFT', 'Facilities')"
+                                                onmouseleave="hideSBLTooltip()">
+                                                <span id="sblSftCount" class="bg-gray-100 text-gray-700 rounded-full px-2 py-0.5 !text-base font-medium">
+                                                    0
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <!-- Non-SFT Facilities Row -->
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">
+                                                SBL Non-SFT Facilities
+                                            </td>
+                                            <td id="sblNonSftTfa" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                                onmouseenter="showSBLTooltip(event, 'Non-SFT', 'TFA')"
+                                                onmouseleave="hideSBLTooltip()">
+                                                $0.0M
+                                            </td>
+                                            <td id="sblNonSftOutstanding" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                                onmouseenter="showSBLTooltip(event, 'Non-SFT', 'Outstanding')"
+                                                onmouseleave="hideSBLTooltip()">
+                                                $0.0M
+                                            </td>
+                                            <td id="sblNonSftUnusedCommitment" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                                onmouseenter="showSBLTooltip(event, 'Non-SFT', 'Unused Commitment')"
+                                                onmouseleave="hideSBLTooltip()">
+                                                $0.0M
+                                            </td>
+                                            <td id="sblNonSftUnusedUncommitted" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                                onmouseenter="showSBLTooltip(event, 'Non-SFT', 'Unused Uncommitted')"
+                                                onmouseleave="hideSBLTooltip()">
+                                                $0.0M
+                                            </td>
+                                            <td class="px-6 py-4 text-center cursor-help"
+                                                onmouseenter="showSBLTooltip(event, 'Non-SFT', 'Facilities')"
+                                                onmouseleave="hideSBLTooltip()">
+                                                <span id="sblNonSftCount" class="bg-gray-100 text-gray-700 rounded-full px-2 py-0.5 !text-base font-medium">
+                                                    0
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <!-- Total Row -->
+                                        <tr class="bg-gray-50">
+                                            <td class="px-6 py-4 text-center !text-base font-semibold text-gray-900 rounded-bl-2xl">
+                                                Total
+                                            </td>
+                                            <td id="sblTotalTfa" class="px-6 py-4 text-center !text-base whitespace-nowrap font-semibold text-gray-900">
+                                                $0.0M
+                                            </td>
+                                            <td id="sblTotalOutstanding" class="px-6 py-4 text-center !text-base whitespace-nowrap font-semibold text-gray-900">
+                                                $0.0M
+                                            </td>
+                                            <td id="sblTotalUnusedCommitment" class="px-6 py-4 text-center !text-base whitespace-nowrap font-semibold text-gray-900">
+                                                $0.0M
+                                            </td>
+                                            <td id="sblTotalUnusedUncommitted" class="px-6 py-4 text-center !text-base whitespace-nowrap font-semibold text-gray-900">
+                                                $0.0M
+                                            </td>
+                                            <td class="px-6 py-4 text-center rounded-br-2xl">
+                                                <span id="sblTotalCount" class="bg-blue-100 text-blue-700 rounded-full px-2 py-0.5 !text-base font-medium">
+                                                    0
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
@@ -1905,49 +2120,6 @@
                             </div>
                         </div>
 
-                        <!-- Important Notes -->
-                        <div class="mb-6 overflow-hidden rounded-xl border border-gray-200 bg-white">
-                            <div class="flex items-center gap-3 px-5 py-4">
-                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 shrink-0">
-                                    <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div class="flex-1">
-                                    <h4 class="!text-base font-semibold text-gray-800 mb-1">
-                                        Important Notes
-                                    </h4>
-                                    <div class="!text-base text-gray-600 space-y-2.5">
-                                        <div class="flex items-start gap-2">
-                                            <span class="font-semibold text-gray-700 mt-0.5">•</span>
-                                            <p>
-                                                <span class="font-semibold text-gray-700">Unused Commitment (UC):</span>
-                                                Undrawn portion of committed facility.
-                                            </p>
-                                        </div>
-                                        <div class="flex items-start gap-2">
-                                            <span class="font-semibold text-gray-700 mt-0.5">•</span>
-                                            <p>
-                                                <span class="font-semibold text-gray-700">Outstanding (OS):</span>
-                                                Drawn amount or calculated exposure.
-                                            </p>
-                                        </div>
-                                        <div class="flex items-start gap-2">
-                                            <span class="font-semibold text-gray-700 mt-0.5">•</span>
-                                            <p>
-                                                <span class="font-semibold text-gray-700">OSUC (Outstanding and Unused
-                                                    Commitment):</span>
-                                                For committed facilities, OSUC = Outstanding + Unused Commitment. For
-                                                uncommitted facilities, OSUC = Outstanding.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Chart Data Viewer Modal -->
                         <div id="chartDataModal" class="fixed inset-0 z-[9999] hidden overflow-y-auto"
                             aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -2299,6 +2471,12 @@
                                     <button @click="selectedRegion = 'LATAM'; filterTrendsByRegion('LATAM')"
                                         :class="selectedRegion === 'LATAM' ? 'shadow-sm text-gray-900 bg-white' : 'text-gray-500'"
                                         class="px-3.5 py-2.5 font-medium transition-colors rounded-md !text-base hover:text-gray-900">LATAM</button>
+                                    <button @click="selectedRegion = 'SARG'; filterTrendsByRegion('SARG')"
+                                        :class="selectedRegion === 'SARG' ? 'shadow-sm text-gray-900 bg-white' : 'text-gray-500'"
+                                        class="px-3.5 py-2.5 font-medium transition-colors rounded-md !text-base hover:text-gray-900">SARG</button>
+                                    <button @click="selectedRegion = 'IPB'; filterTrendsByRegion('IPB')"
+                                        :class="selectedRegion === 'IPB' ? 'shadow-sm text-gray-900 bg-white' : 'text-gray-500'"
+                                        class="px-3.5 py-2.5 font-medium transition-colors rounded-md !text-base hover:text-gray-900">IPB</button>
                                 </div>
                             </div>
 
@@ -2370,6 +2548,75 @@
                         <div id="trendsActiveFiltersBadges"
                             class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-200" style="display: none">
                             <!-- Badges will be dynamically added here -->
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Summary Table by Category -->
+                    <div class="mb-6">
+                        <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                            <div class="px-6 py-4 border-b border-gray-100">
+                                <h3 class="!text-xl font-bold text-gray-900">Portfolio Summary by Category</h3>
+                                <p class="!text-base font-medium text-gray-500 mt-1">Current portfolio values and period-over-period variances</p>
+                            </div>
+
+                            <div class="custom-scrollbar overflow-x-auto">
+                                <table class="min-w-full" id="portfolioSummaryTable">
+                                    <thead id="portfolioSummaryTableHead">
+                                        <tr class="bg-gray-50">
+                                            <th class="px-6 py-4 text-left !text-base font-medium text-gray-500 sticky left-0 bg-gray-50 z-10"
+                                                style="font-weight: 500; text-align: left; padding: 1rem 1.5rem; white-space: nowrap;">
+                                                Category
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
+                                                TFA
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
+                                                OSUC
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
+                                                Outstanding
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium text-gray-500 bg-gray-50"
+                                                style="white-space: nowrap;">
+                                                % of Total Portfolio
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
+                                                TFA vs Prior YE
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
+                                                WoW Variance
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
+                                                MoM Variance
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
+                                                QoQ Variance
+                                            </th>
+                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
+                                                YoY Variance
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody class="divide-y divide-gray-100" id="portfolioSummaryTableBody">
+                                        <tr>
+                                            <td colspan="9" class="px-6 py-8 text-center text-gray-400">
+                                                <div class="flex flex-col items-center gap-2">
+                                                    <svg class="h-8 w-8 text-gray-300 animate-spin" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                            stroke="currentColor" stroke-width="4" fill="none"></circle>
+                                                        <path class="opacity-75" fill="currentColor"
+                                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                        </path>
+                                                    </svg>
+                                                    <p class="!text-base">Loading portfolio summary...</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
@@ -3182,6 +3429,78 @@
             let availableTrendDates = [];
             window.trendsDataLoaded = false; // Track if trends data has been loaded
 
+            // =====================================================
+            // PORTFOLIO SUMMARY TABLE CONFIGURATION
+            // =====================================================
+            // Configure categories and subcategories for the Portfolio Summary Table
+            // This structure defines what categories appear in the table
+            // All categories will ALWAYS display, even if there's no data (will show $0.00)
+            //
+            // HOW TO CUSTOMIZE:
+            // 1. To add a new category: Add a new key to this object
+            // 2. For parent categories with subcategories: Set isParent: true and define subcategories
+            // 3. For standalone categories: Set isParent: false (no subcategories)
+            // 4. Indentation options: '' (no indent), 'pl-8' (medium indent), 'pl-12' (deep indent)
+            // 5. isBold: true for category headings, false for regular text
+            //
+            // Products are matched by EXACT name (case-insensitive) to category/subcategory names
+            // The table will filter by region automatically based on the Region filter selection.
+            // Global = all regions, otherwise filters to selected region only.
+            //
+            const PORTFOLIO_SUMMARY_CATEGORIES = {
+                'Securities Based Lending': {
+                    isParent: false,
+                    indent: '',      // No indentation
+                    isBold: true     // Bold category heading
+                },
+                'Residential Mortgages': {
+                    isParent: false,
+                    indent: '',      // No indentation
+                    isBold: true     // Bold category heading
+                },
+                'Commercial Real Estate': {
+                    isParent: false,
+                    indent: '',      // No indentation
+                    isBold: true     // Bold category heading
+                },
+                'Other Structured Lending': {
+                    isParent: true,
+                    indent: '',      // No indentation for parent
+                    isBold: true,    // Bold parent heading
+                    subcategories: {
+                        'Art Lending': { 
+                            indent: 'pl-12'  // Subcategories indented
+                        },
+                        'Aircraft Financing': { 
+                            indent: 'pl-12'
+                        },
+                        'Sports Financing': { 
+                            indent: 'pl-12'
+                        },
+                        'Law Firm/Partner Lending': { 
+                            indent: 'pl-12'
+                        },
+                        'Subscription Financing': { 
+                            indent: 'pl-12'
+                        },
+                        'Other Secured': { 
+                            indent: 'pl-12'
+                        }
+                    }
+                },
+                'Unsecured Lending': {
+                    isParent: false,
+                    indent: '',      // No indentation
+                    isBold: true     // Bold category heading
+                },
+                'Cards': {
+                    isParent: false,
+                    indent: '',      // No indentation
+                    isBold: true     // Bold category heading
+                }
+            };
+            // =====================================================
+
             // Generate dummy data for trends (for testing)
             function generateTrendsDummyData() {
                 const regions = ["NAM", "EMEA", "APAC", "LATAM"];
@@ -3304,7 +3623,7 @@
             if (ENABLE_DUMMY_DATA) {
                 // Generate comprehensive dummy data for testing
                 const regions = ['NAM', 'EMEA', 'APAC', 'LATAM'];
-                const productPrograms = ['Corporate Lending', 'Trade Finance', 'Working Capital', 'Project Finance', 'Real Estate', 'Asset Based Lending', 'Equipment Finance', 'Supply Chain Finance'];
+                const productPrograms = ['Securities Based Lending', 'Trade Finance', 'Working Capital', 'Project Finance', 'Real Estate', 'Asset Based Lending', 'Equipment Finance', 'Supply Chain Finance'];
                 const facilityTypes = ['Revolver', 'Term Loan', 'Overdraft', 'Bridge Loan', 'Construction Loan', 'LOC', 'Guarantee', 'SBLC'];
                 const creditClass = ['PASS', 'SPECIAL MENTION', 'SUBSTANDARD', 'DOUBTFUL'];
                 const underwriters = ['John Smith', 'Sarah Johnson', 'David Lee', 'Carlos Rodriguez', 'Robert Brown', 'Lisa Anderson', 'Mike Wilson', 'Emily Chen', 'Tom Harris', 'Anna Martinez'];
@@ -3313,6 +3632,7 @@
                 // Sub-product mapping (some products have sub-products, some don't)
                 const subProductMap = {
                     'Corporate Lending': ['Senior Secured', 'Subordinated', 'Mezzanine', 'Syndicated'],
+                    'Securities Based Lending': ['Margin Lending', 'Securities Backed Lines', 'Portfolio Financing'],
                     'Trade Finance': ['Import LC', 'Export LC', 'Standby LC', 'Trade Loans'],
                     'Working Capital': ['Revolving Credit', 'Line of Credit', 'Overdraft Facility'],
                     'Project Finance': ['Infrastructure', 'Energy', 'PPP Projects'],
@@ -3391,6 +3711,18 @@
                         facilityFirstApprovalDate = null;
                     }
 
+                    // Calculate Direct, Contingent, and PSE OS components
+                    const totalOS = baseAmount * (0.5 + Math.random() * 0.3);
+                    const directOS = totalOS * 0.6;
+                    const contingentOS = totalOS * 0.3;
+                    const pseOS = totalOS * 0.1;
+
+                    // Determine SFT_Facility: For SBL, make 60% SFT and 40% Non-SFT
+                    let sftFacility = 'No';
+                    if (productProgram === 'Securities Based Lending') {
+                        sftFacility = (i % 5 < 3) ? 'Yes' : 'No'; // 60% Yes, 40% No
+                    }
+
                     portfolioData.push({
                         Report_Date: '2024-11-30',
                         Region: region,
@@ -3411,7 +3743,10 @@
                         Fac_Amount: baseAmount,
                         Facility_Amount: baseAmount,
                         OSUC: baseAmount * (0.7 + Math.random() * 0.2),
-                        Total_OS: baseAmount * (0.5 + Math.random() * 0.3),
+                        Total_OS: totalOS,
+                        Direct_OS: directOS,
+                        Contingent_OS: contingentOS,
+                        PSE_OS: pseOS,
                         Unused_Commitment: baseAmount * (0.1 + Math.random() * 0.2),
                         Credit_Classification: creditClass[i % creditClass.length],
                         Management_Status: i % 3 === 0 ? 'DM' : 'CM',
@@ -3419,13 +3754,15 @@
                         'PSE_non-PSE': i % 4 === 0 ? 'PSE' : 'non-PSE',
                         PSE_non_PSE: i % 4 === 0 ? 'PSE' : 'non-PSE',
                         Commitment_Type: i % 3 === 0 ? 'Uncommitted' : 'Committed',
+                        'Committed/Uncommitted': i % 3 === 0 ? 'Uncommitted' : 'Committed',
                         Committed_Uncommitted: i % 3 === 0 ? 'UNCOMMITTED' : 'COMMITTED',
                         Maturity_Date: expiryDate,
                         Origination_Date: originationDate,
                         Facility_First_Approval_Date: facilityFirstApprovalDate,
                         CA_Expiry_Date: caExpiryDate,
                         CA_Expiration_Date: caExpiryDate,
-                        ROTCE: 8 + Math.random() * 15
+                        ROTCE: 8 + Math.random() * 15,
+                        SFT_Facility: sftFacility
                     });
                 }
 
@@ -3895,6 +4232,9 @@
                         updateCovenantRegionalTable('pastDue');
                         calculateCCMStats();
                         createCCMRegionalChart();
+                        
+                        // Initialize SBL SFT Facility View
+                        updateSBLSftFacilityView();
 
                         // Initial filter
                         filterData();
@@ -4116,6 +4456,9 @@
                                 calculateCCMStats();
                                 createCCMRegionalChart();
                                 updateCCMStats('pastDue');
+                                
+                                // Initialize SBL SFT Facility View
+                                updateSBLSftFacilityView();
 
                                 const loadTime = ((performance.now() - loadStartTime) / 1000).toFixed(1);
 
@@ -5048,6 +5391,9 @@
                     updateCovenantRegionalTable('pastDue');
                     calculateCCMStats();
                     createCCMRegionalChart();
+                    
+                    // Update SBL SFT Facility View
+                    updateSBLSftFacilityView();
                 });
             }
 
@@ -5325,6 +5671,9 @@
                     updateCovenantRegionalTable('pastDue');
                     calculateCCMStats();
                     createCCMRegionalChart();
+                    
+                    // Update SBL SFT Facility View
+                    updateSBLSftFacilityView();
                 });
             }
 
@@ -5742,12 +6091,12 @@
                     // Total Outstanding from Total_OS column
                     totalOutstanding += parseNumber(row.Total_OS);
 
-                    // Total Unused Commitment from Total_Unused_Exposure column
-                    totalUnusedCommitment += parseNumber(row.Total_Unused_Exposure);
+                    // Total Unused Commitment from Total_Unused_Commitment column
+                    totalUnusedCommitment += parseNumber(row.Total_Unused_Commitment);
 
-                    // Total Unused Uncommitted = Total_Undrawn - Total_Unused_Exposure
+                    // Total Unused Uncommitted = Total_Undrawn - Total_Unused_Commitment
                     const totalUndrawn = parseNumber(row.Total_Undrawn);
-                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    const unusedExposure = parseNumber(row.Total_Unused_Commitment);
                     totalUnusedUncommitted += (totalUndrawn - unusedExposure);
 
                     // Use Relationship_ID for unique count (not Relationship_Name which may have duplicates)
@@ -7692,12 +8041,12 @@
                     // Total Outstanding from Total_OS column
                     totalOutstanding += parseNumber(row.Total_OS);
 
-                    // Total Unused Commitment from Total_Unused_Exposure column
-                    totalUnusedCommitment += parseNumber(row.Total_Unused_Exposure);
+                    // Total Unused Commitment from Total_Unused_Commitment column
+                    totalUnusedCommitment += parseNumber(row.Total_Unused_Commitment);
 
-                    // Total Unused Uncommitted = Total_Undrawn - Total_Unused_Exposure
+                    // Total Unused Uncommitted = Total_Undrawn - Total_Unused_Commitment
                     const totalUndrawn = parseNumber(row.Total_Undrawn);
-                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    const unusedExposure = parseNumber(row.Total_Unused_Commitment);
                     totalUnusedUncommitted += (totalUndrawn - unusedExposure);
 
                     // Use Relationship_ID for unique count (not Relationship_Name which may have duplicates)
@@ -9936,6 +10285,294 @@
 
             // Make updateCCMStats globally accessible
             window.updateCCMStats = updateCCMStats;
+
+            // ========================================
+            // SBL SFT FACILITY VIEW FUNCTIONS
+            // ========================================
+
+            // Global variable to store SBL breakdown data for tooltips
+            let sblBreakdownData = {
+                sft: { tfa: 0, outstanding: 0, unusedCommitment: 0, unusedUncommitted: 0, count: 0 },
+                nonSft: { tfa: 0, outstanding: 0, unusedCommitment: 0, unusedUncommitted: 0, count: 0 },
+                total: { tfa: 0, outstanding: 0, unusedCommitment: 0, unusedUncommitted: 0, count: 0 }
+            };
+
+            // Calculate and update SBL SFT Facility View table
+            function updateSBLSftFacilityView() {
+                // Check if Securities Based Lending is in the active product filters
+                const isSBLFiltered = activeFilters["Product"] && 
+                    (activeFilters["Product"].includes("Securities Based Lending") || 
+                     selectedProducts.includes("Securities Based Lending"));
+                
+                const sblViewElement = document.getElementById("sblSftFacilityView");
+                
+                // Show/hide the table based on whether SBL is filtered
+                if (isSBLFiltered) {
+                    sblViewElement.style.display = "block";
+                    
+                    // Calculate metrics for SFT and Non-SFT facilities
+                    const sftMetrics = {
+                        tfa: 0,
+                        outstanding: 0,
+                        unusedCommitment: 0,
+                        unusedUncommitted: 0,
+                        count: 0
+                    };
+                    
+                    const nonSftMetrics = {
+                        tfa: 0,
+                        outstanding: 0,
+                        unusedCommitment: 0,
+                        unusedUncommitted: 0,
+                        count: 0
+                    };
+                    
+                    // Use filtered data to calculate metrics
+                    const dataToUse = (filteredData && filteredData.length > 0) ? filteredData : portfolioData;
+                    
+                    dataToUse.forEach(row => {
+                        // Only process Securities Based Lending rows
+                        if (row.Product_Program !== "Securities Based Lending") return;
+                        
+                        const isSFT = row.SFT_Facility && 
+                            String(row.SFT_Facility).trim().toLowerCase() === "yes";
+                        
+                        const metrics = isSFT ? sftMetrics : nonSftMetrics;
+                        
+                        // Calculate TFA
+                        const tfa = parseFloat(row.Fac_Amount) || 0;
+                        metrics.tfa += tfa;
+                        
+                        // Calculate Outstanding (Direct + Contingent + PSE)
+                        const directOS = parseFloat(row.Direct_OS) || 0;
+                        const contingentOS = parseFloat(row.Contingent_OS) || 0;
+                        const pseOS = parseFloat(row.PSE_OS) || 0;
+                        const outstanding = directOS + contingentOS + pseOS;
+                        metrics.outstanding += outstanding;
+                        
+                        // Determine if committed or uncommitted
+                        const isCommitted = row["Committed/Uncommitted"] === "Committed" || 
+                                          row.Committed_Uncommitted === "Committed";
+                        
+                        if (isCommitted) {
+                            // For committed facilities: Unused Commitment = TFA - Outstanding
+                            const unusedCommitment = Math.max(0, tfa - outstanding);
+                            metrics.unusedCommitment += unusedCommitment;
+                        } else {
+                            // For uncommitted facilities: Unused Uncommitted = TFA - Outstanding
+                            const unusedUncommitted = Math.max(0, tfa - outstanding);
+                            metrics.unusedUncommitted += unusedUncommitted;
+                        }
+                        
+                        metrics.count++;
+                    });
+                    
+                    // Calculate totals
+                    const totals = {
+                        tfa: sftMetrics.tfa + nonSftMetrics.tfa,
+                        outstanding: sftMetrics.outstanding + nonSftMetrics.outstanding,
+                        unusedCommitment: sftMetrics.unusedCommitment + nonSftMetrics.unusedCommitment,
+                        unusedUncommitted: sftMetrics.unusedUncommitted + nonSftMetrics.unusedUncommitted,
+                        count: sftMetrics.count + nonSftMetrics.count
+                    };
+
+                    // Store data globally for tooltips
+                    sblBreakdownData = {
+                        sft: sftMetrics,
+                        nonSft: nonSftMetrics,
+                        total: totals
+                    };
+                    
+                    // Update SFT row
+                    document.getElementById("sblSftTfa").textContent = formatCurrency(sftMetrics.tfa);
+                    document.getElementById("sblSftOutstanding").textContent = formatCurrency(sftMetrics.outstanding);
+                    document.getElementById("sblSftUnusedCommitment").textContent = formatCurrency(sftMetrics.unusedCommitment);
+                    document.getElementById("sblSftUnusedUncommitted").textContent = formatCurrency(sftMetrics.unusedUncommitted);
+                    document.getElementById("sblSftCount").textContent = sftMetrics.count;
+                    
+                    // Update Non-SFT row
+                    document.getElementById("sblNonSftTfa").textContent = formatCurrency(nonSftMetrics.tfa);
+                    document.getElementById("sblNonSftOutstanding").textContent = formatCurrency(nonSftMetrics.outstanding);
+                    document.getElementById("sblNonSftUnusedCommitment").textContent = formatCurrency(nonSftMetrics.unusedCommitment);
+                    document.getElementById("sblNonSftUnusedUncommitted").textContent = formatCurrency(nonSftMetrics.unusedUncommitted);
+                    document.getElementById("sblNonSftCount").textContent = nonSftMetrics.count;
+                    
+                    // Update Total row
+                    document.getElementById("sblTotalTfa").textContent = formatCurrency(totals.tfa);
+                    document.getElementById("sblTotalOutstanding").textContent = formatCurrency(totals.outstanding);
+                    document.getElementById("sblTotalUnusedCommitment").textContent = formatCurrency(totals.unusedCommitment);
+                    document.getElementById("sblTotalUnusedUncommitted").textContent = formatCurrency(totals.unusedUncommitted);
+                    document.getElementById("sblTotalCount").textContent = totals.count;
+                    
+                } else {
+                    // Hide the table if SBL is not filtered
+                    sblViewElement.style.display = "none";
+                }
+            }
+
+            // Show SBL Tooltip with breakdown
+            let sblTooltipTimeout;
+            function showSBLTooltip(event, type, metric) {
+                console.log('showSBLTooltip called', type, metric);
+                
+                // Initialize tooltip if not already done
+                if (!initTooltipElements()) {
+                    console.warn('Tooltip elements not initialized');
+                    return;
+                }
+                
+                if (sblTooltipTimeout) {
+                    clearTimeout(sblTooltipTimeout);
+                }
+                
+                // Ensure tooltip and tooltipContent are available
+                if (!tooltip || !tooltipContent) {
+                    console.warn('Tooltip elements not available', tooltip, tooltipContent);
+                    return;
+                }
+
+                console.log('SBL Breakdown Data:', sblBreakdownData);
+
+                const data = type === 'SFT' ? sblBreakdownData.sft : sblBreakdownData.nonSft;
+                const otherData = type === 'SFT' ? sblBreakdownData.nonSft : sblBreakdownData.sft;
+                const totalData = sblBreakdownData.total;
+
+                let value, otherValue, totalValue, label;
+                
+                switch(metric) {
+                    case 'TFA':
+                        value = data.tfa;
+                        otherValue = otherData.tfa;
+                        totalValue = totalData.tfa;
+                        label = 'Total Facilities Approved';
+                        break;
+                    case 'Outstanding':
+                        value = data.outstanding;
+                        otherValue = otherData.outstanding;
+                        totalValue = totalData.outstanding;
+                        label = 'Outstanding Balance';
+                        break;
+                    case 'Unused Commitment':
+                        value = data.unusedCommitment;
+                        otherValue = otherData.unusedCommitment;
+                        totalValue = totalData.unusedCommitment;
+                        label = 'Unused Commitment';
+                        break;
+                    case 'Unused Uncommitted':
+                        value = data.unusedUncommitted;
+                        otherValue = otherData.unusedUncommitted;
+                        totalValue = totalData.unusedUncommitted;
+                        label = 'Unused Uncommitted';
+                        break;
+                    case 'Facilities':
+                        value = data.count;
+                        otherValue = otherData.count;
+                        totalValue = totalData.count;
+                        label = 'Facilities Count';
+                        break;
+                }
+
+                const percentage = totalValue > 0 ? ((value / totalValue) * 100).toFixed(1) : 0;
+                const otherPercentage = totalValue > 0 ? ((otherValue / totalValue) * 100).toFixed(1) : 0;
+
+                const isCount = metric === 'Facilities';
+                const formattedValue = isCount ? value : formatCurrency(value);
+                const formattedOtherValue = isCount ? otherValue : formatCurrency(otherValue);
+                const formattedTotal = isCount ? totalValue : formatCurrency(totalValue);
+
+                const sftPct = totalValue > 0 ? ((sblBreakdownData.sft[metric === 'TFA' ? 'tfa' : metric === 'Outstanding' ? 'outstanding' : metric === 'Unused Commitment' ? 'unusedCommitment' : metric === 'Unused Uncommitted' ? 'unusedUncommitted' : 'count'] / totalValue) * 100).toFixed(1) : 0;
+                const nonSftPct = totalValue > 0 ? ((sblBreakdownData.nonSft[metric === 'TFA' ? 'tfa' : metric === 'Outstanding' ? 'outstanding' : metric === 'Unused Commitment' ? 'unusedCommitment' : metric === 'Unused Uncommitted' ? 'unusedUncommitted' : 'count'] / totalValue) * 100).toFixed(1) : 0;
+
+                const tooltipHTML = `
+                    <div class="tooltip-header">
+                        <div class="tooltip-title">Securities Based Lending</div>
+                        <div class="tooltip-subtitle">${label} Breakdown</div>
+                    </div>
+                    
+                    <div class="tooltip-body">
+                        <!-- SFT Facilities -->
+                        <div class="tooltip-section-title" style="color: #3b82f6;">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            SFT Facilities
+                        </div>
+                        <div class="tooltip-grid mb-3">
+                            <div class="tooltip-widget">
+                                <div class="tooltip-widget-label">${label}</div>
+                                <div class="tooltip-widget-value small">${isCount ? sblBreakdownData.sft[metric === 'Facilities' ? 'count' : ''] : formatCurrency(sblBreakdownData.sft[metric === 'TFA' ? 'tfa' : metric === 'Outstanding' ? 'outstanding' : metric === 'Unused Commitment' ? 'unusedCommitment' : 'unusedUncommitted'])}</div>
+                            </div>
+                            <div class="tooltip-widget">
+                                <div class="tooltip-widget-label">Share</div>
+                                <div class="tooltip-widget-value small" style="color: #3b82f6;">${sftPct}%</div>
+                            </div>
+                        </div>
+
+                        <!-- Non-SFT Facilities -->
+                        <div class="tooltip-section-title" style="color: #6b7280;">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd"/>
+                            </svg>
+                            Non-SFT Facilities
+                        </div>
+                        <div class="tooltip-grid mb-3">
+                            <div class="tooltip-widget">
+                                <div class="tooltip-widget-label">${label}</div>
+                                <div class="tooltip-widget-value small">${isCount ? sblBreakdownData.nonSft[metric === 'Facilities' ? 'count' : ''] : formatCurrency(sblBreakdownData.nonSft[metric === 'TFA' ? 'tfa' : metric === 'Outstanding' ? 'outstanding' : metric === 'Unused Commitment' ? 'unusedCommitment' : 'unusedUncommitted'])}</div>
+                            </div>
+                            <div class="tooltip-widget">
+                                <div class="tooltip-widget-label">Share</div>
+                                <div class="tooltip-widget-value small" style="color: #6b7280;">${nonSftPct}%</div>
+                            </div>
+                        </div>
+
+                        <!-- Total -->
+                        <div class="pt-3 border-t border-gray-200 mb-3">
+                            <div class="flex justify-between items-center">
+                                <span class="!text-sm font-semibold text-gray-700">Total ${label}</span>
+                                <span class="!text-base font-bold text-gray-900">${formattedTotal}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                tooltipContent.innerHTML = tooltipHTML;
+                tooltip.classList.add('show');
+                tooltip.style.opacity = '1';
+
+                // Position tooltip
+                const rect = event.target.getBoundingClientRect();
+                const tooltipRect = tooltip.getBoundingClientRect();
+                
+                let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+                let top = rect.top - tooltipRect.height - 10;
+
+                // Keep tooltip on screen
+                if (left < 10) left = 10;
+                if (left + tooltipRect.width > window.innerWidth - 10) {
+                    left = window.innerWidth - tooltipRect.width - 10;
+                }
+                if (top < 10) {
+                    top = rect.bottom + 10;
+                }
+
+                tooltip.style.left = left + 'px';
+                tooltip.style.top = top + 'px';
+            }
+
+            // Hide SBL Tooltip
+            function hideSBLTooltip() {
+                if (sblTooltipTimeout) {
+                    clearTimeout(sblTooltipTimeout);
+                }
+                
+                sblTooltipTimeout = setTimeout(() => {
+                    if (tooltip) {
+                        tooltip.classList.remove('show');
+                        tooltip.style.opacity = '0';
+                    }
+                }, 100);
+            }
 
             // Parse number that might be formatted (e.g., "5.5M", "1.2K", "1,000,000")
             function parseNumber(value) {
@@ -16637,7 +17274,7 @@
 
                 dataSource.forEach(row => {
                     const region = (row.Region || 'Unknown').toUpperCase();
-                    const amount = parseNumber(row.Total_Unused_Exposure);
+                    const amount = parseNumber(row.Total_Unused_Commitment);
 
                     if (regionalData[region]) {
                         regionalData[region].count += 1;
@@ -16711,7 +17348,7 @@
                 dataSource.forEach(row => {
                     const program = row.Product_Program || 'Unknown';
                     if (!byProgram[program]) byProgram[program] = 0;
-                    byProgram[program] += parseNumber(row.Total_Unused_Exposure);
+                    byProgram[program] += parseNumber(row.Total_Unused_Commitment);
                 });
 
                 const sortedPrograms = Object.entries(byProgram)
@@ -16821,7 +17458,7 @@
                 dataSource.forEach(row => {
                     const region = (row.Region || 'Unknown').toUpperCase();
                     const totalUndrawn = parseNumber(row.Total_Undrawn);
-                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    const unusedExposure = parseNumber(row.Total_Unused_Commitment);
                     const amount = totalUndrawn - unusedExposure;
 
                     if (regionalData[region]) {
@@ -16897,7 +17534,7 @@
                     const program = row.Product_Program || 'Unknown';
                     if (!byProgram[program]) byProgram[program] = 0;
                     const totalUndrawn = parseNumber(row.Total_Undrawn);
-                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    const unusedExposure = parseNumber(row.Total_Unused_Commitment);
                     byProgram[program] += (totalUndrawn - unusedExposure);
                 });
 
@@ -19099,7 +19736,7 @@
             // Placeholder functions for other chart types (to be implemented similarly)
             function generateUnusedCommitmentExpandedView(dataSource) {
                 // Calculate Unused Commitment metrics
-                const totalUnusedCommitment = dataSource.reduce((sum, row) => sum + parseNumber(row.Total_Unused_Exposure), 0);
+                const totalUnusedCommitment = dataSource.reduce((sum, row) => sum + parseNumber(row.Total_Unused_Commitment), 0);
                 const totalRelationships = new Set(dataSource.map(r => r.Relationship_Name || r.Relationship_ID).filter(Boolean)).size;
                 const totalFacilities = new Set(dataSource.map(r => r.Facility_ID).filter(Boolean)).size;
                 const avgUnusedCommitmentPerRelationship = totalRelationships > 0 ? totalUnusedCommitment / totalRelationships : 0;
@@ -19107,7 +19744,7 @@
                 // Find largest single facility
                 let largestFacility = 0;
                 dataSource.forEach(row => {
-                    const amount = parseNumber(row.Total_Unused_Exposure);
+                    const amount = parseNumber(row.Total_Unused_Commitment);
                     if (amount > largestFacility) largestFacility = amount;
                 });
 
@@ -19116,7 +19753,7 @@
                 dataSource.forEach(row => {
                     const rel = row.Relationship_Name || row.Relationship_ID || 'Unknown';
                     if (!byRelationship[rel]) byRelationship[rel] = 0;
-                    byRelationship[rel] += parseNumber(row.Total_Unused_Exposure);
+                    byRelationship[rel] += parseNumber(row.Total_Unused_Commitment);
                 });
                 const top10Total = Object.values(byRelationship)
                     .sort((a, b) => b - a)
@@ -19129,7 +19766,7 @@
                 dataSource.forEach(row => {
                     const client = row.Relationship_Name || row.Relationship_ID || 'Unknown';
                     if (!byClient[client]) byClient[client] = 0;
-                    byClient[client] += parseNumber(row.Total_Unused_Exposure);
+                    byClient[client] += parseNumber(row.Total_Unused_Commitment);
                 });
 
                 // Group by Product Program
@@ -19137,7 +19774,7 @@
                 dataSource.forEach(row => {
                     const program = row.Product_Program || 'Unknown';
                     if (!byProgram[program]) byProgram[program] = 0;
-                    byProgram[program] += parseNumber(row.Total_Unused_Exposure);
+                    byProgram[program] += parseNumber(row.Total_Unused_Commitment);
                 });
 
                 // Get Top 10 clients
@@ -19165,7 +19802,7 @@
                         };
                     }
 
-                    detailedData[underwriter].unusedCommitment += parseNumber(row.Total_Unused_Exposure);
+                    detailedData[underwriter].unusedCommitment += parseNumber(row.Total_Unused_Commitment);
                     if (row.Facility_ID) detailedData[underwriter].facilities.add(row.Facility_ID);
                     if (row.Relationship_Name || row.Relationship_ID) {
                         detailedData[underwriter].relationships.add(row.Relationship_Name || row.Relationship_ID);
@@ -19358,10 +19995,10 @@
             }
 
             function generateUnusedUncommittedExpandedView(dataSource) {
-                // Calculate Unused Uncommitted metrics (Total_Undrawn - Total_Unused_Exposure)
+                // Calculate Unused Uncommitted metrics (Total_Undrawn - Total_Unused_Commitment)
                 const totalUnusedUncommitted = dataSource.reduce((sum, row) => {
                     const totalUndrawn = parseNumber(row.Total_Undrawn);
-                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    const unusedExposure = parseNumber(row.Total_Unused_Commitment);
                     return sum + (totalUndrawn - unusedExposure);
                 }, 0);
                 const totalRelationships = new Set(dataSource.map(r => r.Relationship_Name || r.Relationship_ID).filter(Boolean)).size;
@@ -19372,7 +20009,7 @@
                 let largestFacility = 0;
                 dataSource.forEach(row => {
                     const totalUndrawn = parseNumber(row.Total_Undrawn);
-                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    const unusedExposure = parseNumber(row.Total_Unused_Commitment);
                     const amount = totalUndrawn - unusedExposure;
                     if (amount > largestFacility) largestFacility = amount;
                 });
@@ -19383,7 +20020,7 @@
                     const rel = row.Relationship_Name || row.Relationship_ID || 'Unknown';
                     if (!byRelationship[rel]) byRelationship[rel] = 0;
                     const totalUndrawn = parseNumber(row.Total_Undrawn);
-                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    const unusedExposure = parseNumber(row.Total_Unused_Commitment);
                     byRelationship[rel] += (totalUndrawn - unusedExposure);
                 });
                 const top10Total = Object.values(byRelationship)
@@ -19398,7 +20035,7 @@
                     const client = row.Relationship_Name || row.Relationship_ID || 'Unknown';
                     if (!byClient[client]) byClient[client] = 0;
                     const totalUndrawn = parseNumber(row.Total_Undrawn);
-                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    const unusedExposure = parseNumber(row.Total_Unused_Commitment);
                     byClient[client] += (totalUndrawn - unusedExposure);
                 });
 
@@ -19408,7 +20045,7 @@
                     const program = row.Product_Program || 'Unknown';
                     if (!byProgram[program]) byProgram[program] = 0;
                     const totalUndrawn = parseNumber(row.Total_Undrawn);
-                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    const unusedExposure = parseNumber(row.Total_Unused_Commitment);
                     byProgram[program] += (totalUndrawn - unusedExposure);
                 });
 
@@ -19438,7 +20075,7 @@
                     }
 
                     const totalUndrawn = parseNumber(row.Total_Undrawn);
-                    const unusedExposure = parseNumber(row.Total_Unused_Exposure);
+                    const unusedExposure = parseNumber(row.Total_Unused_Commitment);
                     detailedData[underwriter].unusedUncommitted += (totalUndrawn - unusedExposure);
                     if (row.Facility_ID) detailedData[underwriter].facilities.add(row.Facility_ID);
                     if (row.Relationship_Name || row.Relationship_ID) {
@@ -29644,6 +30281,7 @@
                         historicalTrendsData = generateTrendsDummyData();
                         populateTrendsFilterDropdowns();
                         populateTrendAnalysisTable();
+                        populatePortfolioSummaryTable();
                         updateTrendsDateRangeDisplay();
                         hideLoadingOverlay();
                         window.trendsDataLoaded = true;
@@ -29676,6 +30314,7 @@
                     historicalTrendsData = data;
                     populateTrendsFilterDropdowns();
                     populateTrendAnalysisTable();
+                    populatePortfolioSummaryTable();
                     updateTrendsDateRangeDisplay();
                     hideLoadingOverlay();
                     window.trendsDataLoaded = true;
@@ -29793,6 +30432,7 @@
 
                 trendsFilteredData = filtered;
                 populateTrendAnalysisTable();
+                populatePortfolioSummaryTable();
             }
 
             function toggleTrendsFilter(filterType) {
@@ -30139,6 +30779,346 @@
                 tbody.innerHTML = html;
             }
 
+            // Portfolio Summary Table - shows categories like pivot.html
+            function populatePortfolioSummaryTable() {
+                const tbody = document.getElementById('portfolioSummaryTableBody');
+                if (!tbody) return;
+
+                // Get data to use (filtered or all)
+                let dataToUse = trendsFilteredData.length > 0 ? trendsFilteredData : historicalTrendsData;
+
+                // Always show category structure even with no data
+                const hasData = dataToUse && dataToUse.length > 0;
+
+                // Use the global category configuration
+                const categoryStructure = PORTFOLIO_SUMMARY_CATEGORIES;
+
+                // Helper function to normalize names (remove extra spaces around slashes)
+                function normalizeName(name) {
+                    if (!name) return '';
+                    return name.trim().toLowerCase().replace(/\s*\/\s*/g, '/');
+                }
+
+                // Helper function to match product to category/subcategory by exact name
+                // productName = Product_Program (main category)
+                // subProductName = Product_Sub_Program (subcategory)
+                function matchProductToCategory(productName, subProductName) {
+                    const cleanProduct = normalizeName(productName);
+                    const cleanSubProduct = normalizeName(subProductName);
+                    
+                    // First, try to match the main product to a category
+                    let matchedCategory = null;
+                    let matchedCategoryInfo = null;
+                    
+                    for (const [categoryName, categoryInfo] of Object.entries(categoryStructure)) {
+                        const cleanCategory = normalizeName(categoryName);
+                        if (cleanProduct === cleanCategory) {
+                            matchedCategory = categoryName;
+                            matchedCategoryInfo = categoryInfo;
+                            break;
+                        }
+                    }
+                    
+                    // If we have a matched category and a subcategory value, try to match the subcategory
+                    if (matchedCategory && matchedCategoryInfo && cleanSubProduct) {
+                        if (matchedCategoryInfo.isParent && matchedCategoryInfo.subcategories) {
+                            for (const [subName, subInfo] of Object.entries(matchedCategoryInfo.subcategories)) {
+                                const cleanSubName = normalizeName(subName);
+                                if (cleanSubProduct === cleanSubName) {
+                                    return { category: matchedCategory, subcategory: subName };
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Return just the category match (no subcategory)
+                    if (matchedCategory) {
+                        return { category: matchedCategory, subcategory: null };
+                    }
+                    
+                    // No match found - product won't be counted in any category
+                    return { category: null, subcategory: null };
+                }
+
+                // Get all unique dates and sort them (oldest to latest)
+                const dateMap = new Map();
+                if (hasData) {
+                    dataToUse.forEach((row) => {
+                        const dateObj = parseDate(row.Report_Date);
+                        if (dateObj) {
+                            const timestamp = dateObj.getTime();
+                            dateMap.set(timestamp, formatDateToDDMMYYYY(dateObj));
+                        }
+                    });
+                }
+
+                const sortedDates = Array.from(dateMap.keys()).sort((a, b) => a - b);
+
+                // Use the LATEST date as "current" (most recent data)
+                const latestDate = sortedDates.length > 0 ? sortedDates[sortedDates.length - 1] : Date.now();
+                
+                // Calculate target timestamps for historical periods
+                const oneWeekAgo = latestDate - (7 * 24 * 60 * 60 * 1000);
+                const oneMonthAgo = latestDate - (30 * 24 * 60 * 60 * 1000);
+                const oneQuarterAgo = latestDate - (90 * 24 * 60 * 60 * 1000);
+                const oneYearAgo = latestDate - (365 * 24 * 60 * 60 * 1000);
+
+                // Find closest date to each period (from available dates)
+                function findClosestDate(targetTimestamp) {
+                    if (sortedDates.length === 0) return null;
+                    let closest = sortedDates[0];
+                    let minDiff = Math.abs(sortedDates[0] - targetTimestamp);
+                    for (const date of sortedDates) {
+                        const diff = Math.abs(date - targetTimestamp);
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            closest = date;
+                        }
+                    }
+                    return closest;
+                }
+
+                const weekAgoDate = findClosestDate(oneWeekAgo);
+                const monthAgoDate = findClosestDate(oneMonthAgo);
+                const quarterAgoDate = findClosestDate(oneQuarterAgo);
+                const yearAgoDate = findClosestDate(oneYearAgo);
+
+                // Initialize aggregation structure
+                const aggregations = {};
+                for (const [categoryName, categoryInfo] of Object.entries(categoryStructure)) {
+                    aggregations[categoryName] = {
+                        current: { TFA: 0, OSUC: 0, Outstanding: 0 },
+                        weekAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
+                        monthAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
+                        quarterAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
+                        yearAgo: { TFA: 0, OSUC: 0, Outstanding: 0 }
+                    };
+
+                    if (categoryInfo.isParent && categoryInfo.subcategories) {
+                        aggregations[categoryName].subcategories = {};
+                        for (const subName of Object.keys(categoryInfo.subcategories)) {
+                            aggregations[categoryName].subcategories[subName] = {
+                                current: { TFA: 0, OSUC: 0, Outstanding: 0 },
+                                weekAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
+                                monthAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
+                                quarterAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
+                                yearAgo: { TFA: 0, OSUC: 0, Outstanding: 0 }
+                            };
+                        }
+                    }
+                }
+
+                // Aggregate data only if we have data
+                if (hasData) {
+                    dataToUse.forEach((row) => {
+                        const dateObj = parseDate(row.Report_Date);
+                        if (!dateObj) return;
+                        const timestamp = dateObj.getTime();
+
+                        const product = row.Product_Program || row.Product || '';
+                        const subProduct = row.Product_Sub_Program || '';
+                        const match = matchProductToCategory(product, subProduct);
+
+                        const tfa = parseFloat(row.TFA || 0);
+                        const osuc = parseFloat(row.OSUC || 0);
+                        const outstanding = parseFloat(row.Total_OS || 0);
+
+                        // Helper to add values to a target
+                        function addValues(target) {
+                            target.TFA += tfa;
+                            target.OSUC += osuc;
+                            target.Outstanding += outstanding;
+                        }
+
+                        // Determine which period this row belongs to (use LATEST date as current)
+                        const isCurrent = timestamp === latestDate;
+                        const isWeekAgo = weekAgoDate && timestamp === weekAgoDate;
+                        const isMonthAgo = monthAgoDate && timestamp === monthAgoDate;
+                        const isQuarterAgo = quarterAgoDate && timestamp === quarterAgoDate;
+                        const isYearAgo = yearAgoDate && timestamp === yearAgoDate;
+
+                        const categoryAgg = aggregations[match.category];
+                        if (!categoryAgg) return;
+
+                        // Add to appropriate periods
+                        if (isCurrent) addValues(categoryAgg.current);
+                        if (isWeekAgo) addValues(categoryAgg.weekAgo);
+                        if (isMonthAgo) addValues(categoryAgg.monthAgo);
+                        if (isQuarterAgo) addValues(categoryAgg.quarterAgo);
+                        if (isYearAgo) addValues(categoryAgg.yearAgo);
+
+                        // Add to subcategory if applicable
+                        if (match.subcategory && categoryAgg.subcategories && categoryAgg.subcategories[match.subcategory]) {
+                            const subAgg = categoryAgg.subcategories[match.subcategory];
+                            if (isCurrent) addValues(subAgg.current);
+                            if (isWeekAgo) addValues(subAgg.weekAgo);
+                            if (isMonthAgo) addValues(subAgg.monthAgo);
+                            if (isQuarterAgo) addValues(subAgg.quarterAgo);
+                            if (isYearAgo) addValues(subAgg.yearAgo);
+                        }
+                    });
+                }
+
+                // Calculate variance
+                function calculateVariance(current, previous) {
+                    if (!previous || previous === 0) return 0;
+                    return (((current - previous) / previous) * 100).toFixed(1);
+                }
+
+                // Build table HTML
+                let html = '';
+                const totals = {
+                    current: { TFA: 0, OSUC: 0, Outstanding: 0 },
+                    weekAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
+                    monthAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
+                    quarterAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
+                    yearAgo: { TFA: 0, OSUC: 0, Outstanding: 0 }
+                };
+
+                // First pass: Calculate totals
+                for (const [categoryName, categoryInfo] of Object.entries(categoryStructure)) {
+                    const agg = aggregations[categoryName];
+                    
+                    totals.current.TFA += agg.current.TFA;
+                    totals.current.OSUC += agg.current.OSUC;
+                    totals.current.Outstanding += agg.current.Outstanding;
+                    totals.weekAgo.TFA += agg.weekAgo.TFA;
+                    totals.weekAgo.OSUC += agg.weekAgo.OSUC;
+                    totals.weekAgo.Outstanding += agg.weekAgo.Outstanding;
+                    totals.monthAgo.TFA += agg.monthAgo.TFA;
+                    totals.monthAgo.OSUC += agg.monthAgo.OSUC;
+                    totals.monthAgo.Outstanding += agg.monthAgo.Outstanding;
+                    totals.quarterAgo.TFA += agg.quarterAgo.TFA;
+                    totals.quarterAgo.OSUC += agg.quarterAgo.OSUC;
+                    totals.quarterAgo.Outstanding += agg.quarterAgo.Outstanding;
+                    totals.yearAgo.TFA += agg.yearAgo.TFA;
+                    totals.yearAgo.OSUC += agg.yearAgo.OSUC;
+                    totals.yearAgo.Outstanding += agg.yearAgo.Outstanding;
+                }
+
+                // Second pass: Render each category with correct percentages
+                for (const [categoryName, categoryInfo] of Object.entries(categoryStructure)) {
+                    const agg = aggregations[categoryName];
+
+                    // Category row
+                    const currentValue = agg.current[selectedExposureType];
+                    const weekAgoValue = agg.weekAgo[selectedExposureType];
+                    const monthAgoValue = agg.monthAgo[selectedExposureType];
+                    const quarterAgoValue = agg.quarterAgo[selectedExposureType];
+                    const yearAgoValue = agg.yearAgo[selectedExposureType];
+
+                    const wowVariance = calculateVariance(currentValue, weekAgoValue);
+                    const momVariance = calculateVariance(currentValue, monthAgoValue);
+                    const qoqVariance = calculateVariance(currentValue, quarterAgoValue);
+                    const yoyVariance = calculateVariance(currentValue, yearAgoValue);
+
+                    // Get indentation and styling from config
+                    const categoryIndent = categoryInfo.indent || '';
+                    const categoryBold = categoryInfo.isBold ? 'font-semibold' : '';
+
+                    html += `
+                        <tr class="group hover:bg-gray-50">
+                            <td class="px-6 py-4 ${categoryIndent} text-left text-base ${categoryBold} text-gray-900 whitespace-nowrap sticky left-0 bg-white group-hover:bg-gray-50 z-10">
+                                ${categoryName}
+                            </td>
+                            <td class="px-6 py-4 text-center text-base text-gray-700">${formatCurrency(agg.current.TFA)}</td>
+                            <td class="px-6 py-4 text-center text-base text-gray-700">${formatCurrency(agg.current.OSUC)}</td>
+                            <td class="px-6 py-4 text-center text-base text-gray-700">${formatCurrency(agg.current.Outstanding)}</td>
+                            <td class="px-6 py-4 text-center text-base">
+                                <div class="bar-chart-container">
+                                    <div class="bar-chart-fill" style="width: ${currentValue > 0 && totals.current[selectedExposureType] > 0 ? ((currentValue / totals.current[selectedExposureType]) * 100).toFixed(1) : 0}%"></div>
+                                    <div class="bar-chart-text">${currentValue > 0 && totals.current[selectedExposureType] > 0 ? ((currentValue / totals.current[selectedExposureType]) * 100).toFixed(1) : 0}%</div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(calculateVariance(agg.current.TFA, agg.yearAgo.TFA))}</td>
+                            <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(wowVariance)}</td>
+                            <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(momVariance)}</td>
+                            <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(qoqVariance)}</td>
+                            <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(yoyVariance)}</td>
+                        </tr>
+                    `;
+
+                    // Subcategories
+                    if (categoryInfo.isParent && categoryInfo.subcategories && agg.subcategories) {
+                        for (const [subName, subInfo] of Object.entries(categoryInfo.subcategories)) {
+                            const subAgg = agg.subcategories[subName];
+                            
+                            const subCurrentValue = subAgg.current[selectedExposureType];
+                            const subWeekAgoValue = subAgg.weekAgo[selectedExposureType];
+                            const subMonthAgoValue = subAgg.monthAgo[selectedExposureType];
+                            const subQuarterAgoValue = subAgg.quarterAgo[selectedExposureType];
+                            const subYearAgoValue = subAgg.yearAgo[selectedExposureType];
+
+                            const subWowVariance = calculateVariance(subCurrentValue, subWeekAgoValue);
+                            const subMomVariance = calculateVariance(subCurrentValue, subMonthAgoValue);
+                            const subQoqVariance = calculateVariance(subCurrentValue, subQuarterAgoValue);
+                            const subYoyVariance = calculateVariance(subCurrentValue, subYearAgoValue);
+
+                            // Get indentation from config
+                            const subIndent = subInfo.indent || 'pl-12';
+
+                            html += `
+                                <tr class="group hover:bg-gray-50">
+                                    <td class="px-6 py-4 ${subIndent} text-left text-base text-gray-700 whitespace-nowrap sticky left-0 bg-white group-hover:bg-gray-50 z-10">
+                                        ${subName}
+                                    </td>
+                                    <td class="px-6 py-4 text-center text-base text-gray-600">${formatCurrency(subAgg.current.TFA)}</td>
+                                    <td class="px-6 py-4 text-center text-base text-gray-600">${formatCurrency(subAgg.current.OSUC)}</td>
+                                    <td class="px-6 py-4 text-center text-base text-gray-600">${formatCurrency(subAgg.current.Outstanding)}</td>
+                                    <td class="px-6 py-4 text-center text-base">
+                                        <div class="bar-chart-container">
+                                            <div class="bar-chart-fill" style="width: ${subCurrentValue > 0 && totals.current[selectedExposureType] > 0 ? ((subCurrentValue / totals.current[selectedExposureType]) * 100).toFixed(1) : 0}%"></div>
+                                            <div class="bar-chart-text">${subCurrentValue > 0 && totals.current[selectedExposureType] > 0 ? ((subCurrentValue / totals.current[selectedExposureType]) * 100).toFixed(1) : 0}%</div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(calculateVariance(subAgg.current.TFA, subAgg.yearAgo.TFA))}</td>
+                                    <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(subWowVariance)}</td>
+                                    <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(subMomVariance)}</td>
+                                    <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(subQoqVariance)}</td>
+                                    <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(subYoyVariance)}</td>
+                                </tr>
+                            `;
+                        }
+                    }
+                }
+
+                // Total row
+                const totalCurrentValue = totals.current[selectedExposureType];
+                const totalWeekAgoValue = totals.weekAgo[selectedExposureType];
+                const totalMonthAgoValue = totals.monthAgo[selectedExposureType];
+                const totalQuarterAgoValue = totals.quarterAgo[selectedExposureType];
+                const totalYearAgoValue = totals.yearAgo[selectedExposureType];
+
+                const totalWowVariance = calculateVariance(totalCurrentValue, totalWeekAgoValue);
+                const totalMomVariance = calculateVariance(totalCurrentValue, totalMonthAgoValue);
+                const totalQoqVariance = calculateVariance(totalCurrentValue, totalQuarterAgoValue);
+                const totalYoyVariance = calculateVariance(totalCurrentValue, totalYearAgoValue);
+
+                html += `
+                    <tr class="bg-gray-50 font-semibold border-t-2 border-gray-200">
+                        <td class="px-6 py-4 text-left text-base font-bold text-gray-900 whitespace-nowrap sticky left-0 bg-gray-50 z-10">
+                            Total
+                        </td>
+                        <td class="px-6 py-4 text-center text-base font-bold text-gray-900">${formatCurrency(totals.current.TFA)}</td>
+                        <td class="px-6 py-4 text-center text-base font-bold text-gray-900">${formatCurrency(totals.current.OSUC)}</td>
+                        <td class="px-6 py-4 text-center text-base font-bold text-gray-900">${formatCurrency(totals.current.Outstanding)}</td>
+                        <td class="px-6 py-4 text-center text-base">
+                            <div class="bar-chart-container">
+                                <div class="bar-chart-fill" style="width: 100%"></div>
+                                <div class="bar-chart-text font-bold">100.0%</div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(calculateVariance(totals.current.TFA, totals.yearAgo.TFA))}</td>
+                        <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(totalWowVariance)}</td>
+                        <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(totalMomVariance)}</td>
+                        <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(totalQoqVariance)}</td>
+                        <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(totalYoyVariance)}</td>
+                    </tr>
+                `;
+
+                tbody.innerHTML = html;
+            }
+
             // Populate Deep Dive Facilities Details Table (filtered by relationship ID)
             let currentDeepDiveFacilities = []; // Store for tooltips
             let currentDeepDiveCovenants = []; // Store for tooltips
@@ -30187,7 +31167,7 @@
                     const directOS = parseNumber(facility.Direct_OS);
                     const contingentOS = parseNumber(facility.Contingent_OS);
                     const pseOS = parseNumber(facility.PSE_OS);
-                    const totalUnusedExposure = parseNumber(facility.Total_Unused_Exposure);
+                    const totalUnusedExposure = parseNumber(facility.Total_Unused_Commitment);
 
                     // Region badge colors
                     const regionColors = {
@@ -30260,7 +31240,7 @@
                 const totalDirectOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Direct_OS), 0);
                 const totalContingentOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Contingent_OS), 0);
                 const totalPSEOS = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.PSE_OS), 0);
-                const totalUnused = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Total_Unused_Exposure || f.Total_Undrawn), 0);
+                const totalUnused = fullRelationshipData.reduce((sum, f) => sum + parseNumber(f.Total_Unused_Commitment || f.Total_Undrawn), 0);
 
                 const footerFacAmount = document.getElementById("deepDiveFacilitiesFooterFacAmount");
                 const footerDirectOS = document.getElementById("deepDiveFacilitiesFooterDirectOS");
@@ -31113,7 +32093,7 @@
                 const totalCommExposure = parseNumber(facility.OSUC);
                 const osuc = parseNumber(facility.OSUC);
                 const totalOS = parseNumber(facility.Total_OS);
-                const totalUnusedExposure = parseNumber(facility.Total_Unused_Exposure);
+                const totalUnusedExposure = parseNumber(facility.Total_Unused_Commitment);
                 const totalUndrawn = parseNumber(facility.Total_Undrawn);
                 const rotce = facility.ROTCE || "-";
                 
