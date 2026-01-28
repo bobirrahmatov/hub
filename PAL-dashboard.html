@@ -414,62 +414,6 @@
         .loading-text {
             animation: pulse 1.5s ease-in-out infinite;
         }
-
-        /* Bar chart styles for Portfolio Summary table */
-        .bar-chart-container {
-            position: relative;
-            width: 100%;
-            height: 24px;
-            background-color: #f3f4f6;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        .bar-chart-fill {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            background-color: #3b82f6;
-            transition: width 0.3s ease;
-        }
-        .bar-chart-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 14px;
-            font-weight: 500;
-            color: #1f2937;
-            z-index: 1;
-            line-height: 1.5;
-        }
-
-        /* Custom scrollbar styles - override Confluence global CSS */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px !important;
-            height: 8px !important;
-            display: block !important;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            border-radius: 9999px !important;
-            background-color: #f3f4f6 !important;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            border-radius: 9999px !important;
-            background-color: #9ca3af !important;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background-color: #6b7280 !important;
-        }
-
-        /* Force scrollbar visibility - Firefox and other browsers */
-        .custom-scrollbar {
-            scrollbar-width: thin !important;
-            scrollbar-color: #9ca3af #f3f4f6 !important;
-        }
     </style>
 </head>
 
@@ -752,32 +696,6 @@
                                                 <div class="filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150"
                                                     data-value="NAM" onclick="toggleFilterItem(this, 'region')">
                                                     <span class="pr-4 !text-base">NAM</span>
-                                                    <div class="w-5 h-5 check-icon hidden">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-5 h-5 text-blue-600" viewBox="0 0 20 20"
-                                                            fill="currentColor">
-                                                            <path fill-rule="evenodd"
-                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                                clip-rule="evenodd" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                                <div class="filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150"
-                                                    data-value="SARG" onclick="toggleFilterItem(this, 'region')">
-                                                    <span class="pr-4 !text-base">SARG</span>
-                                                    <div class="w-5 h-5 check-icon hidden">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-5 h-5 text-blue-600" viewBox="0 0 20 20"
-                                                            fill="currentColor">
-                                                            <path fill-rule="evenodd"
-                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                                clip-rule="evenodd" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                                <div class="filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150"
-                                                    data-value="IPB" onclick="toggleFilterItem(this, 'region')">
-                                                    <span class="pr-4 !text-base">IPB</span>
                                                     <div class="w-5 h-5 check-icon hidden">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="w-5 h-5 text-blue-600" viewBox="0 0 20 20"
@@ -2471,12 +2389,6 @@
                                     <button @click="selectedRegion = 'LATAM'; filterTrendsByRegion('LATAM')"
                                         :class="selectedRegion === 'LATAM' ? 'shadow-sm text-gray-900 bg-white' : 'text-gray-500'"
                                         class="px-3.5 py-2.5 font-medium transition-colors rounded-md !text-base hover:text-gray-900">LATAM</button>
-                                    <button @click="selectedRegion = 'SARG'; filterTrendsByRegion('SARG')"
-                                        :class="selectedRegion === 'SARG' ? 'shadow-sm text-gray-900 bg-white' : 'text-gray-500'"
-                                        class="px-3.5 py-2.5 font-medium transition-colors rounded-md !text-base hover:text-gray-900">SARG</button>
-                                    <button @click="selectedRegion = 'IPB'; filterTrendsByRegion('IPB')"
-                                        :class="selectedRegion === 'IPB' ? 'shadow-sm text-gray-900 bg-white' : 'text-gray-500'"
-                                        class="px-3.5 py-2.5 font-medium transition-colors rounded-md !text-base hover:text-gray-900">IPB</button>
                                 </div>
                             </div>
 
@@ -2548,75 +2460,6 @@
                         <div id="trendsActiveFiltersBadges"
                             class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-200" style="display: none">
                             <!-- Badges will be dynamically added here -->
-                        </div>
-                    </div>
-
-                    <!-- Portfolio Summary Table by Category -->
-                    <div class="mb-6">
-                        <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
-                            <div class="px-6 py-4 border-b border-gray-100">
-                                <h3 class="!text-xl font-bold text-gray-900">Portfolio Summary by Category</h3>
-                                <p class="!text-base font-medium text-gray-500 mt-1">Current portfolio values and period-over-period variances</p>
-                            </div>
-
-                            <div class="custom-scrollbar overflow-x-auto">
-                                <table class="min-w-full" id="portfolioSummaryTable">
-                                    <thead id="portfolioSummaryTableHead">
-                                        <tr class="bg-gray-50">
-                                            <th class="px-6 py-4 text-left !text-base font-medium text-gray-500 sticky left-0 bg-gray-50 z-10"
-                                                style="font-weight: 500; text-align: left; padding: 1rem 1.5rem; white-space: nowrap;">
-                                                Category
-                                            </th>
-                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
-                                                TFA
-                                            </th>
-                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
-                                                OSUC
-                                            </th>
-                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
-                                                Outstanding
-                                            </th>
-                                            <th class="px-6 py-4 text-center !text-base font-medium text-gray-500 bg-gray-50"
-                                                style="white-space: nowrap;">
-                                                % of Total Portfolio
-                                            </th>
-                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
-                                                TFA vs Prior YE
-                                            </th>
-                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
-                                                WoW Variance
-                                            </th>
-                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
-                                                MoM Variance
-                                            </th>
-                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
-                                                QoQ Variance
-                                            </th>
-                                            <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 bg-gray-50">
-                                                YoY Variance
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody class="divide-y divide-gray-100" id="portfolioSummaryTableBody">
-                                        <tr>
-                                            <td colspan="9" class="px-6 py-8 text-center text-gray-400">
-                                                <div class="flex flex-col items-center gap-2">
-                                                    <svg class="h-8 w-8 text-gray-300 animate-spin" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <circle class="opacity-25" cx="12" cy="12" r="10"
-                                                            stroke="currentColor" stroke-width="4" fill="none"></circle>
-                                                        <path class="opacity-75" fill="currentColor"
-                                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                                        </path>
-                                                    </svg>
-                                                    <p class="!text-base">Loading portfolio summary...</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
 
@@ -3428,78 +3271,6 @@
             let trendsActiveFilters = {};
             let availableTrendDates = [];
             window.trendsDataLoaded = false; // Track if trends data has been loaded
-
-            // =====================================================
-            // PORTFOLIO SUMMARY TABLE CONFIGURATION
-            // =====================================================
-            // Configure categories and subcategories for the Portfolio Summary Table
-            // This structure defines what categories appear in the table
-            // All categories will ALWAYS display, even if there's no data (will show $0.00)
-            //
-            // HOW TO CUSTOMIZE:
-            // 1. To add a new category: Add a new key to this object
-            // 2. For parent categories with subcategories: Set isParent: true and define subcategories
-            // 3. For standalone categories: Set isParent: false (no subcategories)
-            // 4. Indentation options: '' (no indent), 'pl-8' (medium indent), 'pl-12' (deep indent)
-            // 5. isBold: true for category headings, false for regular text
-            //
-            // Products are matched by EXACT name (case-insensitive) to category/subcategory names
-            // The table will filter by region automatically based on the Region filter selection.
-            // Global = all regions, otherwise filters to selected region only.
-            //
-            const PORTFOLIO_SUMMARY_CATEGORIES = {
-                'Securities Based Lending': {
-                    isParent: false,
-                    indent: '',      // No indentation
-                    isBold: true     // Bold category heading
-                },
-                'Residential Mortgages': {
-                    isParent: false,
-                    indent: '',      // No indentation
-                    isBold: true     // Bold category heading
-                },
-                'Commercial Real Estate': {
-                    isParent: false,
-                    indent: '',      // No indentation
-                    isBold: true     // Bold category heading
-                },
-                'Other Structured Lending': {
-                    isParent: true,
-                    indent: '',      // No indentation for parent
-                    isBold: true,    // Bold parent heading
-                    subcategories: {
-                        'Art Lending': { 
-                            indent: 'pl-12'  // Subcategories indented
-                        },
-                        'Aircraft Financing': { 
-                            indent: 'pl-12'
-                        },
-                        'Sports Financing': { 
-                            indent: 'pl-12'
-                        },
-                        'Law Firm/Partner Lending': { 
-                            indent: 'pl-12'
-                        },
-                        'Subscription Financing': { 
-                            indent: 'pl-12'
-                        },
-                        'Other Secured': { 
-                            indent: 'pl-12'
-                        }
-                    }
-                },
-                'Unsecured Lending': {
-                    isParent: false,
-                    indent: '',      // No indentation
-                    isBold: true     // Bold category heading
-                },
-                'Cards': {
-                    isParent: false,
-                    indent: '',      // No indentation
-                    isBold: true     // Bold category heading
-                }
-            };
-            // =====================================================
 
             // Generate dummy data for trends (for testing)
             function generateTrendsDummyData() {
@@ -8375,7 +8146,10 @@
                     const pseValue = String(pseColumn).trim().toUpperCase();
                     if (pseValue === "PSE") continue;
 
-                    const approvalDate = parseDate(row.Origination_Date);
+                    // Check both Origination_Date and Renewal_Date
+                    const originationDate = parseDate(row.Origination_Date);
+                    const renewalDate = parseDate(row.Renewal_Date);
+                    const approvalDate = originationDate || renewalDate; // Use whichever is available
                     const facilityId = row.Facility_ID;
                     const facAmount = parseNumber(row.Fac_Amount);
 
@@ -30285,7 +30059,6 @@
                         historicalTrendsData = generateTrendsDummyData();
                         populateTrendsFilterDropdowns();
                         populateTrendAnalysisTable();
-                        populatePortfolioSummaryTable();
                         updateTrendsDateRangeDisplay();
                         hideLoadingOverlay();
                         window.trendsDataLoaded = true;
@@ -30318,7 +30091,6 @@
                     historicalTrendsData = data;
                     populateTrendsFilterDropdowns();
                     populateTrendAnalysisTable();
-                    populatePortfolioSummaryTable();
                     updateTrendsDateRangeDisplay();
                     hideLoadingOverlay();
                     window.trendsDataLoaded = true;
@@ -30436,7 +30208,6 @@
 
                 trendsFilteredData = filtered;
                 populateTrendAnalysisTable();
-                populatePortfolioSummaryTable();
             }
 
             function toggleTrendsFilter(filterType) {
@@ -30779,346 +30550,6 @@
                 </td>`;
 
                 html += '</tr>';
-
-                tbody.innerHTML = html;
-            }
-
-            // Portfolio Summary Table - shows categories like pivot.html
-            function populatePortfolioSummaryTable() {
-                const tbody = document.getElementById('portfolioSummaryTableBody');
-                if (!tbody) return;
-
-                // Get data to use (filtered or all)
-                let dataToUse = trendsFilteredData.length > 0 ? trendsFilteredData : historicalTrendsData;
-
-                // Always show category structure even with no data
-                const hasData = dataToUse && dataToUse.length > 0;
-
-                // Use the global category configuration
-                const categoryStructure = PORTFOLIO_SUMMARY_CATEGORIES;
-
-                // Helper function to normalize names (remove extra spaces around slashes)
-                function normalizeName(name) {
-                    if (!name) return '';
-                    return name.trim().toLowerCase().replace(/\s*\/\s*/g, '/');
-                }
-
-                // Helper function to match product to category/subcategory by exact name
-                // productName = Product_Program (main category)
-                // subProductName = Product_Sub_Program (subcategory)
-                function matchProductToCategory(productName, subProductName) {
-                    const cleanProduct = normalizeName(productName);
-                    const cleanSubProduct = normalizeName(subProductName);
-                    
-                    // First, try to match the main product to a category
-                    let matchedCategory = null;
-                    let matchedCategoryInfo = null;
-                    
-                    for (const [categoryName, categoryInfo] of Object.entries(categoryStructure)) {
-                        const cleanCategory = normalizeName(categoryName);
-                        if (cleanProduct === cleanCategory) {
-                            matchedCategory = categoryName;
-                            matchedCategoryInfo = categoryInfo;
-                            break;
-                        }
-                    }
-                    
-                    // If we have a matched category and a subcategory value, try to match the subcategory
-                    if (matchedCategory && matchedCategoryInfo && cleanSubProduct) {
-                        if (matchedCategoryInfo.isParent && matchedCategoryInfo.subcategories) {
-                            for (const [subName, subInfo] of Object.entries(matchedCategoryInfo.subcategories)) {
-                                const cleanSubName = normalizeName(subName);
-                                if (cleanSubProduct === cleanSubName) {
-                                    return { category: matchedCategory, subcategory: subName };
-                                }
-                            }
-                        }
-                    }
-                    
-                    // Return just the category match (no subcategory)
-                    if (matchedCategory) {
-                        return { category: matchedCategory, subcategory: null };
-                    }
-                    
-                    // No match found - product won't be counted in any category
-                    return { category: null, subcategory: null };
-                }
-
-                // Get all unique dates and sort them (oldest to latest)
-                const dateMap = new Map();
-                if (hasData) {
-                    dataToUse.forEach((row) => {
-                        const dateObj = parseDate(row.Report_Date);
-                        if (dateObj) {
-                            const timestamp = dateObj.getTime();
-                            dateMap.set(timestamp, formatDateToDDMMYYYY(dateObj));
-                        }
-                    });
-                }
-
-                const sortedDates = Array.from(dateMap.keys()).sort((a, b) => a - b);
-
-                // Use the LATEST date as "current" (most recent data)
-                const latestDate = sortedDates.length > 0 ? sortedDates[sortedDates.length - 1] : Date.now();
-                
-                // Calculate target timestamps for historical periods
-                const oneWeekAgo = latestDate - (7 * 24 * 60 * 60 * 1000);
-                const oneMonthAgo = latestDate - (30 * 24 * 60 * 60 * 1000);
-                const oneQuarterAgo = latestDate - (90 * 24 * 60 * 60 * 1000);
-                const oneYearAgo = latestDate - (365 * 24 * 60 * 60 * 1000);
-
-                // Find closest date to each period (from available dates)
-                function findClosestDate(targetTimestamp) {
-                    if (sortedDates.length === 0) return null;
-                    let closest = sortedDates[0];
-                    let minDiff = Math.abs(sortedDates[0] - targetTimestamp);
-                    for (const date of sortedDates) {
-                        const diff = Math.abs(date - targetTimestamp);
-                        if (diff < minDiff) {
-                            minDiff = diff;
-                            closest = date;
-                        }
-                    }
-                    return closest;
-                }
-
-                const weekAgoDate = findClosestDate(oneWeekAgo);
-                const monthAgoDate = findClosestDate(oneMonthAgo);
-                const quarterAgoDate = findClosestDate(oneQuarterAgo);
-                const yearAgoDate = findClosestDate(oneYearAgo);
-
-                // Initialize aggregation structure
-                const aggregations = {};
-                for (const [categoryName, categoryInfo] of Object.entries(categoryStructure)) {
-                    aggregations[categoryName] = {
-                        current: { TFA: 0, OSUC: 0, Outstanding: 0 },
-                        weekAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
-                        monthAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
-                        quarterAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
-                        yearAgo: { TFA: 0, OSUC: 0, Outstanding: 0 }
-                    };
-
-                    if (categoryInfo.isParent && categoryInfo.subcategories) {
-                        aggregations[categoryName].subcategories = {};
-                        for (const subName of Object.keys(categoryInfo.subcategories)) {
-                            aggregations[categoryName].subcategories[subName] = {
-                                current: { TFA: 0, OSUC: 0, Outstanding: 0 },
-                                weekAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
-                                monthAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
-                                quarterAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
-                                yearAgo: { TFA: 0, OSUC: 0, Outstanding: 0 }
-                            };
-                        }
-                    }
-                }
-
-                // Aggregate data only if we have data
-                if (hasData) {
-                    dataToUse.forEach((row) => {
-                        const dateObj = parseDate(row.Report_Date);
-                        if (!dateObj) return;
-                        const timestamp = dateObj.getTime();
-
-                        const product = row.Product_Program || row.Product || '';
-                        const subProduct = row.Product_Sub_Program || '';
-                        const match = matchProductToCategory(product, subProduct);
-
-                        const tfa = parseFloat(row.TFA || 0);
-                        const osuc = parseFloat(row.OSUC || 0);
-                        const outstanding = parseFloat(row.Total_OS || 0);
-
-                        // Helper to add values to a target
-                        function addValues(target) {
-                            target.TFA += tfa;
-                            target.OSUC += osuc;
-                            target.Outstanding += outstanding;
-                        }
-
-                        // Determine which period this row belongs to (use LATEST date as current)
-                        const isCurrent = timestamp === latestDate;
-                        const isWeekAgo = weekAgoDate && timestamp === weekAgoDate;
-                        const isMonthAgo = monthAgoDate && timestamp === monthAgoDate;
-                        const isQuarterAgo = quarterAgoDate && timestamp === quarterAgoDate;
-                        const isYearAgo = yearAgoDate && timestamp === yearAgoDate;
-
-                        const categoryAgg = aggregations[match.category];
-                        if (!categoryAgg) return;
-
-                        // Add to appropriate periods
-                        if (isCurrent) addValues(categoryAgg.current);
-                        if (isWeekAgo) addValues(categoryAgg.weekAgo);
-                        if (isMonthAgo) addValues(categoryAgg.monthAgo);
-                        if (isQuarterAgo) addValues(categoryAgg.quarterAgo);
-                        if (isYearAgo) addValues(categoryAgg.yearAgo);
-
-                        // Add to subcategory if applicable
-                        if (match.subcategory && categoryAgg.subcategories && categoryAgg.subcategories[match.subcategory]) {
-                            const subAgg = categoryAgg.subcategories[match.subcategory];
-                            if (isCurrent) addValues(subAgg.current);
-                            if (isWeekAgo) addValues(subAgg.weekAgo);
-                            if (isMonthAgo) addValues(subAgg.monthAgo);
-                            if (isQuarterAgo) addValues(subAgg.quarterAgo);
-                            if (isYearAgo) addValues(subAgg.yearAgo);
-                        }
-                    });
-                }
-
-                // Calculate variance
-                function calculateVariance(current, previous) {
-                    if (!previous || previous === 0) return 0;
-                    return (((current - previous) / previous) * 100).toFixed(1);
-                }
-
-                // Build table HTML
-                let html = '';
-                const totals = {
-                    current: { TFA: 0, OSUC: 0, Outstanding: 0 },
-                    weekAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
-                    monthAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
-                    quarterAgo: { TFA: 0, OSUC: 0, Outstanding: 0 },
-                    yearAgo: { TFA: 0, OSUC: 0, Outstanding: 0 }
-                };
-
-                // First pass: Calculate totals
-                for (const [categoryName, categoryInfo] of Object.entries(categoryStructure)) {
-                    const agg = aggregations[categoryName];
-                    
-                    totals.current.TFA += agg.current.TFA;
-                    totals.current.OSUC += agg.current.OSUC;
-                    totals.current.Outstanding += agg.current.Outstanding;
-                    totals.weekAgo.TFA += agg.weekAgo.TFA;
-                    totals.weekAgo.OSUC += agg.weekAgo.OSUC;
-                    totals.weekAgo.Outstanding += agg.weekAgo.Outstanding;
-                    totals.monthAgo.TFA += agg.monthAgo.TFA;
-                    totals.monthAgo.OSUC += agg.monthAgo.OSUC;
-                    totals.monthAgo.Outstanding += agg.monthAgo.Outstanding;
-                    totals.quarterAgo.TFA += agg.quarterAgo.TFA;
-                    totals.quarterAgo.OSUC += agg.quarterAgo.OSUC;
-                    totals.quarterAgo.Outstanding += agg.quarterAgo.Outstanding;
-                    totals.yearAgo.TFA += agg.yearAgo.TFA;
-                    totals.yearAgo.OSUC += agg.yearAgo.OSUC;
-                    totals.yearAgo.Outstanding += agg.yearAgo.Outstanding;
-                }
-
-                // Second pass: Render each category with correct percentages
-                for (const [categoryName, categoryInfo] of Object.entries(categoryStructure)) {
-                    const agg = aggregations[categoryName];
-
-                    // Category row
-                    const currentValue = agg.current[selectedExposureType];
-                    const weekAgoValue = agg.weekAgo[selectedExposureType];
-                    const monthAgoValue = agg.monthAgo[selectedExposureType];
-                    const quarterAgoValue = agg.quarterAgo[selectedExposureType];
-                    const yearAgoValue = agg.yearAgo[selectedExposureType];
-
-                    const wowVariance = calculateVariance(currentValue, weekAgoValue);
-                    const momVariance = calculateVariance(currentValue, monthAgoValue);
-                    const qoqVariance = calculateVariance(currentValue, quarterAgoValue);
-                    const yoyVariance = calculateVariance(currentValue, yearAgoValue);
-
-                    // Get indentation and styling from config
-                    const categoryIndent = categoryInfo.indent || '';
-                    const categoryBold = categoryInfo.isBold ? 'font-semibold' : '';
-
-                    html += `
-                        <tr class="group hover:bg-gray-50">
-                            <td class="px-6 py-4 ${categoryIndent} text-left text-base ${categoryBold} text-gray-900 whitespace-nowrap sticky left-0 bg-white group-hover:bg-gray-50 z-10">
-                                ${categoryName}
-                            </td>
-                            <td class="px-6 py-4 text-center text-base text-gray-700">${formatCurrency(agg.current.TFA)}</td>
-                            <td class="px-6 py-4 text-center text-base text-gray-700">${formatCurrency(agg.current.OSUC)}</td>
-                            <td class="px-6 py-4 text-center text-base text-gray-700">${formatCurrency(agg.current.Outstanding)}</td>
-                            <td class="px-6 py-4 text-center text-base">
-                                <div class="bar-chart-container">
-                                    <div class="bar-chart-fill" style="width: ${currentValue > 0 && totals.current[selectedExposureType] > 0 ? ((currentValue / totals.current[selectedExposureType]) * 100).toFixed(1) : 0}%"></div>
-                                    <div class="bar-chart-text">${currentValue > 0 && totals.current[selectedExposureType] > 0 ? ((currentValue / totals.current[selectedExposureType]) * 100).toFixed(1) : 0}%</div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(calculateVariance(agg.current.TFA, agg.yearAgo.TFA))}</td>
-                            <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(wowVariance)}</td>
-                            <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(momVariance)}</td>
-                            <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(qoqVariance)}</td>
-                            <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(yoyVariance)}</td>
-                        </tr>
-                    `;
-
-                    // Subcategories
-                    if (categoryInfo.isParent && categoryInfo.subcategories && agg.subcategories) {
-                        for (const [subName, subInfo] of Object.entries(categoryInfo.subcategories)) {
-                            const subAgg = agg.subcategories[subName];
-                            
-                            const subCurrentValue = subAgg.current[selectedExposureType];
-                            const subWeekAgoValue = subAgg.weekAgo[selectedExposureType];
-                            const subMonthAgoValue = subAgg.monthAgo[selectedExposureType];
-                            const subQuarterAgoValue = subAgg.quarterAgo[selectedExposureType];
-                            const subYearAgoValue = subAgg.yearAgo[selectedExposureType];
-
-                            const subWowVariance = calculateVariance(subCurrentValue, subWeekAgoValue);
-                            const subMomVariance = calculateVariance(subCurrentValue, subMonthAgoValue);
-                            const subQoqVariance = calculateVariance(subCurrentValue, subQuarterAgoValue);
-                            const subYoyVariance = calculateVariance(subCurrentValue, subYearAgoValue);
-
-                            // Get indentation from config
-                            const subIndent = subInfo.indent || 'pl-12';
-
-                            html += `
-                                <tr class="group hover:bg-gray-50">
-                                    <td class="px-6 py-4 ${subIndent} text-left text-base text-gray-700 whitespace-nowrap sticky left-0 bg-white group-hover:bg-gray-50 z-10">
-                                        ${subName}
-                                    </td>
-                                    <td class="px-6 py-4 text-center text-base text-gray-600">${formatCurrency(subAgg.current.TFA)}</td>
-                                    <td class="px-6 py-4 text-center text-base text-gray-600">${formatCurrency(subAgg.current.OSUC)}</td>
-                                    <td class="px-6 py-4 text-center text-base text-gray-600">${formatCurrency(subAgg.current.Outstanding)}</td>
-                                    <td class="px-6 py-4 text-center text-base">
-                                        <div class="bar-chart-container">
-                                            <div class="bar-chart-fill" style="width: ${subCurrentValue > 0 && totals.current[selectedExposureType] > 0 ? ((subCurrentValue / totals.current[selectedExposureType]) * 100).toFixed(1) : 0}%"></div>
-                                            <div class="bar-chart-text">${subCurrentValue > 0 && totals.current[selectedExposureType] > 0 ? ((subCurrentValue / totals.current[selectedExposureType]) * 100).toFixed(1) : 0}%</div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(calculateVariance(subAgg.current.TFA, subAgg.yearAgo.TFA))}</td>
-                                    <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(subWowVariance)}</td>
-                                    <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(subMomVariance)}</td>
-                                    <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(subQoqVariance)}</td>
-                                    <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(subYoyVariance)}</td>
-                                </tr>
-                            `;
-                        }
-                    }
-                }
-
-                // Total row
-                const totalCurrentValue = totals.current[selectedExposureType];
-                const totalWeekAgoValue = totals.weekAgo[selectedExposureType];
-                const totalMonthAgoValue = totals.monthAgo[selectedExposureType];
-                const totalQuarterAgoValue = totals.quarterAgo[selectedExposureType];
-                const totalYearAgoValue = totals.yearAgo[selectedExposureType];
-
-                const totalWowVariance = calculateVariance(totalCurrentValue, totalWeekAgoValue);
-                const totalMomVariance = calculateVariance(totalCurrentValue, totalMonthAgoValue);
-                const totalQoqVariance = calculateVariance(totalCurrentValue, totalQuarterAgoValue);
-                const totalYoyVariance = calculateVariance(totalCurrentValue, totalYearAgoValue);
-
-                html += `
-                    <tr class="bg-gray-50 font-semibold border-t-2 border-gray-200">
-                        <td class="px-6 py-4 text-left text-base font-bold text-gray-900 whitespace-nowrap sticky left-0 bg-gray-50 z-10">
-                            Total
-                        </td>
-                        <td class="px-6 py-4 text-center text-base font-bold text-gray-900">${formatCurrency(totals.current.TFA)}</td>
-                        <td class="px-6 py-4 text-center text-base font-bold text-gray-900">${formatCurrency(totals.current.OSUC)}</td>
-                        <td class="px-6 py-4 text-center text-base font-bold text-gray-900">${formatCurrency(totals.current.Outstanding)}</td>
-                        <td class="px-6 py-4 text-center text-base">
-                            <div class="bar-chart-container">
-                                <div class="bar-chart-fill" style="width: 100%"></div>
-                                <div class="bar-chart-text font-bold">100.0%</div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(calculateVariance(totals.current.TFA, totals.yearAgo.TFA))}</td>
-                        <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(totalWowVariance)}</td>
-                        <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(totalMomVariance)}</td>
-                        <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(totalQoqVariance)}</td>
-                        <td class="px-6 py-4 text-center text-base">${formatGrowthBadge(totalYoyVariance)}</td>
-                    </tr>
-                `;
 
                 tbody.innerHTML = html;
             }
