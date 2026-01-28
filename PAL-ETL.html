@@ -459,6 +459,41 @@
                         </div>
                     </div>
 
+                    <!-- SARG/IPB Handling Options -->
+                    <div class="py-4 border-b border-gray-200">
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                            <div class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <div class="flex-1">
+                                    <h4 class="text-base font-semibold text-amber-900 mb-2">NAM Region Handling: SARG & IPB</h4>
+                                    <p class="text-sm text-amber-800 mb-3">Choose how to process SARG and IPB regions from the NAM file:</p>
+                                    <div class="flex flex-col sm:flex-row gap-3">
+                                        <label class="flex items-start gap-3 cursor-pointer bg-white border-2 rounded-lg p-3 transition-all" 
+                                               :class="sargIpbMode === 'exclude' ? 'border-brand-500 bg-brand-50' : 'border-gray-200 hover:border-gray-300'">
+                                            <input type="radio" x-model="sargIpbMode" value="exclude"
+                                                class="w-4 h-4 text-brand-600 focus:ring-brand-500 mt-0.5">
+                                            <div>
+                                                <span class="block font-semibold text-gray-900 text-sm">Exclude SARG & IPB</span>
+                                                <span class="block text-xs text-gray-600 mt-1">Exclude SARG data, remap IPB facilities to NAM region</span>
+                                            </div>
+                                        </label>
+                                        <label class="flex items-start gap-3 cursor-pointer bg-white border-2 rounded-lg p-3 transition-all" 
+                                               :class="sargIpbMode === 'include' ? 'border-brand-500 bg-brand-50' : 'border-gray-200 hover:border-gray-300'">
+                                            <input type="radio" x-model="sargIpbMode" value="include"
+                                                class="w-4 h-4 text-brand-600 focus:ring-brand-500 mt-0.5">
+                                            <div>
+                                                <span class="block font-semibold text-gray-900 text-sm">Include SARG & IPB</span>
+                                                <span class="block text-xs text-gray-600 mt-1">Keep SARG and IPB as separate regions (includes LATAM)</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Upload Cards Container -->
                     <div class="py-6 border-b border-gray-200">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -2238,7 +2273,7 @@
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="w-1 h-1 rounded-full bg-gray-400 mt-1.5 flex-shrink-0"></span>
-                                <span><strong>Region Filter:</strong> Keep only NAM, LATAM, SARG, and IPB</span>
+                                <span><strong>Region Filter:</strong> Based on SARG/IPB mode - Exclude: NAM, LATAM, IPB (IPB→NAM) | Include: NAM, LATAM, SARG, IPB</span>
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="w-1 h-1 rounded-full bg-gray-400 mt-1.5 flex-shrink-0"></span>
@@ -3837,10 +3872,12 @@
                                             <code
                                                 class="bg-brand-50 px-1 rounded text-brand-600">Regions_Mapping.xlsx</code>
                                             → Region</li>
-                                        <li>• Filter 2: Keep only <span class="font-semibold text-gray-700">NAM</span>,
-                                            <span class="font-semibold text-gray-700">LATAM</span>, <span
-                                                class="font-semibold text-gray-700">SARG</span>, and <span
-                                                class="font-semibold text-gray-700">IPB</span></li>
+                                        <li>• Filter 2: Keep regions based on <span class="font-semibold text-brand-700">SARG/IPB mode</span>:
+                                            <div class="ml-4 mt-1 space-y-1">
+                                                <div><span class="text-brand-600">→ Exclude mode:</span> Keep <span class="font-semibold text-gray-700">NAM</span>, <span class="font-semibold text-gray-700">LATAM</span>, and <span class="font-semibold text-gray-700">IPB</span> (IPB remapped to NAM)</div>
+                                                <div><span class="text-brand-600">→ Include mode:</span> Keep <span class="font-semibold text-gray-700">NAM</span>, <span class="font-semibold text-gray-700">LATAM</span>, <span class="font-semibold text-gray-700">SARG</span>, and <span class="font-semibold text-gray-700">IPB</span></div>
+                                            </div>
+                                        </li>
                                         <li>• Lookup Key: <code
                                                 class="bg-gray-50 px-1 rounded text-gray-700">Product Program</code>
                                         </li>
@@ -5340,6 +5377,11 @@
                     }
                 },
 
+                // SARG and IPB handling mode
+                // 'exclude' = Exclude SARG, remap IPB to NAM
+                // 'include' = Keep SARG and IPB as separate regions
+                sargIpbMode: 'exclude',
+
                 // Portfolio Analytics of LPTM Configuration
                 confluenceConfig: {
                     pageId: '3229979875',
@@ -6631,11 +6673,22 @@
                     console.log(`Covenants ${region.toUpperCase()} - First sheet: ${firstSheetName}, rows: ${rawData.length}`);
 
                     // Transform data to standard format
-                    const transformedData = rawData
+                    let transformedData = rawData
                         .filter(row => !this.isInternalCovenant(row, region)) // Filter out Internal* rows
                         .filter(row => Object.keys(row).length > 0) // Filter empty rows
                         .map(row => this.mapCovenantRow(row, region, pseMappingData, regionsMapping))
                         .filter(row => row !== null); // Filter out null entries
+
+                    // For NAM, apply SARG/IPB filtering and remapping
+                    if (region === 'nam') {
+                        transformedData = transformedData
+                            .filter(row => this.isAllowedNAMRegion(row.Region)) // Keep based on SARG/IPB mode
+                            .map(row => {
+                                // Remap IPB to NAM if in exclude mode
+                                row.Region = this.remapIPBtoNAM(row.Region);
+                                return row;
+                            });
+                    }
 
                     return transformedData;
                 },
@@ -7663,7 +7716,12 @@
                             .filter(row => !this.isExcludedRiskCategory(row)) // Filter OUT Clearing, Notation, Settlement
                             .filter(row => Object.keys(row).length > 1) // Filter out rows with only empty column A
                             .map(row => this.mapPortfolioRowNAM(row, pseMappingData, regionsMapping))
-                            .filter(row => this.isAllowedNAMRegion(row.Region)); // Keep only NAM, LATAM, SARG, and IPB
+                            .filter(row => this.isAllowedNAMRegion(row.Region)) // Keep based on SARG/IPB mode
+                            .map(row => {
+                                // Remap IPB to NAM if in exclude mode
+                                row.Region = this.remapIPBtoNAM(row.Region);
+                                return row;
+                            });
                     }
 
                     return transformedData;
@@ -7682,11 +7740,30 @@
                     return excludedCategories.includes(riskCategory);
                 },
 
-                // Check if region is allowed for NAM file (NAM, LATAM, SARG, and IPB)
+                // Check if region is allowed for NAM file based on SARG/IPB mode
                 isAllowedNAMRegion(region) {
-                    const allowedRegions = ['nam', 'latam', 'sarg', 'ipb'];
                     const regionStr = String(region || '').trim().toLowerCase();
-                    return allowedRegions.includes(regionStr);
+                    
+                    if (this.sargIpbMode === 'exclude') {
+                        // Exclude SARG, keep NAM, LATAM, and IPB (IPB will be remapped to NAM)
+                        const allowedRegions = ['nam', 'latam', 'ipb'];
+                        return allowedRegions.includes(regionStr);
+                    } else {
+                        // Include all: NAM, LATAM, SARG, and IPB
+                        const allowedRegions = ['nam', 'latam', 'sarg', 'ipb'];
+                        return allowedRegions.includes(regionStr);
+                    }
+                },
+
+                // Remap IPB to NAM when in exclude mode
+                remapIPBtoNAM(region) {
+                    const regionStr = String(region || '').trim().toLowerCase();
+                    
+                    if (this.sargIpbMode === 'exclude' && regionStr === 'ipb') {
+                        return 'NAM';
+                    }
+                    
+                    return region;
                 },
 
                 // Normalize Underwriter name from "LASTNAME, FIRSTNAME" to "FirstName LastName"
@@ -8155,10 +8232,21 @@
                     }
 
                     // Transform data to standard format
-                    const transformedData = rawData
+                    let transformedData = rawData
                         .filter(row => !this.isEmptyReport(row)) // Filter out empty/NIL reports
                         .filter(row => Object.keys(row).length > 0) // Filter empty rows
                         .map(row => this.mapCCMRow(row, region));
+
+                    // For NAM, apply SARG/IPB filtering and remapping
+                    if (region === 'nam') {
+                        transformedData = transformedData
+                            .filter(row => this.isAllowedNAMRegion(row.Region)) // Keep based on SARG/IPB mode
+                            .map(row => {
+                                // Remap IPB to NAM if in exclude mode
+                                row.Region = this.remapIPBtoNAM(row.Region);
+                                return row;
+                            });
+                    }
 
                     return transformedData;
                 },
