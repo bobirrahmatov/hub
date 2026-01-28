@@ -1417,27 +1417,27 @@
                                             <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">
                                                 SBL SFT Facilities
                                             </td>
-                                            <td id="sblSftTfa" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help" 
+                                            <td id="sblSftTfa" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-pointer" 
                                                 onmouseenter="showSBLTooltip(event, 'SFT', 'TFA')"
                                                 onmouseleave="hideSBLTooltip()">
                                                 $0.0M
                                             </td>
-                                            <td id="sblSftOutstanding" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                            <td id="sblSftOutstanding" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-pointer"
                                                 onmouseenter="showSBLTooltip(event, 'SFT', 'Outstanding')"
                                                 onmouseleave="hideSBLTooltip()">
                                                 $0.0M
                                             </td>
-                                            <td id="sblSftUnusedCommitment" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                            <td id="sblSftUnusedCommitment" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-pointer"
                                                 onmouseenter="showSBLTooltip(event, 'SFT', 'Unused Commitment')"
                                                 onmouseleave="hideSBLTooltip()">
                                                 $0.0M
                                             </td>
-                                            <td id="sblSftUnusedUncommitted" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                            <td id="sblSftUnusedUncommitted" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-pointer"
                                                 onmouseenter="showSBLTooltip(event, 'SFT', 'Unused Uncommitted')"
                                                 onmouseleave="hideSBLTooltip()">
                                                 $0.0M
                                             </td>
-                                            <td class="px-6 py-4 text-center cursor-help"
+                                            <td class="px-6 py-4 text-center cursor-pointer"
                                                 onmouseenter="showSBLTooltip(event, 'SFT', 'Facilities')"
                                                 onmouseleave="hideSBLTooltip()">
                                                 <span id="sblSftCount" class="bg-gray-100 text-gray-700 rounded-full px-2 py-0.5 !text-base font-medium">
@@ -1450,27 +1450,27 @@
                                             <td class="px-6 py-4 text-center !text-base font-medium text-gray-900">
                                                 SBL Non-SFT Facilities
                                             </td>
-                                            <td id="sblNonSftTfa" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                            <td id="sblNonSftTfa" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-pointer"
                                                 onmouseenter="showSBLTooltip(event, 'Non-SFT', 'TFA')"
                                                 onmouseleave="hideSBLTooltip()">
                                                 $0.0M
                                             </td>
-                                            <td id="sblNonSftOutstanding" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                            <td id="sblNonSftOutstanding" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-pointer"
                                                 onmouseenter="showSBLTooltip(event, 'Non-SFT', 'Outstanding')"
                                                 onmouseleave="hideSBLTooltip()">
                                                 $0.0M
                                             </td>
-                                            <td id="sblNonSftUnusedCommitment" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                            <td id="sblNonSftUnusedCommitment" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-pointer"
                                                 onmouseenter="showSBLTooltip(event, 'Non-SFT', 'Unused Commitment')"
                                                 onmouseleave="hideSBLTooltip()">
                                                 $0.0M
                                             </td>
-                                            <td id="sblNonSftUnusedUncommitted" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-help"
+                                            <td id="sblNonSftUnusedUncommitted" class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700 cursor-pointer"
                                                 onmouseenter="showSBLTooltip(event, 'Non-SFT', 'Unused Uncommitted')"
                                                 onmouseleave="hideSBLTooltip()">
                                                 $0.0M
                                             </td>
-                                            <td class="px-6 py-4 text-center cursor-help"
+                                            <td class="px-6 py-4 text-center cursor-pointer"
                                                 onmouseenter="showSBLTooltip(event, 'Non-SFT', 'Facilities')"
                                                 onmouseleave="hideSBLTooltip()">
                                                 <span id="sblNonSftCount" class="bg-gray-100 text-gray-700 rounded-full px-2 py-0.5 !text-base font-medium">
@@ -3123,6 +3123,9 @@
                                                 <th
                                                     class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
                                                     Unused Commitment</th>
+                                                <th
+                                                    class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500">
+                                                    SFT Facility</th>
                                             </tr>
                                         </thead>
                                         <tbody id="deepDiveFacilitiesDetailsTable" class="divide-y divide-gray-200">
@@ -5072,9 +5075,9 @@
                         if (rowCommitment !== selectedCommitmentStatus) continue;
                     }
 
-                    // Multi-select Product filter
+                    // Multi-select Product filter - check both Product_Program and Product_Program_Name
                     if (selectedProducts.length > 0) {
-                        const rowProduct = row.Product_Program || "";
+                        const rowProduct = row.Product_Program || row.Product_Program_Name || "";
                         if (!selectedProducts.includes(rowProduct)) continue;
                     }
 
@@ -14502,6 +14505,16 @@
                     return;
                 }
 
+                // Extract ROTCE_Period from portfolio data and update subtitle
+                const rotcePeriod = portfolioData.find(row => row.ROTCE_Period)?.ROTCE_Period || '';
+                const subtitleElement = document.getElementById('rotceSubtitle');
+                if (subtitleElement) {
+                    const topN = parseInt(document.getElementById("topNFilter").value);
+                    subtitleElement.textContent = rotcePeriod 
+                        ? `Top ${topN} relationships ROTCE performance as of ${rotcePeriod}`
+                        : `Top ${topN} relationships ROTCE performance`;
+                }
+
                 // Get Top N from Top Relationships filter
                 const topNRelationships = parseInt(
                     document.getElementById("topNFilter").value
@@ -15086,6 +15099,16 @@
                         chartElement.innerHTML = generateNoDataMessage('ROTCE Performance');
                     }
                     return;
+                }
+
+                // Extract ROTCE_Period from data source and update subtitle
+                const rotcePeriod = dataSource.find(row => row.ROTCE_Period)?.ROTCE_Period || '';
+                const subtitleElement = document.getElementById('rotceSubtitle');
+                if (subtitleElement) {
+                    const topN = parseInt(document.getElementById("topNFilter").value);
+                    subtitleElement.textContent = rotcePeriod 
+                        ? `Top ${topN} relationships ROTCE performance as of ${rotcePeriod}`
+                        : `Top ${topN} relationships ROTCE performance`;
                 }
 
                 // Get Top N from Top Relationships filter (synced)
@@ -30565,7 +30588,7 @@
                     if (tbody) {
                         tbody.innerHTML = `
                         <tr>
-                                <td colspan="11" class="px-6 py-8">
+                                <td colspan="12" class="px-6 py-8">
                                 <div class="flex items-center justify-center py-20">
                                     <div class="text-center">
                                         <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30628,6 +30651,12 @@
                     };
                     const managementStatusColor = managementStatusColors[managementStatus] || 'bg-gray-50 text-gray-700';
 
+                    // SFT Facility badge - check for various possible column names
+                    const sftFacility = facility.SFT_Facility || facility.SFT_Flag || facility.Is_SFT || facility.isSFT || "";
+                    const isSFT = sftFacility && (sftFacility.toString().toUpperCase() === "YES" || sftFacility.toString().toUpperCase() === "Y" || sftFacility === true || sftFacility === 1 || sftFacility === "1");
+                    const sftBadgeColor = isSFT ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700';
+                    const sftBadgeText = isSFT ? 'Yes' : 'No';
+
                     html += `
                     <tr class="hover:bg-gray-50" 
                         data-facility-index="${index}"
@@ -30659,6 +30688,9 @@
                         <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(contingentOS)}</td>
                         <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(pseOS)}</td>
                         <td class="px-6 py-4 text-center !text-base whitespace-nowrap text-gray-700">${formatCurrency(totalUnusedExposure)}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="${sftBadgeColor} rounded-full px-2 py-0.5 !text-base font-medium">${sftBadgeText}</span>
+                        </td>
                     </tr>
                 `;
                 });
