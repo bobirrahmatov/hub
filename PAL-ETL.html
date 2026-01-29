@@ -5855,7 +5855,7 @@
                 let totalUnusedCommitment = 0;
                 let totalUnusedUncommitted = 0;
                 const relationships = new Set();
-                const facilities = new Set();
+                let facilitiesCount = 0;
 
                 // Single pass through filtered data
                 for (let i = 0; i < filteredData.length; i++) {
@@ -5877,14 +5877,15 @@
                     // Use Relationship_ID for unique count (not Relationship_Name which may have duplicates)
                     if (row.Relationship_ID) relationships.add(row.Relationship_ID);
 
-                    if (row.Facility_ID) facilities.add(row.Facility_ID);
+                    // Count all facilities (not distinct)
+                    facilitiesCount++;
                 }
 
                 // Update metric group
                 document.getElementById("relationshipsTotalCount").textContent =
                     relationships.size.toLocaleString();
                 document.getElementById("facilitiesTotalCount").textContent =
-                    facilities.size.toLocaleString();
+                    facilitiesCount.toLocaleString();
                 document.getElementById("totalFacAmount").textContent =
                     formatCurrency(totalFacAmount);
                 document.getElementById("totalOutstanding").textContent =
@@ -7805,7 +7806,7 @@
                 let totalUnusedCommitment = 0;
                 let totalUnusedUncommitted = 0;
                 const relationships = new Set();
-                const facilities = new Set();
+                let facilitiesCount = 0;
 
                 // Single pass through data (much faster than multiple passes)
                 for (let i = 0; i < portfolioData.length; i++) {
@@ -7827,12 +7828,13 @@
                     // Use Relationship_ID for unique count (not Relationship_Name which may have duplicates)
                     if (row.Relationship_ID) relationships.add(row.Relationship_ID);
 
-                    if (row.Facility_ID) facilities.add(row.Facility_ID);
+                    // Count all facilities (not distinct)
+                    facilitiesCount++;
                 }
 
                 const metrics = {
                     relationships: relationships.size,
-                    facilities: facilities.size,
+                    facilities: facilitiesCount,
                     facAmount: totalFacAmount,
                     outstanding: totalOutstanding,
                     unusedCommitment: totalUnusedCommitment,
@@ -10124,26 +10126,19 @@
                         const tfa = parseFloat(row.Fac_Amount) || 0;
                         metrics.tfa += tfa;
                         
-                        // Calculate Outstanding (Direct + Contingent + PSE)
-                        const directOS = parseFloat(row.Direct_OS) || 0;
-                        const contingentOS = parseFloat(row.Contingent_OS) || 0;
-                        const pseOS = parseFloat(row.PSE_OS) || 0;
-                        const outstanding = directOS + contingentOS + pseOS;
+                        // Calculate Outstanding from Total_OS column (matches cards calculation)
+                        const outstanding = parseFloat(row.Total_OS) || 0;
                         metrics.outstanding += outstanding;
                         
-                        // Determine if committed or uncommitted
-                        const isCommitted = row["Committed/Uncommitted"] === "Committed" || 
-                                          row.Committed_Uncommitted === "Committed";
+                        // Use the same columns as the cards for consistency
+                        // Unused Commitment from Total_Unused_Commitment column
+                        const unusedCommitment = parseFloat(row.Total_Unused_Commitment) || 0;
+                        metrics.unusedCommitment += unusedCommitment;
                         
-                        if (isCommitted) {
-                            // For committed facilities: Unused Commitment = TFA - Outstanding
-                            const unusedCommitment = Math.max(0, tfa - outstanding);
-                            metrics.unusedCommitment += unusedCommitment;
-                        } else {
-                            // For uncommitted facilities: Unused Uncommitted = TFA - Outstanding
-                            const unusedUncommitted = Math.max(0, tfa - outstanding);
-                            metrics.unusedUncommitted += unusedUncommitted;
-                        }
+                        // Unused Uncommitted = Total_Undrawn - Total_Unused_Commitment
+                        const totalUndrawn = parseFloat(row.Total_Undrawn) || 0;
+                        const unusedUncommitted = totalUndrawn - unusedCommitment;
+                        metrics.unusedUncommitted += unusedUncommitted;
                         
                         metrics.count++;
                     });
