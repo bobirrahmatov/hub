@@ -2258,8 +2258,7 @@
                         <ul class="!text-base text-gray-600 space-y-1.5">
                             <li class="flex items-start gap-2">
                                 <span class="w-1 h-1 rounded-full bg-gray-400 mt-1.5 flex-shrink-0"></span>
-                                <span><strong>File Structure:</strong> Headers start at row 4 (B4), rows 1-3 skipped,
-                                    column A empty</span>
+                                <span><strong>File Structure:</strong> Sheet "Report 1" (or 1st sheet), headers at row 1 (A1), data starts at row 2 (A2)</span>
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="w-1 h-1 rounded-full bg-gray-400 mt-1.5 flex-shrink-0"></span>
@@ -3860,8 +3859,7 @@
                                             </svg>
                                             <span class="font-medium">Special File Structure:</span>
                                         </div>
-                                        <p class="!text-base text-gray-500 mt-2">Data starts from row 4 (B4), column A
-                                            is always empty. Rows 1-3 contain report metadata and are skipped.</p>
+                                        <p class="!text-base text-gray-500 mt-2">Reads from sheet "Report 1" (or first sheet as fallback). Headers at row 1 (A1), data starts at row 2 (A2).</p>
                                     </div>
                                     <ul class="!text-base text-gray-500 space-y-1.5">
                                         <li>• Filter 1: <code
@@ -7703,16 +7701,38 @@
                 // Process Portfolio file with ETL logic
                 async processPortfolioFile(file, region, pseMappingData, regionsMapping = {}) {
                     const workbook = await this.readExcelWorkbook(file);
-                    const firstSheetName = workbook.SheetNames[0];
-                    const sheet = workbook.Sheets[firstSheetName];
+                    
+                    let sheetName;
+                    let sheet;
+                    
+                    // NAM file: Read from "Report 1" sheet (or first sheet as fallback)
+                    if (region === 'nam') {
+                        // Try to find "Report 1" sheet
+                        sheetName = workbook.SheetNames.find(name => 
+                            name.trim().toLowerCase() === 'report 1' || 
+                            name.trim().toLowerCase() === 'report1'
+                        );
+                        
+                        // If "Report 1" not found, use first sheet
+                        if (!sheetName) {
+                            sheetName = workbook.SheetNames[0];
+                            console.log(`NAM file: "Report 1" sheet not found, using first sheet: "${sheetName}"`);
+                        } else {
+                            console.log(`NAM file: Using sheet "${sheetName}"`);
+                        }
+                    } else {
+                        sheetName = workbook.SheetNames[0];
+                    }
+                    
+                    sheet = workbook.Sheets[sheetName];
 
                     let rawData;
 
-                    // NAM file has special structure: rows 1-3 are empty/report title, headers start at row 4 (B4)
-                    // Column A is always empty, so we skip it
+                    // NAM file new structure: Headers at A1 (row 1), data starts at A2 (row 2)
                     if (region === 'nam') {
-                        // Read starting from row 4 (0-indexed = 3) where headers are
-                        rawData = XLSX.utils.sheet_to_json(sheet, { range: 3 });
+                        // Read from row 1 (headers) and row 2+ (data)
+                        rawData = XLSX.utils.sheet_to_json(sheet);
+                        console.log(`NAM file: Loaded ${rawData.length} rows from sheet "${sheetName}"`);
                     } else {
                         rawData = XLSX.utils.sheet_to_json(sheet);
                     }
@@ -7729,7 +7749,7 @@
                     } else if (region === 'nam') {
                         transformedData = rawData
                             .filter(row => !this.isExcludedRiskCategory(row)) // Filter OUT ONLY: Clearing, Notation, Settlement
-                            .filter(row => Object.keys(row).length > 1) // Filter out rows with only empty column A
+                            .filter(row => Object.keys(row).length > 0) // Filter out completely empty rows
                             .map(row => this.mapPortfolioRowNAM(row, pseMappingData, regionsMapping));
                             // No region filtering - import all regions (NAM, LATAM, SARG, IPB, etc.)
                     }
@@ -7907,7 +7927,33 @@
                 // Parse numeric value safely
                 parseNumeric(value) {
                     if (value === null || value === undefined || value === '') return 0;
-                    const num = parseFloat(String(value).replace(/[,$]/g, ''));
+                    
+                    // Convert to string and clean up
+                    let cleanValue = String(value).trim();
+                    
+                    // Remove common formatting characters
+                    cleanValue = cleanValue.replace(/[$,\s]/g, ''); // Remove $, commas, spaces
+                    cleanValue = cleanValue.replace(/[()]/g, ''); // Remove parentheses (sometimes used for negatives)
+                    
+                    // Handle percentage values
+                    if (cleanValue.includes('%')) {
+                        cleanValue = cleanValue.replace('%', '');
+                        const num = parseFloat(cleanValue);
+                        return isNaN(num) ? 0 : num; // Return as-is, not divided by 100
+                    }
+                    
+                    const num = parseFloat(cleanValue);
+                    
+                    // Debug logging for parseNumeric failures
+                    if (isNaN(num) && window.debugOSUC && value) {
+                        console.warn('parseNumeric failed to parse:', {
+                            original: value,
+                            type: typeof value,
+                            cleaned: cleanValue,
+                            result: 'NaN → 0'
+                        });
+                    }
+                    
                     return isNaN(num) ? 0 : num;
                 },
 
@@ -8072,19 +8118,30 @@
                     // Lookup region based on Control Unit from Regions_Mapping.xlsx
                     const mappedRegion = this.lookupNAMRegion(controlUnit, regionsMapping);
                     
-                    // Debug OSUC column for NAM/LATAM/IPB/SARG regions
-                    if (window.debugOSUC && (mappedRegion === 'NAM' || mappedRegion === 'LATAM' || mappedRegion === 'IPB' || mappedRegion === 'SARG')) {
-                        const osucValue = row['Total Comm Exposure (Fac Lvl)'];
-                        if (!osucValue || osucValue == 0) {
-                            console.log('OSUC Debug - Row:', {
-                                region: mappedRegion,
-                                facilityId: row['Facility ID'],
-                                'Total Comm Exposure (Fac Lvl)': row['Total Comm Exposure (Fac Lvl)'],
-                                'Total Comm Exposure': row['Total Comm Exposure'],
-                                'OSUC': row['OSUC'],
-                                availableColumns: Object.keys(row).filter(k => k.toLowerCase().includes('comm') || k.toLowerCase().includes('osuc'))
-                            });
-                        }
+                    // Debug OSUC column for NAM/LATAM/IPB/SARG regions - Enhanced Debug
+                    if (window.debugOSUC && (mappedRegion === 'NAM' || mappedRegion === 'LATAM' || mappedRegion === 'IPB' || mappedRegion === 'SARG' || mappedRegion === 'Not Mapped')) {
+                        const rawValue = row['Total Comm Exposure (Fac Lvl)'];
+                        const parsedValue = this.parseNumeric(rawValue);
+                        
+                        // Log all rows to see patterns
+                        console.log('OSUC Debug - Row:', {
+                            region: mappedRegion,
+                            facilityId: row['Facility ID'],
+                            controlUnit: row['Control Unit'],
+                            rawValue_TotalCommExposureFacLvl: rawValue,
+                            rawValue_type: typeof rawValue,
+                            parsedValue: parsedValue,
+                            'Total Comm Exposure': row['Total Comm Exposure'],
+                            'OSUC': row['OSUC'],
+                            allExposureColumns: Object.keys(row).filter(k => 
+                                k.toLowerCase().includes('comm') || 
+                                k.toLowerCase().includes('osuc') || 
+                                k.toLowerCase().includes('exposure')
+                            ),
+                            // Check for potential typos
+                            'Total Comm Exposure (Fav Lvl)': row['Total Comm Exposure (Fav Lvl)'],
+                            'TotalCommExposure(FacLvl)': row['TotalCommExposure(FacLvl)']
+                        });
                     }
 
                     // Try multiple column names for Report Date
@@ -8112,7 +8169,14 @@
                         Direct_OS: this.parseNumeric(row['Direct O/S (Fac Lvl)'] || row['Direct O/S']),
                         Contingent_OS: this.parseNumeric(row['Contingent O/S (Fac Lvl)'] || row['Contingent O/S']),
                         PSE_OS: this.parseNumeric(row['PSE O/S (Fac Lvl)'] || row['PSE O/S']),
-                        Total_Comm_Exposure: this.parseNumeric(row['Total Comm Exposure (Fac Lvl)'] || row['Total Comm Exposure']),
+                        Total_Comm_Exposure: this.parseNumeric(
+                            row['Total Comm Exposure (Fac Lvl)'] || 
+                            row['Total Comm Exposure'] ||
+                            row['Total Comm Exposure (Fav Lvl)'] || // Check for typo
+                            row['TotalCommExposure(FacLvl)'] ||
+                            row['Total Committed Exposure (Fac Lvl)'] ||
+                            0
+                        ),
                         Maturity_Date: this.formatDateSafe(row['Maturity Date Or Demand'] || row['Maturity Date']),
                         Product_Underwriter: row['Investment Finance Product Underwriter'] || '',
                         CA_Expiration_Date: this.formatDateSafe(row['CA Expiration Date']),
@@ -8132,9 +8196,11 @@
                         OSUC: this.parseNumeric(
                             row['Total Comm Exposure (Fac Lvl)'] || 
                             row['Total Comm Exposure'] || 
+                            row['Total Comm Exposure (Fav Lvl)'] || // Check for typo: Fav vs Fac
                             row['TotalCommExposure(FacLvl)'] ||
                             row['TotalCommExposure'] ||
                             row['Total Committed Exposure (Fac Lvl)'] ||
+                            row['Total Committed Exposure'] ||
                             row['OSUC'] ||
                             0
                         ),
