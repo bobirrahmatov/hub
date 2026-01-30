@@ -1083,7 +1083,7 @@
                                                             d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                                         </path>
                                                     </svg>
-                                                    <span>Portfolio_tw.xlsb</span>
+                                                    <span>Portfolio_current.xlsb</span>
                                                 </button>
                                                 <button x-show="processingResult.covenantsRecords > 0"
                                                     @click="downloadFile('covenants')"
@@ -1095,7 +1095,7 @@
                                                             d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                                         </path>
                                                     </svg>
-                                                    <span>Covenants_tw.xlsb</span>
+                                                    <span>Covenants_current.xlsb</span>
                                                 </button>
                                                 <button x-show="processingResult.ccmRecords > 0"
                                                     @click="downloadFile('ccm')"
@@ -1107,7 +1107,7 @@
                                                             d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                                         </path>
                                                     </svg>
-                                                    <span>CCM_tw.xlsb</span>
+                                                    <span>CCM_current.xlsb</span>
                                                 </button>
                                                 <button x-show="processingResult.rotceRecords > 0"
                                                     @click="downloadFile('rotce')"
@@ -1119,7 +1119,7 @@
                                                             d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                                         </path>
                                                     </svg>
-                                                    <span>ROTCE_tw.xlsx</span>
+                                                    <span>ROTCE_current.xlsx</span>
                                                 </button>
                                                 <button x-show="processingResult.aggregatedRecords > 0"
                                                     @click="downloadFile('aggregatedHistory')"
@@ -1214,11 +1214,11 @@
                                     <p class="!text-base text-blue-600">Consolidated data will be automatically uploaded
                                         to Portfolio Analytics when processed:</p>
                                     <ul class="!text-base text-blue-600 mt-1 space-y-0.5">
-                                        <li>• <strong>Portfolio_tw.xlsb</strong> - Portfolio data (full detail)</li>
+                                        <li>• <strong>Portfolio_current.xlsb</strong> - Portfolio data (full detail)</li>
                                         <li>• <strong>Portfolio_Aggregated_History.xlsx</strong> - Weekly aggregated
                                             metrics (incremental)</li>
-                                        <li>• <strong>Covenants_tw.xlsb</strong> - Covenants data</li>
-                                        <li>• <strong>CCM_tw.xlsb</strong> - Credit Reviews data</li>
+                                        <li>• <strong>Covenants_current.xlsb</strong> - Covenants data</li>
+                                        <li>• <strong>CCM_current.xlsb</strong> - Credit Reviews data</li>
                                     </ul>
                                 </div>
                             </div>
@@ -1413,7 +1413,7 @@
                             </div>
                             <div>
                                 <h3 class="!text-lg font-semibold text-gray-900">CCM (Credit Reviews) ETL Process</h3>
-                                <p class="!text-base text-gray-500">Consolidating regional CCM files into CCM_tw.xlsb
+                                <p class="!text-base text-gray-500">Consolidating regional CCM files into CCM_current.xlsb
                                 </p>
                             </div>
                         </div>
@@ -1674,7 +1674,7 @@
                                     </div>
                                 </div>
                                 <p class="!text-base text-gray-600">Merge all regional data and upload consolidated
-                                    <span class="font-mono font-semibold">CCM_tw.xlsb</span></p>
+                                    <span class="font-mono font-semibold">CCM_current.xlsb</span></p>
                             </div>
 
                             <!-- Connector: Down arrow with arrowhead -->
@@ -1698,7 +1698,7 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 class="!text-base font-bold text-gray-900">CCM_tw.xlsb</h4>
+                                        <h4 class="!text-base font-bold text-gray-900">CCM_current.xlsb</h4>
                                         <p class="!text-base text-gray-500">Consolidated Credit Reviews</p>
                                         <p class="!text-base text-brand-600 font-medium mt-1">Available in Portfolio
                                             Analytics of LPTM</p>
@@ -1846,7 +1846,7 @@
                             <div>
                                 <h3 class="!text-lg font-semibold text-gray-900">Portfolio Data ETL Process</h3>
                                 <p class="!text-base text-gray-500">Consolidating regional portfolio files into
-                                    Portfolio_tw.xlsb</p>
+                                    Portfolio_current.xlsb</p>
                             </div>
                         </div>
                     </div>
@@ -2057,7 +2057,7 @@
                                     </div>
                                 </div>
                                 <p class="!text-base text-gray-600">Merge all regional portfolio data and upload <span
-                                        class="font-mono font-semibold">Portfolio_tw.xlsb</span></p>
+                                        class="font-mono font-semibold">Portfolio_current.xlsb</span></p>
                             </div>
 
                             <!-- Connector -->
@@ -2109,7 +2109,7 @@
 
                             <!-- Outputs Side by Side -->
                             <div class="flex justify-center gap-6">
-                                <!-- Output 1: Portfolio_tw.xlsb -->
+                                <!-- Output 1: Portfolio_current.xlsb -->
                                 <div
                                     class="flow-card rounded-2xl border-2 border-brand-300 bg-white p-4 shadow-xl w-64">
                                     <div class="flex items-center gap-3">
@@ -2122,7 +2122,7 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <h4 class="!text-base font-bold text-gray-900">Portfolio_tw.xlsb</h4>
+                                            <h4 class="!text-base font-bold text-gray-900">Portfolio_current.xlsb</h4>
                                             <p class="text-[10px] text-gray-500">Full Detail Data</p>
                                             <p class="text-[10px] text-brand-600 font-medium">~50K+ records</p>
                                         </div>
@@ -2362,7 +2362,7 @@
                 <!-- Portfolio Column Mapping Table -->
                 <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 bg-brand-50">
-                        <h3 class="text-base font-semibold text-gray-900">Column Mapping Reference (Portfolio_tw.xlsb -
+                        <h3 class="text-base font-semibold text-gray-900">Column Mapping Reference (Portfolio_current.xlsb -
                             34 columns)</h3>
                     </div>
                     <div class="p-4 overflow-x-auto">
@@ -2650,7 +2650,7 @@
                             <div>
                                 <h3 class="!text-lg font-semibold text-gray-900">Covenants ETL Process</h3>
                                 <p class="!text-base text-gray-500">Consolidating regional covenants files into
-                                    Covenants_tw.xlsb</p>
+                                    Covenants_current.xlsb</p>
                             </div>
                         </div>
                     </div>
@@ -2872,7 +2872,7 @@
                                     </div>
                                 </div>
                                 <p class="!text-base text-gray-600">Merge all regional covenants data and upload <span
-                                        class="font-mono font-semibold">Covenants_tw.xlsb</span></p>
+                                        class="font-mono font-semibold">Covenants_current.xlsb</span></p>
                             </div>
 
                             <!-- Connector: Down arrow with arrowhead -->
@@ -2895,7 +2895,7 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 class="!text-base font-bold text-gray-900">Covenants_tw.xlsb</h4>
+                                        <h4 class="!text-base font-bold text-gray-900">Covenants_current.xlsb</h4>
                                         <p class="!text-base text-gray-500">Consolidated Covenants Data (26 columns)</p>
                                         <p class="!text-base text-brand-600 font-medium mt-1">Available in Portfolio
                                             Analytics of LPTM</p>
@@ -2918,7 +2918,7 @@
                                     <th class="px-3 py-2.5 text-left font-semibold text-gray-700 border-b">Source Column
                                         (Reports)</th>
                                     <th class="px-3 py-2.5 text-left font-semibold text-brand-700 border-b bg-brand-50">
-                                        Output Column (Covenants_tw.xlsb)</th>
+                                        Output Column (Covenants_current.xlsb)</th>
                                     <th class="px-3 py-2.5 text-left font-semibold text-gray-600 border-b">Notes</th>
                                 </tr>
                             </thead>
@@ -3315,7 +3315,7 @@
                                     The CCM ETL process consolidates Credit Committee Memo data from three regional
                                     files into a single
                                     <code
-                                        class="px-1.5 py-0.5 bg-white text-brand-600 rounded !text-base font-mono border border-brand-200">CCM_tw.xlsb</code>
+                                        class="px-1.5 py-0.5 bg-white text-brand-600 rounded !text-base font-mono border border-brand-200">CCM_current.xlsb</code>
                                     file. This process extracts data from specific sheets based on region, transforms
                                     columns to a standardized format,
                                     and calculates the CCM status based on the selected report date.
@@ -3727,7 +3727,7 @@
                                 <div>
                                     <h4 class="font-semibold text-brand-800 mb-1">Output File</h4>
                                     <p class="!text-base text-brand-700">The consolidated data is saved as <code
-                                            class="px-1.5 py-0.5 bg-white text-brand-600 rounded !text-base font-mono border border-brand-200">CCM_tw.xlsb</code>
+                                            class="px-1.5 py-0.5 bg-white text-brand-600 rounded !text-base font-mono border border-brand-200">CCM_current.xlsb</code>
                                         and automatically uploaded to Portfolio Analytics of LPTM.</p>
                                 </div>
                             </div>
@@ -3770,7 +3770,7 @@
                                     The Portfolio ETL process consolidates facility and exposure data from three
                                     regional Credit Platform exports into a single
                                     <code
-                                        class="px-1.5 py-0.5 bg-white text-brand-600 rounded !text-base font-mono border border-brand-200">Portfolio_tw.xlsb</code>
+                                        class="px-1.5 py-0.5 bg-white text-brand-600 rounded !text-base font-mono border border-brand-200">Portfolio_current.xlsb</code>
                                     file. This process includes complex transformations such as PSE classification,
                                     product categorization,
                                     commitment status derivation, and exposure calculations.
@@ -4258,7 +4258,7 @@
                             <h2 class="text-base font-medium text-gray-800 flex items-center gap-2 mb-4">
                                 <span
                                     class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-500 !text-base font-bold">05</span>
-                                Column Mapping (Portfolio_tw.xlsb - 34 Columns)
+                                Column Mapping (Portfolio_current.xlsb - 34 Columns)
                             </h2>
                             <div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
                                 <div class="max-h-96 overflow-y-auto">
@@ -4816,7 +4816,7 @@
                                         <h4 class="font-semibold text-brand-800 mb-1">Primary Output File</h4>
                                         <p class="!text-base text-brand-700">The consolidated data (33 columns) is saved
                                             as <code
-                                                class="px-1.5 py-0.5 bg-white text-brand-600 rounded !text-base font-mono border border-brand-200">Portfolio_tw.xlsb</code>
+                                                class="px-1.5 py-0.5 bg-white text-brand-600 rounded !text-base font-mono border border-brand-200">Portfolio_current.xlsb</code>
                                             and automatically uploaded to Portfolio Analytics of LPTM.</p>
                                     </div>
                                 </div>
@@ -4878,7 +4878,7 @@
                                     The Covenants ETL process consolidates covenant data from three regional files into
                                     a single
                                     <code
-                                        class="px-1.5 py-0.5 bg-white text-brand-600 rounded !text-base font-mono border border-brand-200">Covenants_tw.xlsb</code>
+                                        class="px-1.5 py-0.5 bg-white text-brand-600 rounded !text-base font-mono border border-brand-200">Covenants_current.xlsb</code>
                                     file. This process reads from the first sheet of each regional file, standardizes
                                     column names,
                                     filters out internal covenants, and normalizes status values.
@@ -5310,7 +5310,7 @@
                                 <div>
                                     <h4 class="font-semibold text-brand-800 mb-1">Output File</h4>
                                     <p class="!text-base text-brand-700">The consolidated data is saved as <code
-                                            class="px-1.5 py-0.5 bg-white text-brand-600 rounded !text-base font-mono border border-brand-200">Covenants_tw.xlsb</code>
+                                            class="px-1.5 py-0.5 bg-white text-brand-600 rounded !text-base font-mono border border-brand-200">Covenants_current.xlsb</code>
                                         and automatically uploaded to Portfolio Analytics of LPTM.</p>
                                 </div>
                             </div>
@@ -5383,10 +5383,10 @@
                 confluenceConfig: {
                     pageId: '3229979875',
                     baseUrl: 'https://cedt-confluence.nam.nsroot.net/confluence',
-                    ccmFileName: 'CCM_tw.xlsb',
-                    portfolioFileName: 'Portfolio_tw.xlsb',
-                    covenantsFileName: 'Covenants_tw.xlsb',
-                    rotceFileName: 'ROTCE_tw.xlsx',
+                    ccmFileName: 'CCM_current.xlsb',
+                    portfolioFileName: 'Portfolio_current.xlsb',
+                    covenantsFileName: 'Covenants_current.xlsb',
+                    rotceFileName: 'ROTCE_current.xlsx',
                     mappingFileName: 'Product_Mapping.xlsx',
                     regionsMappingFileName: 'Regions_Mapping.xlsx',
                     aggregatedHistoryFileName: 'Portfolio_Aggregated_History.xlsx'
@@ -6068,10 +6068,10 @@
 
                         // Upload consolidated Portfolio file to Confluence if we have data
                         if (allPortfolioData.length > 0) {
-                            this.loadingMessage = 'Uploading Portfolio_tw.xlsb to Portfolio Analytics...';
+                            this.loadingMessage = 'Uploading Portfolio_current.xlsb to Portfolio Analytics...';
                             portfolioUploadSuccess = await this.uploadPortfolioToConfluence(allPortfolioData);
                             if (portfolioUploadSuccess) {
-                                this.showNotification(`Portfolio_tw.xlsb uploaded to Portfolio Analytics (${allPortfolioData.length} records)`, 'success');
+                                this.showNotification(`Portfolio_current.xlsb uploaded to Portfolio Analytics (${allPortfolioData.length} records)`, 'success');
                             } else {
                                 this.showNotification('Portfolio processed - use Download button to save file', 'warning');
                             }
@@ -6092,10 +6092,10 @@
 
                         // Upload consolidated Covenants file to Confluence if we have data
                         if (allCovenantsData.length > 0) {
-                            this.loadingMessage = 'Uploading Covenants_tw.xlsb to Portfolio Analytics...';
+                            this.loadingMessage = 'Uploading Covenants_current.xlsb to Portfolio Analytics...';
                             covenantsUploadSuccess = await this.uploadCovenantsToConfluence(allCovenantsData);
                             if (covenantsUploadSuccess) {
-                                this.showNotification(`Covenants_tw.xlsb uploaded to Portfolio Analytics (${allCovenantsData.length} records)`, 'success');
+                                this.showNotification(`Covenants_current.xlsb uploaded to Portfolio Analytics (${allCovenantsData.length} records)`, 'success');
                             } else {
                                 this.showNotification('Covenants processed - use Download button to save file', 'warning');
                             }
@@ -6116,10 +6116,10 @@
 
                         // Upload consolidated CCM file to Confluence if we have CCM data
                         if (allCCMData.length > 0) {
-                            this.loadingMessage = 'Uploading CCM_tw.xlsb to Portfolio Analytics...';
+                            this.loadingMessage = 'Uploading CCM_current.xlsb to Portfolio Analytics...';
                             ccmUploadSuccess = await this.uploadCCMToConfluence(allCCMData);
                             if (ccmUploadSuccess) {
-                                this.showNotification(`CCM_tw.xlsb uploaded to Portfolio Analytics (${allCCMData.length} records)`, 'success');
+                                this.showNotification(`CCM_current.xlsb uploaded to Portfolio Analytics (${allCCMData.length} records)`, 'success');
                             } else {
                                 this.showNotification('CCM processed - use Download button to save file', 'warning');
                             }
@@ -6133,12 +6133,12 @@
                             allROTCEData = await this.processROTCEFile(this.files.rotce.global);
                             processedData.rotce = allROTCEData;
 
-                            // Upload ROTCE_tw.xlsx to Confluence
+                            // Upload ROTCE_current.xlsx to Confluence
                             if (allROTCEData.length > 0) {
-                                this.loadingMessage = 'Uploading ROTCE_tw.xlsx to Portfolio Analytics...';
+                                this.loadingMessage = 'Uploading ROTCE_current.xlsx to Portfolio Analytics...';
                                 rotceUploadSuccess = await this.uploadROTCEToConfluence(allROTCEData);
                                 if (rotceUploadSuccess) {
-                                    this.showNotification(`ROTCE_tw.xlsx uploaded to Portfolio Analytics (${allROTCEData.length} records)`, 'success');
+                                    this.showNotification(`ROTCE_current.xlsx uploaded to Portfolio Analytics (${allROTCEData.length} records)`, 'success');
                                 } else {
                                     this.showNotification('ROTCE processed - use Download button to save file', 'warning');
                                 }
@@ -6238,7 +6238,7 @@
                     }
                 },
 
-                // Upload consolidated CCM data to Confluence as CCM_tw.xlsb
+                // Upload consolidated CCM data to Confluence as CCM_current.xlsb
                 async uploadCCMToConfluence(ccmData) {
                     try {
                         // Optimize and convert data to Excel workbook
@@ -6298,7 +6298,7 @@
                             ? `${this.confluenceConfig.baseUrl}/rest/api/content/${this.confluenceConfig.pageId}/child/attachment/${attachmentId}/data`
                             : `${this.confluenceConfig.baseUrl}/rest/api/content/${this.confluenceConfig.pageId}/child/attachment`;
 
-                        console.log('Uploading CCM_tw.xlsb to Confluence:', uploadUrl);
+                        console.log('Uploading CCM_current.xlsb to Confluence:', uploadUrl);
                         console.log('Attachment ID:', attachmentId || 'New file');
 
                         const response = await fetch(uploadUrl, {
@@ -6310,7 +6310,7 @@
                         });
 
                         if (response.ok) {
-                            console.log('Successfully uploaded CCM_tw.xlsb to Confluence');
+                            console.log('Successfully uploaded CCM_current.xlsb to Confluence');
                             return true;
                         } else {
                             const errorText = await response.text();
@@ -6457,7 +6457,7 @@
                             throw new Error(`Failed to upload ROTCE: ${response.status}`);
                         }
 
-                        console.log('ROTCE_tw.xlsx uploaded successfully');
+                        console.log('ROTCE_current.xlsx uploaded successfully');
                         return true;
                     } catch (error) {
                         console.error('Error uploading ROTCE to Confluence:', error);
@@ -6526,7 +6526,7 @@
                     try {
                         const workbook = await this.fetchConfluenceAttachment(this.confluenceConfig.rotceFileName);
                         if (!workbook) {
-                            console.log('ROTCE_tw.xlsx not found in Confluence - ROTCE mapping will be skipped');
+                            console.log('ROTCE_current.xlsx not found in Confluence - ROTCE mapping will be skipped');
                             return null;
                         }
 
@@ -6588,7 +6588,7 @@
 
                 // ==================== COVENANTS ETL FUNCTIONS ====================
 
-                // Upload consolidated Covenants data to Confluence as Covenants_tw.xlsb
+                // Upload consolidated Covenants data to Confluence as Covenants_current.xlsb
                 async uploadCovenantsToConfluence(covenantsData) {
                     try {
                         // Optimize and convert data to Excel workbook
@@ -6664,7 +6664,7 @@
                             ? `${this.confluenceConfig.baseUrl}/rest/api/content/${this.confluenceConfig.pageId}/child/attachment/${attachmentId}/data`
                             : `${this.confluenceConfig.baseUrl}/rest/api/content/${this.confluenceConfig.pageId}/child/attachment`;
 
-                        console.log('Uploading Covenants_tw.xlsb to Confluence:', uploadUrl);
+                        console.log('Uploading Covenants_current.xlsb to Confluence:', uploadUrl);
                         console.log('Attachment ID:', attachmentId || 'New file');
 
                         const response = await fetch(uploadUrl, {
@@ -6676,7 +6676,7 @@
                         });
 
                         if (response.ok) {
-                            console.log('Successfully uploaded Covenants_tw.xlsb to Confluence');
+                            console.log('Successfully uploaded Covenants_current.xlsb to Confluence');
                             return true;
                         } else {
                             const errorText = await response.text();
@@ -7080,7 +7080,7 @@
                 // Lookup Product_Program and Product_Sub_Program from Category mapping
                 lookupCategoryMapping(primaryKeyValue, region, mappingData) {
                     if (!mappingData || !mappingData.categoryMapping || !primaryKeyValue) {
-                        return { productProgram: 'Not Mapped', productSubProgram: 'Not Mapped' };
+                        return { productProgram: 'Not Mapped', productSubProgram: '' }; // Sub-category is optional
                     }
 
                     const keyStr = String(primaryKeyValue).trim();
@@ -7111,11 +7111,14 @@
                     if (match) {
                         return {
                             productProgram: match.category || 'Not Mapped',
-                            productSubProgram: match.subCategory || 'Not Mapped'
+                            productSubProgram: match.subCategory || '' // Empty if no sub-category (not all categories have sub-categories)
                         };
                     }
 
-                    return { productProgram: 'Not Mapped', productSubProgram: 'Not Mapped' };
+                    return { 
+                        productProgram: 'Not Mapped', 
+                        productSubProgram: '' // Empty if no mapping found (sub-category is optional)
+                    };
                 },
 
                 // Determine PSE or non-PSE based on mapping data
@@ -7395,7 +7398,7 @@
                         });
                         
                         const fileSizeMB = (finalBlob.size / (1024 * 1024)).toFixed(2);
-                        const finalFileName = this.confluenceConfig.portfolioFileName; // Portfolio_tw.xlsb
+                        const finalFileName = this.confluenceConfig.portfolioFileName; // Portfolio_current.xlsb
                         console.log(`Portfolio XLSB file size: ${fileSizeMB}MB (Binary format)`);
                         
                         // Check if file is too large
@@ -7499,7 +7502,7 @@
                         const url = URL.createObjectURL(blob);
                         const a = document.createElement('a');
                         a.href = url;
-                        a.download = 'Portfolio_tw.xlsb';
+                        a.download = 'Portfolio_current.xlsb';
                         document.body.appendChild(a);
                         a.click();
                         document.body.removeChild(a);
@@ -8558,10 +8561,10 @@
                     }
 
                     const fileNames = {
-                        portfolio: 'Portfolio_tw.xlsb',
-                        covenants: 'Covenants_tw.xlsb',
-                        ccm: 'CCM_tw.xlsb',
-                        rotce: 'ROTCE_tw.xlsx',
+                        portfolio: 'Portfolio_current.xlsb',
+                        covenants: 'Covenants_current.xlsb',
+                        ccm: 'CCM_current.xlsb',
+                        rotce: 'ROTCE_current.xlsx',
                         aggregatedHistory: 'Portfolio_Aggregated_History.xlsx'
                     };
 
