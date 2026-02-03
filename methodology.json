@@ -1,0 +1,432 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-02-03T00:00:00Z",
+  "metadata": {
+    "confluencePage": "3229979875",
+    "fileName": "methodology.json",
+    "description": "Methodology content for PAL Dashboard charts - Real calculation logic extracted from code",
+    "changeLog": []
+  },
+  "methodologies": {
+    "tfa": {
+      "title": "Total Facility Amount (TFA) - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Total approved credit facilities across the portfolio, representing the bank's total credit capacity committed to clients."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>Formula:</strong> <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">SUM(Fac_Amount)</code></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>Single pass through portfolio data</li><li>Sums all <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Fac_Amount</code> values</li><li>Includes all facility types (committed, uncommitted, revolvers, term loans)</li><li>NO exclusions applied at base level</li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Fac_Amount</code> - Facility amount (primary)</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_Amount</code> - Alternative column name</li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><strong>NO hardcoded exclusions</strong></li><li>Respects all user-selected filters (Region, Status, Product, etc.)</li><li>Includes all Management_Status values (DM + CM)</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "TFA represents the total approved credit facilities, driving business planning, capital allocation, and market share analysis. Growth indicates successful client acquisition and relationship deepening."
+        }
+      }
+    },
+    "outstanding": {
+      "title": "Total Outstanding - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Total drawn/utilized amounts across the portfolio, representing actual credit exposure. Includes Direct + Contingent + PSE outstanding."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>Formula:</strong> <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">SUM(Total_OS)</code></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>Direct sum of <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Total_OS</code> column</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Total_OS</code> already includes Direct + Contingent + PSE</li><li>Single pass optimization for performance</li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Total_OS</code> - Pre-calculated total outstanding column</li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><strong>NO hardcoded exclusions</strong></li><li>Includes all facility types and regions</li><li>Respects user-selected filters</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Represents actual credit exposure - funds deployed to clients. Critical for capital adequacy calculations, liquidity management, and utilization rate analysis."
+        }
+      }
+    },
+    "unusedCommitment": {
+      "title": "Unused Commitment - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Undrawn portion of committed facilities. Represents contingent liability that could be drawn at any time."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>Formula:</strong> <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">SUM(Total_Unused_Commitment)</code></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>Direct sum from pre-calculated column</li><li>Column already filters for committed facilities only</li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Total_Unused_Commitment</code> - Pre-calculated unused committed amount</li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li>Column inherently includes only committed facilities</li><li>Respects user-selected filters</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Critical for liquidity planning and capital allocation. Represents contingent funding obligation requiring liquidity reserves and capital buffers."
+        }
+      }
+    },
+    "unusedUncommitted": {
+      "title": "Unused Uncommitted - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Undrawn portion of uncommitted facilities. Bank can refuse drawdowns, carrying lower capital requirements."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>Formula:</strong> <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">SUM(Total_Undrawn - Total_Unused_Commitment)</code></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>Calculated as residual: Total undrawn minus committed portion</li><li>Per-row calculation: <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">(row.Total_Undrawn - row.Total_Unused_Commitment)</code></li><li>Aggregated across all facilities</li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Total_Undrawn</code> - Total undrawn amount (committed + uncommitted)</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Total_Unused_Commitment</code> - Committed undrawn portion</li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li>Calculated field, no direct exclusions</li><li>Respects user-selected filters</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Lower regulatory capital requirements vs. committed facilities. Provides relationship flexibility without binding funding obligations."
+        }
+      }
+    },
+    "expiration": {
+      "title": "CAs & Facilities Expired - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Count of facilities and Credit Agreements (CAs) that have expired past their maturity/expiration date as of the reporting date."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>Facilities Expired:</strong></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>Count: <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">COUNT(DISTINCT Facility_ID)</code></li><li>Filter: <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Maturity_Date < MAX(Report_Date)</code></li><li><strong>⚠️ NO DM EXCLUSION</strong> - Includes ALL Management_Status values</li></ul><p class=\"mt-3\"><strong>CAs Expired:</strong></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>Count: <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">COUNT(DISTINCT Relationship_ID)</code></li><li>Filter: <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">CA_Expiration_Date < MAX(Report_Date)</code></li><li><strong>🔒 HARDCODED:</strong> <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Management_Status = 'CM'</code> ONLY</li><li><strong>🌍 EMEA Special Rule:</strong> Also requires <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">CA_Review = 'Yes'</code></li><li>Non-EMEA: All CM relationships counted</li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_ID</code> - For unique facility count</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Relationship_ID</code> - For unique CA count</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Maturity_Date</code> - Facility maturity date</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">CA_Expiration_Date</code> - Credit Agreement expiration</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Management_Status</code> - Used for CA filtering (CM only)</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Region</code> - For EMEA special logic</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">CA_Review</code> - EMEA-specific filter</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Report_Date</code> - Baseline for comparison</li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><strong>Facilities:</strong> NO Management_Status filter (includes DM + CM)</li><li><strong>CAs:</strong> ONLY CM (<code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Management_Status = 'CM'</code>)</li><li><strong>EMEA CAs:</strong> Must have <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">CA_Review = 'Yes'</code></li><li>Respects user-selected filters for display</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Expired facilities represent critical operational and credit risk requiring immediate remediation. High counts are regulatory red flags. EMEA's CA_Review requirement ensures focused tracking of reviewed agreements."
+        }
+      }
+    },
+    "newDealsYTD": {
+      "title": "New Deals Funded YTD - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Year-to-date count and amount of newly funded facilities based on reporting month (not actual current date). Excludes PSE facilities."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>Date Logic:</strong></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>Uses <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Origination_Date</code> OR <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Renewal_Date</code> (whichever exists)</li><li>YTD = Jan 1 of reporting year → Latest <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Report_Date</code></li><li><strong>⚠️ Uses reporting month, NOT system current date</strong></li></ul><p class=\"mt-3\"><strong>Filtering:</strong></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li><strong>🔒 HARDCODED EXCLUSION:</strong> <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">PSE_non-PSE != 'PSE'</code></li><li>Always excludes PSE for commercial lending focus</li><li>Count: Raw facility count (not distinct by Facility_ID)</li><li>Amount: <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">SUM(Fac_Amount)</code></li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Origination_Date</code> - Primary date field</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Renewal_Date</code> - Fallback if Origination_Date missing</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">PSE_non-PSE</code> - For PSE exclusion</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_ID</code> - For tracking unique facilities</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Fac_Amount</code> - Facility amount</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Report_Date</code> - Defines YTD range</li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><strong>🔒 PSE ALWAYS EXCLUDED:</strong> <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">PSE_non-PSE != 'PSE'</code></li><li>Only facilities with valid Origination_Date or Renewal_Date</li><li>Only facilities with valid Facility_ID</li><li>Respects user-selected filters</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Tracks actual business production. PSE exclusion provides clearer commercial lending activity view. YTD perspective tracks annual targets and YoY growth."
+        }
+      }
+    },
+    "newDealsMTD": {
+      "title": "New Deals Funded MTD - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Month-to-date funded facilities. Same logic as YTD but for current reporting month only."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>Date Logic:</strong></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>Uses <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Origination_Date</code> OR <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Renewal_Date</code></li><li>MTD = 1st of reporting month → Latest <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Report_Date</code></li><li><strong>🔒 HARDCODED EXCLUSION:</strong> <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">PSE_non-PSE != 'PSE'</code></li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li>Same columns as YTD</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Origination_Date / Renewal_Date</code></li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">PSE_non-PSE</code></li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_ID</code></li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><strong>🔒 PSE ALWAYS EXCLUDED</strong></li><li>MTD time window only</li><li>Respects user filters</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Early monthly production indicator. Enables quick trend identification and timely corrections."
+        }
+      }
+    },
+    "expiring": {
+      "title": "CAs & Facilities Expiring (Next 3 Months) - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Count of facilities and CAs expiring or coming due in next 3 months from reporting date. Used for renewal pipeline tracking."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>Date Range:</strong> <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">MAX(Report_Date)</code> to <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">MAX(Report_Date) + 3 months</code></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>Charts/tables show facilities with <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Maturity_Date</code> in this range</li><li>Grouped by month for trend visualization</li><li>Count may be raw or distinct depending on use case</li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Maturity_Date</code> - Facility maturity date</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">CA_Expiration_Date</code> - CA expiration</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Report_Date</code> - Baseline date</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_ID / Relationship_ID</code></li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li>Only facilities/CAs within 3-month window</li><li>May inherit Management_Status filters from display context</li><li>Respects user-selected filters</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Critical for relationship management and revenue protection. Enables proactive renewal planning and prevents client attrition."
+        }
+      }
+    },
+    "topRelationships": {
+      "title": "Top Relationships - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Top N relationships ranked by selected amount type (TFA, Outstanding, etc.), with regional breakdown."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>User-Selectable Metrics:</strong></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>TFA, Direct OS, Contingent OS, PSE OS, OSUC, Unused Commitment</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">SUM(selected_field) GROUP BY Relationship_Name</code></li><li>Sort: Descending by total amount</li><li>Top N: User-selectable (5, 10, 15, or 20)</li><li>Regional breakdown within each relationship</li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Relationship_Name</code> - Grouping key</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Region</code> - For breakdown</li><li>Selected amount field (varies by user choice)</li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li>Only relationships with non-zero amounts</li><li>Respects user-selected filters</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Identifies key accounts requiring senior management attention. Informs concentration risk limits and cross-sell priorities."
+        }
+      }
+    },
+    "newFacilities": {
+      "title": "New Facilities Approved - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Count and amount of newly approved facilities by credit classification. Tracks business origination momentum."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>Uses First Approval Date:</strong></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>Filter: <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_First_Approval_Date</code> in selected period</li><li>Grouped by <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Credit_Classification</code></li><li>Count: Number of facilities approved</li><li>Amount: <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">SUM(Fac_Amount)</code></li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_First_Approval_Date</code></li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Credit_Classification</code></li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Fac_Amount</code></li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li>Only facilities with valid approval dates</li><li>Respects user filters</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Tracks business origination momentum. Credit classification breakdown reveals risk profile of new business."
+        }
+      }
+    },
+    "pipeline": {
+      "title": "Pipeline (Approved Not Funded) - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Facilities approved but not yet funded. Represents near-term balance sheet growth and revenue activation pipeline."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>Identification:</strong></p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>May use <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_ID LIKE 'PIPELINEFAC%'</code></li><li>OR: Has <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_First_Approval_Date</code> but no <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_First_Funding_Date</code></li><li>Count and sum amounts</li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_ID</code></li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_First_Approval_Date</code></li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Facility_First_Funding_Date</code></li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li>Only approved but unfunded facilities</li><li>Respects user filters</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Enables liquidity planning and operational resource allocation. Large buildup may signal documentation bottlenecks."
+        }
+      }
+    },
+    "rotce": {
+      "title": "ROTCE Performance - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Return on Tangible Common Equity across relationships/facilities. Shows capital efficiency and profitability."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p>Uses pre-calculated <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">ROTCE</code> column from data source. May aggregate by relationship or facility groupings.</p>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">ROTCE</code> - Pre-calculated return percentage</li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Relationship_Name</code></li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li>Only relationships with valid ROTCE data</li><li>Respects user filters</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Primary measure of shareholder value creation. Drives capital allocation and pricing adequacy decisions."
+        }
+      }
+    },
+    "covenantMonitoring": {
+      "title": "Covenant Monitoring - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Past due and coming due covenants (loaded from separate <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Covenants_current.xlsx</code> file). Tracks compliance obligations."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>Data Source:</strong> Separate covenant data file, not main portfolio</p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li><strong>Past Due:</strong> Covenant review date < current date, grouped by aging (1-45, 46-60, 61-90, 90+ days)</li><li><strong>Coming Due:</strong> Next 30 days from current date</li><li>Regional aggregation and filtering</li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Covenant_Review_Date</code></li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Relationship_ID / Relationship_Name</code></li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Region</code></li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Underwriter</code></li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li>Uses covenant-specific filters (Region, Underwriter, Product)</li><li>NOT standard portfolio filters</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Critical for regulatory compliance. Past due covenants require immediate action. Coming due enables proactive planning."
+        }
+      }
+    },
+    "ccmRegionalChart": {
+      "title": "CCM Regional Distribution - Methodology",
+      "sections": {
+        "whatThisShows": {
+          "icon": "chart",
+          "title": "What This Shows:",
+          "content": "Credit and Covenant Monitoring (CCM) activity distribution by region (loaded from <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">CCM_current.xlsx</code> and <code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">CCM_previous.xlsx</code>)."
+        },
+        "calculationLogic": {
+          "icon": "calculator",
+          "title": "Calculation Logic:",
+          "content": "<p><strong>Data Source:</strong> Separate CCM data files (current + previous month)</p><ul class=\"list-disc list-inside ml-4 space-y-1\"><li>Count of CCM relationships by region</li><li>Variance tracking vs. previous period</li><li>Past due vs. current status breakdown</li></ul>"
+        },
+        "dataColumns": {
+          "icon": "database",
+          "title": "Data Columns Used:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Region</code></li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">CCM_Status</code></li><li><code class=\"bg-gray-100 px-1.5 py-0.5 rounded text-xs\">Relationship_ID</code></li></ul>"
+        },
+        "exclusions": {
+          "icon": "filter",
+          "title": "Exclusions & Filters:",
+          "content": "<ul class=\"list-disc list-inside space-y-1\"><li>Separate data source from portfolio</li><li>Uses covenant-style filters</li></ul>"
+        },
+        "businessContext": {
+          "icon": "lightbulb",
+          "title": "Business Context:",
+          "content": "Regulatory requirement for ongoing credit assessment. Regional breakdowns help distribute workload and ensure adequate oversight."
+        }
+      }
+    }
+  }
+}
