@@ -10908,15 +10908,15 @@
                 const data = sblSpreadRegionData[region];
                 if (!data) return;
 
-                // Calculate overall mean across all regions
-                let totalSpread = 0;
-                let totalCount = 0;
+                // Calculate overall weighted average across all regions
+                let totalWeightedSum = 0;
+                let totalOS = 0;
                 Object.values(sblSpreadRegionData).forEach(regionData => {
-                    totalSpread += regionData.totalSpread;
-                    totalCount += regionData.spreadCount;
+                    totalWeightedSum += regionData.weightedSpreadSum;
+                    totalOS += regionData.totalDirectOS;
                 });
 
-                const overallMean = totalCount > 0 ? (totalSpread / totalCount).toFixed(1) : '0.0';
+                const overallMean = totalOS > 0 ? (totalWeightedSum / totalOS).toFixed(1) : '0.0';
                 const difference = (meanSpread - overallMean).toFixed(1);
                 const diffText = difference >= 0 ? `+${difference}` : difference;
                 const diffColor = difference >= 0 ? '#ef4444' : '#10b981';
@@ -10924,7 +10924,7 @@
                 const tooltipHTML = `
                     <div class="tooltip-header">
                         <div class="tooltip-title">SBL Spread Analysis</div>
-                        <div class="tooltip-subtitle">${region} - Mean Spread</div>
+                        <div class="tooltip-subtitle">${region} - Weighted Avg Spread</div>
                     </div>
                     
                     <div class="tooltip-body">
@@ -10936,15 +10936,15 @@
                         </div>
                         <div class="tooltip-grid mb-3">
                             <div class="tooltip-widget">
-                                <div class="tooltip-widget-label">Mean Spread</div>
+                                <div class="tooltip-widget-label">Weighted Avg Spread</div>
                                 <div class="tooltip-widget-value small">${meanSpread} bps</div>
                             </div>
                             <div class="tooltip-widget">
-                                <div class="tooltip-widget-label">Facilities</div>
-                                <div class="tooltip-widget-value small">${data.spreadCount}</div>
+                                <div class="tooltip-widget-label">Direct O/S</div>
+                                <div class="tooltip-widget-value small">${formatCurrency(data.totalDirectOS)}</div>
                             </div>
                             <div class="tooltip-widget">
-                                <div class="tooltip-widget-label">vs Overall Mean</div>
+                                <div class="tooltip-widget-label">vs Overall Avg</div>
                                 <div class="tooltip-widget-value small" style="color: ${diffColor};">${diffText} bps</div>
                             </div>
                         </div>
@@ -10957,12 +10957,17 @@
                         </div>
                         <div class="tooltip-grid">
                             <div class="tooltip-widget">
-                                <div class="tooltip-widget-label">Overall Mean</div>
+                                <div class="tooltip-widget-label">Overall Weighted Avg</div>
                                 <div class="tooltip-widget-value small">${overallMean} bps</div>
                             </div>
                             <div class="tooltip-widget">
-                                <div class="tooltip-widget-label">Total Facilities</div>
-                                <div class="tooltip-widget-value small">${totalCount}</div>
+                                <div class="tooltip-widget-label">Total Direct O/S</div>
+                                <div class="tooltip-widget-value small">${formatCurrency(totalOS)}</div>
+                            </div>
+                        </div>
+                        <div class="mt-2 p-2 bg-blue-50 rounded">
+                            <div class="text-xs text-gray-600">
+                                <strong>Formula:</strong> Σ(Spread × Direct_OS) / Σ(Direct_OS)
                             </div>
                         </div>
                     </div>
@@ -11013,7 +11018,7 @@
                     const dataToUse = (filteredData && filteredData.length > 0) ? filteredData : portfolioData;
                     
                     // Initialize data structures by region
-                    const regions = ['NAM', 'EMEA', 'APAC', 'LATAM'];
+                    const regions = ['NAM', 'LATAM'];  // Only NAM and LATAM for now
                     const regionData = {};
                     sblSpreadRegionData = {};
                     
@@ -11024,8 +11029,8 @@
                             spread_70_or_less: { count: 0, totalOS: 0 },
                             spread_70_125: { count: 0, totalOS: 0 },
                             spread_above_125: { count: 0, totalOS: 0 },
-                            totalSpread: 0,
-                            spreadCount: 0
+                            weightedSpreadSum: 0,  // SUM(Spread × Direct_OS)
+                            totalDirectOS: 0        // SUM(Direct_OS) for weighted average
                         };
                         sblSpreadRegionData[region] = regionData[region];
                     });
@@ -11065,9 +11070,9 @@
                                 regionData[region].spread_above_125.totalOS += directOS;
                             }
                             
-                            // For mean calculation
-                            regionData[region].totalSpread += loanSpread;
-                            regionData[region].spreadCount++;
+                            // For weighted average calculation: SUM(Spread × Direct_OS) / SUM(Direct_OS)
+                            regionData[region].weightedSpreadSum += (loanSpread * directOS);
+                            regionData[region].totalDirectOS += directOS;
                         }
                     });
                     
@@ -11080,13 +11085,14 @@
                         spread_70_or_less: 0,
                         spread_70_125: 0,
                         spread_above_125: 0,
-                        totalSpread: 0,
-                        spreadCount: 0
+                        weightedSpreadSum: 0,
+                        totalDirectOS: 0
                     };
                     
                     regions.forEach((region, index) => {
                         const data = regionData[region];
-                        const meanSpread = data.spreadCount > 0 ? (data.totalSpread / data.spreadCount).toFixed(1) : '0.0';
+                        // Weighted Average: SUM(Spread × Direct_OS) / SUM(Direct_OS)
+                        const meanSpread = data.totalDirectOS > 0 ? (data.weightedSpreadSum / data.totalDirectOS).toFixed(1) : '0.0';
                         
                         // Add to totals
                         totalRow.facilitiesWithOS += data.facilitiesWithOS;
@@ -11094,8 +11100,8 @@
                         totalRow.spread_70_or_less += data.spread_70_or_less.count;
                         totalRow.spread_70_125 += data.spread_70_125.count;
                         totalRow.spread_above_125 += data.spread_above_125.count;
-                        totalRow.totalSpread += data.totalSpread;
-                        totalRow.spreadCount += data.spreadCount;
+                        totalRow.weightedSpreadSum += data.weightedSpreadSum;
+                        totalRow.totalDirectOS += data.totalDirectOS;
                         
                         const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
                         countHTML += `
@@ -11127,8 +11133,8 @@
                         `;
                     });
                     
-                    // Add total row for count table
-                    const totalMeanSpread = totalRow.spreadCount > 0 ? (totalRow.totalSpread / totalRow.spreadCount).toFixed(1) : '0.0';
+                    // Add total row for count table - Weighted Average
+                    const totalMeanSpread = totalRow.totalDirectOS > 0 ? (totalRow.weightedSpreadSum / totalRow.totalDirectOS).toFixed(1) : '0.0';
                     countHTML += `
                         <tr class="bg-gray-100 border-t-2 border-gray-300">
                             <td class="px-6 py-4 text-center !text-base font-bold text-gray-900">Total</td>
@@ -29728,11 +29734,11 @@
                 
                 return `
                     <div class="methodology-section">
-                        <div class="flex items-center gap-2 mb-2">
-                            <svg class="w-5 h-5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 ${icon}
                             </svg>
-                            <h5 class="font-semibold text-gray-900">${section.title}</h5>
+                            <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">${section.title}</h5>
                         </div>
                         <div class="methodology-content ${contentClass}" ${contentAttr} data-section-content="true">
                             ${section.content}
@@ -30102,11 +30108,11 @@
                                     <p class="text-gray-600">Displays facilities expiring in the next 3 months from the reporting date, categorized as "Expired" (past) or "Expiring" (future). Helps track renewal pipeline and expired facilities requiring action.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Base Date:</strong> Uses <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs">Report_Date</code> (latest reporting month), not system current date</p>
@@ -30166,20 +30172,20 @@
                         content: `
                             <div class="space-y-4">
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">What This Shows:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">What This Shows:</h5>
                                     </div>
                                     <p class="text-gray-600">Counts of Credit Agreements and Facilities that have already expired (past their expiration/maturity date relative to the reporting date). This is a snapshot metric, not a time series.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Facilities Expired Count:</strong></p>
@@ -30265,11 +30271,11 @@
                                     <p class="text-gray-600">Displays the top N relationships ranked by selected amount type (TFA, Direct OS, OSUC, etc.), with regional breakdown showing distribution across NAM, EMEA, LATAM, and APAC.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Amount Type Selection:</strong> User selects from dropdown (default: Direct OS)</p>
@@ -30348,11 +30354,11 @@
                                     <p class="text-gray-600">Displays the top N relationships ranked by selected amount type (TFA, Direct OS, OSUC, etc.), with regional breakdown showing distribution across NAM, EMEA, LATAM, and APAC.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Amount Type Selection:</strong> User selects from dropdown (default: Direct OS)</p>
@@ -30422,20 +30428,20 @@
                         content: `
                             <div class="space-y-4">
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">What This Shows:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">What This Shows:</h5>
                                     </div>
                                     <p class="text-gray-600">Total Outstanding represents the aggregate of all drawn/utilized amounts across the portfolio. It includes Direct exposure (traditional lending), Contingent exposure (guarantees, LCs), and PSE (Public Sector Entity) outstanding amounts.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Primary Formula:</strong></p>
@@ -30503,20 +30509,20 @@
                         content: `
                             <div class="space-y-4">
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">What This Shows:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">What This Shows:</h5>
                                     </div>
                                     <p class="text-gray-600">Unused Commitment represents the undrawn portion of committed credit facilities available to clients. This is a contingent liability that could be drawn at any time, representing potential future funding obligations.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Formula:</strong></p>
@@ -30583,20 +30589,20 @@
                         content: `
                             <div class="space-y-4">
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">What This Shows:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">What This Shows:</h5>
                                     </div>
                                     <p class="text-gray-600">Unused Uncommitted represents the undrawn portion of uncommitted facilities. Unlike committed facilities, these are discretionary - the bank is not obligated to fund drawdowns and can refuse requests. This represents potential exposure with lower contingent liability.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Formula:</strong></p>
@@ -30665,20 +30671,20 @@
                         content: `
                             <div class="space-y-4">
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">What This Shows:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">What This Shows:</h5>
                                     </div>
                                     <p class="text-gray-600">Total Facility Amount (TFA) represents the total approved credit facilities across the portfolio. It includes all facility types regardless of drawdown status.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Formula:</strong></p>
@@ -30735,20 +30741,20 @@
                         content: `
                             <div class="space-y-4">
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">What This Shows:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">What This Shows:</h5>
                                     </div>
                                     <p class="text-gray-600">OSUC represents the total economic exposure from committed facilities, combining what has been drawn (Outstanding) plus what remains available to be drawn (Unused Commitment). This is the key risk metric for capital allocation.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Formula:</strong></p>
@@ -30802,20 +30808,20 @@
                         content: `
                             <div class="space-y-4">
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">What This Shows:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">What This Shows:</h5>
                                     </div>
                                     <p class="text-gray-600">Counts and amounts of newly approved facilities, showing business origination activity. Facilities are categorized by Credit Classification to show risk profile of new business.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Time Period Selection:</strong> User can select Current Month, Last Month, YTD, or Custom</p>
@@ -30888,11 +30894,11 @@
                                     <p class="text-gray-600">ROTCE measures profitability relative to tangible common equity allocated to each facility. It's a key performance indicator showing return efficiency across the portfolio.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>ROTCE Formula:</strong></p>
@@ -30963,11 +30969,11 @@
                                     <p class="text-gray-600">New Deals Closed YTD tracks facilities that have been originated (closed/funded) from January 1st through the reporting month of the current year. This measures actual business production, excluding PSE (Public Sector Entity) facilities.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Time Period:</strong></p>
@@ -31052,11 +31058,11 @@
                                     <p class="text-gray-600">New Deals Closed MTD tracks facilities that have been originated (closed/funded) from the 1st through the reporting day of the current month. This provides a near-term view of production momentum, excluding PSE facilities.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Time Period:</strong></p>
@@ -31133,20 +31139,20 @@
                         content: `
                             <div class="space-y-4">
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">What This Shows:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">What This Shows:</h5>
                                     </div>
                                     <p class="text-gray-600">Counts and amounts of newly approved facilities, showing business origination activity. Facilities are categorized by Credit Classification to show risk profile of new business. Same as "New Facilities Approved" chart with period selector.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Time Period Selection:</strong> User can select Current Month, Last Month (Previous), YTD, or Custom</p>
@@ -31219,11 +31225,11 @@
                                     <p class="text-gray-600">Displays facilities expiring in the next 3 months from the reporting date, categorized as "Expired" (past) or "Expiring" (future). Helps track renewal pipeline and expired facilities requiring action. Same as "CAs & Facilities Expiring" chart.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Base Date:</strong> Uses <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs">Report_Date</code> (latest reporting month), not system current date</p>
@@ -31281,11 +31287,11 @@
                                     <p class="text-gray-600">Tracks covenant compliance monitoring status, highlighting covenants that are past their review date or coming due in the next 30 days. Helps manage compliance obligations and prevent breaches.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Two Views Available:</strong></p>
@@ -31366,11 +31372,11 @@
                                     <p class="text-gray-600">Displays Credit and Covenant Monitoring (CCM) status by region, showing the distribution of past due vs. upcoming reviews across NAM, EMEA, LATAM, and APAC. Helps identify regional compliance workload and priorities.</p>
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0l-7 10h14M12 17V7"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">Calculation Logic:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">Calculation Logic:</h5>
                                     </div>
                                     <div class="text-gray-600 space-y-2">
                                         <p><strong>Regional Aggregation:</strong></p>
@@ -31440,11 +31446,11 @@
                         content: `
                             <div class="space-y-4">
                                 <div>
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <svg style="width: 1.25rem !important; height: 1.25rem !important; min-width: 1.25rem; min-height: 1.25rem; color: #2563eb; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
                                         </svg>
-                                        <h5 class="font-semibold text-gray-900">What This Shows:</h5>
+                                        <h5 style="font-size: 1rem !important; font-weight: 600 !important; color: #111827 !important; margin: 0 !important; line-height: 1.25rem !important;">What This Shows:</h5>
                                     </div>
                                     <p class="text-gray-600">Pipeline represents approved facilities that have not yet been originated (closed/funded). These are deals in the closing process that will become active facilities.</p>
                                 </div>
