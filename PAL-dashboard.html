@@ -654,58 +654,22 @@
                                             </div>
                                             <!-- Options List -->
                                             <div id="regionFilterValues" class="max-h-64 overflow-y-auto">
-                                                <div class="filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150"
-                                                    data-value="APAC" onclick="toggleFilterItem(this, 'region')">
-                                                    <span class="pr-4 !text-base">APAC</span>
-                                                    <div class="w-5 h-5 check-icon hidden">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-5 h-5 text-blue-600" viewBox="0 0 20 20"
-                                                            fill="currentColor">
-                                                            <path fill-rule="evenodd"
-                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                                clip-rule="evenodd" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                                <div class="filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150"
-                                                    data-value="EMEA" onclick="toggleFilterItem(this, 'region')">
-                                                    <span class="pr-4 !text-base">EMEA</span>
-                                                    <div class="w-5 h-5 check-icon hidden">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-5 h-5 text-blue-600" viewBox="0 0 20 20"
-                                                            fill="currentColor">
-                                                            <path fill-rule="evenodd"
-                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                                clip-rule="evenodd" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                                <div class="filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150"
-                                                    data-value="LATAM" onclick="toggleFilterItem(this, 'region')">
-                                                    <span class="pr-4 !text-base">LATAM</span>
-                                                    <div class="w-5 h-5 check-icon hidden">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-5 h-5 text-blue-600" viewBox="0 0 20 20"
-                                                            fill="currentColor">
-                                                            <path fill-rule="evenodd"
-                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                                clip-rule="evenodd" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                                <div class="filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150"
-                                                    data-value="NAM" onclick="toggleFilterItem(this, 'region')">
-                                                    <span class="pr-4 !text-base">NAM</span>
-                                                    <div class="w-5 h-5 check-icon hidden">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-5 h-5 text-blue-600" viewBox="0 0 20 20"
-                                                            fill="currentColor">
-                                                            <path fill-rule="evenodd"
-                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                                clip-rule="evenodd" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
+                                                <label class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition-colors" data-value="APAC">
+                                                    <input type="checkbox" value="APAC" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="toggleCheckboxFilterItem(this, 'region')" />
+                                                    <span class="text-base text-gray-700">APAC</span>
+                                                </label>
+                                                <label class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition-colors" data-value="EMEA">
+                                                    <input type="checkbox" value="EMEA" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="toggleCheckboxFilterItem(this, 'region')" />
+                                                    <span class="text-base text-gray-700">EMEA</span>
+                                                </label>
+                                                <label class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition-colors" data-value="LATAM">
+                                                    <input type="checkbox" value="LATAM" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="toggleCheckboxFilterItem(this, 'region')" />
+                                                    <span class="text-base text-gray-700">LATAM</span>
+                                                </label>
+                                                <label class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition-colors" data-value="NAM">
+                                                    <input type="checkbox" value="NAM" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="toggleCheckboxFilterItem(this, 'region')" />
+                                                    <span class="text-base text-gray-700">NAM</span>
+                                                </label>
                                             </div>
                                             <!-- Apply Button -->
                                             <div class="p-3 border-t border-gray-100 bg-gray-50">
@@ -5745,7 +5709,12 @@
                     tempSelectedRegions = [];
                     selectedRegion = "all";
 
-                    // Clear checkmarks
+                    // Clear checkboxes
+                    document.querySelectorAll('#regionFilterValues input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+
+                    // Clear checkmarks (for backward compatibility)
                     document.querySelectorAll('#regionFilterValues .filter-item').forEach(item => {
                         item.classList.remove("text-blue-600", "bg-blue-50");
                         item.classList.add("text-gray-600");
@@ -7420,8 +7389,22 @@
                 const container = document.getElementById("regionFilterValues");
                 if (!container) return;
 
+                // Handle both labels (new) and filter-item divs (old)
+                const labels = container.querySelectorAll("label");
                 const items = container.querySelectorAll(".filter-item");
                 let visibleCount = 0;
+                
+                labels.forEach((label) => {
+                    const value = label.getAttribute("data-value");
+                    const text = label.textContent || value;
+                    if (text && text.toLowerCase().includes(searchTerm)) {
+                        label.style.display = "flex";
+                        visibleCount++;
+                    } else {
+                        label.style.display = "none";
+                    }
+                });
+                
                 items.forEach((item) => {
                     const value = item.getAttribute("data-value");
                     const text = item.querySelector("span")?.textContent || value;
@@ -7829,7 +7812,11 @@
                 const teamleadLabel = document.getElementById("teamleadFilterLabel");
                 if (teamleadLabel) teamleadLabel.textContent = "Select team lead";
 
-                // Clear checkmarks from all multi-select dropdowns
+                // Clear checkboxes and checkmarks from all multi-select dropdowns
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
                 document.querySelectorAll('.filter-item').forEach(item => {
                     item.classList.remove("text-blue-600", "bg-blue-50");
                     item.classList.add("text-gray-600");
@@ -10428,8 +10415,8 @@
                         count: 0
                     };
                     
-                    // Use filtered data to calculate metrics
-                    const dataToUse = (filteredData && filteredData.length > 0) ? filteredData : portfolioData;
+                    // Use filtered data to calculate metrics - always use filteredData when available
+                    const dataToUse = (filteredData && filteredData !== portfolioData) ? filteredData : portfolioData;
                     
                     dataToUse.forEach(row => {
                         // Only process Securities Based Lending rows
@@ -11103,8 +11090,8 @@
                 if (isSBLFiltered) {
                     sblSpreadElement.style.display = "block";
                     
-                    // Use filtered data to calculate metrics
-                    const dataToUse = (filteredData && filteredData.length > 0) ? filteredData : portfolioData;
+                    // Use filtered data to calculate metrics - always use filteredData when available
+                    const dataToUse = (filteredData && filteredData !== portfolioData) ? filteredData : portfolioData;
                     
                     // Initialize data structures by region
                     const regions = ['NAM', 'LATAM'];  // Only NAM and LATAM for now
