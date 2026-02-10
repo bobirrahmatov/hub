@@ -756,7 +756,7 @@
                                         class="!text-base !font-medium text-gray-700 tracking-wide text-center">Product</span>
                                     <div class="relative" id="productFilterContainer">
                                         <button onclick="toggleTopFilter('product')" id="btnProductDropdown"
-                                            class="inline-flex items-center justify-between min-w-[150px] gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 !text-base text-gray-600 shadow-sm outline-none hover:border-gray-300 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all">
+                                            class="inline-flex items-center justify-between min-w-[140px] gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 !text-base text-gray-600 shadow-sm outline-none hover:border-gray-300 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all">
                                             <span id="productFilterLabel" class="!text-base">Select product</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400"
                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -800,9 +800,8 @@
                                         Product</span>
                                     <div class="relative" id="subproductFilterContainer">
                                         <button onclick="toggleTopFilter('subproduct')" id="btnSubproductDropdown"
-                                            class="inline-flex items-center justify-between min-w-[150px] gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 !text-base text-gray-600 shadow-sm outline-none hover:border-gray-300 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all">
-                                            <span id="subproductFilterLabel" class="!text-base">Select sub
-                                                product</span>
+                                            class="inline-flex items-center justify-between min-w-[140px] gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 !text-base text-gray-600 shadow-sm outline-none hover:border-gray-300 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all">
+                                            <span id="subproductFilterLabel" class="!text-base">Select sub product</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400"
                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -845,9 +844,8 @@
                                         class="!text-base !font-medium text-gray-700 tracking-wide text-center">Underwriter</span>
                                     <div class="relative" id="underwriterFilterContainer">
                                         <button onclick="toggleTopFilter('underwriter')" id="btnUnderwriterDropdown"
-                                            class="inline-flex items-center justify-between min-w-[160px] gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 !text-base text-gray-600 shadow-sm outline-none hover:border-gray-300 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all">
-                                            <span id="underwriterFilterLabel" class="!text-base">Select
-                                                underwriter</span>
+                                            class="inline-flex items-center justify-between min-w-[140px] gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 !text-base text-gray-600 shadow-sm outline-none hover:border-gray-300 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all">
+                                            <span id="underwriterFilterLabel" class="!text-base">Select underwriter</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400"
                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -890,7 +888,7 @@
                                         class="!text-base !font-medium text-gray-700 tracking-wide text-center">Team Lead</span>
                                     <div class="relative" id="teamleadFilterContainer">
                                         <button onclick="toggleTopFilter('teamlead')" id="btnTeamleadDropdown"
-                                            class="inline-flex items-center justify-between min-w-[160px] gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 !text-base text-gray-600 shadow-sm outline-none hover:border-gray-300 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all">
+                                            class="inline-flex items-center justify-between min-w-[140px] gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 !text-base text-gray-600 shadow-sm outline-none hover:border-gray-300 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all">
                                             <span id="teamleadFilterLabel" class="!text-base">Select team lead</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400"
                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -4134,6 +4132,12 @@
 
                 // Add global click listener to close dropdowns when clicking outside
                 document.addEventListener('click', function (event) {
+                    // Don't close dropdowns if clicking on the "More Filters" button
+                    const filterButton = document.getElementById('filterButtonInline');
+                    if (filterButton && (event.target === filterButton || filterButton.contains(event.target))) {
+                        return;
+                    }
+                    
                     if (openTopFilter) {
                         const dropdownContainer = document.getElementById(openTopFilter + 'FilterContainer');
                         if (dropdownContainer && !dropdownContainer.contains(event.target)) {
@@ -5075,15 +5079,10 @@
                     let teamleadHTML = "";
                     teamLeads.forEach(teamlead => {
                         teamleadHTML += `
-                            <div class="filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150"
-                                data-value="${teamlead}" onclick="toggleFilterItem(this, 'teamlead')">
-                                <span class="pr-4 !text-base">${teamlead}</span>
-                                <div class="w-5 h-5 check-icon hidden">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                                    </svg>
-                                </div>
-                            </div>
+                            <label class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition-colors" data-value="${teamlead}">
+                                <input type="checkbox" value="${teamlead}" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="toggleCheckboxFilterItem(this, 'teamlead')" />
+                                <span class="text-base text-gray-700">${teamlead}</span>
+                            </label>
                         `;
                     });
                     teamleadFilterContainer.innerHTML = teamleadHTML;
@@ -5124,12 +5123,11 @@
             function applyFilters() {
                 const startTime = performance.now();
 
-                // Get advanced filter values (excluding Region, Status, Commitment Status, Product Program, and Underwriter which are in smart filters)
+                // Get advanced filter values (excluding Region, Status, Commitment Status, Product Program, Underwriter, and Team Lead which are in smart filters)
                 // Add safety checks for each element
                 const filters = {
                     extendingUnit: document.getElementById("filterExtendingUnit")?.value || "",
                     facilityType: document.getElementById("filterFacilityType")?.value || "",
-                    teamLead: document.getElementById("filterTeamLead")?.value || "",
                     caMaturity: document.getElementById("filterCAMaturity")?.value || "",
                     facilityMaturity: document.getElementById("filterFacilityMaturity")?.value || "",
                 };
@@ -5300,11 +5298,7 @@
                         row.Facility_Type !== filters.facilityType
                     )
                         continue;
-                    if (
-                        filters.teamLead &&
-                        row.Underwriting_Team_Lead !== filters.teamLead
-                    )
-                        continue;
+                    // Team Lead filter is now handled by multi-select above (selectedTeamleads)
 
                     // Date filters (use pre-parsed dates from index)
                     if (caDateRange) {
@@ -5405,11 +5399,10 @@
             function applyFiltersWithChartFilter() {
                 const startTime = performance.now();
 
-                // Get advanced filter values (excluding Region, Status, Commitment Status, Product Program, and Underwriter which are in smart filters)
+                // Get advanced filter values (excluding Region, Status, Commitment Status, Product Program, Underwriter, and Team Lead which are in smart filters)
                 const filters = {
                     extendingUnit: document.getElementById("filterExtendingUnit").value,
                     facilityType: document.getElementById("filterFacilityType").value,
-                    teamLead: document.getElementById("filterTeamLead").value,
                     caMaturity: document.getElementById("filterCAMaturity").value,
                     facilityMaturity: document.getElementById("filterFacilityMaturity")
                         .value,
@@ -5587,11 +5580,7 @@
                         row.Facility_Type !== filters.facilityType
                     )
                         continue;
-                    if (
-                        filters.teamLead &&
-                        row.Underwriting_Team_Lead !== filters.teamLead
-                    )
-                        continue;
+                    // Team Lead filter is now handled by multi-select above (selectedTeamleads)
 
                     // Date filters (use pre-parsed dates from index)
                     if (caDateRange) {
@@ -5932,11 +5921,33 @@
                     return;
                 }
 
-                // Handle advanced filters (Product Program and Underwriter are now in global filters)
+                // Handle multi-select Team Lead filter
+                if (label === "Team Lead") {
+                    selectedTeamleads = [];
+                    tempSelectedTeamleads = [];
+
+                    // Clear checkmarks
+                    document.querySelectorAll('#teamleadFilterValues .filter-item').forEach(item => {
+                        item.classList.remove("text-blue-600", "bg-blue-50");
+                        item.classList.add("text-gray-600");
+                        const checkIcon = item.querySelector(".check-icon");
+                        if (checkIcon) checkIcon.classList.add("hidden");
+                    });
+
+                    // Reset label
+                    const teamleadLabel = document.getElementById("teamleadFilterLabel");
+                    if (teamleadLabel) teamleadLabel.textContent = "Select team lead";
+
+                    delete activeFilters["Team Lead"];
+                    updateFilterCount();
+                    applyFilters();
+                    return;
+                }
+
+                // Handle advanced filters (Product Program, Underwriter, and Team Lead are now in global filters)
                 const filterMap = {
                     "Extending Unit": "filterExtendingUnit",
                     "Facility Type": "filterFacilityType",
-                    "Team Lead": "filterTeamLead",
                     "CAs Maturing": "filterCAMaturity",
                     "Facilities Maturing": "filterFacilityMaturity",
                 };
@@ -5978,33 +5989,42 @@
             function toggleFilterPopover() {
                 const popover = document.getElementById("filterPopover");
                 if (popover.classList.contains("hidden")) {
+                    // Close any open filter dropdowns first
+                    if (openTopFilter) {
+                        const dropdown = document.getElementById(openTopFilter + 'FilterDropdown');
+                        if (dropdown) {
+                            dropdown.classList.add('hidden');
+                        }
+                        openTopFilter = null;
+                    }
+                    
                     // Opening popover - save current filter state (excluding smart filters and fields that are now in smart filters)
                     tempFilterState = {
-                        extendingUnit: document.getElementById("filterExtendingUnit").value,
-                        facilityType: document.getElementById("filterFacilityType").value,
-                        commitment: document.getElementById("filterCommitment").value,
-                        teamLead: document.getElementById("filterTeamLead").value,
-                        caMaturity: document.getElementById("filterCAMaturity").value,
-                        facilityMaturity: document.getElementById("filterFacilityMaturity")
-                            .value,
+                        extendingUnit: document.getElementById("filterExtendingUnit")?.value || "",
+                        facilityType: document.getElementById("filterFacilityType")?.value || "",
+                        commitment: document.getElementById("filterCommitment")?.value || "",
+                        caMaturity: document.getElementById("filterCAMaturity")?.value || "",
+                        facilityMaturity: document.getElementById("filterFacilityMaturity")?.value || "",
                     };
 
                     popover.classList.remove("hidden");
                     document.body.style.overflow = "hidden"; // Prevent background scrolling
                 } else {
                     // Closing popover - restore previous filter state (cancel changes)
-                    document.getElementById("filterExtendingUnit").value =
-                        tempFilterState.extendingUnit || "";
-                    document.getElementById("filterFacilityType").value =
-                        tempFilterState.facilityType || "";
-                    document.getElementById("filterCommitment").value =
-                        tempFilterState.commitment || "";
-                    document.getElementById("filterTeamLead").value =
-                        tempFilterState.teamLead || "";
-                    document.getElementById("filterCAMaturity").value =
-                        tempFilterState.caMaturity || "";
-                    document.getElementById("filterFacilityMaturity").value =
-                        tempFilterState.facilityMaturity || "";
+                    const extendingUnitEl = document.getElementById("filterExtendingUnit");
+                    if (extendingUnitEl) extendingUnitEl.value = tempFilterState.extendingUnit || "";
+                    
+                    const facilityTypeEl = document.getElementById("filterFacilityType");
+                    if (facilityTypeEl) facilityTypeEl.value = tempFilterState.facilityType || "";
+                    
+                    const commitmentEl = document.getElementById("filterCommitment");
+                    if (commitmentEl) commitmentEl.value = tempFilterState.commitment || "";
+                    
+                    const caMaturityEl = document.getElementById("filterCAMaturity");
+                    if (caMaturityEl) caMaturityEl.value = tempFilterState.caMaturity || "";
+                    
+                    const facilityMaturityEl = document.getElementById("filterFacilityMaturity");
+                    if (facilityMaturityEl) facilityMaturityEl.value = tempFilterState.facilityMaturity || "";
 
                     popover.classList.add("hidden");
                     document.body.style.overflow = ""; // Restore scrolling
@@ -7170,6 +7190,8 @@
                         tempSelectedSubProducts = [...selectedSubProducts];
                     } else if (filterType === "underwriter") {
                         tempSelectedUnderwriters = [...selectedUnderwriters];
+                    } else if (filterType === "teamlead") {
+                        tempSelectedTeamleads = [...selectedTeamleads];
                     }
 
                     // Update UI to show current selections
@@ -7188,7 +7210,36 @@
                 }
             }
 
-            // Toggle a filter item selection (click handler)
+            // Toggle a filter item selection (checkbox handler)
+            function toggleCheckboxFilterItem(checkbox, filterType) {
+                const value = checkbox.value;
+                if (!value) return;
+
+                let tempArray;
+                if (filterType === "region") {
+                    tempArray = tempSelectedRegions;
+                } else if (filterType === "product") {
+                    tempArray = tempSelectedProducts;
+                } else if (filterType === "subproduct") {
+                    tempArray = tempSelectedSubProducts;
+                } else if (filterType === "underwriter") {
+                    tempArray = tempSelectedUnderwriters;
+                } else if (filterType === "teamlead") {
+                    tempArray = tempSelectedTeamleads;
+                } else {
+                    return;
+                }
+
+                // Toggle selection based on checkbox state
+                const index = tempArray.indexOf(value);
+                if (checkbox.checked && index === -1) {
+                    tempArray.push(value);
+                } else if (!checkbox.checked && index > -1) {
+                    tempArray.splice(index, 1);
+                }
+            }
+
+            // Toggle a filter item selection (click handler) - kept for backward compatibility
             function toggleFilterItem(element, filterType) {
                 const value = element.getAttribute("data-value");
                 if (!value) return;
@@ -7202,6 +7253,8 @@
                     tempArray = tempSelectedSubProducts;
                 } else if (filterType === "underwriter") {
                     tempArray = tempSelectedUnderwriters;
+                } else if (filterType === "teamlead") {
+                    tempArray = tempSelectedTeamleads;
                 } else {
                     return;
                 }
@@ -7238,6 +7291,13 @@
                 const container = document.getElementById(filterType + "FilterValues");
                 if (!container) return;
 
+                // Update checkboxes
+                const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach((checkbox) => {
+                    checkbox.checked = tempArray.includes(checkbox.value);
+                });
+
+                // Also handle old filter-item divs for backward compatibility
                 const items = container.querySelectorAll(".filter-item");
                 items.forEach((item) => {
                     const value = item.getAttribute("data-value");
@@ -7491,21 +7551,23 @@
                 const fragment = document.createDocumentFragment();
 
                 products.forEach((product) => {
-                    const div = document.createElement("div");
-                    div.className = "filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150";
-                    div.setAttribute("data-value", product);
-                    div.onclick = function () { toggleFilterItem(this, 'product'); };
+                    const label = document.createElement("label");
+                    label.className = "flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition-colors";
+                    label.setAttribute("data-value", product);
 
-                    div.innerHTML = `
-                    <span class="pr-4 !text-base">${product}</span>
-                    <div class="w-5 h-5 check-icon hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                `;
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.value = product;
+                    checkbox.className = "w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500";
+                    checkbox.onchange = function() { toggleCheckboxFilterItem(this, 'product'); };
 
-                    fragment.appendChild(div);
+                    const span = document.createElement("span");
+                    span.className = "text-base text-gray-700";
+                    span.textContent = product;
+
+                    label.appendChild(checkbox);
+                    label.appendChild(span);
+                    fragment.appendChild(label);
                 });
 
                 // Single DOM write
@@ -7531,21 +7593,23 @@
                 const fragment = document.createDocumentFragment();
 
                 subProducts.forEach((subProduct) => {
-                    const div = document.createElement("div");
-                    div.className = "filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150";
-                    div.setAttribute("data-value", subProduct);
-                    div.onclick = function () { toggleFilterItem(this, 'subproduct'); };
+                    const label = document.createElement("label");
+                    label.className = "flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition-colors";
+                    label.setAttribute("data-value", subProduct);
 
-                    div.innerHTML = `
-                    <span class="pr-4 !text-base">${subProduct}</span>
-                    <div class="w-5 h-5 check-icon hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                `;
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.value = subProduct;
+                    checkbox.className = "w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500";
+                    checkbox.onchange = function() { toggleCheckboxFilterItem(this, 'subproduct'); };
 
-                    fragment.appendChild(div);
+                    const span = document.createElement("span");
+                    span.className = "text-base text-gray-700";
+                    span.textContent = subProduct;
+
+                    label.appendChild(checkbox);
+                    label.appendChild(span);
+                    fragment.appendChild(label);
                 });
 
                 // Single DOM write
@@ -7592,21 +7656,23 @@
                 const fragment = document.createDocumentFragment();
 
                 underwriters.forEach((underwriter) => {
-                    const div = document.createElement("div");
-                    div.className = "filter-item flex items-center justify-between px-3 py-2.5 cursor-pointer !text-base text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-150";
-                    div.setAttribute("data-value", underwriter);
-                    div.onclick = function () { toggleFilterItem(this, 'underwriter'); };
+                    const label = document.createElement("label");
+                    label.className = "flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition-colors";
+                    label.setAttribute("data-value", underwriter);
 
-                    div.innerHTML = `
-                    <span class="pr-4 !text-base">${underwriter}</span>
-                    <div class="w-5 h-5 check-icon hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                `;
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.value = underwriter;
+                    checkbox.className = "w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500";
+                    checkbox.onchange = function() { toggleCheckboxFilterItem(this, 'underwriter'); };
 
-                    fragment.appendChild(div);
+                    const span = document.createElement("span");
+                    span.className = "text-base text-gray-700";
+                    span.textContent = underwriter;
+
+                    label.appendChild(checkbox);
+                    label.appendChild(span);
+                    fragment.appendChild(label);
                 });
 
                 // Single DOM write
@@ -7716,10 +7782,12 @@
                 selectedProducts = [];
                 selectedSubProducts = [];
                 selectedUnderwriters = [];
+                selectedTeamleads = [];
                 tempSelectedRegions = [];
                 tempSelectedProducts = [];
                 tempSelectedSubProducts = [];
                 tempSelectedUnderwriters = [];
+                tempSelectedTeamleads = [];
 
                 // Clear search inputs
                 const searchInput = document.getElementById('searchInput');
@@ -7757,6 +7825,9 @@
 
                 const underwriterLabel = document.getElementById("underwriterFilterLabel");
                 if (underwriterLabel) underwriterLabel.textContent = "Select underwriter";
+
+                const teamleadLabel = document.getElementById("teamleadFilterLabel");
+                if (teamleadLabel) teamleadLabel.textContent = "Select team lead";
 
                 // Clear checkmarks from all multi-select dropdowns
                 document.querySelectorAll('.filter-item').forEach(item => {
@@ -9148,15 +9219,15 @@
                     // Apply region filter if active (legacy single-select)
                     if (selectedRegion !== 'all' && region !== selectedRegion.toUpperCase()) return;
 
-                    // Apply multi-select Region filter
+                    // Apply multi-select Region filter with case normalization
                     if (selectedRegions.length > 0) {
-                        const rowRegion = row.Region || "";
-                        if (!selectedRegions.includes(rowRegion)) return;
+                        const rowRegion = (row.Region || "").toUpperCase();
+                        if (!selectedRegions.some(r => r.toUpperCase() === rowRegion)) return;
                     }
 
-                    // Apply multi-select Product filter
+                    // Apply multi-select Product filter - check both Product_Program and Product_Program_Name
                     if (selectedProducts.length > 0) {
-                        const rowProduct = row.Product_Program || "";
+                        const rowProduct = row.Product_Program || row.Product_Program_Name || "";
                         if (!selectedProducts.includes(rowProduct)) return;
                     }
 
@@ -9170,6 +9241,12 @@
                     if (selectedUnderwriters.length > 0) {
                         const rowUnderwriter = row.Lead_Underwriter || "";
                         if (!selectedUnderwriters.includes(rowUnderwriter)) return;
+                    }
+
+                    // Apply multi-select Team Lead filter
+                    if (selectedTeamleads.length > 0) {
+                        const rowTeamLead = row.Underwriting_Team_Lead || "";
+                        if (!selectedTeamleads.includes(rowTeamLead)) return;
                     }
 
                     // Process Past Due covenants using Coming_Due_Past_Due and Past_Due_Category from dataLoader
@@ -9672,15 +9749,15 @@
                     // Apply region filter if active (legacy single-select)
                     if (selectedRegion !== 'all' && region !== selectedRegion.toUpperCase()) return;
 
-                    // Apply multi-select Region filter
+                    // Apply multi-select Region filter with case normalization
                     if (selectedRegions.length > 0) {
-                        const rowRegion = row.Region || "";
-                        if (!selectedRegions.includes(rowRegion)) return;
+                        const rowRegion = (row.Region || "").toUpperCase();
+                        if (!selectedRegions.some(r => r.toUpperCase() === rowRegion)) return;
                     }
 
-                    // Apply multi-select Product filter
+                    // Apply multi-select Product filter - check both Product_Program and Product_Program_Name
                     if (selectedProducts.length > 0) {
-                        const rowProduct = row.Product_Program || "";
+                        const rowProduct = row.Product_Program || row.Product_Program_Name || "";
                         if (!selectedProducts.includes(rowProduct)) return;
                     }
 
@@ -9694,6 +9771,12 @@
                     if (selectedUnderwriters.length > 0) {
                         const rowUnderwriter = row.Lead_Underwriter || "";
                         if (!selectedUnderwriters.includes(rowUnderwriter)) return;
+                    }
+
+                    // Apply multi-select Team Lead filter
+                    if (selectedTeamleads.length > 0) {
+                        const rowTeamLead = row.Underwriting_Team_Lead || "";
+                        if (!selectedTeamleads.includes(rowTeamLead)) return;
                     }
 
                     regionPopulation[region]++;
@@ -9713,15 +9796,15 @@
                     // Apply region filter if active (legacy single-select)
                     if (selectedRegion !== 'all' && region !== selectedRegion.toUpperCase()) return;
 
-                    // Apply multi-select Region filter
+                    // Apply multi-select Region filter with case normalization
                     if (selectedRegions.length > 0) {
-                        const rowRegion = row.Region || "";
-                        if (!selectedRegions.includes(rowRegion)) return;
+                        const rowRegion = (row.Region || "").toUpperCase();
+                        if (!selectedRegions.some(r => r.toUpperCase() === rowRegion)) return;
                     }
 
-                    // Apply multi-select Product filter
+                    // Apply multi-select Product filter - check both Product_Program and Product_Program_Name
                     if (selectedProducts.length > 0) {
-                        const rowProduct = row.Product_Program || "";
+                        const rowProduct = row.Product_Program || row.Product_Program_Name || "";
                         if (!selectedProducts.includes(rowProduct)) return;
                     }
 
@@ -9735,6 +9818,12 @@
                     if (selectedUnderwriters.length > 0) {
                         const rowUnderwriter = row.Lead_Underwriter || "";
                         if (!selectedUnderwriters.includes(rowUnderwriter)) return;
+                    }
+
+                    // Apply multi-select Team Lead filter
+                    if (selectedTeamleads.length > 0) {
+                        const rowTeamLead = row.Underwriting_Team_Lead || "";
+                        if (!selectedTeamleads.includes(rowTeamLead)) return;
                     }
 
                     // For Past Due covenants - use Past_Due_Category from dataLoader (normalized categories)
@@ -15355,6 +15444,60 @@
             // ============================================
 
             // Create ROTCE chart (initial load)
+            // Format ROTCE period to readable format
+            function formatROTCEPeriod(periodString) {
+                if (!periodString) return '';
+                
+                const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+                const monthAbbr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                
+                // Try to parse different formats
+                let month, year;
+                
+                // Format: "Sep-25" or "Sep-2025"
+                const abbrevFormat = periodString.match(/^([A-Za-z]{3})-?(\d{2,4})$/);
+                if (abbrevFormat) {
+                    const monthIdx = monthAbbr.findIndex(m => m.toLowerCase() === abbrevFormat[1].toLowerCase());
+                    if (monthIdx !== -1) {
+                        month = monthNames[monthIdx];
+                        year = abbrevFormat[2].length === 2 ? `20${abbrevFormat[2]}` : abbrevFormat[2];
+                        return `${month} ${year}`;
+                    }
+                }
+                
+                // Format: "01/09/2025" or "09/01/2025" (assume DD/MM/YYYY or MM/DD/YYYY)
+                const slashFormat = periodString.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+                if (slashFormat) {
+                    const part1 = parseInt(slashFormat[1]);
+                    const part2 = parseInt(slashFormat[2]);
+                    year = slashFormat[3];
+                    
+                    // If first part > 12, it's likely DD/MM/YYYY, otherwise MM/DD/YYYY
+                    if (part1 > 12) {
+                        month = monthNames[part2 - 1];
+                    } else if (part2 > 12) {
+                        month = monthNames[part1 - 1];
+                    } else {
+                        // Ambiguous, assume MM/DD/YYYY (US format)
+                        month = monthNames[part1 - 1];
+                    }
+                    return `${month} ${year}`;
+                }
+                
+                // Format: "2025-09-01" (ISO format)
+                const isoFormat = periodString.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+                if (isoFormat) {
+                    year = isoFormat[1];
+                    month = monthNames[parseInt(isoFormat[2]) - 1];
+                    return `${month} ${year}`;
+                }
+                
+                // If no format matches, return original
+                return periodString;
+            }
+
             function createROTCEChart() {
 
                 const chartElement = document.querySelector("#rotceChart");
@@ -15367,13 +15510,14 @@
                     return;
                 }
 
-                // Extract ROTCE_Period from portfolio data and update subtitle
+                // Extract ROTCE_Period from portfolio data and format it
                 const rotcePeriod = portfolioData.find(row => row.ROTCE_Period)?.ROTCE_Period || '';
+                const formattedPeriod = formatROTCEPeriod(rotcePeriod);
                 const subtitleElement = document.getElementById('rotceSubtitle');
                 if (subtitleElement) {
                     const topN = parseInt(document.getElementById("topNFilter").value);
-                    subtitleElement.textContent = rotcePeriod 
-                        ? `Top ${topN} relationships ROTCE performance as of ${rotcePeriod}`
+                    subtitleElement.textContent = formattedPeriod 
+                        ? `Top ${topN} relationships ROTCE performance as of ${formattedPeriod}`
                         : `Top ${topN} relationships ROTCE performance`;
                 }
 
@@ -15963,13 +16107,14 @@
                     return;
                 }
 
-                // Extract ROTCE_Period from data source and update subtitle
+                // Extract ROTCE_Period from data source and format it
                 const rotcePeriod = dataSource.find(row => row.ROTCE_Period)?.ROTCE_Period || '';
+                const formattedPeriod = formatROTCEPeriod(rotcePeriod);
                 const subtitleElement = document.getElementById('rotceSubtitle');
                 if (subtitleElement) {
                     const topN = parseInt(document.getElementById("topNFilter").value);
-                    subtitleElement.textContent = rotcePeriod 
-                        ? `Top ${topN} relationships ROTCE performance as of ${rotcePeriod}`
+                    subtitleElement.textContent = formattedPeriod 
+                        ? `Top ${topN} relationships ROTCE performance as of ${formattedPeriod}`
                         : `Top ${topN} relationships ROTCE performance`;
                 }
 
@@ -17139,12 +17284,12 @@
                     });
                 }
 
-                // Apply multi-select Region filter
+                // Apply multi-select Region filter with case normalization
                 if (selectedRegions.length > 0) {
                     const beforeFilter = filtered.length;
                     filtered = filtered.filter(row => {
-                        const rowRegion = row.Region || "";
-                        return selectedRegions.includes(rowRegion);
+                        const rowRegion = (row.Region || "").toUpperCase();
+                        return selectedRegions.some(r => r.toUpperCase() === rowRegion);
                     });
                 }
 
@@ -32062,10 +32207,10 @@
                     // Apply region filter if active (legacy single-select)
                     if (selectedRegion !== 'all' && region !== selectedRegion.toUpperCase()) return false;
 
-                    // Apply multi-select Region filter
+                    // Apply multi-select Region filter with case normalization
                     if (selectedRegions.length > 0) {
-                        const rowRegion = row.Region || "";
-                        if (!selectedRegions.includes(rowRegion)) return false;
+                        const rowRegion = (row.Region || "").toUpperCase();
+                        if (!selectedRegions.some(r => r.toUpperCase() === rowRegion)) return false;
                     }
 
                     // Apply multi-select Underwriter filter
