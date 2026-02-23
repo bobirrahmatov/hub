@@ -677,6 +677,85 @@
         </div>
     </div>
 
+    <!-- EUC Warning Modal -->
+    <div id="eucWarningModal" class="hidden fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-99999">
+        <div class="modal-close-btn fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"></div>
+        <div class="relative w-full max-w-[600px] rounded-3xl bg-white p-6 dark:bg-gray-900 lg:p-10">
+            <div class="text-center">
+                <div class="relative flex items-center justify-center z-1 mb-7">
+                    <svg class="fill-warning-50 dark:fill-warning-500/15" width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M34.364 6.85053C38.6205 -2.28351 51.3795 -2.28351 55.636 6.85053C58.0129 11.951 63.5594 14.6722 68.9556 13.3853C78.6192 11.0807 86.5743 21.2433 82.2185 30.3287C79.7862 35.402 81.1561 41.5165 85.5082 45.0122C93.3019 51.2725 90.4628 63.9451 80.7747 66.1403C75.3648 67.3661 71.5265 72.2695 71.5572 77.9156C71.6123 88.0265 60.1169 93.6664 52.3918 87.3184C48.0781 83.7737 41.9219 83.7737 37.6082 87.3184C29.8831 93.6664 18.3877 88.0266 18.4428 77.9156C18.4735 72.2695 14.6352 67.3661 9.22531 66.1403C-0.462787 63.9451 -3.30193 51.2725 4.49185 45.0122C8.84391 41.5165 10.2138 35.402 7.78151 30.3287C3.42572 21.2433 11.3808 11.0807 21.0444 13.3853C26.4406 14.6722 31.9871 11.951 34.364 6.85053Z" fill="" fill-opacity=""/>
+                    </svg>
+
+                    <span class="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
+                        <svg class="fill-warning-600 dark:fill-orange-400" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M32.1445 19.0002C32.1445 26.2604 26.2589 32.146 18.9987 32.146C11.7385 32.146 5.85287 26.2604 5.85287 19.0002C5.85287 11.7399 11.7385 5.85433 18.9987 5.85433C26.2589 5.85433 32.1445 11.7399 32.1445 19.0002ZM18.9987 35.146C27.9158 35.146 35.1445 27.9173 35.1445 19.0002C35.1445 10.0831 27.9158 2.85433 18.9987 2.85433C10.0816 2.85433 2.85287 10.0831 2.85287 19.0002C2.85287 27.9173 10.0816 35.146 18.9987 35.146ZM21.0001 26.0855C21.0001 24.9809 20.1047 24.0855 19.0001 24.0855L18.9985 24.0855C17.894 24.0855 16.9985 24.9809 16.9985 26.0855C16.9985 27.19 17.894 28.0855 18.9985 28.0855L19.0001 28.0855C20.1047 28.0855 21.0001 27.19 21.0001 26.0855ZM18.9986 10.1829C19.827 10.1829 20.4986 10.8545 20.4986 11.6829L20.4986 20.6707C20.4986 21.4992 19.827 22.1707 18.9986 22.1707C18.1701 22.1707 17.4986 21.4992 17.4986 20.6707L17.4986 11.6829C17.4986 10.8545 18.1701 10.1829 18.9986 10.1829Z" fill=""/>
+                        </svg>
+                    </span>
+                </div>
+
+                <h4 class="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90 sm:text-title-sm">
+                    EUC Classification Alert!
+                </h4>
+                <p class="text-sm leading-6 text-gray-500 dark:text-gray-400 mb-6">
+                    Based on your responses, this report qualifies as an End User Computing (EUC) application. You will be designated as the EUC Owner and must complete the following steps before development begins:
+                </p>
+
+                <!-- 3 Next Steps with SVG Icons -->
+                <div class="space-y-4 text-left">
+                    <!-- Step 1 -->
+                    <div class="flex items-start gap-3 rounded-xl border border-warning-500 bg-warning-50 p-4 dark:border-warning-500/30 dark:bg-warning-500/15">
+                        <div class="-mt-0.5 text-warning-500 dark:text-orange-400">
+                            <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.25C6.615 2.25 2.25 6.615 2.25 12C2.25 17.385 6.615 21.75 12 21.75C17.385 21.75 21.75 17.385 21.75 12C21.75 6.615 17.385 2.25 12 2.25ZM11.25 8.25C11.25 7.836 11.586 7.5 12 7.5C12.414 7.5 12.75 7.836 12.75 8.25V12.75C12.75 13.164 12.414 13.5 12 13.5C11.586 13.5 11.25 13.164 11.25 12.75V8.25ZM12 17.25C11.586 17.25 11.25 16.914 11.25 16.5C11.25 16.086 11.586 15.75 12 15.75H12.01C12.424 15.75 12.76 16.086 12.76 16.5C12.76 16.914 12.424 17.25 12.01 17.25H12Z" fill=""/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h5 class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90">Obtain Proper Approvals</h5>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Coordinate with Technology Partners for technical review and obtain C15+ approval for Medium/High Risk EUCs.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flex items-start gap-3 rounded-xl border border-warning-500 bg-warning-50 p-4 dark:border-warning-500/30 dark:bg-warning-500/15">
+                        <div class="-mt-0.5 text-warning-500 dark:text-orange-400">
+                            <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.5 3.75C6.25736 3.75 5.25 4.75736 5.25 6V18C5.25 19.2426 6.25736 20.25 7.5 20.25H16.5C17.7426 20.25 18.75 19.2426 18.75 18V8.56066L14.1893 4H7.5ZM3.75 6C3.75 3.92893 5.42893 2.25 7.5 2.25H14.25C14.4489 2.25 14.6397 2.32902 14.7803 2.46967L19.5303 7.21967C19.671 7.36032 19.75 7.55109 19.75 7.75V18C19.75 20.0711 18.0711 21.75 16.5 21.75H7.5C5.42893 21.75 3.75 20.0711 3.75 18V6ZM8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H15C15.4142 11.25 15.75 11.5858 15.75 12C15.75 12.4142 15.4142 12.75 15 12.75H9C8.58579 12.75 8.25 12.4142 8.25 12ZM9 15.25C8.58579 15.25 8.25 15.5858 8.25 16C8.25 16.4142 8.58579 16.75 9 16.75H13C13.4142 16.75 13.75 16.4142 13.75 16C13.75 15.5858 13.4142 15.25 13 15.25H9Z" fill=""/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h5 class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90">Complete Risk Assessment</h5>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Document the risk assessment, mitigation plan, and ensure compliance validation is completed.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flex items-start gap-3 rounded-xl border border-warning-500 bg-warning-50 p-4 dark:border-warning-500/30 dark:bg-warning-500/15">
+                        <div class="-mt-0.5 text-warning-500 dark:text-orange-400">
+                            <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M9 2.25C6.92893 2.25 5.25 3.92893 5.25 6V18C5.25 20.0711 6.92893 21.75 9 21.75H15C17.0711 21.75 18.75 20.0711 18.75 18V9.31066L13.9393 4.5H9C8.58579 4.5 8.25 4.83579 8.25 5.25V5.25C8.25 5.66421 8.58579 6 9 6H12.75V9C12.75 10.2426 13.7574 11.25 15 11.25H17.25V18C17.25 19.2426 16.2426 20.25 15 20.25H9C7.75736 20.25 6.75 19.2426 6.75 18V6C6.75 4.75736 7.75736 3.75 9 3.75H13.1893L17.25 7.81066V9C17.25 9.41421 17.5858 9.75 18 9.75C18.4142 9.75 18.75 9.41421 18.75 9V8.56066L14.1893 4H9C6.92893 4 5.25 5.67893 5.25 7.75V18C5.25 20.0711 6.92893 21.75 9 21.75H15C17.0711 21.75 18.75 20.0711 18.75 18V9.31066C18.75 9.11174 18.671 8.92098 18.5303 8.78033L13.7197 3.96967C13.579 3.82902 13.3882 3.75 13.1893 3.75H9C6.92893 3.75 5.25 5.42893 5.25 7.5V18C5.25 20.0711 6.92893 21.75 9 21.75H15C17.0711 21.75 18.75 20.0711 18.75 18V9.31066L13.9393 4.5C13.9393 4.5 13.9393 4.5 13.9393 4.5V4.5C13.7984 4.35902 13.6076 4.28 13.4087 4.28H9C6.92893 4.28 5.28 5.92893 5.28 8V18C5.28 20.0711 6.92893 21.72 9 21.72H15C17.0711 21.72 18.72 20.0711 18.72 18V9.31066L13.9093 4.5H9C8.58579 4.5 8.25 4.83579 8.25 5.25C8.25 5.66421 8.58579 6 9 6H12.75V9C12.75 10.2426 13.7574 11.25 15 11.25H17.25V18C17.25 19.2426 16.2426 20.25 15 20.25H9C7.75736 20.25 6.75 19.2426 6.75 18V6C6.75 4.75736 7.75736 3.75 9 3.75H13.1893C13.3882 3.75 13.579 3.82902 13.7197 3.96967L18.5303 8.78033C18.671 8.92098 18.75 9.11174 18.75 9.31066V18C18.75 20.0711 17.0711 21.75 15 21.75H9C6.92893 21.75 5.25 20.0711 5.25 18V6C5.25 3.92893 6.92893 2.25 9 2.25ZM10.5 13.5C10.0858 13.5 9.75 13.8358 9.75 14.25C9.75 14.6642 10.0858 15 10.5 15H13.5C13.9142 15 14.25 14.6642 14.25 14.25C14.25 13.8358 13.9142 13.5 13.5 13.5H10.5ZM9.75 17.25C9.75 16.8358 10.0858 16.5 10.5 16.5H13.5C13.9142 16.5 14.25 16.8358 14.25 17.25C14.25 17.6642 13.9142 18 13.5 18H10.5C10.0858 18 9.75 17.6642 9.75 17.25Z" fill=""/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h5 class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90">Register EUC Application</h5>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Complete formal EUC registration and review the EUC Policy and Guidelines documentation.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-center w-full gap-3 mt-7">
+                    <button
+                        type="button"
+                        onclick="acknowledgeEUCWarning()"
+                        class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto"
+                    >
+                        Okay, I Got It
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="text/javascript">
         // ==========================================
         // CONFIGURATION - Update this variable with your team's DL
@@ -721,19 +800,70 @@
             return null;
         }
 
+        // Fetch user details from ECS API
+        async function getUserDetailsFromECS(username) {
+            try {
+                const response = await fetch(`https://ecs.search.citi.net/search/api/search/people?q=soeid:${username}&q.mode=advanced`);
+                
+                if (!response.ok) {
+                    console.warn('Could not fetch user details from ECS');
+                    return null;
+                }
+                
+                const data = await response.json();
+                
+                // Extract first result if available
+                if (data.people && data.people.hits > 0 && data.people.docs && data.people.docs.length > 0) {
+                    const userDoc = data.people.docs[0];
+                    return {
+                        businessunit: userDoc.businessunit?.[0] || '',
+                        region: userDoc.region?.[0] || '',
+                        department: userDoc.department?.[0] || '',
+                        city: userDoc.city?.[0] || '',
+                        countrycode: userDoc.countrycode?.[0] || ''
+                    };
+                }
+                
+                return null;
+            } catch (error) {
+                console.error('Error fetching user details from ECS:', error);
+                return null;
+            }
+        }
+
+        // Get current user with full details (Confluence + ECS)
+        async function getCurrentUserWithDetails() {
+            const confluenceUser = await getCurrentUser();
+            if (!confluenceUser) return null;
+            
+            const ecsDetails = await getUserDetailsFromECS(confluenceUser.username);
+            
+            return {
+                ...confluenceUser,
+                businessunit: ecsDetails?.businessunit || '',
+                region: ecsDetails?.region || '',
+                department: ecsDetails?.department || '',
+                city: ecsDetails?.city || '',
+                countrycode: ecsDetails?.countrycode || ''
+            };
+        }
+
         // Set today's date as default
         document.addEventListener('DOMContentLoaded', async function () {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('request-date').value = today;
 
-            // Auto-populate user information
-            const currentUser = await getCurrentUser();
+            // Auto-populate user information with ECS details
+            const currentUser = await getCurrentUserWithDetails();
             if (currentUser) {
                 document.getElementById('requestor-name').value = currentUser.displayName;
                 document.getElementById('requestor-email').value = currentUser.email;
+                document.getElementById('requestor-department').value = currentUser.department || '';
+                
                 // Make fields readonly since they're auto-populated
                 document.getElementById('requestor-name').readOnly = true;
                 document.getElementById('requestor-email').readOnly = true;
+                document.getElementById('requestor-department').readOnly = true;
             }
 
             // Handle frequency select dropdown styling and EUC section visibility
@@ -766,8 +896,10 @@
                 radio.addEventListener('change', function() {
                     if (this.value === 'Yes') {
                         processNameField.style.display = 'block';
+                        checkEUCStatus();
                     } else {
                         processNameField.style.display = 'none';
+                        checkEUCStatus();
                     }
                 });
             });
@@ -780,15 +912,87 @@
                 radio.addEventListener('change', function() {
                     if (this.value === 'Yes') {
                         systemNameField.style.display = 'block';
+                        checkEUCStatus();
                     } else {
                         systemNameField.style.display = 'none';
+                        checkEUCStatus();
                     }
+                });
+            });
+
+            // Handle manual manipulation radio buttons
+            const manualManipulationRadios = document.querySelectorAll('input[name="manualManipulation"]');
+            manualManipulationRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    checkEUCStatus();
+                });
+            });
+
+            // Handle financial impact radio buttons
+            const financialImpactRadios = document.querySelectorAll('input[name="financialImpact"]');
+            financialImpactRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    checkEUCStatus();
                 });
             });
         });
 
         // Store current form data globally
         let currentFormData = null;
+        
+        // Track if user has acknowledged EUC warning
+        let eucWarningAcknowledged = false;
+        
+        // Check if report qualifies as EUC
+        function checkEUCStatus() {
+            // Only check if EUC section is visible (frequency is not "One-time")
+            const eucSection = document.getElementById('euc-section');
+            if (eucSection.style.display === 'none') {
+                return false;
+            }
+            
+            // Check if any EUC question is answered "Yes"
+            const businessProcess = document.querySelector('input[name="businessProcess"]:checked');
+            const systemUpload = document.querySelector('input[name="systemUpload"]:checked');
+            const manualManipulation = document.querySelector('input[name="manualManipulation"]:checked');
+            const financialImpact = document.querySelector('input[name="financialImpact"]:checked');
+            
+            const isEUC = 
+                (businessProcess && businessProcess.value === 'Yes') ||
+                (systemUpload && systemUpload.value === 'Yes') ||
+                (manualManipulation && manualManipulation.value === 'Yes') ||
+                (financialImpact && financialImpact.value === 'Yes');
+            
+            // Show warning modal if EUC and not already acknowledged
+            if (isEUC && !eucWarningAcknowledged) {
+                showEUCWarningModal();
+            }
+            
+            return isEUC;
+        }
+        
+        // Show EUC warning modal
+        function showEUCWarningModal() {
+            const modal = document.getElementById('eucWarningModal');
+            modal.classList.remove('hidden');
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Close EUC warning modal
+        function closeEUCWarningModal() {
+            const modal = document.getElementById('eucWarningModal');
+            modal.classList.add('hidden');
+            // Restore body scroll
+            document.body.style.overflow = '';
+        }
+        
+        // Acknowledge EUC warning
+        function acknowledgeEUCWarning() {
+            eucWarningAcknowledged = true;
+            closeEUCWarningModal();
+            showInfoToast('EUC classification acknowledged. Please ensure you obtain all necessary approvals.');
+        }
 
         // Form submission handler
         async function handleFormSubmit(event) {
@@ -804,6 +1008,9 @@
                 form.reportValidity();
                 return false;
             }
+            
+            // Get current user with full ECS details
+            const currentUserDetails = await getCurrentUserWithDetails();
             
             // Collect form data
             const formData = {
@@ -823,7 +1030,15 @@
                 requestDate: document.getElementById('request-date').value,
                 status: 'Pending',
                 createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
+                updatedAt: new Date().toISOString(),
+                // Add ECS details for better tracking
+                requestorDetails: {
+                    businessunit: currentUserDetails?.businessunit || '',
+                    region: currentUserDetails?.region || '',
+                    department: currentUserDetails?.department || '',
+                    city: currentUserDetails?.city || '',
+                    countrycode: currentUserDetails?.countrycode || ''
+                }
             };
 
             // Add EUC assessment data if frequency is not one-time
@@ -841,6 +1056,17 @@
                     manualManipulation: manualManipulation ? manualManipulation.value : null,
                     financialImpact: financialImpact ? financialImpact.value : null
                 };
+                
+                // Determine if this is an EUC
+                formData.isEUC = 
+                    (businessProcess && businessProcess.value === 'Yes') ||
+                    (systemUpload && systemUpload.value === 'Yes') ||
+                    (manualManipulation && manualManipulation.value === 'Yes') ||
+                    (financialImpact && financialImpact.value === 'Yes');
+                    
+                formData.eucWarningAcknowledged = eucWarningAcknowledged;
+            } else {
+                formData.isEUC = false;
             }
 
             // Show loading toast
@@ -1031,7 +1257,19 @@ ${requestData.context}`;
                 if (requestData.eucAssessment) {
                     detailsText += `
 
---- EUC ASSESSMENT ---
+--- EUC ASSESSMENT ---`;
+                    
+                    // Add EUC classification warning if applicable
+                    if (requestData.isEUC) {
+                        detailsText += `
+⚠️ THIS REPORT IS CLASSIFIED AS AN EUC
+⚠️ EUC Owner: ${requestData.requestorName}
+⚠️ Approvals Required: Tech Partners + Risk Assessment
+⚠️ For Medium/High Risk: C15+ Approval Required
+`;
+                    }
+                    
+                    detailsText += `
 Business Process/MCA: ${requestData.eucAssessment.businessProcess || 'N/A'}`;
                     
                     if (requestData.eucAssessment.processName) {
@@ -1058,7 +1296,11 @@ Financial Impact: ${requestData.eucAssessment.financialImpact || 'N/A'}`;
 --- REQUESTOR INFORMATION ---
 Name: ${requestData.requestorName}
 Email: ${requestData.requestorEmail}
-Department: ${requestData.department}
+Department: ${requestData.requestorDetails?.department || requestData.department || 'Not Specified'}
+Business Unit: ${requestData.requestorDetails?.businessunit || 'Not Specified'}
+Region: ${requestData.requestorDetails?.region || 'Not Specified'}
+City: ${requestData.requestorDetails?.city || 'Not Specified'}
+Country: ${requestData.requestorDetails?.countrycode || 'Not Specified'}
 Request Date: ${requestData.requestDate}
 Request ID: ${requestData.id}`;
 
@@ -1071,13 +1313,27 @@ Request ID: ${requestData.id}`;
                     dateReceived: requestData.requestDate,
                     maker: '', // Left empty - to be assigned by team
                     requestor: requestData.requestorName,
+                    requestorDepartment: requestData.requestorDetails?.department || requestData.department || '',
+                    requestorRegion: requestData.requestorDetails?.region || '',
+                    requestorBusinessUnit: requestData.requestorDetails?.businessunit || '',
+                    requestorCity: requestData.requestorDetails?.city || '',
+                    requestorCountry: requestData.requestorDetails?.countrycode || '',
                     status: 'Open',
                     timeSpent: 0,
-                    region: requestData.department || 'Not Specified',
-                    requestorRegion: requestData.department || 'Not Specified',
+                    region: requestData.requestorDetails?.department || requestData.department || 'Not Specified',
                     priority: determinePriority(requestData.urgency),
                     createdAt: requestData.createdAt,
-                    updatedAt: requestData.updatedAt
+                    updatedAt: requestData.updatedAt,
+                    closeDate: null,
+                    isEUC: requestData.isEUC || false,
+                    eucOwner: requestData.isEUC ? requestData.requestorName : null,
+                    // Initialize timeline
+                    timeline: [{
+                        type: 'created',
+                        user: requestData.requestorName,
+                        message: requestData.isEUC ? 'submitted the report request (EUC)' : 'submitted the report request',
+                        timestamp: requestData.createdAt
+                    }]
                 };
 
                 // Add new task to existing tasks
@@ -1149,18 +1405,38 @@ Request ID: ${requestData.id}`;
         function sendEmailNotification(formData) {
             if (!formData) return;
             
-            const subject = `New Report Request: ${formData.reportName}`;
+            const subject = formData.isEUC 
+                ? `⚠️ EUC Report Request: ${formData.reportName}` 
+                : `New Report Request: ${formData.reportName}`;
             
             // Create a concise, well-formatted email body
-            const textBody = `
-NEW REPORT REQUEST
+            let textBody = `
+NEW REPORT REQUEST${formData.isEUC ? ' - ⚠️ EUC CLASSIFICATION' : ''}
 
 Report: ${formData.reportName}
 Requestor: ${formData.requestorName} (${formData.requestorEmail})
 Department: ${formData.department}
 Urgency: ${formData.urgency}
 Frequency: ${formData.frequency}
+`;
 
+            // Add EUC warning if applicable
+            if (formData.isEUC) {
+                textBody += `
+⚠️⚠️⚠️ EUC CLASSIFICATION WARNING ⚠️⚠️⚠️
+This report qualifies as an End User Computing (EUC) application.
+
+EUC OWNER: ${formData.requestorName}
+REQUIRED ACTIONS:
+- Must obtain proper approvals BEFORE development begins
+- Coordinate with Technology Partners for technical review
+- Complete risk assessment and documentation
+- For Medium/High Risk EUCs: C15+ approval required
+
+`;
+            }
+
+            textBody += `
 PURPOSE:
 ${formData.purpose}
 
@@ -1200,15 +1476,19 @@ This request has been saved to the LPTM Hub adhoc tasks tracker.
             document.getElementById('process-name-field').style.display = 'none';
             document.getElementById('system-name-field').style.display = 'none';
             
+            // Reset EUC warning acknowledgment
+            eucWarningAcknowledged = false;
+            
             // Reset date to today and re-populate user info
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('request-date').value = today;
             
-            // Re-populate user information
-            getCurrentUser().then(currentUser => {
+            // Re-populate user information with ECS details
+            getCurrentUserWithDetails().then(currentUser => {
                 if (currentUser) {
                     document.getElementById('requestor-name').value = currentUser.displayName;
                     document.getElementById('requestor-email').value = currentUser.email;
+                    document.getElementById('requestor-department').value = currentUser.department || '';
                 }
             });
         }
@@ -1227,8 +1507,6 @@ This request has been saved to the LPTM Hub adhoc tasks tracker.
             });
         });
     </script>
-
 </body>
-
 </html>
 
