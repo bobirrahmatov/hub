@@ -188,7 +188,33 @@
         border-top-left-radius: 1rem !important;
         border-top-right-radius: 1rem !important;
       }
-      
+
+      /* FTE drill-down table */
+      .fte-chevron {
+        transition: transform 0.2s ease;
+        flex-shrink: 0;
+      }
+      .fte-child-row td {
+        background-color: rgba(70, 95, 255, 0.03);
+      }
+      .dark .fte-child-row td {
+        background-color: rgba(70, 95, 255, 0.06);
+      }
+      /* Ad Hoc rows get a subtle cyan tint (distinct from green KPI) */
+      .fte-adhoc-row td {
+        background-color: rgba(8, 145, 178, 0.06);
+      }
+      .dark .fte-adhoc-row td {
+        background-color: rgba(8, 145, 178, 0.1);
+      }
+
+      /* Modal dropdowns: fixed so they show on top and can flip above/below */
+      .modal-dropdown-panel {
+        position: fixed !important;
+        z-index: 100000 !important;
+      }
+
+
       /* Spinning animation for refresh button */
       @keyframes spin {
         from {
@@ -428,6 +454,11 @@
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                     Interim Reports
                   </button>
+                  <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+                  <button type="button" @click="selected = 'Ad Hoc'; open = false; filterByReportType('Ad Hoc')"
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-cyan-700 hover:bg-cyan-50 transition-colors dark:text-cyan-400 dark:hover:bg-cyan-900/20">
+                    Ad Hoc Tasks
+                  </button>
                 </div>
               </div>
               
@@ -472,6 +503,49 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Divider -->
+              <div class="h-6 w-px bg-gray-200 dark:bg-gray-700 hidden sm:block self-center"></div>
+
+              <!-- Include Ad Hoc Toggle -->
+              <label class="inline-flex items-center gap-2 cursor-pointer select-none" title="Include Ad Hoc tasks in FTE &amp; Management Summary tabs">
+                <div class="relative">
+                  <input type="checkbox" id="adhocIncludeToggle" class="sr-only peer" onchange="onAdhocToggle()">
+                  <div class="w-9 h-5 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:bg-cyan-500 transition-colors"></div>
+                  <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
+                </div>
+                <span class="!text-base font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">Ad Hoc</span>
+              </label>
+
+              <!-- Ad Hoc Status Multi-select (shown only when Ad Hoc toggle is on) -->
+              <div id="adhocStatusFilterWrap" style="display:none">
+                <div x-data="{open:false,selectedStatuses:['All'],statuses:['Pending','In Progress','Completed','Not Assigned','On Hold','Open'],getDisplayText:function(){if(this.selectedStatuses.includes('All')||this.selectedStatuses.length===0)return'All Statuses';if(this.selectedStatuses.length===1)return this.selectedStatuses[0];return this.selectedStatuses.length+' Selected';},toggleStatus:function(status){if(status==='All'){this.selectedStatuses=['All'];onAdhocStatusFilter(['All']);}else{if(this.selectedStatuses.includes('All')){this.selectedStatuses=[status];}else{if(this.selectedStatuses.includes(status)){this.selectedStatuses=this.selectedStatuses.filter(function(s){return s!==status;});if(this.selectedStatuses.length===0){this.selectedStatuses=['All'];}}else{this.selectedStatuses.push(status);}}onAdhocStatusFilter(this.selectedStatuses);}},isSelected:function(status){return this.selectedStatuses.includes(status);}}" class="relative" id="adhocStatusFilterDropdown">
+                  <button @click="open = !open" type="button"
+                    class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800 min-w-[140px]">
+                    <span x-text="getDisplayText()" class="truncate"></span>
+                    <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div x-show="open" @click.outside="open = false" x-cloak
+                    class="absolute left-0 top-full z-[99999] mt-2 w-52 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
+                    <div class="space-y-1">
+                      <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
+                        <input type="checkbox" :checked="isSelected('All')" @change="toggleStatus('All')" class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500" />
+                        All Statuses
+                      </label>
+                      <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+                      <template x-for="status in statuses" :key="status">
+                        <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
+                          <input type="checkbox" :checked="isSelected(status)" @change="toggleStatus(status)" class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500" />
+                          <span x-text="status"></span>
+                        </label>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
                   
@@ -508,6 +582,16 @@
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M6 3.75A2.75 2.75 0 018.75 1h2.5A2.75 2.75 0 0114 3.75v.443c.572.055 1.14.122 1.706.2C17.137 4.582 18 5.582 18 6.818v8.482a3.7 3.7 0 01-3.7 3.7H5.7A3.7 3.7 0 012 15.3V6.818c0-1.236.864-2.236 2.295-2.425.565-.078 1.134-.145 1.705-.2v-.443zm2.75-.75c-.69 0-1.25.56-1.25 1.25v.38a62.25 62.25 0 015 0v-.38c0-.69-.56-1.25-1.25-1.25h-2.5zM4.486 5.874C3.668 5.972 3 6.498 3 7v8.3a2.7 2.7 0 002.7 2.7h8.6A2.7 2.7 0 0017 15.3V7c0-.502-.668-1.028-1.486-1.126-.798-.096-1.616-.163-2.45-.209v1.086c0 .414-.336.75-.75.75h-5.628a.75.75 0 01-.75-.75V5.665c-.834.046-1.652.113-2.45.209zM10 11a1 1 0 100-2 1 1 0 000 2zm0 4a1 1 0 100-2 1 1 0 000 2zm3-5a1 1 0 11-2 0 1 1 0 012 0zm-1 5a1 1 0 100-2 1 1 0 000 2zM8 10a1 1 0 11-2 0 1 1 0 012 0zm-1 5a1 1 0 100-2 1 1 0 000 2z" fill="currentColor"/>
                     </svg>
                     FTE Analysis
+                  </button>
+                  <button
+                    class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out"
+                    x-bind:class="activeTab === 'mgmt' ? ' text-brand-500 border-brand-500 dark:border-brand-400 dark:text-brand-400' : 'bg-transparent text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+                    x-on:click="activeTab = 'mgmt'; setTimeout(() => { if (typeof refreshManagementSummary === 'function') refreshManagementSummary(); }, 100);"
+                  >
+                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Management Summary
                   </button>
                 </nav>
             </div>
@@ -554,6 +638,10 @@
                       <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Include PII?</th>
                       <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">EUC</th>
                       <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Audience</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Next Steps</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Additional Information</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Agreed Rationalization Category</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Rationalization Status</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="reportsTableBody">
@@ -826,7 +914,7 @@
                 <!-- FTE Analysis Tab -->
                 <div x-show="activeTab === 'fte'">
                   <div class="grid grid-cols-12 gap-4 md:gap-6">
-                    
+
                     <!-- FTE Metrics Cards -->
                     <div class="col-span-12">
                       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4">
@@ -914,9 +1002,9 @@
 
                     <!-- FTE by Maker & Report Type - Consolidated Table (Full Width) -->
                     <div class="col-span-12">
-                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 overflow-hidden" style="background-color: var(--card-bg, white);">
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">FTE by Maker & Report Type</h3>
+                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">FTE by Maker &amp; Report Type</h3>
                           <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Workload breakdown by person and type (Total FTE = Total Hours ÷ 160)</p>
                         </div>
                         <div class="custom-scrollbar overflow-x-auto">
@@ -924,12 +1012,12 @@
                             <thead>
                               <tr class="bg-gray-50 dark:bg-gray-800/50">
                                 <th class="px-6 py-4 text-left !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Report Preparer</th>
-                                <th class="px-6 py-4 text-left !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Report Type</th>
+                                <th class="px-6 py-4 text-left !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Report Type / Breakdown</th>
                                 <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">Hours/Month</th>
                                 <th class="px-6 py-4 text-center !text-base font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">FTE</th>
                               </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="fteConsolidatedTableBody">
+                            <tbody id="fteConsolidatedTableBody">
                               <!-- Populated by JS -->
                             </tbody>
                             <tfoot class="border-t-2 border-gray-300 dark:border-gray-600">
@@ -1004,6 +1092,198 @@
                   </div>
                 </div>
                 <!-- End FTE Analysis Tab -->
+
+                <!-- Management Summary Tab -->
+                <div x-show="activeTab === 'mgmt'">
+                  <div class="grid grid-cols-12 gap-4 md:gap-6">
+
+                    <!-- Metric Cards Row -->
+                    <div class="col-span-12">
+                      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4">
+
+                        <!-- Total Reports -->
+                        <div class="rounded-2xl border border-gray-200 bg-white px-6 pb-5 pt-6 dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                          <div class="mb-6 flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/20">
+                              <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            </div>
+                            <div>
+                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Total Reports</h3>
+                              <span class="block !text-base text-gray-500 dark:text-gray-400">Produced by LPTM</span>
+                            </div>
+                          </div>
+                          <div class="flex items-end justify-between">
+                            <h4 id="mgmt-total" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                          </div>
+                        </div>
+
+                        <!-- Kept -->
+                        <div class="rounded-2xl border border-gray-200 bg-white px-6 pb-5 pt-6 dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                          <div class="mb-6 flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/20">
+                              <svg class="h-6 w-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div>
+                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Kept</h3>
+                              <span class="block !text-base text-gray-500 dark:text-gray-400">Retain</span>
+                            </div>
+                          </div>
+                          <div class="flex items-end justify-between gap-3">
+                            <h4 id="mgmt-kept" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                            <span id="mgmt-kept-pct" class="flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 !text-xl font-bold text-green-600 leading-none dark:bg-green-500/15 dark:text-green-500">0%</span>
+                          </div>
+                        </div>
+
+                        <!-- Killed -->
+                        <div class="rounded-2xl border border-gray-200 bg-white px-6 pb-5 pt-6 dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                          <div class="mb-6 flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20">
+                              <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div>
+                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Killed</h3>
+                              <span class="block !text-base text-gray-500 dark:text-gray-400">Retire</span>
+                            </div>
+                          </div>
+                          <div class="flex items-end justify-between gap-3">
+                            <h4 id="mgmt-killed" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                            <span id="mgmt-killed-pct" class="flex items-center gap-1 rounded-full bg-red-50 px-3 py-1 !text-xl font-bold text-red-600 leading-none dark:bg-red-500/15 dark:text-red-500">0%</span>
+                          </div>
+                        </div>
+
+                        <!-- Hours/Month -->
+                        <div class="rounded-2xl border border-gray-200 bg-white px-6 pb-5 pt-6 dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                          <div class="mb-6 flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 dark:bg-brand-900/20">
+                              <svg class="h-6 w-6 text-brand-600 dark:text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div>
+                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Hours/Month</h3>
+                              <span class="block !text-base text-gray-500 dark:text-gray-400">Initial total</span>
+                            </div>
+                          </div>
+                          <div class="flex items-end justify-between">
+                            <h4 id="mgmt-hours" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <!-- Regional Overview Section Title -->
+                    <div class="col-span-12">
+                      <h2 class="!text-xl font-bold text-gray-800 dark:text-white/90 pb-1 border-b border-gray-200 dark:border-gray-700">Regional Overview</h2>
+                    </div>
+
+                    <!-- Number of Reports: table left + pie chart right -->
+                    <div class="col-span-12 grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2 items-stretch">
+
+                      <!-- Number of Reports Table -->
+                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 flex flex-col" style="background-color: var(--card-bg, white);">
+                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex-shrink-0">
+                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Number of Reports</h3>
+                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Report count by category and region</p>
+                        </div>
+                        <div class="custom-scrollbar overflow-x-auto flex-1">
+                          <table class="min-w-full h-full">
+                            <thead>
+                              <tr class="bg-gray-50 dark:bg-gray-800/50">
+                                <th class="px-5 py-3 text-left !text-base font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap"></th>
+                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Total</th>
+                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Americas</th>
+                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">EMEA</th>
+                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">APAC</th>
+                              </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="mgmt-reports-tbody">
+                              <!-- populated by JS -->
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      <!-- Global Overview – Reports Pie Chart -->
+                      <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03] flex flex-col">
+                        <div class="mb-4 flex-shrink-0">
+                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Global Overview (# of Reports)</h3>
+                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Rationalization category breakdown</p>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center chartDarkStyle">
+                          <div id="mgmtReportsDonutChart" class="w-full"></div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <!-- Time Spent: table left + pie chart right -->
+                    <div class="col-span-12 grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2 items-stretch">
+
+                      <!-- Time Spent Table -->
+                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 flex flex-col" style="background-color: var(--card-bg, white);">
+                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex-shrink-0">
+                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Time Spent (hours per month)</h3>
+                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Monthly hours by category and region</p>
+                        </div>
+                        <div class="custom-scrollbar overflow-x-auto flex-1">
+                          <table class="min-w-full h-full">
+                            <thead>
+                              <tr class="bg-gray-50 dark:bg-gray-800/50">
+                                <th class="px-5 py-3 text-left !text-base font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap"></th>
+                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Total</th>
+                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Americas</th>
+                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">EMEA</th>
+                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">APAC</th>
+                              </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="mgmt-hours-tbody">
+                              <!-- populated by JS -->
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      <!-- Global Overview – Hours Pie Chart -->
+                      <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03] flex flex-col">
+                        <div class="mb-4 flex-shrink-0">
+                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Global Overview (Hours per month)</h3>
+                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Hours distribution by category</p>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center chartDarkStyle">
+                          <div id="mgmtHoursDonutChart" class="w-full"></div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <!-- FTE Analysis Table (full width) -->
+                    <div class="col-span-12">
+                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">FTE Analysis</h3>
+                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Full-time equivalent breakdown by category and region (Total Hours ÷ 160)</p>
+                        </div>
+                        <div class="custom-scrollbar overflow-x-auto">
+                          <table class="min-w-full">
+                            <thead>
+                              <tr class="bg-gray-50 dark:bg-gray-800/50">
+                                <th class="px-5 py-3 text-left !text-base font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap"></th>
+                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Total</th>
+                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Americas</th>
+                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">EMEA</th>
+                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">APAC</th>
+                              </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="mgmt-fte-tbody">
+                              <!-- populated by JS -->
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <!-- End Management Summary Tab -->
                 
               </div>
               <!-- End Tab Content -->
@@ -1081,15 +1361,15 @@
                 Report Type <span class="text-error-500">*</span>
               </label>
               <div class="relative">
-                <button @click="open = !open" type="button"
+                <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                   <span x-text="selected" :class="selected === 'Select Report Type' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div x-show="open" @click.outside="open = false" x-cloak
-                  class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+                <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                   <button type="button" @click="selected = 'BAU Report'; open = false; document.getElementById('report-type').value = 'BAU Report';"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                     BAU Report
@@ -1117,15 +1397,15 @@
                 Category <span class="text-error-500">*</span>
               </label>
               <div class="relative">
-                <button @click="open = !open" type="button"
+                <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                   <span x-text="selected" :class="selected === 'Select Category' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div x-show="open" @click.outside="open = false" x-cloak
-                  class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+                <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                   <button type="button" @click="selected = 'BI Dashboard'; open = false; document.getElementById('report-category').value = 'BI Dashboard';"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                     BI Dashboard
@@ -1153,15 +1433,15 @@
                 Sub Category
               </label>
               <div class="relative">
-                <button @click="open = !open" type="button"
+                <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                   <span x-text="selected" :class="selected === 'Select Sub Category' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div x-show="open" @click.outside="open = false" x-cloak
-                  class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+                <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                   <button type="button" @click="selected = 'MCA - Deliverable'; open = false; document.getElementById('report-subcategory').value = 'MCA - Deliverable';"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                     MCA - Deliverable
@@ -1197,15 +1477,15 @@
                 Critical Report
               </label>
               <div class="relative">
-                <button @click="open = !open" type="button"
+                <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                   <span x-text="selected" :class="selected === 'Select Critical Report' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div x-show="open" @click.outside="open = false" x-cloak
-                  class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+                <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                   <button type="button" @click="selected = 'Complex'; open = false; document.getElementById('report-critical').value = 'Complex';"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                     Complex
@@ -1229,15 +1509,15 @@
                 Report Complexity
               </label>
               <div class="relative">
-                <button @click="open = !open" type="button"
+                <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                   <span x-text="selected" :class="selected === 'Select Complexity' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div x-show="open" @click.outside="open = false" x-cloak
-                  class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+                <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                   <button type="button" @click="selected = 'Low'; open = false; document.getElementById('report-complexity').value = 'Low';"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                     Low
@@ -1301,15 +1581,15 @@
                 Report Region <span class="text-error-500">*</span>
               </label>
               <div class="relative">
-                <button @click="open = !open" type="button"
+                <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                   <span x-text="getDisplayText()" :class="selectedRegions.length === 0 ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div x-show="open" @click.outside="open = false" x-cloak
-                  class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+                <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                   <template x-for="region in regions" :key="region">
                     <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
                       <input
@@ -1375,15 +1655,15 @@
                 Frequency <span class="text-error-500">*</span>
               </label>
               <div class="relative">
-                <button @click="open = !open" type="button"
+                <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                   <span x-text="getDisplayText()" :class="selectedFrequencies.length === 0 ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div x-show="open" @click.outside="open = false" x-cloak
-                  class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+                <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                   <template x-for="frequency in frequencies" :key="frequency">
                     <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
                       <input
@@ -1459,15 +1739,15 @@
                 Prepare Region
               </label>
               <div class="relative">
-                <button @click="open = !open" type="button"
+                <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                   <span x-text="getDisplayText()" :class="selectedRegions.length === 0 ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div x-show="open" @click.outside="open = false" x-cloak
-                  class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+                <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                   <template x-for="region in regions" :key="region">
                     <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
                       <input
@@ -1490,15 +1770,15 @@
                 Active Status <span class="text-error-500">*</span>
               </label>
               <div class="relative">
-                <button @click="open = !open" type="button"
+                <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                   <span x-text="selected"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div x-show="open" @click.outside="open = false" x-cloak
-                  class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+                <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                   <button type="button" @click="selected = 'Active'; open = false; document.getElementById('report-status').value = 'Active';"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                     Active
@@ -1548,15 +1828,15 @@
                 Include PII?
               </label>
               <div class="relative">
-                <button @click="open = !open" type="button"
+                <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                   <span x-text="selected"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div x-show="open" @click.outside="open = false" x-cloak
-                  class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+                <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                   <button type="button" @click="selected = 'No'; open = false; document.getElementById('report-pii').value = 'No';"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                     No
@@ -1580,15 +1860,15 @@
                 EUC
               </label>
               <div class="relative">
-                <button @click="open = !open" type="button"
+                <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                   class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                   <span x-text="selected"></span>
                   <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div x-show="open" @click.outside="open = false" x-cloak
-                  class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+                <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                   <button type="button" @click="selected = 'No'; open = false; document.getElementById('report-euc').value = 'No';"
                     class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                     No
@@ -1912,15 +2192,15 @@
                 <div id="view-report-type-display" class="mt-2 text-gray-600 dark:text-gray-400">-</div>
                 <div id="view-report-type-edit-container" class="hidden mt-2" x-data="{ open: false, selected: 'Select Report Type' }">
                   <div class="relative">
-                    <button @click="open = !open" type="button"
+                    <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                       <span x-text="selected" :class="selected === 'Select Report Type' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                       <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div x-show="open" @click.outside="open = false" x-cloak
-                      class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+<div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                       <button type="button" @click="selected = 'BAU Report'; open = false; document.getElementById('view-report-type-edit').value = 'BAU Report';"
                         class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                         BAU Report
@@ -1949,15 +2229,15 @@
                 <div id="view-report-category-display" class="mt-2 text-gray-600 dark:text-gray-400">-</div>
                 <div id="view-report-category-edit-container" class="hidden mt-2" x-data="{ open: false, selected: 'Select Category' }">
                   <div class="relative">
-                    <button @click="open = !open" type="button"
+                    <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                       <span x-text="selected" :class="selected === 'Select Category' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                       <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div x-show="open" @click.outside="open = false" x-cloak
-                      class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+<div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                       <button type="button" @click="selected = 'BI Dashboard'; open = false; document.getElementById('view-report-category-edit').value = 'BI Dashboard';"
                         class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                         BI Dashboard
@@ -1986,15 +2266,15 @@
                 <div id="view-report-subcategory-display" class="mt-2 text-gray-600 dark:text-gray-400">-</div>
                 <div id="view-report-subcategory-edit-container" class="hidden mt-2" x-data="{ open: false, selected: 'Select Sub Category' }">
                   <div class="relative">
-                    <button @click="open = !open" type="button"
+                    <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                       <span x-text="selected" :class="selected === 'Select Sub Category' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                       <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div x-show="open" @click.outside="open = false" x-cloak
-                      class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+<div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                       <button type="button" @click="selected = 'MCA - Deliverable'; open = false; document.getElementById('view-report-subcategory-edit').value = 'MCA - Deliverable';"
                         class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                         MCA - Deliverable
@@ -2031,15 +2311,15 @@
                 <div id="view-report-critical-display" class="mt-2 text-gray-600 dark:text-gray-400">-</div>
                 <div id="view-report-critical-edit-container" class="hidden mt-2" x-data="{ open: false, selected: 'Select Critical Report' }">
                   <div class="relative">
-                    <button @click="open = !open" type="button"
+                    <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                       <span x-text="selected" :class="selected === 'Select Critical Report' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                       <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div x-show="open" @click.outside="open = false" x-cloak
-                      class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+<div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                       <button type="button" @click="selected = 'Complex'; open = false; document.getElementById('view-report-critical-edit').value = 'Complex';"
                         class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                         Complex
@@ -2064,15 +2344,15 @@
                 <div id="view-report-complexity-display" class="mt-2">-</div>
                 <div id="view-report-complexity-edit-container" class="hidden mt-2" x-data="{ open: false, selected: 'Select Complexity' }">
                   <div class="relative">
-                    <button @click="open = !open" type="button"
+                    <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                       <span x-text="selected" :class="selected === 'Select Complexity' ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                       <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div x-show="open" @click.outside="open = false" x-cloak
-                      class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+<div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                       <button type="button" @click="selected = 'Low'; open = false; document.getElementById('view-report-complexity-edit').value = 'Low';"
                         class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                         Low
@@ -2121,15 +2401,15 @@
                   }
                 }">
                   <div class="relative">
-                    <button @click="open = !open" type="button"
+                    <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                       <span x-text="getDisplayText()" :class="selectedRegions.length === 0 ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                       <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div x-show="open" @click.outside="open = false" x-cloak
-                      class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+<div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                       <template x-for="region in regions" :key="region">
                         <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
                           <input
@@ -2177,15 +2457,15 @@
                   }
                 }">
                   <div class="relative">
-                    <button @click="open = !open" type="button"
+                    <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                       <span x-text="getDisplayText()" :class="selectedFrequencies.length === 0 ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                       <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div x-show="open" @click.outside="open = false" x-cloak
-                      class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+<div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                       <template x-for="frequency in frequencies" :key="frequency">
                         <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
                           <input
@@ -2244,15 +2524,15 @@
                   }
                 }">
                   <div class="relative">
-                    <button @click="open = !open" type="button"
+                    <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                       <span x-text="getDisplayText()" :class="selectedRegions.length === 0 ? 'text-gray-400 dark:text-gray-500' : ''"></span>
                       <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div x-show="open" @click.outside="open = false" x-cloak
-                      class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+<div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                       <template x-for="region in regions" :key="region">
                         <label class="flex items-center gap-3 rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700 cursor-pointer">
                           <input
@@ -2276,15 +2556,15 @@
                 <div id="view-report-status-display" class="mt-2 text-gray-600 dark:text-gray-400">-</div>
                 <div id="view-report-status-edit-container" class="hidden mt-2" x-data="{ open: false, selected: 'Active' }">
                   <div class="relative">
-                    <button @click="open = !open" type="button"
+                    <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                       <span x-text="selected"></span>
                       <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div x-show="open" @click.outside="open = false" x-cloak
-                      class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+<div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                       <button type="button" @click="selected = 'Active'; open = false; document.getElementById('view-report-status-edit').value = 'Active';"
                         class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                         Active
@@ -2328,15 +2608,15 @@
                 <div id="view-report-pii-display" class="mt-2">-</div>
                 <div id="view-report-pii-edit-container" class="hidden mt-2" x-data="{ open: false, selected: 'No' }">
                   <div class="relative">
-                    <button @click="open = !open" type="button"
+                    <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                       <span x-text="selected"></span>
                       <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div x-show="open" @click.outside="open = false" x-cloak
-                      class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+<div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                       <button type="button" @click="selected = 'No'; open = false; document.getElementById('view-report-pii-edit').value = 'No';"
                         class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                         No
@@ -2361,15 +2641,15 @@
                 <div id="view-report-euc-display" class="mt-2">-</div>
                 <div id="view-report-euc-edit-container" class="hidden mt-2" x-data="{ open: false, selected: 'No' }">
                   <div class="relative">
-                    <button @click="open = !open" type="button"
+                    <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
                       <span x-text="selected"></span>
                       <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div x-show="open" @click.outside="open = false" x-cloak
-                      class="absolute left-0 right-0 top-full z-[99999] max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg mt-2 dark:border-gray-700 dark:bg-gray-800">
+<div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                  class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                       <button type="button" @click="selected = 'No'; open = false; document.getElementById('view-report-euc-edit').value = 'No';"
                         class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                         No
@@ -2394,6 +2674,81 @@
                   class="hidden mt-2 w-full h-11 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base text-gray-800 shadow-theme-xs focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
                 />
               </div>
+
+              <!-- Next Steps -->
+              <div class="border-b border-gray-100 dark:border-gray-800 pb-4">
+                <dt class="font-semibold text-gray-900 dark:text-white/90">Next Steps</dt>
+                <div id="view-report-next-steps-display" class="mt-2 text-gray-600 dark:text-gray-400 whitespace-pre-wrap">-</div>
+                <textarea
+                  id="view-report-next-steps-edit"
+                  rows="3"
+                  class="hidden mt-2 w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base text-gray-800 shadow-theme-xs focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 resize-y"
+                ></textarea>
+              </div>
+
+              <!-- Additional Information -->
+              <div class="border-b border-gray-100 dark:border-gray-800 pb-4">
+                <dt class="font-semibold text-gray-900 dark:text-white/90">Additional Information</dt>
+                <div id="view-report-additional-info-display" class="mt-2 text-gray-600 dark:text-gray-400 whitespace-pre-wrap">-</div>
+                <textarea
+                  id="view-report-additional-info-edit"
+                  rows="3"
+                  class="hidden mt-2 w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base text-gray-800 shadow-theme-xs focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 resize-y"
+                ></textarea>
+              </div>
+
+              <!-- Agreed Rationalization Category -->
+              <div class="border-b border-gray-100 dark:border-gray-800 pb-4"
+                x-data="{ open: false, selected: '— Select —' }" id="view-report-rationalization-category-edit-container">
+                <dt class="font-semibold text-gray-900 dark:text-white/90">Agreed Rationalization Category</dt>
+                <div id="view-report-rationalization-category-display" class="mt-2 text-gray-600 dark:text-gray-400">-</div>
+                <div class="hidden mt-2 relative" id="view-report-rationalization-category-edit-wrap">
+                  <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
+                    class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
+                    <span x-text="selected"></span>
+                    <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                    class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
+                    <button type="button" @click="selected = '— Select —'; open = false; document.getElementById('view-report-rationalization-category-edit').value = '';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">— Select —</button>
+                    <button type="button" @click="selected = 'Retain'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Retain';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Retain</button>
+                    <button type="button" @click="selected = 'Retire'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Retire';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Retire</button>
+                    <button type="button" @click="selected = 'Pending Tech Release'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Pending Tech Release';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Pending Tech Release</button>
+                    <button type="button" @click="selected = 'Dependent on One Wealth Go-Live'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Dependent on One Wealth Go-Live';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Dependent on One Wealth Go-Live</button>
+                    <button type="button" @click="selected = 'Other'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Other'; document.getElementById('view-report-rationalization-category-other').style.display='block';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Other</button>
+                  </div>
+                  <input type="hidden" id="view-report-rationalization-category-edit" />
+                  <input type="text" id="view-report-rationalization-category-other" placeholder="Specify…"
+                    style="display:none;"
+                    class="mt-2 w-full h-11 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base text-gray-800 shadow-theme-xs focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                    onblur="if(this.value.trim()) document.getElementById('view-report-rationalization-category-edit').value = this.value.trim();" />
+                </div>
+              </div>
+
+              <!-- Rationalization Status -->
+              <div class="pb-4"
+                x-data="{ open: false, selected: '— Select —' }" id="view-report-rationalization-status-edit-container">
+                <dt class="font-semibold text-gray-900 dark:text-white/90">Rationalization Status</dt>
+                <div id="view-report-rationalization-status-display" class="mt-2 text-gray-600 dark:text-gray-400">-</div>
+                <div class="hidden mt-2 relative" id="view-report-rationalization-status-edit-wrap">
+                  <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
+                    class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
+                    <span x-text="selected"></span>
+                    <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
+                    class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
+                    <button type="button" @click="selected = '— Select —'; open = false; document.getElementById('view-report-rationalization-status-edit').value = '';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">— Select —</button>
+                    <button type="button" @click="selected = 'Done'; open = false; document.getElementById('view-report-rationalization-status-edit').value = 'Done';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Done</button>
+                    <button type="button" @click="selected = 'Pending'; open = false; document.getElementById('view-report-rationalization-status-edit').value = 'Pending';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Pending</button>
+                  </div>
+                  <input type="hidden" id="view-report-rationalization-status-edit" />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -2410,6 +2765,73 @@
       let currentStatusFilter = 'All';
       let currentReportTypeFilter = 'All';
       let currentRegionFilter = ['All']; // Now supports multiple regions - starts with All selected
+
+      // Ad Hoc tasks (loaded from adhoc_tasks.json, used only in FTE & Management tabs)
+      let adhocTasks = [];
+      let includeAdhocInFTE = false;
+      let adhocStatusFilter = ['All']; // array matching multi-select; ['All'] = no filter
+
+      async function fetchAdhocTasks() {
+        try {
+          const response = await fetch('https://cedt-confluence.net/confluence/download/attachments/2740868871/adhoc_tasks.json?api=v2');
+          if (!response.ok) return [];
+          const data = await response.json();
+          if (data.tasks && Array.isArray(data.tasks)) return data.tasks;
+          if (Array.isArray(data)) return data;
+          return [];
+        } catch (e) {
+          console.warn('Could not load adhoc_tasks.json', e);
+          return [];
+        }
+      }
+
+      // Map adhoc tasks to report-like objects for FTE / Mgmt calculations only
+      function getAdhocFTEReports() {
+        if (!includeAdhocInFTE || !adhocTasks.length) return [];
+        return adhocTasks
+          .filter(t => adhocStatusFilter.includes('All') || adhocStatusFilter.includes(t.status))
+          .map(t => {
+            const makers = Array.isArray(t.maker) ? t.maker : (t.maker ? [t.maker] : ['Unknown']);
+            const hoursEach = (parseFloat(t.timeSpent) || 0) / Math.max(makers.length, 1);
+            return makers.map(m => ({
+              id: t.id + '_' + m,
+              reportName: t.reportName || t.description || 'Ad Hoc Task',
+              reportType: 'Ad Hoc',
+              preparedBy: m,
+              reportRegion: t.region ? [t.region] : [],
+              prepareRegion: t.requestorRegion ? [t.requestorRegion] : [],
+              avgTimePerMonth: hoursEach,
+              timeAvgPerRun: hoursEach,
+              activeStatus: 'Active', // treat all included adhoc as active for FTE (filtered by adhocStatusFilter above)
+              frequency: ['Monthly'],
+              reportComplexity: t.priority === 'High' ? 'High' : (t.priority === 'Low' ? 'Low' : 'Medium'),
+              rationalizationCategory: '',
+              rationalizationStatus: '',
+              _isAdhoc: true
+            }));
+          }).flat();
+      }
+
+      function onAdhocToggle() {
+        includeAdhocInFTE = document.getElementById('adhocIncludeToggle')?.checked ?? false;
+        // Show/hide the ad hoc status filter dropdown
+        const wrap = document.getElementById('adhocStatusFilterWrap');
+        if (wrap) wrap.style.display = includeAdhocInFTE ? 'block' : 'none';
+        refreshFTEAndMgmt();
+      }
+
+      function onAdhocStatusFilter(statuses) {
+        adhocStatusFilter = Array.isArray(statuses) ? statuses : [statuses || 'All'];
+        refreshFTEAndMgmt();
+      }
+
+      function refreshFTEAndMgmt() {
+        if (typeof refreshFTEAnalysis === 'function') refreshFTEAnalysis();
+        if (typeof refreshManagementSummary === 'function') refreshManagementSummary();
+      }
+
+      window.onAdhocToggle = onAdhocToggle;
+      window.onAdhocStatusFilter = onAdhocStatusFilter;
       
       // Calculate average time spent per month based on frequency and time per run
       function calculateAvgTimePerMonth(timeAvgPerRun, frequencies) {
@@ -2679,6 +3101,18 @@
               <td class="px-6 py-4 text-center whitespace-nowrap">
                 <span class="!text-base text-gray-700 dark:text-gray-300">${report.audience || '-'}</span>
               </td>
+              <td class="px-6 py-4" style="min-width:180px;max-width:260px;">
+                <span class="!text-base text-gray-700 dark:text-gray-300 break-words whitespace-pre-wrap block">${report.nextSteps ? report.nextSteps.replace(/</g,'&lt;').replace(/>/g,'&gt;') : '<span class="text-gray-400">—</span>'}</span>
+              </td>
+              <td class="px-6 py-4" style="min-width:180px;max-width:260px;">
+                <span class="!text-base text-gray-700 dark:text-gray-300 break-words whitespace-pre-wrap block">${report.additionalInfo ? report.additionalInfo.replace(/</g,'&lt;').replace(/>/g,'&gt;') : '<span class="text-gray-400">—</span>'}</span>
+              </td>
+              <td class="px-6 py-4 text-center whitespace-nowrap">
+                ${report.rationalizationCategory ? `<span class="!text-base text-gray-700 dark:text-gray-300">${report.rationalizationCategory.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>` : '<span class="text-gray-400">—</span>'}
+              </td>
+              <td class="px-6 py-4 text-center whitespace-nowrap">
+                ${getRationalizationStatusBadge(report.rationalizationStatus)}
+              </td>
             </tr>
           `;
         });
@@ -2708,6 +3142,13 @@
         return badges[type] || type;
       }
       
+      function getRationalizationStatusBadge(status) {
+        if (!status) return '<span class="text-gray-400 !text-base">—</span>';
+        if (status === 'Done') return '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-success-50 px-2.5 py-0.5 !text-base font-medium text-success-700 dark:bg-success-900/20 dark:text-success-400">Done</span>';
+        if (status === 'Pending') return '<span class="inline-flex items-center whitespace-nowrap rounded-full bg-warning-50 px-2.5 py-0.5 !text-base font-medium text-warning-700 dark:bg-warning-900/20 dark:text-warning-400">Pending</span>';
+        return `<span class="!text-base text-gray-700 dark:text-gray-300">${status}</span>`;
+      }
+
       function getRegionBadge(region) {
         if (!region) return '<span class="!text-base text-gray-400 dark:text-gray-500">-</span>';
         
@@ -3024,6 +3465,14 @@
       
       function filterByReportType(type) {
         currentReportTypeFilter = type;
+        // When Ad Hoc type is selected, auto-enable the toggle
+        if (type === 'Ad Hoc') {
+          includeAdhocInFTE = true;
+          const toggle = document.getElementById('adhocIncludeToggle');
+          if (toggle) toggle.checked = true;
+          const wrap = document.getElementById('adhocStatusFilterWrap');
+          if (wrap) wrap.style.display = 'block';
+        }
         filterReports();
       }
       
@@ -3033,7 +3482,8 @@
       }
       
       function filterReports() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchInputEl = document.getElementById('searchInput');
+        const searchTerm = (searchInputEl && searchInputEl.value) ? searchInputEl.value.trim().toLowerCase() : '';
 
         filteredReports = reports.filter(report => {
           // Apply status filter
@@ -3041,8 +3491,8 @@
             return false;
           }
           
-          // Apply report type filter
-          if (currentReportTypeFilter !== 'All' && report.reportType !== currentReportTypeFilter) {
+          // Apply report type filter ('Ad Hoc' only applies to FTE/Mgmt tabs, so show all in main table)
+          if (currentReportTypeFilter !== 'All' && currentReportTypeFilter !== 'Ad Hoc' && report.reportType !== currentReportTypeFilter) {
             return false;
           }
           
@@ -3074,6 +3524,7 @@
         renderReportsTable();
         refreshDashboard();
         if (typeof refreshFTEAnalysis === 'function') refreshFTEAnalysis();
+        if (typeof refreshManagementSummary === 'function') refreshManagementSummary();
       }
       
       // Pagination
@@ -3262,6 +3713,10 @@
         }
         
         document.getElementById('view-report-audience-display').textContent = report.audience || '-';
+        document.getElementById('view-report-next-steps-display').textContent = report.nextSteps || '-';
+        document.getElementById('view-report-additional-info-display').textContent = report.additionalInfo || '-';
+        document.getElementById('view-report-rationalization-category-display').textContent = report.rationalizationCategory || '-';
+        document.getElementById('view-report-rationalization-status-display').textContent = report.rationalizationStatus || '-';
         
         // Populate edit fields (hidden inputs + Alpine.js state will be updated when entering edit mode)
         document.getElementById('view-report-type-edit').value = report.reportType || '';
@@ -3278,6 +3733,10 @@
         document.getElementById('view-report-pii-edit').value = report.includePII || 'No';
         document.getElementById('view-report-euc-edit').value = report.euc || 'No';
         document.getElementById('view-report-audience-edit').value = report.audience || '';
+        document.getElementById('view-report-next-steps-edit').value = report.nextSteps || '';
+        document.getElementById('view-report-additional-info-edit').value = report.additionalInfo || '';
+        document.getElementById('view-report-rationalization-category-edit').value = report.rationalizationCategory || '';
+        document.getElementById('view-report-rationalization-status-edit').value = report.rationalizationStatus || '';
         
         // Update Alpine.js dropdown selections after modal opens
         setTimeout(() => {
@@ -3615,7 +4074,11 @@
           'view-report-time-display',
           'view-report-pii-display',
           'view-report-euc-display',
-          'view-report-audience-display'
+          'view-report-audience-display',
+          'view-report-next-steps-display',
+          'view-report-additional-info-display',
+          'view-report-rationalization-category-display',
+          'view-report-rationalization-status-display'
         ];
         
         const editFieldsAndContainers = [
@@ -3634,7 +4097,11 @@
           'view-report-time-edit',
           'view-report-pii-edit-container',
           'view-report-euc-edit-container',
-          'view-report-audience-edit'
+          'view-report-audience-edit',
+          'view-report-next-steps-edit',
+          'view-report-additional-info-edit',
+          'view-report-rationalization-category-edit-wrap',
+          'view-report-rationalization-status-edit-wrap'
         ];
         
         displayFields.forEach(id => {
@@ -3674,7 +4141,11 @@
           'view-report-time-display',
           'view-report-pii-display',
           'view-report-euc-display',
-          'view-report-audience-display'
+          'view-report-audience-display',
+          'view-report-next-steps-display',
+          'view-report-additional-info-display',
+          'view-report-rationalization-category-display',
+          'view-report-rationalization-status-display'
         ];
         
         const editFieldsAndContainers = [
@@ -3693,7 +4164,11 @@
           'view-report-time-edit',
           'view-report-pii-edit-container',
           'view-report-euc-edit-container',
-          'view-report-audience-edit'
+          'view-report-audience-edit',
+          'view-report-next-steps-edit',
+          'view-report-additional-info-edit',
+          'view-report-rationalization-category-edit-wrap',
+          'view-report-rationalization-status-edit-wrap'
         ];
         
         displayFields.forEach(id => {
@@ -3734,6 +4209,10 @@
           document.getElementById('view-report-pii-edit').value = originalReportData.includePII || 'No';
           document.getElementById('view-report-euc-edit').value = originalReportData.euc || 'No';
           document.getElementById('view-report-audience-edit').value = originalReportData.audience || '';
+          document.getElementById('view-report-next-steps-edit').value = originalReportData.nextSteps || '';
+          document.getElementById('view-report-additional-info-edit').value = originalReportData.additionalInfo || '';
+          document.getElementById('view-report-rationalization-category-edit').value = originalReportData.rationalizationCategory || '';
+          document.getElementById('view-report-rationalization-status-edit').value = originalReportData.rationalizationStatus || '';
           
           // Restore Alpine.js dropdown selections
           updateViewModalAlpineDropdown('view-report-type-edit-container', originalReportData.reportType);
@@ -3784,6 +4263,10 @@
         const includePII = document.getElementById('view-report-pii-edit').value;
         const euc = document.getElementById('view-report-euc-edit').value;
         const audience = document.getElementById('view-report-audience-edit').value;
+        const nextSteps = document.getElementById('view-report-next-steps-edit')?.value ?? report.nextSteps ?? '';
+        const additionalInfo = document.getElementById('view-report-additional-info-edit')?.value ?? report.additionalInfo ?? '';
+        const rationalizationCategory = document.getElementById('view-report-rationalization-category-edit')?.value ?? report.rationalizationCategory ?? '';
+        const rationalizationStatus = document.getElementById('view-report-rationalization-status-edit')?.value ?? report.rationalizationStatus ?? '';
         
         // Parse JSON arrays from hidden inputs
         let reportRegion = [];
@@ -3829,6 +4312,10 @@
         if (report.includePII !== includePII) changes.push('PII setting');
         if (report.euc !== euc) changes.push('EUC setting');
         if (report.audience !== audience) changes.push('audience');
+        if (report.nextSteps !== nextSteps) changes.push('next steps');
+        if (report.additionalInfo !== additionalInfo) changes.push('additional information');
+        if (report.rationalizationCategory !== rationalizationCategory) changes.push('rationalization category');
+        if (report.rationalizationStatus !== rationalizationStatus) changes.push('rationalization status');
         
         // Update the report object
         report.reportName = reportName;
@@ -3848,6 +4335,10 @@
         report.includePII = includePII;
         report.euc = euc;
         report.audience = audience;
+        report.nextSteps = nextSteps;
+        report.additionalInfo = additionalInfo;
+        report.rationalizationCategory = rationalizationCategory;
+        report.rationalizationStatus = rationalizationStatus;
         report.updatedAt = new Date().toISOString();
         
         // Add to timeline with detailed changes
@@ -3896,6 +4387,10 @@
           document.getElementById('view-report-pii-display').textContent = includePII || 'No';
           document.getElementById('view-report-euc-display').textContent = euc || 'No';
           document.getElementById('view-report-audience-display').textContent = audience || '-';
+          document.getElementById('view-report-next-steps-display').textContent = nextSteps || '-';
+          document.getElementById('view-report-additional-info-display').textContent = additionalInfo || '-';
+          document.getElementById('view-report-rationalization-category-display').textContent = rationalizationCategory || '-';
+          document.getElementById('view-report-rationalization-status-display').textContent = rationalizationStatus || '-';
           
           // Update original data
           originalReportData = JSON.parse(JSON.stringify(report));
@@ -3946,6 +4441,28 @@
         }
       }
       
+      // ──────────────────────────────────────────────────────────────────────────
+
+      function positionModalDropdown(triggerEl, panelEl) {
+        if (!triggerEl || !panelEl) return;
+        const r = triggerEl.getBoundingClientRect();
+        const maxPanelHeight = 240;
+        const gap = 8;
+        const spaceBelow = window.innerHeight - r.bottom - gap;
+        const spaceAbove = r.top - gap;
+        panelEl.style.left = r.left + 'px';
+        panelEl.style.minWidth = r.width + 'px';
+        if (spaceBelow >= maxPanelHeight || spaceBelow >= spaceAbove) {
+          panelEl.style.top = (r.bottom + gap) + 'px';
+          panelEl.style.bottom = 'auto';
+          panelEl.style.maxHeight = Math.min(maxPanelHeight, Math.max(120, spaceBelow)) + 'px';
+        } else {
+          panelEl.style.bottom = (window.innerHeight - r.top + gap) + 'px';
+          panelEl.style.top = 'auto';
+          panelEl.style.maxHeight = Math.min(maxPanelHeight, Math.max(120, spaceAbove)) + 'px';
+        }
+      }
+
       function closeReportModal() {
         const modal = document.getElementById('reportModal');
         modal.classList.add('hidden');
@@ -4012,7 +4529,11 @@
           timeAvgPerRun: parseFloat(document.getElementById('report-time')?.value) || 0,
           includePII: document.getElementById('report-pii')?.value || '',
           euc: document.getElementById('report-euc')?.value || '',
-          audience: document.getElementById('report-audience')?.value || ''
+          audience: document.getElementById('report-audience')?.value || '',
+          nextSteps: existingReport?.nextSteps || '',
+          additionalInfo: existingReport?.additionalInfo || '',
+          rationalizationCategory: existingReport?.rationalizationCategory || '',
+          rationalizationStatus: existingReport?.rationalizationStatus || ''
         };
         
         const isUpdate = reportIdInternal && existingReport;
@@ -4194,7 +4715,11 @@
             'Avg Time Per Month',
             'Include PII?',
             'EUC',
-            'Audience'
+            'Audience',
+            'Next Steps',
+            'Additional Information',
+            'Agreed Rationalization Category',
+            'Rationalization Status'
           ];
           
           let ws;
@@ -4223,7 +4748,11 @@
               'Avg Time Per Month': report.avgTimePerMonth || 0,
               'Include PII?': report.includePII || '',
               'EUC': report.euc || '',
-              'Audience': report.audience || ''
+              'Audience': report.audience || '',
+              'Next Steps': report.nextSteps || '',
+              'Additional Information': report.additionalInfo || '',
+              'Agreed Rationalization Category': report.rationalizationCategory || '',
+              'Rationalization Status': report.rationalizationStatus || ''
             }));
             
             // Use header parameter to ensure correct column order
@@ -4295,6 +4824,10 @@
                   includePII: row['Include PII?'] || 'No',
                   euc: row['EUC'] || 'No',
                   audience: row['Audience'] || '',
+                  nextSteps: row['Next Steps'] || '',
+                  additionalInfo: row['Additional Information'] || '',
+                  rationalizationCategory: row['Agreed Rationalization Category'] || '',
+                  rationalizationStatus: row['Rationalization Status'] || '',
                   createdAt: new Date().toISOString(),
                   updatedAt: new Date().toISOString()
                 };
@@ -4906,6 +5439,25 @@
           }
         }
 
+        // Reset Ad Hoc toggle + status filter
+        includeAdhocInFTE = false;
+        adhocStatusFilter = ['All'];
+        const adhocToggle = document.getElementById('adhocIncludeToggle');
+        if (adhocToggle) adhocToggle.checked = false;
+        const adhocWrap = document.getElementById('adhocStatusFilterWrap');
+        if (adhocWrap) adhocWrap.style.display = 'none';
+        // Reset the Alpine ad hoc status dropdown
+        const adhocStatusDrop = document.getElementById('adhocStatusFilterDropdown');
+        if (adhocStatusDrop) {
+          try {
+            const alpineData = (adhocStatusDrop._x_dataStack && adhocStatusDrop._x_dataStack[0])
+              || (adhocStatusDrop.__x && adhocStatusDrop.__x.$data);
+            if (alpineData) { alpineData.selectedStatuses = ['All']; alpineData.open = false; }
+            const btn = adhocStatusDrop.querySelector('button span');
+            if (btn) btn.textContent = 'All Statuses';
+          } catch(e) {}
+        }
+
         // Clear advanced filters
         advancedFilters = [];
         filterIdCounter = 0;
@@ -4942,8 +5494,10 @@
       // Initialize on page load
       document.addEventListener('DOMContentLoaded', async function() {
         try {
-          // Fetch reports from Confluence
-          const data = await fetchReports();
+          // Fetch reports and ad hoc tasks in parallel
+          const [data, adhocData] = await Promise.all([fetchReports(), fetchAdhocTasks()]);
+          adhocTasks = adhocData || [];
+          console.log('✅ Loaded', adhocTasks.length, 'ad hoc tasks from Confluence');
           if (data && data.length > 0) {
             // Calculate avgTimePerMonth for reports that don't have it
             reports = data.map(report => {
@@ -5593,10 +6147,36 @@
         renderFTEReportTypeDonutChart();
       }
       
+      // Returns { base: [...], adhoc: [...] } — useful for per-series chart rendering
+      function splitFTEDataset() {
+        const all = getFTEDataset();
+        return {
+          base:  all.filter(r => !r._isAdhoc),
+          adhoc: all.filter(r =>  r._isAdhoc)
+        };
+      }
+
+      function getFTEDataset() {
+        const rtFilter = currentReportTypeFilter || 'All';
+        // When 'Ad Hoc' type is selected, return only adhoc regardless of toggle
+        if (rtFilter === 'Ad Hoc') {
+          return getAdhocFTEReports();
+        }
+        // Base reports (active), optionally type-filtered
+        let base = filteredReports.filter(r => r.activeStatus === 'Active');
+        if (rtFilter !== 'All') {
+          base = base.filter(r => r.reportType === rtFilter);
+        }
+        if (!includeAdhocInFTE) return base;
+        // Include adhoc, but if a specific type is selected filter them too
+        const adhoc = getAdhocFTEReports();
+        return base.concat(adhoc);
+      }
+
       function calculateFTEMetrics() {
-        const activeReports = filteredReports.filter(r => r.activeStatus === 'Active');
+        const activeReports = getFTEDataset();
         const totalHours = activeReports.reduce((sum, r) => sum + (r.avgTimePerMonth || 0), 0);
-        const totalFTE = totalHours / 160; // Assuming 160 hours per month per FTE
+        const totalFTE = totalHours / 160;
         const avgHoursPerReport = activeReports.length > 0 ? totalHours / activeReports.length : 0;
         
         document.getElementById('fteTotal').textContent = totalFTE.toFixed(1);
@@ -5608,49 +6188,119 @@
       function populateFTEConsolidatedTable() {
         const tbody = document.getElementById('fteConsolidatedTableBody');
         if (!tbody) return;
-        
-        const activeReports = filteredReports.filter(r => r.activeStatus === 'Active');
-        
-        // Group by maker and report type
-        // Note: If 1 person does 2 reports for 2 different regions, FTE = total hours ÷ 160
-        // Example: Person A does Report 1 (50h/month for NAM) + Report 2 (30h/month for EMEA) = 80h total ÷ 160 = 0.5 FTE
-        const makerTypeStats = {};
+
+        const activeReports = getFTEDataset();
+
+        // Build structure: { maker → { type → hours } }
+        const makerMap = {};
+        const makerIsAdhoc = {}; // track which makers have adhoc tasks
         let totalHours = 0;
-        
+
         activeReports.forEach(report => {
           const maker = report.preparedBy || 'Unknown';
-          const type = report.reportType || 'Unknown';
-          const key = `${maker}|${type}`;
-          
-          if (!makerTypeStats[key]) {
-            makerTypeStats[key] = { maker, type, hours: 0 };
-          }
-          makerTypeStats[key].hours += report.avgTimePerMonth || 0;
+          const type  = report.reportType  || 'Unknown';
+          if (!makerMap[maker]) makerMap[maker] = {};
+          if (!makerMap[maker][type]) makerMap[maker][type] = 0;
+          makerMap[maker][type] += report.avgTimePerMonth || 0;
           totalHours += report.avgTimePerMonth || 0;
+          if (report._isAdhoc) makerIsAdhoc[maker] = true;
         });
-        
-        tbody.innerHTML = Object.values(makerTypeStats)
-          .sort((a, b) => {
-            // Sort by maker first, then by hours
-            if (a.maker !== b.maker) return a.maker.localeCompare(b.maker);
-            return b.hours - a.hours;
-          })
-          .map(stat => {
-            const fte = (stat.hours / 160).toFixed(2);
-            return `
-              <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30">
-                <td class="px-6 py-4 text-left !text-base font-medium text-gray-900 dark:text-white">${stat.maker}</td>
-                <td class="px-6 py-4 text-left !text-base text-gray-700 dark:text-gray-300">${stat.type}</td>
-                <td class="px-6 py-4 text-center !text-base text-gray-700 dark:text-gray-300">${Math.round(stat.hours)}h</td>
-                <td class="px-6 py-4 text-center !text-base font-semibold text-gray-900 dark:text-white">${fte}</td>
-              </tr>
-            `;
-          }).join('');
-        
+
+        // Sort makers by total hours descending
+        const makers = Object.keys(makerMap).sort((a, b) => {
+          const sumA = Object.values(makerMap[a]).reduce((s, v) => s + v, 0);
+          const sumB = Object.values(makerMap[b]).reduce((s, v) => s + v, 0);
+          return sumB - sumA;
+        });
+
+        // Track which makers are expanded (start all collapsed)
+        if (!window._fteExpanded) window._fteExpanded = {};
+
+        let html = '';
+        const lastMakerIdx = makers.length - 1;
+
+        makers.forEach((maker, mIdx) => {
+          const types = Object.keys(makerMap[maker]).sort((a, b) => makerMap[maker][b] - makerMap[maker][a]);
+          const makerHours = types.reduce((s, t) => s + makerMap[maker][t], 0);
+          const makerFte   = (makerHours / 160).toFixed(2);
+          const isExpanded = !!window._fteExpanded[maker];
+          const isLastMaker = mIdx === lastMakerIdx;
+          const escapedMaker = maker.replace(/'/g, "\\'");
+
+          const isAdhocMaker = !!makerIsAdhoc[maker];
+
+          // ── Maker header row ──────────────────────────────────────────────────
+          html += `
+            <tr class="fte-maker-row ${isAdhocMaker ? 'fte-adhoc-row' : ''} cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors select-none border-t border-gray-200 dark:border-gray-700"
+                onclick="fteDrillToggle('${escapedMaker}')">
+              <td class="px-6 py-3.5 text-left !text-base font-semibold text-gray-900 dark:text-white whitespace-nowrap">
+                <span class="inline-flex items-center gap-2">
+                  <span class="fte-chevron inline-flex items-center justify-center w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-700 transition-transform ${isExpanded ? 'rotate-90' : ''}" data-maker="${escapedMaker}">
+                    <svg class="w-3 h-3 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </span>
+                  ${maker}
+                </span>
+              </td>
+              <td class="px-6 py-3.5 text-left !text-base text-gray-500 dark:text-gray-400">
+                ${types.length} report type${types.length !== 1 ? 's' : ''}
+              </td>
+              <td class="px-6 py-3.5 text-center !text-base font-semibold text-gray-900 dark:text-white">${Math.round(makerHours)}h</td>
+              <td class="px-6 py-3.5 text-center !text-base font-bold text-brand-600 dark:text-brand-400">${makerFte}</td>
+            </tr>`;
+
+          // ── Child rows (per report type) ──────────────────────────────────────
+          types.forEach((type, tIdx) => {
+            const hours = makerMap[maker][type];
+            const fte   = (hours / 160).toFixed(2);
+            html += `
+              <tr class="fte-child-row ${isExpanded ? '' : 'hidden'} hover:bg-brand-50/40 dark:hover:bg-brand-900/10 transition-colors"
+                  data-maker="${escapedMaker}">
+                <td class="pl-14 pr-6 py-3 text-left !text-base text-gray-500 dark:text-gray-400"></td>
+                <td class="px-6 py-3 text-left !text-base text-gray-700 dark:text-gray-300">
+                  <span class="inline-flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full ${type === 'Ad Hoc' ? 'bg-cyan-400 dark:bg-cyan-500' : 'bg-brand-400 dark:bg-brand-500'} flex-shrink-0"></span>
+                    ${type}${type === 'Ad Hoc' ? ' <span class="ml-1 inline-flex items-center rounded-full bg-cyan-50 px-1.5 py-0.5 text-xs font-medium text-cyan-700 dark:bg-cyan-900/20 dark:text-cyan-400">Ad Hoc</span>' : ''}
+                  </span>
+                </td>
+                <td class="px-6 py-3 text-center !text-base text-gray-700 dark:text-gray-300">${Math.round(hours)}h</td>
+                <td class="px-6 py-3 text-center !text-base text-gray-700 dark:text-gray-300">${fte}</td>
+              </tr>`;
+          });
+        });
+
+        tbody.innerHTML = html;
+
         // Update totals
         document.getElementById('fteConsolidatedHoursTotal').textContent = Math.round(totalHours) + 'h';
         document.getElementById('fteConsolidatedFTETotal').textContent = (totalHours / 160).toFixed(1);
       }
+
+      function fteDrillToggle(maker) {
+        if (!window._fteExpanded) window._fteExpanded = {};
+        window._fteExpanded[maker] = !window._fteExpanded[maker];
+        const isExpanded = window._fteExpanded[maker];
+
+        // Toggle child rows
+        document.querySelectorAll(`.fte-child-row[data-maker="${maker}"]`).forEach(row => {
+          if (isExpanded) {
+            row.classList.remove('hidden');
+          } else {
+            row.classList.add('hidden');
+          }
+        });
+
+        // Rotate chevron
+        document.querySelectorAll(`.fte-chevron[data-maker="${maker}"]`).forEach(el => {
+          if (isExpanded) {
+            el.classList.add('rotate-90');
+          } else {
+            el.classList.remove('rotate-90');
+          }
+        });
+      }
+      window.fteDrillToggle = fteDrillToggle;
       
       function renderFTEComplexityChart() {
         const chartElement = document.querySelector("#fteComplexityChart");
@@ -5662,89 +6312,66 @@
         }
         
         chartElement.innerHTML = '';
-        
-        const activeReports = filteredReports.filter(r => r.activeStatus === 'Active');
-        const complexityStats = {};
-        
-        activeReports.forEach(report => {
-          const complexity = report.reportComplexity || report.complexity || 'Unknown';
-          if (!complexityStats[complexity]) complexityStats[complexity] = 0;
-          complexityStats[complexity] += report.avgTimePerMonth || 0;
+
+        const { base: baseRpts, adhoc: adhocRpts } = splitFTEDataset();
+        const hasAdhoc = adhocRpts.length > 0;
+        const baseComplexStats = {};
+        const adhocComplexStats = {};
+
+        baseRpts.forEach(r => {
+          const c = r.reportComplexity || r.complexity || 'Unknown';
+          baseComplexStats[c] = (baseComplexStats[c] || 0) + (r.avgTimePerMonth || 0);
         });
-        
-        const complexities = Object.keys(complexityStats);
-        const hours = Object.values(complexityStats);
-        
+        adhocRpts.forEach(r => {
+          const c = r.reportComplexity || r.complexity || 'Unknown';
+          adhocComplexStats[c] = (adhocComplexStats[c] || 0) + (r.avgTimePerMonth || 0);
+        });
+
+        const complexities = [...new Set([...Object.keys(baseComplexStats), ...Object.keys(adhocComplexStats)])];
         if (complexities.length === 0) {
           chartElement.innerHTML = '<div class="flex items-center justify-center py-20"><div class="text-center"><svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No data available</p></div></div>';
           return;
         }
-        
+
+        const series = hasAdhoc
+          ? [
+              { name: 'Reports',  data: complexities.map(c => Math.round(baseComplexStats[c]  || 0)) },
+              { name: 'Ad Hoc',   data: complexities.map(c => Math.round(adhocComplexStats[c] || 0)) }
+            ]
+          : [{ name: 'Hours/Month', data: complexities.map(c => Math.round(baseComplexStats[c] || 0)) }];
+
+        const barRadius = hasAdhoc ? 4 : 8;
         const chartOptions = {
-          series: [{
-            name: 'Hours/Month',
-            data: hours
-          }],
+          series,
           chart: {
-            type: 'bar',
-            height: 350,
+            type: 'bar', height: 350,
             fontFamily: "Outfit, sans-serif",
-            toolbar: { show: false }
+            toolbar: { show: false },
+            stacked: hasAdhoc
           },
           plotOptions: {
-            bar: {
-              borderRadius: 8,
-              dataLabels: { position: 'top' },
-              columnWidth: '55%'
-            }
+            bar: { borderRadius: barRadius, dataLabels: { position: 'top' }, columnWidth: '55%' }
           },
           dataLabels: {
-            enabled: true,
-            formatter: function (val) {
-              return Math.round(val) + 'h';
-            },
+            enabled: !hasAdhoc,
+            formatter: val => Math.round(val) + 'h',
             offsetY: -20,
-            style: {
-              fontSize: '12px',
-              colors: ["#6B7280"]
-            }
+            style: { fontSize: '12px', colors: ["#6B7280"] }
           },
           xaxis: {
             categories: complexities,
-            position: 'bottom',
-            labels: {
-              style: {
-                colors: '#6B7280',
-                fontSize: '12px'
-              }
-            }
+            labels: { style: { colors: '#6B7280', fontSize: '12px' } }
           },
           yaxis: {
-            title: {
-              text: 'Hours per Month',
-              style: {
-                color: '#6B7280',
-                fontSize: '14px',
-                fontWeight: 500
-              }
-            },
-            labels: {
-              style: {
-                colors: '#6B7280',
-                fontSize: '12px'
-              },
-              formatter: function (val) {
-                return Math.round(val) + 'h';
-              }
-            }
+            title: { text: 'Hours per Month', style: { color: '#6B7280', fontSize: '14px', fontWeight: 500 } },
+            labels: { style: { colors: '#6B7280', fontSize: '12px' }, formatter: val => Math.round(val) + 'h' }
           },
-          colors: ['#3641f5'],
-          grid: {
-            borderColor: '#E5E7EB',
-            strokeDashArray: 4
-          }
+          colors: hasAdhoc ? ['#3641f5', '#0891B2'] : ['#3641f5'],
+          legend: { show: hasAdhoc, position: 'top', fontFamily: 'Outfit, sans-serif', fontSize: '13px' },
+          tooltip: { y: { formatter: val => Math.round(val) + 'h' } },
+          grid: { borderColor: '#E5E7EB', strokeDashArray: 4 }
         };
-        
+
         window.fteComplexityChartInstance = new ApexCharts(chartElement, chartOptions);
         window.fteComplexityChartInstance.render();
       }
@@ -5759,91 +6386,65 @@
         }
         
         chartElement.innerHTML = '';
-        
-        const activeReports = filteredReports.filter(r => r.activeStatus === 'Active');
-        const frequencyStats = {};
-        
-        activeReports.forEach(report => {
-          const frequencies = Array.isArray(report.frequency) ? report.frequency : [report.frequency || 'Unknown'];
-          frequencies.forEach(freq => {
-            if (!frequencyStats[freq]) frequencyStats[freq] = 0;
-            frequencyStats[freq] += report.avgTimePerMonth || 0;
-          });
+
+        const { base: baseFreqRpts, adhoc: adhocFreqRpts } = splitFTEDataset();
+        const hasFreqAdhoc = adhocFreqRpts.length > 0;
+        const baseFreqStats = {};
+        const adhocFreqStats = {};
+
+        baseFreqRpts.forEach(r => {
+          const freqs = Array.isArray(r.frequency) ? r.frequency : [r.frequency || 'Unknown'];
+          freqs.forEach(f => { baseFreqStats[f] = (baseFreqStats[f] || 0) + (r.avgTimePerMonth || 0); });
         });
-        
-        const frequencies = Object.keys(frequencyStats);
-        const hours = Object.values(frequencyStats);
-        
+        adhocFreqRpts.forEach(r => {
+          const freqs = Array.isArray(r.frequency) ? r.frequency : [r.frequency || 'One-Off'];
+          freqs.forEach(f => { adhocFreqStats[f] = (adhocFreqStats[f] || 0) + (r.avgTimePerMonth || 0); });
+        });
+
+        const frequencies = [...new Set([...Object.keys(baseFreqStats), ...Object.keys(adhocFreqStats)])];
         if (frequencies.length === 0) {
           chartElement.innerHTML = '<div class="flex items-center justify-center py-20"><div class="text-center"><svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No data available</p></div></div>';
           return;
         }
-        
+
+        const freqSeries = hasFreqAdhoc
+          ? [
+              { name: 'Reports', data: frequencies.map(f => Math.round(baseFreqStats[f]  || 0)) },
+              { name: 'Ad Hoc',  data: frequencies.map(f => Math.round(adhocFreqStats[f] || 0)) }
+            ]
+          : [{ name: 'Hours/Month', data: frequencies.map(f => Math.round(baseFreqStats[f] || 0)) }];
+
         const chartOptions = {
-          series: [{
-            name: 'Hours/Month',
-            data: hours
-          }],
+          series: freqSeries,
           chart: {
-            type: 'bar',
-            height: 350,
+            type: 'bar', height: 350,
             fontFamily: "Outfit, sans-serif",
-            toolbar: { show: false }
+            toolbar: { show: false },
+            stacked: hasFreqAdhoc
           },
           plotOptions: {
-            bar: {
-              borderRadius: 8,
-              dataLabels: { position: 'top' },
-              columnWidth: '55%'
-            }
+            bar: { borderRadius: hasFreqAdhoc ? 4 : 8, dataLabels: { position: 'top' }, columnWidth: '55%' }
           },
           dataLabels: {
-            enabled: true,
-            formatter: function (val) {
-              return Math.round(val) + 'h';
-            },
+            enabled: !hasFreqAdhoc,
+            formatter: val => Math.round(val) + 'h',
             offsetY: -20,
-            style: {
-              fontSize: '12px',
-              colors: ["#6B7280"]
-            }
+            style: { fontSize: '12px', colors: ["#6B7280"] }
           },
           xaxis: {
             categories: frequencies,
-            position: 'bottom',
-            labels: {
-              style: {
-                colors: '#6B7280',
-                fontSize: '12px'
-              }
-            }
+            labels: { style: { colors: '#6B7280', fontSize: '12px' } }
           },
           yaxis: {
-            title: {
-              text: 'Hours per Month',
-              style: {
-                color: '#6B7280',
-                fontSize: '14px',
-                fontWeight: 500
-              }
-            },
-            labels: {
-              style: {
-                colors: '#6B7280',
-                fontSize: '12px'
-              },
-              formatter: function (val) {
-                return Math.round(val) + 'h';
-              }
-            }
+            title: { text: 'Hours per Month', style: { color: '#6B7280', fontSize: '14px', fontWeight: 500 } },
+            labels: { style: { colors: '#6B7280', fontSize: '12px' }, formatter: val => Math.round(val) + 'h' }
           },
-          colors: ['#10B981'],
-          grid: {
-            borderColor: '#E5E7EB',
-            strokeDashArray: 4
-          }
+          colors: hasFreqAdhoc ? ['#10B981', '#0891B2'] : ['#10B981'],
+          legend: { show: hasFreqAdhoc, position: 'top', fontFamily: 'Outfit, sans-serif', fontSize: '13px' },
+          tooltip: { y: { formatter: val => Math.round(val) + 'h' } },
+          grid: { borderColor: '#E5E7EB', strokeDashArray: 4 }
         };
-        
+
         window.fteFrequencyChartInstance = new ApexCharts(chartElement, chartOptions);
         window.fteFrequencyChartInstance.render();
       }
@@ -5859,7 +6460,7 @@
         
         chartElement.innerHTML = '';
         
-        const activeReports = filteredReports.filter(r => r.activeStatus === 'Active');
+        const activeReports = getFTEDataset();
         const regionStats = {};
         
         activeReports.forEach(report => {
@@ -5994,7 +6595,7 @@
         
         chartElement.innerHTML = '';
         
-        const activeReports = filteredReports.filter(r => r.activeStatus === 'Active');
+        const activeReports = getFTEDataset();
         const typeStats = {};
         
         activeReports.forEach(report => {
@@ -6010,10 +6611,15 @@
           chartElement.innerHTML = '<div class="flex items-center justify-center py-20"><div class="text-center"><svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><p class="mt-4 !text-base text-gray-500 dark:text-gray-400">No data available</p></div></div>';
           return;
         }
+
+        // Assign colors: cyan for Ad Hoc (distinct from green KPI), brand palette for everything else
+        const BASE_DONUT_COLORS = ["#3641f5", "#7592ff", "#F59E0B", "#8B5CF6", "#EC4899", "#6B7280"];
+        let bci = 0;
+        const chartColors = types.map(t => t === 'Ad Hoc' ? '#0891B2' : BASE_DONUT_COLORS[bci++ % BASE_DONUT_COLORS.length]);
         
         const chartOptions = {
           series: hours,
-          colors: ["#3641f5", "#7592ff", "#10B981", "#F59E0B"],
+          colors: chartColors,
           labels: types,
           chart: {
             fontFamily: "Outfit, sans-serif",
@@ -6553,6 +7159,304 @@
         reportFrequencyChartInstance.render();
       }
       
+      // ─── Management Summary ────────────────────────────────────────────────────
+      let mgmtReportsChartInstance = null;
+      let mgmtHoursChartInstance = null;
+
+      const MGMT_CATEGORIES = [
+        { key: 'Retain',                          label: 'Kept',                                       hoursLabel: 'Hours Kept',                                   fteLabel: 'Kept',                                   color: '#1D7D74' },
+        { key: 'Retire',                          label: 'Killed',                                     hoursLabel: 'Hours Killed',                                 fteLabel: 'Killed',                                 color: '#DC2626' },
+        { key: 'Pending Tech Release',            label: 'Pending Tech Release (Q3–Q4)',               hoursLabel: 'Hours Pending Tech Release (Q3–Q4)',            fteLabel: 'Pending Tech Release (Q3–Q4)',            color: '#D97706' },
+        { key: 'Dependent on One Wealth Go-Live', label: 'Dependent on One Wealth Go-Live',            hoursLabel: 'Hours Dependent on One Wealth Go-Live',         fteLabel: 'Dependent on One Wealth Go-Live',         color: '#6366F1' }
+      ];
+
+      const REGIONS_MGMT = ['Americas', 'EMEA', 'APAC'];
+
+      function mgmtReportsByRegion(subset) {
+        const counts = { Americas: 0, EMEA: 0, APAC: 0 };
+        subset.forEach(r => {
+          const regions = Array.isArray(r.reportRegion) ? r.reportRegion : (r.reportRegion ? [r.reportRegion] : []);
+          REGIONS_MGMT.forEach(reg => { if (regions.includes(reg)) counts[reg]++; });
+        });
+        return counts;
+      }
+
+      function mgmtHoursByRegion(subset) {
+        const hours = { Americas: 0, EMEA: 0, APAC: 0 };
+        subset.forEach(r => {
+          const regions = Array.isArray(r.reportRegion) ? r.reportRegion : (r.reportRegion ? [r.reportRegion] : []);
+          const h = parseFloat(r.avgTimePerMonth) || 0;
+          const share = regions.length > 0 ? h / regions.length : 0;
+          REGIONS_MGMT.forEach(reg => { if (regions.includes(reg)) hours[reg] += share; });
+        });
+        return hours;
+      }
+
+      function mgmtFteByRegion(hoursMap) {
+        const fte = {};
+        Object.entries(hoursMap).forEach(([k, v]) => { fte[k] = v / 160; });
+        return fte;
+      }
+
+      function buildMgmtAdhocRow(label, totalVal, regionMap, formatter) {
+        const fmt = formatter || (v => v);
+        return `
+          <tr class="hover:bg-cyan-50/60 dark:hover:bg-cyan-900/10 transition-colors border-t-2 border-cyan-200 dark:border-cyan-800">
+            <td class="px-5 py-3 text-left !text-base font-medium text-cyan-700 dark:text-cyan-400 whitespace-nowrap">
+              <span class="inline-flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 flex-shrink-0"></span>
+                ${label}
+              </span>
+            </td>
+            <td class="px-5 py-3 text-center !text-base font-semibold text-cyan-700 dark:text-cyan-400">${fmt(totalVal)}</td>
+            ${REGIONS_MGMT.map(r => `<td class="px-5 py-3 text-center !text-base text-cyan-600 dark:text-cyan-400">${fmt(regionMap[r] || 0)}</td>`).join('')}
+          </tr>`;
+      }
+
+      function buildMgmtTableRow(label, totalVal, regionMap, formatter, isTotal) {
+        const baseClass = isTotal
+          ? 'font-bold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800/50'
+          : '!text-base text-gray-700 dark:text-gray-300';
+        const fmt = formatter || (v => v);
+        return `
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+            <td class="px-5 py-3 text-left ${baseClass} whitespace-nowrap">${label}</td>
+            <td class="px-5 py-3 text-center ${baseClass} font-semibold">${fmt(totalVal)}</td>
+            ${REGIONS_MGMT.map(r => `<td class="px-5 py-3 text-center ${baseClass}">${fmt(regionMap[r] || 0)}</td>`).join('')}
+          </tr>`;
+      }
+
+      function refreshManagementSummary() {
+        // Use the same unified dataset as FTE (respects type filter + adhoc toggle + status filter)
+        const data = getFTEDataset();
+        if (!data) return;
+
+        const total = data.length;
+        const allRegCounts = mgmtReportsByRegion(data);
+        const allRegHours = mgmtHoursByRegion(data);
+        const totalHours = data.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
+
+        // ── Metric cards ──
+        const kept   = data.filter(r => r.rationalizationCategory === 'Retain').length;
+        const killed = data.filter(r => r.rationalizationCategory === 'Retire').length;
+        document.getElementById('mgmt-total').textContent  = total;
+        document.getElementById('mgmt-kept').textContent   = kept;
+        document.getElementById('mgmt-killed').textContent = killed;
+        document.getElementById('mgmt-hours').textContent  = Math.round(totalHours);
+        document.getElementById('mgmt-kept-pct').textContent  = total > 0 ? Math.round(kept / total * 100) + '%' : '0%';
+        document.getElementById('mgmt-killed-pct').textContent = total > 0 ? Math.round(killed / total * 100) + '%' : '0%';
+
+        // ── Build per-category subsets ──
+        const catSubsets = MGMT_CATEGORIES.map(c => ({
+          ...c,
+          reports: data.filter(r => {
+            const v = r.rationalizationCategory || '';
+            if (c.key === 'Retain')  return v === 'Retain';
+            if (c.key === 'Retire')  return v === 'Retire';
+            return v === c.key;
+          })
+        }));
+
+        // Split out adhoc items for separate rows/slices
+        const adhocItems = data.filter(r => r._isAdhoc);
+        const regularItems = data.filter(r => !r._isAdhoc);
+        const adhocHoursTotal = adhocItems.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
+        const adhocRegCounts = mgmtReportsByRegion(adhocItems);
+        const adhocRegHours = mgmtHoursByRegion(adhocItems);
+
+        // ── Reports table ──
+        const rTbody = document.getElementById('mgmt-reports-tbody');
+        if (rTbody) {
+          let html = buildMgmtTableRow('Total # Reports Produced by LPTM', total, allRegCounts, v => v, true);
+          catSubsets.forEach(c => {
+            const regCounts = mgmtReportsByRegion(c.reports);
+            html += buildMgmtTableRow(c.label, c.reports.length, regCounts, v => v, false);
+          });
+          if (adhocItems.length > 0) {
+            html += buildMgmtAdhocRow('Ad Hoc Tasks', adhocItems.length, adhocRegCounts, v => v);
+          }
+          rTbody.innerHTML = html;
+        }
+
+        // ── Hours table ──
+        const hTbody = document.getElementById('mgmt-hours-tbody');
+        if (hTbody) {
+          let html = buildMgmtTableRow('Initial Time Spent per month', Math.round(totalHours), allRegHours, v => Math.round(v), true);
+          catSubsets.forEach(c => {
+            const regH = mgmtHoursByRegion(c.reports);
+            const subH = c.reports.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
+            html += buildMgmtTableRow(c.hoursLabel, Math.round(subH), regH, v => Math.round(v), false);
+          });
+          if (adhocItems.length > 0) {
+            html += buildMgmtAdhocRow('Ad Hoc Hours', Math.round(adhocHoursTotal), adhocRegHours, v => Math.round(v));
+          }
+          hTbody.innerHTML = html;
+        }
+
+        // ── FTE table ──
+        const fTbody = document.getElementById('mgmt-fte-tbody');
+        if (fTbody) {
+          const totalFTE = totalHours / 160;
+          const allRegFte = mgmtFteByRegion(allRegHours);
+          let html = buildMgmtTableRow('FTE equivalent per month', Math.round(totalFTE * 10) / 10 || 0, allRegFte, v => Math.round(v * 10) / 10 || 0, true);
+          catSubsets.forEach(c => {
+            const regH = mgmtHoursByRegion(c.reports);
+            const subH = c.reports.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
+            const subFTE = subH / 160;
+            const regFte = mgmtFteByRegion(regH);
+            html += buildMgmtTableRow(c.fteLabel, Math.round(subFTE * 10) / 10 || 0, regFte, v => Math.round(v * 10) / 10 || 0, false);
+          });
+          if (adhocItems.length > 0) {
+            const adhocFTE = adhocHoursTotal / 160;
+            const adhocRegFte = mgmtFteByRegion(adhocRegHours);
+            html += buildMgmtAdhocRow('Ad Hoc FTE', Math.round(adhocFTE * 10) / 10 || 0, adhocRegFte, v => Math.round(v * 10) / 10 || 0);
+          }
+          fTbody.innerHTML = html;
+        }
+
+        // ── Shared chart config factory (matches FTE by Report Type style, right legend) ──
+        const isDark = document.documentElement.classList.contains('dark');
+        // Same color palette as FTE Analysis donut charts
+        const FTE_COLORS = ["#3641f5", "#10B981", "#F59E0B", "#7592ff"];
+        const catColors = FTE_COLORS;
+        const catLabels = catSubsets.map(c => c.label);
+
+        function buildMgmtDonutOptions(series, labels, colors, totalLabel, totalFormatter, tooltipFormatter) {
+          return {
+            series,
+            colors,
+            labels,
+            chart: {
+              fontFamily: "Outfit, sans-serif",
+              type: "donut",
+              width: "100%",
+              height: 320,
+              parentHeightOffset: 0,
+              background: 'transparent'
+            },
+            plotOptions: {
+              pie: {
+                donut: {
+                  size: "65%",
+                  background: "transparent",
+                  labels: {
+                    show: true,
+                    name: {
+                      show: true,
+                      fontSize: "14px",
+                      fontFamily: "Outfit, sans-serif",
+                      fontWeight: 400,
+                      color: "#6B7280",
+                      offsetY: -10
+                    },
+                    value: {
+                      show: true,
+                      fontSize: "28px",
+                      fontFamily: "Outfit, sans-serif",
+                      fontWeight: 600,
+                      color: isDark ? "#F9FAFB" : "#1F2937",
+                      offsetY: 10,
+                      formatter: val => totalFormatter(val)
+                    },
+                    total: {
+                      show: true,
+                      showAlways: true,
+                      label: totalLabel,
+                      fontSize: "14px",
+                      fontFamily: "Outfit, sans-serif",
+                      fontWeight: 400,
+                      color: "#6B7280",
+                      formatter: w => totalFormatter(w.globals.seriesTotals.reduce((a, b) => a + b, 0))
+                    }
+                  }
+                }
+              }
+            },
+            dataLabels: { enabled: false },
+            tooltip: { enabled: true, y: { formatter: tooltipFormatter } },
+            stroke: { show: false, width: 4, colors: "transparent" },
+            legend: {
+              show: true,
+              position: "bottom",
+              horizontalAlign: "center",
+              fontFamily: "Outfit, sans-serif",
+              fontSize: "14px",
+              fontWeight: 400,
+              labels: {
+                colors: isDark ? '#D1D5DB' : '#6B7280',
+                useSeriesColors: false
+              },
+              markers: {
+                size: 6,
+                shape: "circle",
+                radius: 999,
+                strokeWidth: 0
+              },
+              itemMargin: { horizontal: 8, vertical: 4 }
+            },
+            responsive: [
+              {
+                breakpoint: 640,
+                options: {
+                  chart: { width: 340, height: 300 }
+                }
+              }
+            ]
+          };
+        }
+
+        // Build chart labels/colors/series — append Ad Hoc slice when present
+        const chartCatLabels  = [...catLabels];
+        const chartCatColors  = [...catColors];
+        const chartReportSeries = catSubsets.map(c => c.reports.length);
+        const chartHoursSeries  = catSubsets.map(c => Math.round(c.reports.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0)));
+        if (adhocItems.length > 0) {
+          chartCatLabels.push('Ad Hoc');
+          chartCatColors.push('#0891B2');
+          chartReportSeries.push(adhocItems.length);
+          chartHoursSeries.push(Math.round(adhocHoursTotal));
+        }
+
+        // ── Pie chart – Reports ──
+        if (mgmtReportsChartInstance) { mgmtReportsChartInstance.destroy(); mgmtReportsChartInstance = null; }
+        const rChartEl = document.getElementById('mgmtReportsDonutChart');
+        if (rChartEl) {
+          rChartEl.innerHTML = '';
+          if (chartReportSeries.some(v => v > 0)) {
+            mgmtReportsChartInstance = new ApexCharts(rChartEl, buildMgmtDonutOptions(
+              chartReportSeries, chartCatLabels, chartCatColors,
+              "Total",
+              val => Math.round(val),
+              (v) => `${v} reports (${total > 0 ? Math.round(v / total * 100) : 0}%)`
+            ));
+            mgmtReportsChartInstance.render();
+          } else {
+            rChartEl.innerHTML = '<div class="flex items-center justify-center py-16 text-gray-400 dark:text-gray-500 !text-base">No data available</div>';
+          }
+        }
+
+        // ── Pie chart – Hours ──
+        if (mgmtHoursChartInstance) { mgmtHoursChartInstance.destroy(); mgmtHoursChartInstance = null; }
+        const hChartEl = document.getElementById('mgmtHoursDonutChart');
+        if (hChartEl) {
+          hChartEl.innerHTML = '';
+          if (chartHoursSeries.some(v => v > 0)) {
+            mgmtHoursChartInstance = new ApexCharts(hChartEl, buildMgmtDonutOptions(
+              chartHoursSeries, chartCatLabels, chartCatColors,
+              "Total hrs",
+              val => Math.round(val) + 'h',
+              (v) => `${v}h (${totalHours > 0 ? Math.round(v / totalHours * 100) : 0}%)`
+            ));
+            mgmtHoursChartInstance.render();
+          } else {
+            hChartEl.innerHTML = '<div class="flex items-center justify-center py-16 text-gray-400 dark:text-gray-500 !text-base">No data available</div>';
+          }
+        }
+      }
+
+      window.refreshManagementSummary = refreshManagementSummary;
+      // ─────────────────────────────────────────────────────────────────────────
+
       // Modal close event listeners for reportModal
       document.addEventListener('DOMContentLoaded', function() {
         // Set up close button listeners
