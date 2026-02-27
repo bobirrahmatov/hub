@@ -2766,6 +2766,19 @@
       let currentReportTypeFilter = 'All';
       let currentRegionFilter = ['All']; // Now supports multiple regions - starts with All selected
 
+      // Normalize a person's name to "First Last" format:
+      //   - Strips [BusinessUnit] suffixes, e.g. [WLTH], [Tech]
+      //   - Converts "Last, First" → "First Last"
+      function normalizeMakerName(name) {
+        if (!name) return name;
+        let n = String(name).replace(/\s*\[.*?\]\s*/g, '').trim();
+        const commaMatch = n.match(/^([^,]+),\s*(.+)$/);
+        if (commaMatch) {
+          n = commaMatch[2].trim() + ' ' + commaMatch[1].trim();
+        }
+        return n.trim();
+      }
+
       // Ad Hoc tasks (loaded from adhoc_tasks.json, used only in FTE & Management tabs)
       let adhocTasks = [];
       let includeAdhocInFTE = false;
@@ -2791,7 +2804,7 @@
         return adhocTasks
           .filter(t => adhocStatusFilter.includes('All') || adhocStatusFilter.includes(t.status))
           .map(t => {
-            const makers = Array.isArray(t.maker) ? t.maker : (t.maker ? [t.maker] : ['Unknown']);
+            const makers = (Array.isArray(t.maker) ? t.maker : (t.maker ? [t.maker] : ['Unknown'])).map(normalizeMakerName);
             const hoursEach = (parseFloat(t.timeSpent) || 0) / Math.max(makers.length, 1);
             return makers.map(m => ({
               id: t.id + '_' + m,
@@ -4816,7 +4829,7 @@
                   reportComplexity: row['Report Complexity'] || '',
                   reportRegion: parseRegions(row['Report Region']),
                   frequency: parsedFrequency, // Parse as array like regions
-                  preparedBy: row['Prepared By'] || '',
+                  preparedBy: normalizeMakerName(row['Prepared By'] || ''),
                   prepareRegion: parseRegions(row['Prepare Region']),
                   activeStatus: row['Active Status'] || 'Active',
                   timeAvgPerRun: parsedTimePerRun,
@@ -5503,6 +5516,9 @@
             reports = data.map(report => {
               if (!report.avgTimePerMonth && report.timeAvgPerRun && report.frequency) {
                 report.avgTimePerMonth = calculateAvgTimePerMonth(report.timeAvgPerRun, report.frequency);
+              }
+              if (report.preparedBy) {
+                report.preparedBy = normalizeMakerName(report.preparedBy);
               }
               return report;
             });
@@ -7194,15 +7210,10 @@
       function buildMgmtAdhocRow(label, totalVal, regionMap, formatter) {
         const fmt = formatter || (v => v);
         return `
-          <tr class="hover:bg-cyan-50/60 dark:hover:bg-cyan-900/10 transition-colors border-t-2 border-cyan-200 dark:border-cyan-800">
-            <td class="px-5 py-3 text-left !text-base font-medium text-cyan-700 dark:text-cyan-400 whitespace-nowrap">
-              <span class="inline-flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 flex-shrink-0"></span>
-                ${label}
-              </span>
-            </td>
-            <td class="px-5 py-3 text-center !text-base font-semibold text-cyan-700 dark:text-cyan-400">${fmt(totalVal)}</td>
-            ${REGIONS_MGMT.map(r => `<td class="px-5 py-3 text-center !text-base text-cyan-600 dark:text-cyan-400">${fmt(regionMap[r] || 0)}</td>`).join('')}
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+            <td class="px-5 py-3 text-left !text-base text-gray-700 dark:text-gray-300 whitespace-nowrap">${label}</td>
+            <td class="px-5 py-3 text-center !text-base text-gray-700 dark:text-gray-300 font-semibold">${fmt(totalVal)}</td>
+            ${REGIONS_MGMT.map(r => `<td class="px-5 py-3 text-center !text-base text-gray-700 dark:text-gray-300">${fmt(regionMap[r] || 0)}</td>`).join('')}
           </tr>`;
       }
 
@@ -7268,7 +7279,7 @@
         // ── Reports table ──
         const rTbody = document.getElementById('mgmt-reports-tbody');
         if (rTbody) {
-          let html = buildMgmtTableRow('Total # Reports Produced by LPTM', total, allRegCounts, v => v, true);
+          let html = '';
           catSubsets.forEach(c => {
             const regCounts = mgmtReportsByRegion(c.reports);
             html += buildMgmtTableRow(c.label, c.reports.length, regCounts, v => v, false);
@@ -7276,13 +7287,14 @@
           if (adhocItems.length > 0) {
             html += buildMgmtAdhocRow('Ad Hoc Tasks', adhocItems.length, adhocRegCounts, v => v);
           }
+          html += buildMgmtTableRow('Total # Reports Produced by LPTM', total, allRegCounts, v => v, true);
           rTbody.innerHTML = html;
         }
 
         // ── Hours table ──
         const hTbody = document.getElementById('mgmt-hours-tbody');
         if (hTbody) {
-          let html = buildMgmtTableRow('Initial Time Spent per month', Math.round(totalHours), allRegHours, v => Math.round(v), true);
+          let html = '';
           catSubsets.forEach(c => {
             const regH = mgmtHoursByRegion(c.reports);
             const subH = c.reports.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
@@ -7291,6 +7303,7 @@
           if (adhocItems.length > 0) {
             html += buildMgmtAdhocRow('Ad Hoc (hrs)', Math.round(adhocHoursTotal), adhocRegHours, v => Math.round(v));
           }
+          html += buildMgmtTableRow('Initial Time Spent per month', Math.round(totalHours), allRegHours, v => Math.round(v), true);
           hTbody.innerHTML = html;
         }
 
@@ -7299,7 +7312,7 @@
         if (fTbody) {
           const totalFTE = totalHours / 160;
           const allRegFte = mgmtFteByRegion(allRegHours);
-          let html = buildMgmtTableRow('FTE equivalent per month', Math.round(totalFTE * 10) / 10 || 0, allRegFte, v => Math.round(v * 10) / 10 || 0, true);
+          let html = '';
           catSubsets.forEach(c => {
             const regH   = mgmtHoursByRegion(c.reports);
             const subH   = c.reports.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
@@ -7312,6 +7325,7 @@
             const adhocRegFte = mgmtFteByRegion(adhocRegHours);
             html += buildMgmtAdhocRow('Ad Hoc (FTE)', Math.round(adhocFTE * 10) / 10 || 0, adhocRegFte, v => Math.round(v * 10) / 10 || 0);
           }
+          html += buildMgmtTableRow('FTE equivalent per month', Math.round(totalFTE * 10) / 10 || 0, allRegFte, v => Math.round(v * 10) / 10 || 0, true);
           fTbody.innerHTML = html;
         }
 
