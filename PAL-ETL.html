@@ -2363,7 +2363,7 @@
                 <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 bg-brand-50">
                         <h3 class="text-base font-semibold text-gray-900">Column Mapping Reference (Portfolio_current.xlsb -
-                            34 columns)</h3>
+                            36 columns)</h3>
                     </div>
                     <div class="p-4 overflow-x-auto">
                         <table class="min-w-full text-[10px]">
@@ -2597,6 +2597,18 @@
                                             class="text-green-500">(YES/Y→Yes, NO/N→No)</span></td>
                                     <td class="px-2 py-1 font-mono text-gray-400">-</td>
                                     <td class="px-2 py-1 font-mono text-gray-400">-</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 bg-purple-50/30">
+                                    <td class="px-2 py-1 font-mono font-medium">Loan_Spread</td>
+                                    <td class="px-2 py-1 font-mono text-blue-700">Fac Int Spread Percent</td>
+                                    <td class="px-2 py-1 font-mono text-brand-600">Loan Spread</td>
+                                    <td class="px-2 py-1 font-mono text-gray-600">Spread</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 bg-indigo-50/30">
+                                    <td class="px-2 py-1 font-mono font-medium">Pricing_Exception</td>
+                                    <td class="px-2 py-1 font-mono text-blue-700">Pricing Exception</td>
+                                    <td class="px-2 py-1 font-mono text-brand-600">Pricing Exception</td>
+                                    <td class="px-2 py-1 font-mono text-gray-600">Pricing Exception Y/N (Pre)</td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 bg-blue-50/30">
                                     <td class="px-2 py-1 font-mono font-medium">OSUC</td>
@@ -4258,7 +4270,7 @@
                             <h2 class="text-base font-medium text-gray-800 flex items-center gap-2 mb-4">
                                 <span
                                     class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-500 !text-base font-bold">05</span>
-                                Column Mapping (Portfolio_current.xlsb - 34 Columns)
+                                Column Mapping (Portfolio_current.xlsb - 36 Columns)
                             </h2>
                             <div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
                                 <div class="max-h-96 overflow-y-auto">
@@ -8046,6 +8058,8 @@
                         Origination_Date: this.formatDateSafe(row['Origination Date']),
                         Renewal_Date: this.formatDateSafe(row['Renewal Date']),
                         CA_Review: caReview,
+                        Loan_Spread: row['Fac Int Spread Percent'] || '',
+                        Pricing_Exception: row['Pricing Exception'] || '',
                         OSUC: 0,
                         Total_OS: 0,
                         Total_Unused_Commitment: 0,
@@ -8100,6 +8114,8 @@
                         Origination_Date: this.formatDateSafe(row['Original Origination Date']),
                         Renewal_Date: this.formatDateSafe(row['Renewal Date']),
                         CA_Review: '',
+                        Loan_Spread: row['Loan Spread'] || '',
+                        Pricing_Exception: row['Pricing Exception'] || '',
                         OSUC: 0,
                         Total_OS: 0,
                         Total_Unused_Commitment: 0,
@@ -8196,6 +8212,8 @@
                         ),
                         Renewal_Date: this.formatDateSafe(row['Renewal Date']),
                         CA_Review: '',
+                        Loan_Spread: row['Spread'] || '',
+                        Pricing_Exception: row['Pricing Exception Y/N (Pre)'] || '',
                         OSUC: this.parseNumeric(
                             row['Total Comm Exposure (Fac Lvl)'] || 
                             row['Total Comm Exposure'] || 
