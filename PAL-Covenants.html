@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio Analytics Lending — Covenants</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        success: { 50: '#f0fdf4', 500: '#10b981', 600: '#059669', 700: '#047857' },
+                        danger: '#dc2626', warning: '#f59e0b'
+                    },
+                    boxShadow: { 'theme-lg': '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)' }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #888; border-radius: 3px; }
+        .apexcharts-tooltip {
+            background: #ffffff !important; border: 1px solid #e5e7eb !important;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1) !important; color: #1f2937 !important;
+            border-radius: 8px !important; z-index: 99999 !important; pointer-events: none !important; padding: 0 !important;
+        }
+        .apexcharts-tooltip .apexcharts-tooltip-title {
+            background: #f9fafb !important; border-bottom: 1px solid #e5e7eb !important;
+            color: #1f2937 !important; padding: 8px 12px !important; font-weight: 600 !important; margin: 0 !important;
+        }
+        .apexcharts-tooltip-series-group { background: transparent !important; padding: 8px 12px !important; }
+        .apexcharts-legend-marker { border-radius: 3px !important; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+        .loading-spinner { animation: spin 1s linear infinite; }
+        .loading-text { animation: pulse 1.5s ease-in-out infinite; }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[10000] flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl p-8 shadow-2xl flex flex-col items-center gap-6 min-w-[320px]">
+            <svg class="loading-spinner w-16 h-16 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <div class="text-center">
+                <p id="loadingMessage" class="text-gray-900 !text-lg font-semibold loading-text">Please wait...</p>
+                <p class="text-gray-500 !text-base mt-1">Loading covenant data</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-4 md:p-6">
+        <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800">
+            <div class="px-5 py-4 sm:px-6 sm:py-5" x-data="{ activeTab: 'overview' }"
+                x-init="
+                // Re-render overview once Alpine is done mounting AND data is ready
+                $nextTick(() => {
+                    let attempts = 0;
+                    const waitForData = setInterval(() => {
+                        attempts++;
+                        if (window.dataReady) {
+                            clearInterval(waitForData);
+                            setTimeout(() => { renderOverviewCharts(); renderDetailTables(); }, 80);
+                        } else if (attempts > 30) { clearInterval(waitForData); }
+                    }, 100);
+                });
+                $watch('activeTab', value => {
+                    if (value === 'trends')     { setTimeout(() => renderTrendCharts(), 80); }
+                    if (value === 'overview')   { setTimeout(() => renderOverviewCharts(), 80); }
+                    if (value === 'population') { setTimeout(() => renderPopulationTab(), 80); }
+                });
+            ">
+
+                <!-- ── Tab Navigation ── -->
+                <div class="border-b border-gray-200 dark:border-gray-800">
+                    <nav class="-mb-px flex space-x-2 overflow-x-auto" aria-label="Tabs">
+
+                        <button @click="activeTab = 'overview'"
+                            :class="activeTab === 'overview' ? 'text-blue-500 border-blue-500' : 'text-gray-500 border-transparent hover:text-gray-700'"
+                            class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out">
+                            <svg class="size-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M4.83203 2.5835C3.58939 2.5835 2.58203 3.59085 2.58203 4.83349V7.25015C2.58203 8.49279 3.58939 9.50015 4.83203 9.50015H7.2487C8.49134 9.50015 9.4987 8.49279 9.4987 7.25015V4.8335C9.4987 3.59086 8.49134 2.5835 7.2487 2.5835H4.83203ZM4.08203 4.83349C4.08203 4.41928 4.41782 4.0835 4.83203 4.0835H7.2487C7.66291 4.0835 7.9987 4.41928 7.9987 4.8335V7.25015C7.9987 7.66436 7.66291 8.00015 7.2487 8.00015H4.83203C4.41782 8.00015 4.08203 7.66436 4.08203 7.25015V4.83349ZM4.83203 10.5002C3.58939 10.5002 2.58203 11.5075 2.58203 12.7502V15.1668C2.58203 16.4095 3.58939 17.4168 4.83203 17.4168H7.2487C8.49134 17.4168 9.4987 16.4095 9.4987 15.1668V12.7502C9.4987 11.5075 8.49134 10.5002 7.2487 10.5002H4.83203ZM4.08203 12.7502C4.08203 12.336 4.41782 12.0002 4.83203 12.0002H7.2487C7.66291 12.0002 7.9987 12.336 7.9987 12.7502V15.1668C7.9987 15.5811 7.66291 15.9168 7.2487 15.9168H4.83203C4.41782 15.9168 4.08203 15.5811 4.08203 15.1668V12.7502ZM10.4987 4.83349C10.4987 3.59085 11.5061 2.5835 12.7487 2.5835H15.1654C16.408 2.5835 17.4154 3.59086 17.4154 4.8335V7.25015C17.4154 8.49279 16.408 9.50015 15.1654 9.50015H12.7487C11.5061 9.50015 10.4987 8.49279 10.4987 7.25015V4.83349ZM12.7487 4.0835C12.3345 4.0835 11.9987 4.41928 11.9987 4.83349V7.25015C11.9987 7.66436 12.3345 8.00015 12.7487 8.00015H15.1654C15.5796 8.00015 15.9154 7.66436 15.9154 7.25015V4.8335C15.9154 4.41928 15.5796 4.0835 15.1654 4.0835H12.7487ZM12.7487 10.5002C11.5061 10.5002 10.4987 11.5075 10.4987 12.7502V15.1668C10.4987 16.4095 11.5061 17.4168 12.7487 17.4168H15.1654C16.408 17.4168 17.4154 16.4095 17.4154 15.1668V12.7502C17.4154 11.5075 16.408 10.5002 15.1654 10.5002H12.7487ZM11.9987 12.7502C11.9987 12.336 12.3345 12.0002 12.7487 12.0002H15.1654C15.5796 12.0002 15.9154 12.336 15.9154 12.7502V15.1668C15.9154 15.5811 15.5796 15.9168 15.1654 15.9168H12.7487C12.3345 15.9168 11.9987 15.5811 11.9987 15.1668V12.7502Z"/>
+                            </svg>
+                            Covenant Overview
+                        </button>
+
+                        <button @click="activeTab = 'trends'"
+                            :class="activeTab === 'trends' ? 'text-blue-500 border-blue-500' : 'text-gray-500 border-transparent hover:text-gray-700'"
+                            class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out">
+                            <svg class="size-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M9.85954 4.0835C9.5834 4.0835 9.35954 4.30735 9.35954 4.5835V15.4161C9.35954 15.6922 9.5834 15.9161 9.85954 15.9161H10.1373C10.4135 15.9161 10.6373 15.6922 10.6373 15.4161V4.5835C10.6373 4.30735 10.4135 4.0835 10.1373 4.0835H9.85954ZM7.85954 4.5835C7.85954 3.47893 8.75497 2.5835 9.85954 2.5835H10.1373C11.2419 2.5835 12.1373 3.47893 12.1373 4.5835V15.4161C12.1373 16.5206 11.2419 17.4161 10.1373 17.4161H9.85954C8.75497 17.4161 7.85954 16.5206 7.85954 15.4161V4.5835ZM4.58203 8.9598C4.30589 8.9598 4.08203 9.18366 4.08203 9.4598V15.4168C4.08203 15.693 4.30589 15.9168 4.58203 15.9168H4.85981C5.13595 15.9168 5.35981 15.693 5.35981 15.4168V9.4598C5.35981 9.18366 5.13595 8.9598 4.85981 8.9598H4.58203ZM2.58203 9.4598C2.58203 8.35523 3.47746 7.4598 4.58203 7.4598H4.85981C5.96438 7.4598 6.85981 8.35523 6.85981 9.4598V15.4168C6.85981 16.5214 5.96438 17.4168 4.85981 17.4168H4.58203C3.47746 17.4168 2.58203 16.5214 2.58203 15.4168V9.4598ZM14.637 12.435C14.637 12.1589 14.8609 11.935 15.137 11.935H15.4148C15.691 11.935 15.9148 12.1589 15.9148 12.435V15.4168C15.9148 15.693 15.691 15.9168 15.4148 15.9168H15.137C14.8609 15.9168 14.637 15.693 14.637 15.4168V12.435ZM15.137 10.435C14.0325 10.435 13.137 11.3304 13.137 12.435V15.4168C13.137 16.5214 14.0325 17.4168 15.137 17.4168H15.4148C16.5194 17.4168 17.4148 16.5214 17.4148 15.4168V12.435C17.4148 11.3304 16.5194 10.435 15.4148 10.435H15.137Z"/>
+                            </svg>
+                            Covenant Trends
+                        </button>
+
+                        <button @click="activeTab = 'population'"
+                            :class="activeTab === 'population' ? 'text-blue-500 border-blue-500' : 'text-gray-500 border-transparent hover:text-gray-700'"
+                            class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 !text-base font-medium transition-colors duration-200 ease-in-out">
+                            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                            Population
+                        </button>
+
+                    </nav>
+                </div>
+
+                <!-- ── Tab Content ── -->
+                <div class="pt-4">
+
+                    <!-- ════════════════════════════════════════════ -->
+                    <!--  OVERVIEW TAB                               -->
+                    <!-- ════════════════════════════════════════════ -->
+                    <div x-show="activeTab === 'overview'">
+
+                        <!-- ROW 1: 2 KPI Cards only (Relationships + Facilities) -->
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 mb-6">
+
+                            <div class="rounded-2xl border border-gray-200 bg-white p-5 flex flex-col relative">
+                                <div class="flex items-start gap-3 pr-6 flex-1">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100">
+                                        <svg class="h-5 w-5 shrink-0 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="!text-base font-medium text-gray-500">Relationships with Covenants</h3>
+                                        <p class="!text-sm text-gray-400">(Unique relationship count)</p>
+                                    </div>
+                                </div>
+                                <p class="!text-2xl font-bold text-gray-900 text-center mt-3" id="kpiActiveRelationships">0</p>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white p-5 flex flex-col relative">
+                                <div class="flex items-start gap-3 pr-6 flex-1">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-100">
+                                        <svg class="h-5 w-5 shrink-0 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="!text-base font-medium text-gray-500">Facilities with Covenants</h3>
+                                        <p class="!text-sm text-gray-400">(Unique facility count)</p>
+                                    </div>
+                                </div>
+                                <p class="!text-2xl font-bold text-gray-900 text-center mt-3" id="kpiActiveFacilities">0</p>
+                            </div>
+
+                        </div>
+
+                        <!-- ROW 2: Active by Region + Past Due by Region -->
+                        <div class="grid grid-cols-12 gap-4 md:gap-6 mb-6">
+
+                            <div class="col-span-12 xl:col-span-6">
+                                <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 h-full flex flex-col relative" style="overflow:visible">
+                                    <div class="mb-6 flex justify-between items-start">
+                                        <div class="pr-8">
+                                            <h3 class="!text-lg font-semibold text-gray-800">Covenants by Region</h3>
+                                            <p class="mt-1 !text-base text-gray-500">Relationships &amp; Facilities per region</p>
+                                        </div>
+                                        <button onclick="downloadChartSVG('activeByRegion','Covenants-by-Region')" class="text-gray-400 hover:text-gray-700 transition-colors flex-shrink-0 mt-0.5" title="Download SVG">
+                                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="flex-1" style="overflow:visible">
+                                        <div id="activeByRegionChart" class="w-full" style="min-height:300px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-span-12 xl:col-span-6">
+                                <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 h-full flex flex-col relative" style="overflow:visible">
+                                    <div class="mb-6 flex justify-between items-start">
+                                        <div class="pr-8">
+                                            <h3 class="!text-lg font-semibold text-gray-800">Past Due Covenants by Region</h3>
+                                            <p class="mt-1 !text-base text-gray-500">Past due Relationships &amp; Facilities per region</p>
+                                        </div>
+                                        <button onclick="downloadChartSVG('pastDueByRegion','PastDue-by-Region')" class="text-gray-400 hover:text-gray-700 transition-colors flex-shrink-0 mt-0.5" title="Download SVG">
+                                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="flex-1" style="overflow:visible">
+                                        <div id="pastDueByRegionChart" class="w-full" style="min-height:300px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- ROW 3: Aging Stacked Bar (col-8) + Aging KPI Cards (col-4) -->
+                        <div class="grid grid-cols-12 gap-4 md:gap-6 mb-6">
+
+                            <div class="col-span-12 xl:col-span-8">
+                                <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 h-full flex flex-col relative" style="overflow:visible">
+                                    <div class="mb-6 flex justify-between items-start">
+                                        <div class="pr-8">
+                                            <h3 class="!text-lg font-semibold text-gray-800">Past Due Aging by Region</h3>
+                                            <p class="mt-1 !text-base text-gray-500">Breakdown across aging buckets per region</p>
+                                        </div>
+                                        <button onclick="downloadChartSVG('agingByRegion','Aging-by-Region')" class="text-gray-400 hover:text-gray-700 transition-colors flex-shrink-0 mt-0.5" title="Download SVG">
+                                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="flex-1" style="overflow:visible">
+                                        <div id="agingByRegionChart" class="w-full" style="min-height:320px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-span-12 xl:col-span-4 flex flex-col gap-4">
+                                <div class="rounded-2xl border border-gray-200 bg-white p-5 flex flex-col flex-1">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50">
+                                            <svg class="h-5 w-5 shrink-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        </div>
+                                        <h3 class="!text-base font-medium text-gray-500">1–45 Days Past Due</h3>
+                                    </div>
+                                    <p class="!text-2xl font-bold text-gray-900 text-center mt-3" id="kpiDays1_45">0</p>
+                                </div>
+                                <div class="rounded-2xl border border-gray-200 bg-white p-5 flex flex-col flex-1">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50">
+                                            <svg class="h-5 w-5 shrink-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        </div>
+                                        <h3 class="!text-base font-medium text-gray-500">46–60 Days Past Due</h3>
+                                    </div>
+                                    <p class="!text-2xl font-bold text-gray-900 text-center mt-3" id="kpiDays46_60">0</p>
+                                </div>
+                                <div class="rounded-2xl border border-gray-200 bg-white p-5 flex flex-col flex-1">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50">
+                                            <svg class="h-5 w-5 shrink-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        </div>
+                                        <h3 class="!text-base font-medium text-gray-500">61–90 Days Past Due</h3>
+                                    </div>
+                                    <p class="!text-2xl font-bold text-gray-900 text-center mt-3" id="kpiDays61_90">0</p>
+                                </div>
+                                <div class="rounded-2xl border border-gray-200 bg-white p-5 flex flex-col flex-1">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50">
+                                            <svg class="h-5 w-5 shrink-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                        </div>
+                                        <h3 class="!text-base font-medium text-gray-500">&gt;90 Days Past Due</h3>
+                                    </div>
+                                    <p class="!text-2xl font-bold text-gray-900 text-center mt-3" id="kpiDays90plus">0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ROW 4: Regional Aging Table + Relationship Detail -->
+                        <div class="grid grid-cols-12 gap-4 md:gap-6 mb-6">
+
+                            <div class="col-span-12 xl:col-span-5">
+                                <div class="rounded-2xl border border-gray-200 bg-white h-full flex flex-col overflow-hidden">
+                                    <div class="px-6 py-4 border-b border-gray-100">
+                                        <h3 class="!text-lg font-semibold text-gray-800">Regional Aging Detail</h3>
+                                        <p class="mt-1 !text-base text-gray-500">Past due covenant aging breakdown by region</p>
+                                    </div>
+                                    <div class="custom-scrollbar overflow-auto flex-1">
+                                        <table class="min-w-full">
+                                            <thead>
+                                                <tr class="bg-gray-50 border-b border-gray-200">
+                                                    <th class="px-4 py-3 text-left !text-base font-medium text-gray-500">Region</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500">1–45d</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500">46–60d</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500">61–90d</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500">&gt;90d</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500">Total PD</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500">Facs</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500">PD%</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="regionalAgingTableBody" class="divide-y divide-gray-200">
+                                                <tr><td colspan="8" class="px-4 py-6 text-center !text-base text-gray-400">Loading...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-span-12 xl:col-span-7">
+                                <div class="rounded-2xl border border-gray-200 bg-white h-full flex flex-col overflow-hidden">
+                                    <div class="px-6 py-4 border-b border-gray-100">
+                                        <h3 class="!text-lg font-semibold text-gray-800">Covenant Detail by Relationship</h3>
+                                        <p class="mt-1 !text-base text-gray-500">Relationship-level breakdown with aging buckets (past due only)</p>
+                                    </div>
+                                    <div class="custom-scrollbar overflow-auto" style="height:288px;">
+                                        <table class="min-w-full">
+                                            <thead class="sticky top-0 z-10">
+                                                <tr class="bg-gray-50 border-b border-gray-200">
+                                                    <th class="px-4 py-3 text-left !text-base font-medium text-gray-500 whitespace-nowrap">Relationship</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">Region</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">Underwriter</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">1–45d</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">46–60d</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">61–90d</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">&gt;90d</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="relationshipDetailBody" class="divide-y divide-gray-200">
+                                                <tr><td colspan="8" class="px-4 py-6 text-center !text-base text-gray-400">Loading...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="flex items-center justify-between px-6 py-3 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+                                        <p class="!text-base text-gray-500">Showing <span id="relStart">0</span>–<span id="relEnd">0</span> of <span id="relTotal">0</span></p>
+                                        <div class="flex items-center gap-2">
+                                            <button id="relPrevBtn" onclick="changeRelPage('prev')" disabled class="rounded-lg border border-gray-300 bg-white px-3 py-1.5 !text-base font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">Previous</button>
+                                            <span class="!text-base text-gray-500">Page <span id="relPage">1</span> of <span id="relPages">1</span></span>
+                                            <button id="relNextBtn" onclick="changeRelPage('next')" disabled class="rounded-lg border border-gray-300 bg-white px-3 py-1.5 !text-base font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">Next</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /overview -->
+
+
+                    <!-- ════════════════════════════════════════════ -->
+                    <!--  TRENDS TAB                                 -->
+                    <!-- ════════════════════════════════════════════ -->
+                    <div x-show="activeTab === 'trends'" x-cloak>
+
+                        <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-5">
+                            <div class="flex flex-wrap items-center gap-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="!text-base font-medium text-gray-500">Region:</span>
+                                    <div class="flex items-center gap-1 bg-gray-100 rounded-lg p-0.5" id="trendRegionBtns">
+                                        <button data-region="All"  onclick="setTrendRegion('All')"  class="px-2.5 py-1 !text-base rounded-md bg-white shadow-sm text-gray-900 font-medium transition-all duration-200">All</button>
+                                        <button data-region="NAM"  onclick="setTrendRegion('NAM')"  class="px-2.5 py-1 !text-base rounded-md text-gray-600 transition-all duration-200">NAM</button>
+                                        <button data-region="EMEA" onclick="setTrendRegion('EMEA')" class="px-2.5 py-1 !text-base rounded-md text-gray-600 transition-all duration-200">EMEA</button>
+                                        <button data-region="APAC" onclick="setTrendRegion('APAC')" class="px-2.5 py-1 !text-base rounded-md text-gray-600 transition-all duration-200">APAC</button>
+                                        <button data-region="LATAM" onclick="setTrendRegion('LATAM')" class="px-2.5 py-1 !text-base rounded-md text-gray-600 transition-all duration-200">LATAM</button>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="!text-base font-medium text-gray-500">Period:</span>
+                                    <div class="flex items-center gap-1 bg-gray-100 rounded-lg p-0.5" id="trendPeriodBtns">
+                                        <button data-period="4"  onclick="setTrendPeriod(4)"  class="px-2.5 py-1 !text-base rounded-md text-gray-600 transition-all duration-200">4W</button>
+                                        <button data-period="8"  onclick="setTrendPeriod(8)"  class="px-2.5 py-1 !text-base rounded-md text-gray-600 transition-all duration-200">8W</button>
+                                        <button data-period="12" onclick="setTrendPeriod(12)" class="px-2.5 py-1 !text-base rounded-md bg-white shadow-sm text-gray-900 font-medium transition-all duration-200">12W</button>
+                                        <button data-period="24" onclick="setTrendPeriod(24)" class="px-2.5 py-1 !text-base rounded-md text-gray-600 transition-all duration-200">24W</button>
+                                    </div>
+                                </div>
+                                <div class="ml-auto text-right">
+                                    <p class="!text-base font-semibold text-gray-600" id="trendDateRange">—</p>
+                                    <p class="!text-sm text-gray-400">Reporting period</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-12 gap-4 md:gap-6 mb-6">
+                            <div class="col-span-12">
+                                <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 relative" style="overflow:visible">
+                                    <div class="mb-6 flex justify-between items-start">
+                                        <div>
+                                            <h3 class="!text-lg font-semibold text-gray-800">Active Covenant Trends</h3>
+                                            <p class="mt-1 !text-base text-gray-500">Weekly — Relationships &amp; Facilities with active covenants</p>
+                                        </div>
+                                        <button onclick="downloadChartSVG('activeTrend','Active-Covenant-Trends')" class="text-gray-400 hover:text-gray-700 transition-colors flex-shrink-0 mt-0.5" title="Download SVG">
+                                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        </button>
+                                    </div>
+                                    <div id="activeTrendChart" style="min-height:320px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-12 gap-4 md:gap-6 mb-6">
+                            <div class="col-span-12 xl:col-span-6">
+                                <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 h-full flex flex-col relative" style="overflow:visible">
+                                    <div class="mb-6 flex justify-between items-start">
+                                        <div>
+                                            <h3 class="!text-lg font-semibold text-gray-800">Past Due Covenant Trends</h3>
+                                            <p class="mt-1 !text-base text-gray-500">Weekly trend of past due Relationships &amp; Facilities</p>
+                                        </div>
+                                        <button onclick="downloadChartSVG('pastDueTrend','PastDue-Trends')" class="text-gray-400 hover:text-gray-700 transition-colors flex-shrink-0 mt-0.5" title="Download SVG">
+                                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="flex-1"><div id="pastDueTrendChart" style="min-height:280px;"></div></div>
+                                </div>
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 h-full flex flex-col relative" style="overflow:visible">
+                                    <div class="mb-6 flex justify-between items-start">
+                                        <div>
+                                            <h3 class="!text-lg font-semibold text-gray-800">Aging Bucket Trends</h3>
+                                            <p class="mt-1 !text-base text-gray-500">Weekly — 1–45d, 46–60d, 61–90d, &gt;90d</p>
+                                        </div>
+                                        <button onclick="downloadChartSVG('agingTrend','Aging-Trends')" class="text-gray-400 hover:text-gray-700 transition-colors flex-shrink-0 mt-0.5" title="Download SVG">
+                                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="flex-1"><div id="agingTrendChart" style="min-height:280px;"></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden mb-6">
+                            <div class="px-6 py-4 border-b border-gray-100">
+                                <h3 class="!text-lg font-semibold text-gray-800">Trend Analysis by Region</h3>
+                                <p class="mt-1 !text-base text-gray-500">Metrics as rows · weeks as columns — grouped by region</p>
+                            </div>
+                            <div class="custom-scrollbar overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead id="trendAnalysisTableHead">
+                                        <tr class="bg-gray-50">
+                                            <th class="px-5 py-3 text-left !text-base font-medium text-gray-500 sticky left-0 bg-gray-50 z-10 min-w-[150px]">Metric</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="trendAnalysisTableBody" class="divide-y divide-gray-100">
+                                        <tr><td colspan="10" class="px-4 py-8 text-center !text-base text-gray-400">Loading trend analysis...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div><!-- /trends -->
+
+
+                    <!-- ════════════════════════════════════════════ -->
+                    <!--  POPULATION TAB                             -->
+                    <!-- ════════════════════════════════════════════ -->
+                    <div x-show="activeTab === 'population'" x-cloak>
+
+                        <!-- ── Section 1: Three Months Total Population ── -->
+                        <div class="grid grid-cols-12 gap-4 md:gap-6 mb-6">
+
+                            <!-- Mini charts panel — no inner colored wrapper -->
+                            <div class="col-span-12 xl:col-span-6">
+                                <div class="rounded-2xl border border-gray-200 bg-white h-full flex flex-col">
+                                    <div class="px-5 pt-5 pb-3 sm:px-6 sm:pt-6 flex-shrink-0">
+                                        <h3 class="!text-lg font-semibold text-gray-800">Three Months Total Population</h3>
+                                        <p class="mt-1 !text-base text-gray-500">Relationships &amp; Facilities with active covenants by region</p>
+                                    </div>
+                                    <div class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-5 pb-4 sm:px-6" id="populationPanel">
+                                        <p class="text-center !text-base text-gray-400 py-8">Loading...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Trend table — fills entire card -->
+                            <div class="col-span-12 xl:col-span-6">
+                                <div class="rounded-2xl border border-gray-200 bg-white h-full flex flex-col">
+                                    <div class="px-5 pt-5 pb-3 sm:px-6 sm:pt-6 flex-shrink-0 border-b border-gray-100">
+                                        <h3 class="!text-lg font-semibold text-gray-800">Three Months Trend</h3>
+                                        <p class="mt-1 !text-base text-gray-500">Month-over-month change with trend indicators</p>
+                                    </div>
+                                    <div class="flex-1 min-h-0 overflow-auto custom-scrollbar">
+                                        <table class="min-w-full">
+                                            <thead>
+                                                <tr class="bg-gray-50 border-b border-gray-200">
+                                                    <th class="px-4 py-3 text-left !text-base font-medium text-gray-500 whitespace-nowrap">Region</th>
+                                                    <th class="px-4 py-3 text-left !text-base font-medium text-gray-500 whitespace-nowrap">Metric</th>
+                                                    <th id="thMonth1" class="px-4 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">—</th>
+                                                    <th id="thMonth2" class="px-4 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">—</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-400 whitespace-nowrap">Δ</th>
+                                                    <th id="thMonth3" class="px-4 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">—</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-400 whitespace-nowrap">Δ</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="populationTrendBody" class="divide-y divide-gray-100">
+                                                <tr><td colspan="7" class="px-4 py-8 text-center !text-base text-gray-400">Loading...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- ── Section 2: Three Months Past Due ── -->
+                        <div class="grid grid-cols-12 gap-4 md:gap-6 mb-6">
+
+                            <!-- Mini charts panel — no inner colored wrapper -->
+                            <div class="col-span-12 xl:col-span-6">
+                                <div class="rounded-2xl border border-gray-200 bg-white h-full flex flex-col">
+                                    <div class="px-5 pt-5 pb-3 sm:px-6 sm:pt-6 flex-shrink-0">
+                                        <h3 class="!text-lg font-semibold text-gray-800">Three Months Past Due</h3>
+                                        <p class="mt-1 !text-base text-gray-500">Past due Relationships &amp; Facilities by region</p>
+                                    </div>
+                                    <div class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-5 pb-4 sm:px-6" id="pastDuePanel">
+                                        <p class="text-center !text-base text-gray-400 py-8">Loading...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Trend table — fills entire card -->
+                            <div class="col-span-12 xl:col-span-6">
+                                <div class="rounded-2xl border border-gray-200 bg-white h-full flex flex-col">
+                                    <div class="px-5 pt-5 pb-3 sm:px-6 sm:pt-6 flex-shrink-0 border-b border-gray-100">
+                                        <h3 class="!text-lg font-semibold text-gray-800">Three Months Past Due Trend</h3>
+                                        <p class="mt-1 !text-base text-gray-500">Month-over-month change in past due metrics</p>
+                                    </div>
+                                    <div class="flex-1 min-h-0 overflow-auto custom-scrollbar">
+                                        <table class="min-w-full">
+                                            <thead>
+                                                <tr class="bg-gray-50 border-b border-gray-200">
+                                                    <th class="px-4 py-3 text-left !text-base font-medium text-gray-500 whitespace-nowrap">Region</th>
+                                                    <th class="px-4 py-3 text-left !text-base font-medium text-gray-500 whitespace-nowrap">Metric</th>
+                                                    <th id="pdThMonth1" class="px-4 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">—</th>
+                                                    <th id="pdThMonth2" class="px-4 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">—</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-400 whitespace-nowrap">Δ</th>
+                                                    <th id="pdThMonth3" class="px-4 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">—</th>
+                                                    <th class="px-3 py-3 text-center !text-base font-medium text-gray-400 whitespace-nowrap">Δ</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="pastDueTrendBody" class="divide-y divide-gray-100">
+                                                <tr><td colspan="7" class="px-4 py-8 text-center !text-base text-gray-400">Loading...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div><!-- /population -->
+
+                </div><!-- /tab-content -->
+            </div><!-- /alpine -->
+        </div><!-- /dashboard container -->
+    </div>
+
+    <script>
+        // =========================================================
+        // CONFIG
+        // =========================================================
+        const CONFLUENCE_BASE_URL = "https://cedt-confluence.nam.nsroot.net/confluence";
+        const CONFLUENCE_PAGE_ID  = "YOUR_PAGE_ID";
+        const COVENANT_FILE       = "Covenants_current.xlsx";
+        const ENABLE_DUMMY_DATA   = true;
+        const REGIONS             = ['NAM', 'EMEA', 'APAC', 'LATAM'];
+        const FONT_FAMILY         = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+
+        let allCovenantData  = [];
+        let historicalData   = [];
+        let chartInstances   = {};
+        let currentTrendRegion = 'All';
+        let currentTrendPeriod = 12;
+        let relTableState    = { rows: [], page: 1, perPage: 6 };
+
+        // =========================================================
+        // LOADING
+        // =========================================================
+        function showLoading(msg) {
+            const el = document.getElementById('loadingOverlay');
+            const m  = document.getElementById('loadingMessage');
+            if (el) el.classList.remove('hidden');
+            if (m && msg) m.textContent = msg;
+        }
+        function hideLoading() {
+            const el = document.getElementById('loadingOverlay');
+            if (el) el.classList.add('hidden');
+        }
+
+        // flag — set true once data is loaded so Alpine $nextTick can re-render
+        window.dataReady = false;
+
+        // =========================================================
+        // BOOT
+        // =========================================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            showLoading('Loading covenant data...');
+            try {
+                if (ENABLE_DUMMY_DATA) {
+                    await new Promise(r => setTimeout(r, 350));
+                    allCovenantData = generateCurrentDummy();
+                    historicalData  = generateHistoricalDummy();
+                } else {
+                    const blob = await fetch(
+                        `${CONFLUENCE_BASE_URL}/download/attachments/${CONFLUENCE_PAGE_ID}/${COVENANT_FILE}?api=v2`,
+                        { headers: { 'Accept': 'application/json', 'X-Atlassian-Token': 'no-check' }}
+                    ).then(r => { if (!r.ok) throw new Error(r.status); return r.blob(); });
+                    allCovenantData = await parseExcelBlob(blob);
+                    historicalData  = generateHistoricalDummy();
+                }
+                hideLoading();
+                updateKPIs();
+                window.dataReady = true;
+                // Delay so Alpine has finished processing x-show before ApexCharts measures dimensions
+                setTimeout(() => {
+                    renderOverviewCharts();
+                    renderDetailTables();
+                }, 150);
+            } catch (e) {
+                console.error(e);
+                hideLoading();
+            }
+        });
+
+        async function parseExcelBlob(blob) {
+            return new Promise((res, rej) => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    try {
+                        const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array', cellDates: true });
+                        res(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' }));
+                    } catch(err) { rej(err); }
+                };
+                reader.onerror = rej;
+                reader.readAsArrayBuffer(blob);
+            });
+        }
+
+        // =========================================================
+        // DUMMY DATA  (extensive — 400 covenant records, 52-week history)
+        // =========================================================
+        function generateCurrentDummy() {
+            const uw       = ['J. Smith','M. Johnson','L. Davis','K. Wilson','R. Brown','C. Garcia','A. Martinez','S. Lee','P. Thomas','N. White','T. Harris','W. Chen'];
+            const products = ['Corporate Lending','Trade Finance','Working Capital','Project Finance','Real Estate','Asset Based Lending','Infrastructure','Energy Finance','Structured Finance','Syndicated Loans'];
+            const freqs    = ['Monthly','Quarterly','Semi-Annual','Annual','One-Time'];
+            const today    = new Date('2026-02-28');
+            const data     = [];
+
+            // Regional record counts + PD rate
+            const REGION_CFG = [
+                { region:'NAM',   count:155, pdRate:0.34, pdSpread:[0.42,0.27,0.18,0.13] },
+                { region:'EMEA',  count:105, pdRate:0.30, pdSpread:[0.40,0.28,0.20,0.12] },
+                { region:'APAC',  count: 85, pdRate:0.28, pdSpread:[0.44,0.26,0.17,0.13] },
+                { region:'LATAM', count: 55, pdRate:0.38, pdSpread:[0.38,0.29,0.20,0.13] }
+            ];
+
+            let globalIdx = 0;
+            REGION_CFG.forEach(({ region, count, pdRate, pdSpread }) => {
+                for (let i = 0; i < count; i++) {
+                    globalIdx++;
+                    const rand   = Math.random();
+                    const isPD   = rand < pdRate;
+                    let daysOver = 0, cat = 'Coming Due';
+                    if (isPD) {
+                        const r2 = Math.random();
+                        if (r2 < pdSpread[0])       { daysOver = Math.floor(Math.random() * 44) + 1;   cat = '1-45 Days'; }
+                        else if (r2 < pdSpread[0]+pdSpread[1]) { daysOver = Math.floor(Math.random() * 14) + 46; cat = '46-60 Days'; }
+                        else if (r2 < pdSpread[0]+pdSpread[1]+pdSpread[2]) { daysOver = Math.floor(Math.random() * 29) + 61; cat = '61-90 Days'; }
+                        else                         { daysOver = Math.floor(Math.random() * 90) + 91;  cat = '>90 Days'; }
+                    }
+                    const dueDate = isPD
+                        ? new Date(today.getTime() - daysOver * 86400000)
+                        : new Date(today.getTime() + (Math.floor(Math.random() * 59) + 1) * 86400000);
+                    const relNum = Math.floor(i / 2.5) + 1;
+                    const facNum = Math.floor(i / 1.8) + 1;
+                    data.push({
+                        Report_Date:         '2026-02-28',
+                        Region:              region,
+                        Lead_Underwriter:    uw[globalIdx % uw.length],
+                        Product_Program_Name: products[globalIdx % products.length],
+                        Relationship_ID:     `REL${region.slice(0,1)}${String(relNum).padStart(4,'0')}`,
+                        Relationship_Name:   `${region} ${['Corp','Holdings','Enterprises','Group','Capital','Partners'][globalIdx % 6]} ${relNum}`,
+                        Facility_Number:     `FAC${region.slice(0,1)}${String(facNum).padStart(4,'0')}`,
+                        Covenant_Number:     `COV2026${String(globalIdx).padStart(4,'0')}`,
+                        Periodic_Frequency:  freqs[globalIdx % freqs.length],
+                        Covenant_Due_Date:   dueDate.toISOString().split('T')[0],
+                        Days_Past_Due:       daysOver,
+                        Coming_Due_Past_Due: isPD ? 'Past Due' : 'Coming Due',
+                        Past_Due_Category:   cat
+                    });
+                }
+            });
+            return data;
+        }
+
+        function generateHistoricalDummy() {
+            const data  = [];
+            const today = new Date('2026-02-28');
+            // 52 weeks of history (full year)
+            const BASE = {
+                NAM:   { rel:68, fac:50, pdPct:0.21, pdFacR:0.76, covMult:0.58, aging:[0.42,0.27,0.18,0.13] },
+                EMEA:  { rel:40, fac:28, pdPct:0.19, pdFacR:0.74, covMult:0.55, aging:[0.40,0.28,0.20,0.12] },
+                APAC:  { rel:28, fac:20, pdPct:0.17, pdFacR:0.72, covMult:0.52, aging:[0.44,0.26,0.17,0.13] },
+                LATAM: { rel:15, fac:11, pdPct:0.24, pdFacR:0.79, covMult:0.60, aging:[0.38,0.29,0.20,0.13] }
+            };
+            for (let w = 51; w >= 0; w--) {
+                const weekDate = new Date(today.getTime() - w * 7 * 86400000);
+                const weekStr  = weekDate.toISOString().split('T')[0];
+                const pos      = (51 - w) / 51;                        // 0→oldest, 1→newest
+                const month    = weekDate.getMonth();
+                // gentle seasonal curve: slightly lower mid-year, higher Q4/Q1
+                const seasonal = 1 + 0.08 * Math.sin((month / 12) * 2 * Math.PI + Math.PI * 0.5);
+                const noise    = () => (Math.random() - 0.5) * 0.14;   // ±7% random noise
+
+                REGIONS.forEach(region => {
+                    const b    = BASE[region];
+                    const grow = 1 + pos * 0.15;                        // 15% growth over the year
+                    const aRel  = Math.max(6,  Math.round(b.rel * grow * seasonal * (1 + noise())));
+                    const aFac  = Math.max(4,  Math.round(b.fac * grow * seasonal * (1 + noise())));
+                    const pdRel = Math.max(1,  Math.round(aRel * (b.pdPct + noise() * 0.04)));
+                    const pdFac = Math.max(1,  Math.round(pdRel * (b.pdFacR + noise() * 0.06)));
+                    const pdCov = Math.max(2,  Math.round(aRel * (b.covMult + noise() * 0.04)));
+                    const [a0, a1, a2, a3] = b.aging;
+                    const d1 = Math.max(0, Math.round(pdCov * (a0 + noise() * 0.04)));
+                    const d2 = Math.max(0, Math.round(pdCov * (a1 + noise() * 0.03)));
+                    const d3 = Math.max(0, Math.round(pdCov * (a2 + noise() * 0.03)));
+                    const d4 = Math.max(0, Math.round(pdCov * (a3 + noise() * 0.02)));
+                    data.push({ week: weekStr, region, aRel, aFac, pdRel, pdFac, pdCov, d1, d2, d3, d4 });
+                });
+            }
+            return data;
+        }
+
+        // =========================================================
+        // REGIONAL AGGREGATION
+        // =========================================================
+        function categorizeAging(row) {
+            const cat  = String(row.Past_Due_Category || '').trim();
+            const days = parseFloat(row.Days_Past_Due) || 0;
+            if (cat.includes('1-45')  || cat.includes('0-30') || cat.includes('31-45') || (days >= 1  && days <= 45)) return '1-45';
+            if (cat.includes('46-60') || (days >= 46 && days <= 60)) return '46-60';
+            if (cat.includes('61-90') || (days >= 61 && days <= 90)) return '61-90';
+            if (cat.includes('>90')   || cat.includes('90+')  || days > 90)              return '90plus';
+            return 'other';
+        }
+
+        function getRegionalAgg(data) {
+            const agg = {};
+            REGIONS.forEach(r => {
+                agg[r] = { relSet: new Set(), facSet: new Set(), pdRelSet: new Set(), pdFacSet: new Set(), aging: { '1-45':0,'46-60':0,'61-90':0,'90plus':0 } };
+            });
+            data.forEach(row => {
+                const region = String(row.Region || '').toUpperCase();
+                if (!agg[region]) return;
+                const status = String(row.Coming_Due_Past_Due || '').trim().toLowerCase();
+                if (row.Relationship_ID) agg[region].relSet.add(row.Relationship_ID);
+                if (row.Facility_Number)  agg[region].facSet.add(row.Facility_Number);
+                if (status === 'past due') {
+                    if (row.Relationship_ID) agg[region].pdRelSet.add(row.Relationship_ID);
+                    if (row.Facility_Number)  agg[region].pdFacSet.add(row.Facility_Number);
+                    const b = categorizeAging(row);
+                    if (agg[region].aging[b] !== undefined) agg[region].aging[b]++;
+                }
+            });
+            const out = {};
+            REGIONS.forEach(r => {
+                out[r] = {
+                    rels: agg[r].relSet.size, facs: agg[r].facSet.size,
+                    pdRels: agg[r].pdRelSet.size, pdFacs: agg[r].pdFacSet.size,
+                    aging: agg[r].aging
+                };
+            });
+            return out;
+        }
+
+        // =========================================================
+        // KPIs
+        // =========================================================
+        function updateKPIs() {
+            const reg = getRegionalAgg(allCovenantData);
+            let aRel = 0, aFac = 0, d1 = 0, d2 = 0, d3 = 0, d4 = 0;
+            REGIONS.forEach(r => {
+                aRel += reg[r].rels; aFac += reg[r].facs;
+                d1 += reg[r].aging['1-45']; d2 += reg[r].aging['46-60'];
+                d3 += reg[r].aging['61-90']; d4 += reg[r].aging['90plus'];
+            });
+            setEl('kpiActiveRelationships', aRel.toLocaleString());
+            setEl('kpiActiveFacilities',    aFac.toLocaleString());
+            setEl('kpiDays1_45',  d1);
+            setEl('kpiDays46_60', d2);
+            setEl('kpiDays61_90', d3);
+            setEl('kpiDays90plus', d4);
+        }
+
+        function setEl(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+
+        // =========================================================
+        // CHART HELPERS
+        // =========================================================
+        function destroyChart(key) {
+            if (chartInstances[key]) { try { chartInstances[key].destroy(); } catch(e) {} chartInstances[key] = null; }
+        }
+
+        function buildBarOptions(categories, series, colors, stacked = false) {
+            return {
+                series, colors,
+                chart: { fontFamily: FONT_FAMILY, type: 'bar', height: 300, stacked, toolbar: { show: false }, animations: { enabled: true, easing: 'easeinout', speed: 600 } },
+                plotOptions: { bar: { horizontal: false, columnWidth: stacked ? '50%' : '55%', borderRadius: 4, borderRadiusApplication: 'end' } },
+                dataLabels: { enabled: stacked, formatter: v => v > 0 ? v : '', style: { fontSize: '11px', colors: ['#fff'] } },
+                xaxis: { categories, labels: { style: { fontSize: '13px', fontFamily: FONT_FAMILY } } },
+                yaxis: { labels: { style: { fontSize: '12px', fontFamily: FONT_FAMILY }, formatter: v => Math.round(v) } },
+                legend: { position: 'top', horizontalAlign: 'right', fontSize: '13px', fontFamily: FONT_FAMILY, markers: { width: 10, height: 10, radius: 2 } },
+                grid: { borderColor: '#f0f0f0', strokeDashArray: 4 },
+                tooltip: { theme: 'light', shared: true, intersect: false, y: { formatter: v => (v || 0).toLocaleString() } }
+            };
+        }
+
+        // TailAdmin chart-08 area chart style — gradient fill, no toolbar, no markers
+        function buildAreaOptions(categories, series, height = 300) {
+            return {
+                series,
+                chart: {
+                    fontFamily: FONT_FAMILY, type: 'area', height,
+                    toolbar: { show: false },
+                    animations: { enabled: true, easing: 'easeinout', speed: 700 }
+                },
+                colors: series.map(s => s.color),
+                fill: {
+                    type: 'gradient',
+                    gradient: { enabled: true, opacityFrom: 0.45, opacityTo: 0, type: 'vertical', shadeIntensity: 1 }
+                },
+                stroke: { curve: 'smooth', width: 2 },
+                markers: { size: 0 },
+                dataLabels: { enabled: false },
+                xaxis: {
+                    type: 'category', categories,
+                    axisBorder: { show: false }, axisTicks: { show: false },
+                    labels: { rotate: -35, style: { fontSize: '11px', fontFamily: FONT_FAMILY }, tickAmount: Math.min(categories.length, 12) }
+                },
+                yaxis: { labels: { style: { fontSize: '12px', fontFamily: FONT_FAMILY }, formatter: v => Math.round(v) }, min: 0 },
+                legend: { show: true, position: 'top', horizontalAlign: 'left', fontSize: '13px', fontFamily: FONT_FAMILY, markers: { width: 10, height: 10, radius: 2 } },
+                grid: {
+                    xaxis: { lines: { show: false } },
+                    yaxis: { lines: { show: true } },
+                    borderColor: '#f0f0f0'
+                },
+                tooltip: { theme: 'light', shared: true, intersect: false, y: { formatter: v => v ? v.toLocaleString() : '0' } }
+            };
+        }
+
+        // =========================================================
+        // SVG DOWNLOAD
+        // =========================================================
+        window.downloadChartSVG = function(chartKey, filename) {
+            const instance = chartInstances[chartKey];
+            if (!instance) { console.warn('Chart not found:', chartKey); return; }
+            try {
+                const chartEl = instance.el;
+                if (!chartEl) return;
+                const svgEl = chartEl.querySelector('.apexcharts-svg');
+                if (!svgEl) return;
+                const svgClone = svgEl.cloneNode(true);
+                // Remove white background rect
+                const bg = svgClone.querySelector('.apexcharts-canvas-svg-bg');
+                if (bg) bg.remove();
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                const svgStr = '<?xml version="1.0" encoding="UTF-8"?>' + new XMLSerializer().serializeToString(svgClone);
+                const blob   = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+                const url    = URL.createObjectURL(blob);
+                const a      = document.createElement('a');
+                a.href = url; a.download = (filename || chartKey) + '.svg';
+                document.body.appendChild(a); a.click();
+                document.body.removeChild(a); URL.revokeObjectURL(url);
+            } catch(e) { console.error('SVG download failed:', e); }
+        };
+
+        // =========================================================
+        // OVERVIEW CHARTS
+        // =========================================================
+        // PAL-dashboard blue/indigo palette
+        const PAL_BLUE   = ['#465FFF', '#9CB9FF'];           // primary two-series
+        const PAL_QUAD   = ['#2a31d8', '#465FFF', '#7592FF', '#C2D6FF']; // four-series dark→light
+
+        function renderOverviewCharts() {
+            const reg = getRegionalAgg(allCovenantData);
+
+            destroyChart('activeByRegion');
+            const el1 = document.getElementById('activeByRegionChart');
+            if (el1) {
+                const opts = buildBarOptions(REGIONS,
+                    [
+                        { name: 'Relationships', data: REGIONS.map(r => reg[r].rels) },
+                        { name: 'Facilities',    data: REGIONS.map(r => reg[r].facs) }
+                    ], PAL_BLUE);
+                chartInstances['activeByRegion'] = new ApexCharts(el1, opts);
+                chartInstances['activeByRegion'].render();
+            }
+
+            destroyChart('pastDueByRegion');
+            const el2 = document.getElementById('pastDueByRegionChart');
+            if (el2) {
+                const opts = buildBarOptions(REGIONS,
+                    [
+                        { name: 'PD Relationships', data: REGIONS.map(r => reg[r].pdRels) },
+                        { name: 'PD Facilities',    data: REGIONS.map(r => reg[r].pdFacs) }
+                    ], PAL_BLUE);
+                chartInstances['pastDueByRegion'] = new ApexCharts(el2, opts);
+                chartInstances['pastDueByRegion'].render();
+            }
+
+            destroyChart('agingByRegion');
+            const el3 = document.getElementById('agingByRegionChart');
+            if (el3) {
+                const opts = buildBarOptions(REGIONS,
+                    [
+                        { name: '1–45 Days',  data: REGIONS.map(r => reg[r].aging['1-45'])  },
+                        { name: '46–60 Days', data: REGIONS.map(r => reg[r].aging['46-60']) },
+                        { name: '61–90 Days', data: REGIONS.map(r => reg[r].aging['61-90']) },
+                        { name: '>90 Days',   data: REGIONS.map(r => reg[r].aging['90plus']) }
+                    ], PAL_QUAD, true);
+                opts.chart.height = 320;
+                chartInstances['agingByRegion'] = new ApexCharts(el3, opts);
+                chartInstances['agingByRegion'].render();
+            }
+        }
+
+        // =========================================================
+        // DETAIL TABLES (OVERVIEW)
+        // =========================================================
+        function renderDetailTables() { renderRegionalAgingTable(); buildRelationshipRows(); renderRelationshipTable(); }
+
+        function renderRegionalAgingTable() {
+            const tbody = document.getElementById('regionalAgingTableBody');
+            if (!tbody) return;
+            const reg = getRegionalAgg(allCovenantData);
+            let html = '', tPD = 0, tFac = 0, t1 = 0, t2 = 0, t3 = 0, t4 = 0;
+            REGIONS.forEach(r => {
+                const d   = reg[r];
+                const pd  = d.pdRels;
+                const fac = d.facs;
+                const pct = fac > 0 ? (d.pdFacs / fac * 100).toFixed(1) : '0.0';
+                tPD += pd; tFac += fac;
+                t1 += d.aging['1-45']; t2 += d.aging['46-60']; t3 += d.aging['61-90']; t4 += d.aging['90plus'];
+                const agingTotal = d.aging['1-45'] + d.aging['46-60'] + d.aging['61-90'] + d.aging['90plus'];
+                html += `<tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-4 py-3 !text-base font-semibold text-gray-800">${r}</td>
+                    <td class="px-3 py-3 text-center !text-base text-gray-700">${d.aging['1-45'] || '—'}</td>
+                    <td class="px-3 py-3 text-center !text-base text-gray-700">${d.aging['46-60'] || '—'}</td>
+                    <td class="px-3 py-3 text-center !text-base text-gray-700">${d.aging['61-90'] || '—'}</td>
+                    <td class="px-3 py-3 text-center !text-base text-gray-700">${d.aging['90plus'] || '—'}</td>
+                    <td class="px-3 py-3 text-center !text-base font-semibold text-gray-900">${pd || '—'}</td>
+                    <td class="px-3 py-3 text-center !text-base text-gray-600">${fac}</td>
+                    <td class="px-3 py-3 text-center !text-base text-gray-700">${pct}%</td>
+                </tr>`;
+            });
+            const tPct = tFac > 0 ? (tPD / tFac * 100).toFixed(1) : '0.0';
+            html += `<tr class="bg-gray-50 border-t-2 border-gray-200">
+                <td class="px-4 py-3 !text-base font-bold text-gray-900">Total</td>
+                <td class="px-3 py-3 text-center !text-base font-bold text-gray-900">${t1}</td>
+                <td class="px-3 py-3 text-center !text-base font-bold text-gray-900">${t2}</td>
+                <td class="px-3 py-3 text-center !text-base font-bold text-gray-900">${t3}</td>
+                <td class="px-3 py-3 text-center !text-base font-bold text-gray-900">${t4}</td>
+                <td class="px-3 py-3 text-center !text-base font-bold text-gray-900">${tPD}</td>
+                <td class="px-3 py-3 text-center !text-base font-bold text-gray-900">${tFac}</td>
+                <td class="px-3 py-3 text-center !text-base font-bold text-gray-900">${tPct}%</td>
+            </tr>`;
+            tbody.innerHTML = html;
+        }
+
+        function buildRelationshipRows() {
+            const byRel  = {};
+            const pastDue = allCovenantData.filter(r => String(r.Coming_Due_Past_Due || '').trim().toLowerCase() === 'past due');
+            pastDue.forEach(row => {
+                const key = (row.Relationship_ID || 'Unknown') + '|' + (row.Region || '');
+                if (!byRel[key]) byRel[key] = { name: row.Relationship_Name||'Unknown', region: row.Region||'—', uw: row.Lead_Underwriter||'—', d1:0,d2:0,d3:0,d4:0,total:0 };
+                const b = categorizeAging(row);
+                if (b==='1-45') byRel[key].d1++; else if (b==='46-60') byRel[key].d2++; else if (b==='61-90') byRel[key].d3++; else if (b==='90plus') byRel[key].d4++;
+                byRel[key].total++;
+            });
+            relTableState.rows = Object.values(byRel).sort((a,b) => { if(b.d4!==a.d4) return b.d4-a.d4; if(b.d3!==a.d3) return b.d3-a.d3; if(b.d2!==a.d2) return b.d2-a.d2; return b.d1-a.d1; });
+            relTableState.page = 1;
+        }
+
+        function renderRelationshipTable() {
+            const tbody = document.getElementById('relationshipDetailBody');
+            if (!tbody) return;
+            const { rows, page, perPage } = relTableState;
+            const start = (page-1)*perPage, end = Math.min(start+perPage, rows.length);
+            const pages = Math.max(1, Math.ceil(rows.length/perPage));
+            const rcls  = { NAM:'bg-blue-50 text-blue-700', EMEA:'bg-green-50 text-green-700', APAC:'bg-yellow-50 text-yellow-700', LATAM:'bg-purple-50 text-purple-700' };
+            tbody.innerHTML = rows.length === 0
+                ? `<tr><td colspan="8" class="px-4 py-8 text-center !text-base text-gray-400">No past due covenants</td></tr>`
+                : rows.slice(start, end).map(row => {
+                    const rc = rcls[row.region] || 'bg-gray-100 text-gray-600';
+                    return `<tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-4 py-3 !text-base font-medium text-gray-800 whitespace-nowrap">${esc(row.name)}</td>
+                        <td class="px-3 py-3 text-center"><span class="inline-flex items-center px-2 py-0.5 rounded-full !text-base font-medium ${rc}">${esc(row.region)}</span></td>
+                        <td class="px-3 py-3 !text-base text-gray-500 whitespace-nowrap text-center">${esc(row.uw)}</td>
+                        <td class="px-3 py-3 text-center !text-base text-gray-700">${row.d1||'—'}</td>
+                        <td class="px-3 py-3 text-center !text-base text-gray-700">${row.d2||'—'}</td>
+                        <td class="px-3 py-3 text-center !text-base text-gray-700">${row.d3||'—'}</td>
+                        <td class="px-3 py-3 text-center !text-base text-gray-700">${row.d4||'—'}</td>
+                        <td class="px-3 py-3 text-center !text-base font-semibold text-gray-900">${row.total}</td>
+                    </tr>`;
+                }).join('');
+            setEl('relStart', rows.length > 0 ? start+1 : 0); setEl('relEnd', end); setEl('relTotal', rows.length);
+            setEl('relPage', page); setEl('relPages', pages);
+            document.getElementById('relPrevBtn').disabled = page <= 1;
+            document.getElementById('relNextBtn').disabled = page >= pages;
+        }
+
+        window.changeRelPage = function(dir) {
+            const pages = Math.ceil(relTableState.rows.length / relTableState.perPage);
+            if (dir==='prev' && relTableState.page>1)     relTableState.page--;
+            if (dir==='next' && relTableState.page<pages) relTableState.page++;
+            renderRelationshipTable();
+        };
+
+        // =========================================================
+        // TRENDS CHARTS
+        // =========================================================
+        function activateTrendBtn(group, matchFn) {
+            document.querySelectorAll(`#${group} button`).forEach(btn => {
+                const active = matchFn(btn);
+                btn.classList.toggle('bg-white', active); btn.classList.toggle('shadow-sm', active);
+                btn.classList.toggle('text-gray-900', active); btn.classList.toggle('font-medium', active);
+                btn.classList.toggle('text-gray-600', !active);
+            });
+        }
+
+        window.setTrendRegion = function(r) {
+            currentTrendRegion = r;
+            activateTrendBtn('trendRegionBtns', btn => btn.dataset.region === r);
+            renderTrendCharts();
+        };
+
+        window.setTrendPeriod = function(p) {
+            currentTrendPeriod = p;
+            activateTrendBtn('trendPeriodBtns', btn => parseInt(btn.dataset.period) === p);
+            renderTrendCharts();
+        };
+
+        function renderTrendCharts() {
+            if (!historicalData.length) return;
+            let trendData = historicalData;
+            if (currentTrendRegion !== 'All') trendData = trendData.filter(r => r.region === currentTrendRegion);
+            const allWeeks = [...new Set(historicalData.map(r => r.week))].sort();
+            const weeks    = allWeeks.slice(-currentTrendPeriod);
+            const dr = document.getElementById('trendDateRange');
+            if (dr && weeks.length) dr.textContent = fmtWeek(weeks[0]) + ' – ' + fmtWeek(weeks[weeks.length-1]);
+
+            const agg = weeks.map(week => {
+                const rows = trendData.filter(r => r.week === week);
+                return { week, aRel: sum(rows,'aRel'), aFac: sum(rows,'aFac'), pdRel: sum(rows,'pdRel'), pdFac: sum(rows,'pdFac'), pdCov: sum(rows,'pdCov'), d1: sum(rows,'d1'), d2: sum(rows,'d2'), d3: sum(rows,'d3'), d4: sum(rows,'d4') };
+            });
+            const labels = weeks.map(fmtWeek);
+
+            destroyChart('activeTrend');
+            const el1 = document.getElementById('activeTrendChart');
+            if (el1) {
+                const opts = buildAreaOptions(labels, [
+                    { name: 'Relationships', data: agg.map(w => w.aRel),  color: '#465FFF' },
+                    { name: 'Facilities',    data: agg.map(w => w.aFac),  color: '#9CB9FF' }
+                ], 320);
+                chartInstances['activeTrend'] = new ApexCharts(el1, opts);
+                chartInstances['activeTrend'].render();
+            }
+
+            destroyChart('pastDueTrend');
+            const el2 = document.getElementById('pastDueTrendChart');
+            if (el2) {
+                const opts = buildAreaOptions(labels, [
+                    { name: 'PD Relationships', data: agg.map(w => w.pdRel), color: '#465FFF' },
+                    { name: 'PD Facilities',    data: agg.map(w => w.pdFac), color: '#9CB9FF' }
+                ]);
+                chartInstances['pastDueTrend'] = new ApexCharts(el2, opts);
+                chartInstances['pastDueTrend'].render();
+            }
+
+            destroyChart('agingTrend');
+            const el3 = document.getElementById('agingTrendChart');
+            if (el3) {
+                const opts = buildAreaOptions(labels, [
+                    { name: '1–45 Days',  data: agg.map(w => w.d1), color: '#2a31d8' },
+                    { name: '46–60 Days', data: agg.map(w => w.d2), color: '#465FFF' },
+                    { name: '61–90 Days', data: agg.map(w => w.d3), color: '#7592FF' },
+                    { name: '>90 Days',   data: agg.map(w => w.d4), color: '#C2D6FF' }
+                ]);
+                chartInstances['agingTrend'] = new ApexCharts(el3, opts);
+                chartInstances['agingTrend'].render();
+            }
+
+            renderTrendTable(trendData, weeks.slice(-6));
+        }
+
+        // PAL-dashboard style: metrics as rows, weeks as dynamic columns
+        function renderTrendTable(trendData, weeks) {
+            const thead = document.getElementById('trendAnalysisTableHead');
+            const tbody = document.getElementById('trendAnalysisTableBody');
+            if (!tbody || !thead) return;
+
+            const numCols = weeks.length + 1; // +1 for metric label column
+
+            // ── Dynamic header: sticky "Metric" label + one column per week ──
+            let headerHTML = '<tr class="bg-gray-50">';
+            headerHTML += `<th class="px-5 py-3 text-left !text-base font-medium text-gray-500 sticky left-0 bg-gray-50 z-10 min-w-[155px] whitespace-nowrap">Metric</th>`;
+            weeks.forEach(w => {
+                headerHTML += `<th class="px-4 py-3 text-center !text-base font-medium text-gray-500 whitespace-nowrap">${fmtWeek(w)}</th>`;
+            });
+            headerHTML += '</tr>';
+            thead.innerHTML = headerHTML;
+
+            // PD Rels / PD Facs removed — show aging buckets only
+            const METRICS = [
+                { key: 'd1', label: '1–45 Days',  cls: 'text-gray-700'  },
+                { key: 'd2', label: '46–60 Days', cls: 'text-gray-700'  },
+                { key: 'd3', label: '61–90 Days', cls: 'text-gray-700'  },
+                { key: 'd4', label: '>90 Days',   cls: 'text-gray-700'  }
+            ];
+
+            const displayRegions = currentTrendRegion === 'All' ? REGIONS : [currentTrendRegion];
+            const regionBadge = { NAM:'bg-blue-50 text-blue-700', EMEA:'bg-green-50 text-green-700', APAC:'bg-yellow-50 text-yellow-700', LATAM:'bg-purple-50 text-purple-700' };
+            let html = '';
+
+            displayRegions.forEach((region, rIdx) => {
+                // Region group separator row
+                const badge = regionBadge[region] || 'bg-gray-100 text-gray-600';
+                html += `<tr class="border-t-2 border-gray-200 bg-gray-50/60">
+                    <td class="px-5 py-2 sticky left-0 bg-gray-50/60 z-10" colspan="${numCols}">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full !text-base font-semibold ${badge}">${region}</span>
+                    </td>
+                </tr>`;
+
+                METRICS.forEach(metric => {
+                    const values = weeks.map(week => {
+                        const row = trendData.find(r => r.week === week && r.region === region);
+                        return row ? (row[metric.key] || 0) : null;
+                    });
+                    html += `<tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-5 py-2.5 !text-base ${metric.cls} sticky left-0 bg-white whitespace-nowrap z-10">${metric.label}</td>
+                        ${values.map((v, vi) => {
+                            const prev  = vi > 0 ? values[vi - 1] : null;
+                            const badge = vi > 0 ? formatGrowthBadge(prev, v) : '';
+                            return `<td class="px-4 py-2.5 text-center whitespace-nowrap">
+                                <div class="flex flex-col items-center gap-0.5">
+                                    <span class="!text-base text-gray-700">${v !== null ? v : '—'}</span>
+                                    ${badge ? `<div>${badge}</div>` : ''}
+                                </div>
+                            </td>`;
+                        }).join('')}
+                    </tr>`;
+                });
+            });
+
+            tbody.innerHTML = html || `<tr><td colspan="${numCols}" class="px-4 py-8 text-center !text-base text-gray-400">No data available</td></tr>`;
+        }
+
+        // =========================================================
+        // POPULATION TAB
+        // =========================================================
+        function computeMonthlyAgg() {
+            const MONTH_ORDER = { Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12 };
+            const byMonthRegion = {};
+
+            historicalData.forEach(row => {
+                const d    = new Date(row.week);
+                const yr   = d.getFullYear().toString().slice(-2);
+                const mo   = d.toLocaleDateString('en-US', { month: 'short' });
+                const mkey = `${mo}-${yr}`;
+                if (!byMonthRegion[mkey]) byMonthRegion[mkey] = {};
+                if (!byMonthRegion[mkey][row.region]) byMonthRegion[mkey][row.region] = [];
+                byMonthRegion[mkey][row.region].push(row);
+            });
+
+            const sortedMonths = Object.keys(byMonthRegion).sort((a, b) => {
+                const [aM, aY] = a.split('-'), [bM, bY] = b.split('-');
+                return ((parseInt(aY)+2000)*12 + MONTH_ORDER[aM]) - ((parseInt(bY)+2000)*12 + MONTH_ORDER[bM]);
+            });
+
+            const last3 = sortedMonths.slice(-3);
+            const result = {};
+
+            last3.forEach(month => {
+                result[month] = {};
+                REGIONS.forEach(region => {
+                    const rows = byMonthRegion[month][region] || [];
+                    const avg  = key => rows.length ? Math.round(rows.reduce((s,r) => s+(r[key]||0), 0) / rows.length) : 0;
+                    result[month][region] = { aRel: avg('aRel'), aFac: avg('aFac'), pdRel: avg('pdRel'), pdFac: avg('pdFac'), pdCov: avg('pdCov'), d1: avg('d1'), d2: avg('d2'), d3: avg('d3'), d4: avg('d4') };
+                });
+                // Global = sum of regions
+                result[month].GLOBAL = { aRel:0,aFac:0,pdRel:0,pdFac:0,pdCov:0,d1:0,d2:0,d3:0,d4:0 };
+                REGIONS.forEach(r => { Object.keys(result[month].GLOBAL).forEach(k => { result[month].GLOBAL[k] += result[month][r][k]||0; }); });
+                // Americas = NAM + LATAM
+                result[month].AMERICAS = {};
+                Object.keys(result[month].NAM).forEach(k => { result[month].AMERICAS[k] = (result[month].NAM[k]||0) + (result[month].LATAM[k]||0); });
+            });
+
+            return { months: last3, data: result };
+        }
+
+        // ── ApexCharts mini horizontal bar — labels outside bar end, no cutoff ──
+        function createMiniBarChart(divId, categories, values, color) {
+            destroyChart(divId);
+            const el = document.getElementById(divId);
+            if (!el) return;
+            const maxVal = Math.max(...values, 1);
+            // Shorten labels to "Feb" not "Feb-26" so they never get cut off
+            const shortCats = categories.map(c => String(c).split('-')[0]);
+            const chart = new ApexCharts(el, {
+                series: [{ data: values }],
+                chart: {
+                    type: 'bar', height: 100, fontFamily: FONT_FAMILY,
+                    toolbar: { show: false }, animations: { enabled: true, easing: 'easeinout', speed: 500 },
+                    parentHeightOffset: 0
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: true, barHeight: '50%', borderRadius: 4,
+                        dataLabels: { position: 'top' }
+                    }
+                },
+                dataLabels: {
+                    enabled: true, textAnchor: 'start', offsetX: 6,
+                    style: { fontSize: '11px', fontFamily: FONT_FAMILY, colors: ['#374151'], fontWeight: 700 },
+                    formatter: v => v
+                },
+                xaxis: {
+                    categories: shortCats,
+                    labels: { show: false },
+                    axisBorder: { show: false }, axisTicks: { show: false },
+                    max: maxVal * 1.55
+                },
+                yaxis: {
+                    labels: {
+                        style: { fontSize: '11px', fontFamily: FONT_FAMILY, colors: ['#6b7280'] },
+                        maxWidth: 32, trim: false
+                    }
+                },
+                grid: { show: false, padding: { top: -6, bottom: -6, left: 2, right: 10 } },
+                tooltip: {
+                    enabled: true, theme: 'light',
+                    y: { formatter: v => (v||0).toLocaleString() },
+                    // Show full month in tooltip
+                    x: { formatter: (_, { dataPointIndex }) => categories[dataPointIndex] || '' }
+                },
+                colors: [color]
+            });
+            chart.render();
+            chartInstances[divId] = chart;
+        }
+
+        function pctChange(prev, curr) {
+            if (prev == null || prev === 0) return { pct: '—', cls: 'text-gray-400', arrow: '' };
+            const val   = ((curr - prev) / prev * 100);
+            const abs   = Math.abs(val).toFixed(0);
+            const up    = val > 0;
+            const cls   = up ? 'text-red-500' : 'text-emerald-600';
+            const arrow = up ? '▲' : '▼';
+            return { pct: `${abs}%`, cls, arrow };
+        }
+
+        // % change in its own dedicated column — 7 columns total
+        function buildTrendTableHTML(areas) {
+            return areas.map((area, aIdx) => {
+                return area.rows.map((row, rIdx) => {
+                    const c12 = pctChange(row.m1v, row.m2v);
+                    const c23 = pctChange(row.m2v, row.m3v);
+                    const badge12 = c12.pct !== '—'
+                        ? `<span class="inline-flex items-center gap-0.5 text-xs font-semibold ${c12.cls} whitespace-nowrap">${c12.arrow}${c12.pct}</span>`
+                        : `<span class="text-xs text-gray-300">—</span>`;
+                    const badge23 = c23.pct !== '—'
+                        ? `<span class="inline-flex items-center gap-0.5 text-xs font-semibold ${c23.cls} whitespace-nowrap">${c23.arrow}${c23.pct}</span>`
+                        : `<span class="text-xs text-gray-300">—</span>`;
+                    return `<tr class="${rIdx === 0 && aIdx > 0 ? 'border-t-2 border-gray-200' : ''} hover:bg-gray-50 transition-colors">
+                        ${rIdx === 0 ? `<td class="px-4 py-3 !text-base font-semibold text-gray-900 whitespace-nowrap" rowspan="3">${area.label}</td>` : ''}
+                        <td class="px-4 py-3 !text-base text-gray-600 whitespace-nowrap">${row.metric}</td>
+                        <td class="px-4 py-3 text-center !text-base font-semibold text-gray-900">${row.m1v ?? '—'}</td>
+                        <td class="px-4 py-3 text-center !text-base font-semibold text-gray-900">${row.m2v ?? '—'}</td>
+                        <td class="px-3 py-3 text-center">${badge12}</td>
+                        <td class="px-4 py-3 text-center !text-base font-semibold text-gray-900">${row.m3v ?? '—'}</td>
+                        <td class="px-3 py-3 text-center">${badge23}</td>
+                    </tr>`;
+                }).join('');
+            }).join('');
+        }
+
+        // No card borders/backgrounds inside — clean grid matching Overview tab
+        function buildPopPanel(panelId, areas) {
+            const html = areas.map((area, aIdx) => `
+                ${aIdx > 0 ? '<div class="border-t border-gray-100 my-2"></div>' : ''}
+                <div class="flex items-start gap-3 py-2">
+                    <div class="w-16 flex-shrink-0 pt-3">
+                        <p class="!text-sm font-semibold text-gray-700">${area.label}</p>
+                    </div>
+                    <div class="flex-1 grid grid-cols-3 gap-3">
+                        ${area.metrics.map(m => `
+                            <div>
+                                <p class="text-xs font-medium text-gray-400 mb-0.5 leading-tight text-center">${m.title}</p>
+                                <div id="${m.chartId}"></div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById(panelId).innerHTML = html;
+        }
+
+        function renderPopulationTab() {
+            const { months, data } = computeMonthlyAgg();
+            if (!months.length) return;
+            const m1 = months[0], m2 = months[1], m3 = months[2];
+            const barMonths = [...months].reverse(); // newest first for bar chart y-axis
+
+            // ── Headers ──
+            ['thMonth1','thMonth2','thMonth3'].forEach((id, i) => setEl(id, months[i] || '—'));
+            ['pdThMonth1','pdThMonth2','pdThMonth3'].forEach((id, i) => setEl(id, months[i] || '—'));
+
+            // ── SECTION 1: Total Population — unified blue color ──────────────────
+            const POP_COLOR = '#465FFF';
+            const totalAreas = [
+                { label: 'Global',   metrics: [
+                    { chartId: 'pop_g_rel', title: '# Relationships with Covenants', vals: months.map(m => data[m]?.GLOBAL?.aRel  || 0), color: POP_COLOR },
+                    { chartId: 'pop_g_cov', title: '# Covenants',                    vals: months.map(m => data[m]?.GLOBAL?.pdCov || 0), color: POP_COLOR },
+                    { chartId: 'pop_g_fac', title: '# Facilities with Covenant',     vals: months.map(m => data[m]?.GLOBAL?.aFac  || 0), color: POP_COLOR }
+                ]},
+                { label: 'Americas', metrics: [
+                    { chartId: 'pop_a_rel', title: '# Relationships with Covenants', vals: months.map(m => data[m]?.AMERICAS?.aRel || 0), color: POP_COLOR },
+                    { chartId: 'pop_a_cov', title: '# Covenants',                    vals: months.map(m => data[m]?.AMERICAS?.pdCov || 0), color: POP_COLOR },
+                    { chartId: 'pop_a_fac', title: '# Facilities with Covenant',     vals: months.map(m => data[m]?.AMERICAS?.aFac || 0), color: POP_COLOR }
+                ]},
+                { label: 'EMEA',     metrics: [
+                    { chartId: 'pop_e_rel', title: '# Relationships with Covenants', vals: months.map(m => data[m]?.EMEA?.aRel  || 0), color: POP_COLOR },
+                    { chartId: 'pop_e_cov', title: '# Covenants',                    vals: months.map(m => data[m]?.EMEA?.pdCov || 0), color: POP_COLOR },
+                    { chartId: 'pop_e_fac', title: '# Facilities with Covenant',     vals: months.map(m => data[m]?.EMEA?.aFac  || 0), color: POP_COLOR }
+                ]},
+                { label: 'APAC',     metrics: [
+                    { chartId: 'pop_p_rel', title: '# Relationships with Covenants', vals: months.map(m => data[m]?.APAC?.aRel  || 0), color: POP_COLOR },
+                    { chartId: 'pop_p_cov', title: '# Covenants',                    vals: months.map(m => data[m]?.APAC?.pdCov || 0), color: POP_COLOR },
+                    { chartId: 'pop_p_fac', title: '# Facilities with Covenant',     vals: months.map(m => data[m]?.APAC?.aFac  || 0), color: POP_COLOR }
+                ]}
+            ];
+            buildPopPanel('populationPanel', totalAreas);
+            setTimeout(() => {
+                totalAreas.forEach(area => area.metrics.forEach(m => {
+                    createMiniBarChart(m.chartId, barMonths, [...m.vals].reverse(), m.color);
+                }));
+            }, 50);
+
+            // Total Population trend table
+            document.getElementById('populationTrendBody').innerHTML = buildTrendTableHTML([
+                { label: 'Global',   rows: [
+                    { metric: '# Relationships', m1v: data[m1]?.GLOBAL?.aRel,   m2v: data[m2]?.GLOBAL?.aRel,   m3v: data[m3]?.GLOBAL?.aRel  },
+                    { metric: '# Covenants',     m1v: data[m1]?.GLOBAL?.pdCov,  m2v: data[m2]?.GLOBAL?.pdCov,  m3v: data[m3]?.GLOBAL?.pdCov },
+                    { metric: '# Facilities',    m1v: data[m1]?.GLOBAL?.aFac,   m2v: data[m2]?.GLOBAL?.aFac,   m3v: data[m3]?.GLOBAL?.aFac  }
+                ]},
+                { label: 'Americas', rows: [
+                    { metric: '# Relationships', m1v: data[m1]?.AMERICAS?.aRel,  m2v: data[m2]?.AMERICAS?.aRel,  m3v: data[m3]?.AMERICAS?.aRel  },
+                    { metric: '# Covenants',     m1v: data[m1]?.AMERICAS?.pdCov, m2v: data[m2]?.AMERICAS?.pdCov, m3v: data[m3]?.AMERICAS?.pdCov },
+                    { metric: '# Facilities',    m1v: data[m1]?.AMERICAS?.aFac,  m2v: data[m2]?.AMERICAS?.aFac,  m3v: data[m3]?.AMERICAS?.aFac  }
+                ]},
+                { label: 'EMEA',     rows: [
+                    { metric: '# Relationships', m1v: data[m1]?.EMEA?.aRel,   m2v: data[m2]?.EMEA?.aRel,   m3v: data[m3]?.EMEA?.aRel  },
+                    { metric: '# Covenants',     m1v: data[m1]?.EMEA?.pdCov,  m2v: data[m2]?.EMEA?.pdCov,  m3v: data[m3]?.EMEA?.pdCov },
+                    { metric: '# Facilities',    m1v: data[m1]?.EMEA?.aFac,   m2v: data[m2]?.EMEA?.aFac,   m3v: data[m3]?.EMEA?.aFac  }
+                ]},
+                { label: 'APAC',     rows: [
+                    { metric: '# Relationships', m1v: data[m1]?.APAC?.aRel,   m2v: data[m2]?.APAC?.aRel,   m3v: data[m3]?.APAC?.aRel  },
+                    { metric: '# Covenants',     m1v: data[m1]?.APAC?.pdCov,  m2v: data[m2]?.APAC?.pdCov,  m3v: data[m3]?.APAC?.pdCov },
+                    { metric: '# Facilities',    m1v: data[m1]?.APAC?.aFac,   m2v: data[m2]?.APAC?.aFac,   m3v: data[m3]?.APAC?.aFac  }
+                ]}
+            ]) || `<tr><td colspan="7" class="px-4 py-8 text-center !text-base text-gray-400">No data</td></tr>`;
+
+            // ── SECTION 2: Past Due — unified red color ──────────────────────────
+            const PD_COLOR = '#9CB9FF';
+            const pdAreas = [
+                { label: 'Global',   metrics: [
+                    { chartId: 'pd_g_rel', title: '# PD Relationships', vals: months.map(m => data[m]?.GLOBAL?.pdRel   || 0), color: PD_COLOR },
+                    { chartId: 'pd_g_cov', title: '# PD Covenants',     vals: months.map(m => data[m]?.GLOBAL?.pdCov   || 0), color: PD_COLOR },
+                    { chartId: 'pd_g_fac', title: '# PD Facilities',    vals: months.map(m => data[m]?.GLOBAL?.pdFac   || 0), color: PD_COLOR }
+                ]},
+                { label: 'Americas', metrics: [
+                    { chartId: 'pd_a_rel', title: '# PD Relationships', vals: months.map(m => data[m]?.AMERICAS?.pdRel || 0), color: PD_COLOR },
+                    { chartId: 'pd_a_cov', title: '# PD Covenants',     vals: months.map(m => data[m]?.AMERICAS?.pdCov || 0), color: PD_COLOR },
+                    { chartId: 'pd_a_fac', title: '# PD Facilities',    vals: months.map(m => data[m]?.AMERICAS?.pdFac || 0), color: PD_COLOR }
+                ]},
+                { label: 'EMEA',     metrics: [
+                    { chartId: 'pd_e_rel', title: '# PD Relationships', vals: months.map(m => data[m]?.EMEA?.pdRel     || 0), color: PD_COLOR },
+                    { chartId: 'pd_e_cov', title: '# PD Covenants',     vals: months.map(m => data[m]?.EMEA?.pdCov     || 0), color: PD_COLOR },
+                    { chartId: 'pd_e_fac', title: '# PD Facilities',    vals: months.map(m => data[m]?.EMEA?.pdFac     || 0), color: PD_COLOR }
+                ]},
+                { label: 'APAC',     metrics: [
+                    { chartId: 'pd_p_rel', title: '# PD Relationships', vals: months.map(m => data[m]?.APAC?.pdRel     || 0), color: PD_COLOR },
+                    { chartId: 'pd_p_cov', title: '# PD Covenants',     vals: months.map(m => data[m]?.APAC?.pdCov     || 0), color: PD_COLOR },
+                    { chartId: 'pd_p_fac', title: '# PD Facilities',    vals: months.map(m => data[m]?.APAC?.pdFac     || 0), color: PD_COLOR }
+                ]}
+            ];
+            buildPopPanel('pastDuePanel', pdAreas);
+            setTimeout(() => {
+                pdAreas.forEach(area => area.metrics.forEach(m => {
+                    createMiniBarChart(m.chartId, barMonths, [...m.vals].reverse(), m.color);
+                }));
+            }, 100);
+
+            // Past Due trend table
+            document.getElementById('pastDueTrendBody').innerHTML = buildTrendTableHTML([
+                { label: 'Global',   rows: [
+                    { metric: '# PD Relationships', m1v: data[m1]?.GLOBAL?.pdRel,   m2v: data[m2]?.GLOBAL?.pdRel,   m3v: data[m3]?.GLOBAL?.pdRel   },
+                    { metric: '# PD Covenants',     m1v: data[m1]?.GLOBAL?.pdCov,   m2v: data[m2]?.GLOBAL?.pdCov,   m3v: data[m3]?.GLOBAL?.pdCov   },
+                    { metric: '# PD Facilities',    m1v: data[m1]?.GLOBAL?.pdFac,   m2v: data[m2]?.GLOBAL?.pdFac,   m3v: data[m3]?.GLOBAL?.pdFac   }
+                ]},
+                { label: 'Americas', rows: [
+                    { metric: '# PD Relationships', m1v: data[m1]?.AMERICAS?.pdRel, m2v: data[m2]?.AMERICAS?.pdRel, m3v: data[m3]?.AMERICAS?.pdRel },
+                    { metric: '# PD Covenants',     m1v: data[m1]?.AMERICAS?.pdCov, m2v: data[m2]?.AMERICAS?.pdCov, m3v: data[m3]?.AMERICAS?.pdCov },
+                    { metric: '# PD Facilities',    m1v: data[m1]?.AMERICAS?.pdFac, m2v: data[m2]?.AMERICAS?.pdFac, m3v: data[m3]?.AMERICAS?.pdFac }
+                ]},
+                { label: 'EMEA',     rows: [
+                    { metric: '# PD Relationships', m1v: data[m1]?.EMEA?.pdRel,     m2v: data[m2]?.EMEA?.pdRel,     m3v: data[m3]?.EMEA?.pdRel     },
+                    { metric: '# PD Covenants',     m1v: data[m1]?.EMEA?.pdCov,     m2v: data[m2]?.EMEA?.pdCov,     m3v: data[m3]?.EMEA?.pdCov     },
+                    { metric: '# PD Facilities',    m1v: data[m1]?.EMEA?.pdFac,     m2v: data[m2]?.EMEA?.pdFac,     m3v: data[m3]?.EMEA?.pdFac     }
+                ]},
+                { label: 'APAC',     rows: [
+                    { metric: '# PD Relationships', m1v: data[m1]?.APAC?.pdRel,     m2v: data[m2]?.APAC?.pdRel,     m3v: data[m3]?.APAC?.pdRel     },
+                    { metric: '# PD Covenants',     m1v: data[m1]?.APAC?.pdCov,     m2v: data[m2]?.APAC?.pdCov,     m3v: data[m3]?.APAC?.pdCov     },
+                    { metric: '# PD Facilities',    m1v: data[m1]?.APAC?.pdFac,     m2v: data[m2]?.APAC?.pdFac,     m3v: data[m3]?.APAC?.pdFac     }
+                ]}
+            ]) || `<tr><td colspan="7" class="px-4 py-8 text-center !text-base text-gray-400">No data</td></tr>`;
+        }
+
+        // =========================================================
+        // UTILITIES
+        // =========================================================
+        function sum(arr, key) { return arr.reduce((s, r) => s + (r[key] || 0), 0); }
+        function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+        function fmtWeek(d) { try { return new Date(d).toLocaleDateString('en-US', { month:'short', day:'numeric' }); } catch { return d; } }
+
+        // PAL-dashboard style growth badge — green pill for up, red pill for down
+        function formatGrowthBadge(prev, curr) {
+            if (prev === null || prev === undefined || curr === null || curr === undefined) return '<span class="text-gray-400">—</span>';
+            if (prev === 0 && curr === 0) return '<span class="text-gray-400">—</span>';
+            // For PD metrics: an increase is bad (red), a decrease is good (green/teal)
+            const delta = curr - prev;
+            const pct   = prev > 0 ? Math.abs(delta / prev * 100).toFixed(1) : '—';
+            if (delta === 0) return '<span class="text-gray-400">0%</span>';
+            if (delta > 0) {
+                return `<span class="inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 !text-xs font-medium bg-red-50 text-red-600 whitespace-nowrap">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    ${pct}%</span>`;
+            } else {
+                return `<span class="inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 !text-xs font-medium bg-green-50 text-green-700 whitespace-nowrap">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+                    ${pct}%</span>`;
+            }
+        }
+
+        window.renderOverviewCharts = renderOverviewCharts;
+        window.renderTrendCharts    = renderTrendCharts;
+        window.renderPopulationTab  = renderPopulationTab;
+    </script>
+</body>
+</html>
