@@ -200,12 +200,12 @@
       .dark .fte-child-row td {
         background-color: rgba(70, 95, 255, 0.06);
       }
-      /* Ad Hoc rows get a subtle cyan tint (distinct from green KPI) */
+      /* Ad Hoc rows - no special tint */
       .fte-adhoc-row td {
-        background-color: rgba(8, 145, 178, 0.06);
+        background-color: transparent;
       }
       .dark .fte-adhoc-row td {
-        background-color: rgba(8, 145, 178, 0.1);
+        background-color: transparent;
       }
 
       /* Modal dropdowns: fixed so they show on top and can flip above/below */
@@ -456,7 +456,7 @@
                   </button>
                   <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
                   <button type="button" @click="selected = 'Ad Hoc'; open = false; filterByReportType('Ad Hoc')"
-                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-cyan-700 hover:bg-cyan-50 transition-colors dark:text-cyan-400 dark:hover:bg-cyan-900/20">
+                    class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">
                     Ad Hoc Tasks
                   </button>
                 </div>
@@ -511,7 +511,7 @@
               <label class="inline-flex items-center gap-2 cursor-pointer select-none" title="Include Ad Hoc tasks in FTE &amp; Management Summary tabs">
                 <div class="relative">
                   <input type="checkbox" id="adhocIncludeToggle" class="sr-only peer" onchange="onAdhocToggle()">
-                  <div class="w-9 h-5 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:bg-cyan-500 transition-colors"></div>
+                  <div class="w-9 h-5 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:bg-blue-500 transition-colors"></div>
                   <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
                 </div>
                 <span class="!text-base font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">Ad Hoc</span>
@@ -622,6 +622,7 @@
                       <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Actions</th>
                       <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">ID</th>
                       <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Report Name</th>
+                      <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Parent Report</th>
                       <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Description</th>
                       <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Report Type</th>
                       <th class="px-6 py-4 text-center !text-base !font-medium whitespace-nowrap !text-gray-500 dark:!text-gray-400" style="text-align: center !important;">Category</th>
@@ -1179,7 +1180,7 @@
                     <div class="col-span-12 grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2 items-stretch">
 
                       <!-- Number of Reports Table -->
-                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 flex flex-col" style="background-color: var(--card-bg, white);">
+                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 flex flex-col overflow-hidden" style="background-color: var(--card-bg, white);">
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex-shrink-0">
                           <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Number of Reports</h3>
                           <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Report count by category and region</p>
@@ -1219,7 +1220,7 @@
                     <div class="col-span-12 grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2 items-stretch">
 
                       <!-- Time Spent Table -->
-                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 flex flex-col" style="background-color: var(--card-bg, white);">
+                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 flex flex-col overflow-hidden" style="background-color: var(--card-bg, white);">
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex-shrink-0">
                           <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Time Spent (hours per month)</h3>
                           <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Monthly hours by category and region</p>
@@ -1257,7 +1258,7 @@
 
                     <!-- FTE Analysis Table (full width) -->
                     <div class="col-span-12">
-                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 overflow-hidden" style="background-color: var(--card-bg, white);">
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
                           <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">FTE Analysis</h3>
                           <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Full-time equivalent breakdown by category and region (Total Hours ÷ 160)</p>
@@ -1338,6 +1339,19 @@
                 id="report-name"
                 required
                 placeholder="Enter report name"
+                class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+              />
+            </div>
+
+            <!-- Parent Report -->
+            <div class="col-span-1 sm:col-span-2">
+              <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
+                Parent Report
+              </label>
+              <input
+                type="text"
+                id="report-parent"
+                placeholder="Enter parent report name (if this is a sub-report)"
                 class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 !text-base text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
               />
             </div>
@@ -2173,6 +2187,18 @@
               />
             </div>
 
+            <!-- Parent Report (Editable) -->
+            <div class="mb-6">
+              <dt class="!text-base font-semibold text-gray-900 dark:text-white/90 mb-2">Parent Report</dt>
+              <div id="view-report-parent-display" class="!text-base text-gray-600 dark:text-gray-400">-</div>
+              <input 
+                type="text" 
+                id="view-report-parent-edit" 
+                placeholder="Enter parent report name (if this is a sub-report)"
+                class="hidden w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white/90 !text-base px-3 py-2 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+              />
+            </div>
+
             <!-- Description -->
             <div class="mb-8 p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50">
               <dt class="!text-base font-semibold text-gray-900 dark:text-white/90 mb-2">Description</dt>
@@ -2766,6 +2792,19 @@
       let currentReportTypeFilter = 'All';
       let currentRegionFilter = ['All']; // Now supports multiple regions - starts with All selected
 
+      // Normalize a person's name to "First Last" format:
+      //   - Strips [BusinessUnit] suffixes, e.g. [WLTH], [Tech]
+      //   - Converts "Last, First" → "First Last"
+      function normalizeMakerName(name) {
+        if (!name) return name;
+        let n = String(name).replace(/\s*\[.*?\]\s*/g, '').trim();
+        const commaMatch = n.match(/^([^,]+),\s*(.+)$/);
+        if (commaMatch) {
+          n = commaMatch[2].trim() + ' ' + commaMatch[1].trim();
+        }
+        return n.trim();
+      }
+
       // Ad Hoc tasks (loaded from adhoc_tasks.json, used only in FTE & Management tabs)
       let adhocTasks = [];
       let includeAdhocInFTE = false;
@@ -2791,7 +2830,7 @@
         return adhocTasks
           .filter(t => adhocStatusFilter.includes('All') || adhocStatusFilter.includes(t.status))
           .map(t => {
-            const makers = Array.isArray(t.maker) ? t.maker : (t.maker ? [t.maker] : ['Unknown']);
+            const makers = (Array.isArray(t.maker) ? t.maker : (t.maker ? [t.maker] : ['Unknown'])).map(normalizeMakerName);
             const hoursEach = (parseFloat(t.timeSpent) || 0) / Math.max(makers.length, 1);
             return makers.map(m => ({
               id: t.id + '_' + m,
@@ -3047,7 +3086,10 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <span class="!text-base font-medium text-gray-900 dark:text-white">${report.reportName || '-'}</span>
               </td>
-              <td class="px-6 py-4 max-w-xs">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="!text-base text-gray-700 dark:text-gray-300">${report.parentReport || '-'}</span>
+              </td>
+              <td class="px-6 py-4" style="min-width:260px;max-width:420px;">
                 <span class="!text-base text-gray-700 dark:text-gray-300 line-clamp-2">${report.description || '-'}</span>
               </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
@@ -3510,6 +3552,7 @@
             return (
               (report.id && String(report.id).toLowerCase().includes(searchTerm)) ||
               (report.reportName && String(report.reportName).toLowerCase().includes(searchTerm)) ||
+              (report.parentReport && String(report.parentReport).toLowerCase().includes(searchTerm)) ||
               (report.description && String(report.description).toLowerCase().includes(searchTerm)) ||
               (report.reportType && String(report.reportType).toLowerCase().includes(searchTerm)) ||
               (report.category && String(report.category).toLowerCase().includes(searchTerm)) ||
@@ -3627,6 +3670,8 @@
         document.getElementById('view-report-name').textContent = report.reportName || 'Report Details';
         document.getElementById('view-report-name-display').textContent = report.reportName || '-';
         document.getElementById('view-report-name-edit').value = report.reportName || '';
+        document.getElementById('view-report-parent-display').textContent = report.parentReport || '-';
+        document.getElementById('view-report-parent-edit').value = report.parentReport || '';
         document.getElementById('view-report-description-display').textContent = report.description || 'No description provided';
         document.getElementById('view-report-description-edit').value = report.description || '';
         
@@ -4060,6 +4105,7 @@
         // Show display fields, hide edit fields
         const displayFields = [
           'view-report-name-display',
+          'view-report-parent-display',
           'view-report-description-display',
           'view-report-type-display',
           'view-report-category-display',
@@ -4083,6 +4129,7 @@
         
         const editFieldsAndContainers = [
           'view-report-name-edit',
+          'view-report-parent-edit',
           'view-report-description-edit',
           'view-report-type-edit-container',
           'view-report-category-edit-container',
@@ -4127,6 +4174,7 @@
         // Hide display fields, show edit fields
         const displayFields = [
           'view-report-name-display',
+          'view-report-parent-display',
           'view-report-description-display',
           'view-report-type-display',
           'view-report-category-display',
@@ -4150,6 +4198,7 @@
         
         const editFieldsAndContainers = [
           'view-report-name-edit',
+          'view-report-parent-edit',
           'view-report-description-edit',
           'view-report-type-edit-container',
           'view-report-category-edit-container',
@@ -4194,6 +4243,7 @@
         // Restore original values to edit fields
         if (originalReportData) {
           document.getElementById('view-report-name-edit').value = originalReportData.reportName || '';
+          document.getElementById('view-report-parent-edit').value = originalReportData.parentReport || '';
           document.getElementById('view-report-description-edit').value = originalReportData.description || '';
           document.getElementById('view-report-type-edit').value = originalReportData.reportType || '';
           document.getElementById('view-report-category-edit').value = originalReportData.category || '';
@@ -4248,6 +4298,7 @@
         
         // Get values from edit fields
         const reportName = document.getElementById('view-report-name-edit').value;
+        const parentReport = document.getElementById('view-report-parent-edit').value;
         const description = document.getElementById('view-report-description-edit').value;
         const reportType = document.getElementById('view-report-type-edit').value;
         const category = document.getElementById('view-report-category-edit').value;
@@ -4297,6 +4348,7 @@
         // Track changes for timeline
         const changes = [];
         if (report.reportName !== reportName) changes.push('name');
+        if (report.parentReport !== parentReport) changes.push('parent report');
         if (report.description !== description) changes.push('description');
         if (report.reportType !== reportType) changes.push('type');
         if (report.category !== category) changes.push('category');
@@ -4319,6 +4371,7 @@
         
         // Update the report object
         report.reportName = reportName;
+        report.parentReport = parentReport;
         report.description = description;
         report.reportType = reportType;
         report.category = category;
@@ -4371,6 +4424,7 @@
           // Update the display fields with new values
           document.getElementById('view-report-name').textContent = reportName || 'Report Details';
           document.getElementById('view-report-name-display').textContent = reportName || '-';
+          document.getElementById('view-report-parent-display').textContent = parentReport || '-';
           document.getElementById('view-report-description-display').textContent = description || 'No description provided';
           document.getElementById('view-report-type-display').textContent = reportType || '-';
           document.getElementById('view-report-category-display').textContent = category || '-';
@@ -4500,6 +4554,7 @@
         // Build base report data (without ID and frequency)
         const baseReportData = {
           reportName: document.getElementById('report-name')?.value || '',
+          parentReport: document.getElementById('report-parent')?.value || '',
           description: document.getElementById('report-description')?.value || '',
           reportType: document.getElementById('report-type')?.value || '',
           category: document.getElementById('report-category')?.value || '',
@@ -4700,6 +4755,7 @@
           const headers = [
             'ID',
             'Report Name',
+            'Parent Report',
             'Description',
             'Report Type',
             'Category',
@@ -4733,6 +4789,7 @@
             const exportData = filteredReports.map(report => ({
               'ID': report.id,
               'Report Name': report.reportName,
+              'Parent Report': report.parentReport || '',
               'Description': report.description || '',
               'Report Type': report.reportType || '',
               'Category': report.category || '',
@@ -4808,6 +4865,7 @@
                 return {
                   id: row['ID'] || `REP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
                   reportName: row['Report Name'] || '',
+                  parentReport: row['Parent Report'] || '',
                   description: row['Description'] || '',
                   reportType: row['Report Type'] || '',
                   category: row['Category'] || '',
@@ -4816,7 +4874,7 @@
                   reportComplexity: row['Report Complexity'] || '',
                   reportRegion: parseRegions(row['Report Region']),
                   frequency: parsedFrequency, // Parse as array like regions
-                  preparedBy: row['Prepared By'] || '',
+                  preparedBy: normalizeMakerName(row['Prepared By'] || ''),
                   prepareRegion: parseRegions(row['Prepare Region']),
                   activeStatus: row['Active Status'] || 'Active',
                   timeAvgPerRun: parsedTimePerRun,
@@ -5016,6 +5074,7 @@
       const filterableColumns = [
         { value: 'id', label: 'ID' },
         { value: 'reportName', label: 'Report Name' },
+        { value: 'parentReport', label: 'Parent Report' },
         { value: 'description', label: 'Description' },
         { value: 'reportType', label: 'Report Type' },
         { value: 'category', label: 'Category' },
@@ -5250,6 +5309,7 @@
           if (searchTerm) {
             const matchesSearch = 
               report.reportName.toLowerCase().includes(searchTerm) ||
+              (report.parentReport && report.parentReport.toLowerCase().includes(searchTerm)) ||
               report.id.toLowerCase().includes(searchTerm) ||
               (report.description && report.description.toLowerCase().includes(searchTerm));
             
@@ -5503,6 +5563,9 @@
             reports = data.map(report => {
               if (!report.avgTimePerMonth && report.timeAvgPerRun && report.frequency) {
                 report.avgTimePerMonth = calculateAvgTimePerMonth(report.timeAvgPerRun, report.frequency);
+              }
+              if (report.preparedBy) {
+                report.preparedBy = normalizeMakerName(report.preparedBy);
               }
               return report;
             });
@@ -6260,8 +6323,8 @@
                 <td class="pl-14 pr-6 py-3 text-left !text-base text-gray-500 dark:text-gray-400"></td>
                 <td class="px-6 py-3 text-left !text-base text-gray-700 dark:text-gray-300">
                   <span class="inline-flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full ${type === 'Ad Hoc' ? 'bg-cyan-400 dark:bg-cyan-500' : 'bg-brand-400 dark:bg-brand-500'} flex-shrink-0"></span>
-                    ${type}${type === 'Ad Hoc' ? ' <span class="ml-1 inline-flex items-center rounded-full bg-cyan-50 px-1.5 py-0.5 text-xs font-medium text-cyan-700 dark:bg-cyan-900/20 dark:text-cyan-400">Ad Hoc</span>' : ''}
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-400 dark:bg-brand-500 flex-shrink-0"></span>
+                    ${type}
                   </span>
                 </td>
                 <td class="px-6 py-3 text-center !text-base text-gray-700 dark:text-gray-300">${Math.round(hours)}h</td>
@@ -7163,13 +7226,6 @@
       let mgmtReportsChartInstance = null;
       let mgmtHoursChartInstance = null;
 
-      const MGMT_CATEGORIES = [
-        { key: 'Retain',                          label: 'Kept',                                       hoursLabel: 'Hours Kept',                                   fteLabel: 'Kept',                                   color: '#1D7D74' },
-        { key: 'Retire',                          label: 'Killed',                                     hoursLabel: 'Hours Killed',                                 fteLabel: 'Killed',                                 color: '#DC2626' },
-        { key: 'Pending Tech Release',            label: 'Pending Tech Release (Q3–Q4)',               hoursLabel: 'Hours Pending Tech Release (Q3–Q4)',            fteLabel: 'Pending Tech Release (Q3–Q4)',            color: '#D97706' },
-        { key: 'Dependent on One Wealth Go-Live', label: 'Dependent on One Wealth Go-Live',            hoursLabel: 'Hours Dependent on One Wealth Go-Live',         fteLabel: 'Dependent on One Wealth Go-Live',         color: '#6366F1' }
-      ];
-
       const REGIONS_MGMT = ['Americas', 'EMEA', 'APAC'];
 
       function mgmtReportsByRegion(subset) {
@@ -7201,15 +7257,10 @@
       function buildMgmtAdhocRow(label, totalVal, regionMap, formatter) {
         const fmt = formatter || (v => v);
         return `
-          <tr class="hover:bg-cyan-50/60 dark:hover:bg-cyan-900/10 transition-colors border-t-2 border-cyan-200 dark:border-cyan-800">
-            <td class="px-5 py-3 text-left !text-base font-medium text-cyan-700 dark:text-cyan-400 whitespace-nowrap">
-              <span class="inline-flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 flex-shrink-0"></span>
-                ${label}
-              </span>
-            </td>
-            <td class="px-5 py-3 text-center !text-base font-semibold text-cyan-700 dark:text-cyan-400">${fmt(totalVal)}</td>
-            ${REGIONS_MGMT.map(r => `<td class="px-5 py-3 text-center !text-base text-cyan-600 dark:text-cyan-400">${fmt(regionMap[r] || 0)}</td>`).join('')}
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+            <td class="px-5 py-3 text-left !text-base text-gray-700 dark:text-gray-300 whitespace-nowrap">${label}</td>
+            <td class="px-5 py-3 text-center !text-base text-gray-700 dark:text-gray-300 font-semibold">${fmt(totalVal)}</td>
+            ${REGIONS_MGMT.map(r => `<td class="px-5 py-3 text-center !text-base text-gray-700 dark:text-gray-300">${fmt(regionMap[r] || 0)}</td>`).join('')}
           </tr>`;
       }
 
@@ -7218,18 +7269,28 @@
           ? 'font-bold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800/50'
           : '!text-base text-gray-700 dark:text-gray-300';
         const fmt = formatter || (v => v);
+        const firstExtra = isTotal ? ' rounded-bl-2xl' : '';
+        const regionCells = REGIONS_MGMT.map((r, i) => {
+          const lastExtra = (isTotal && i === REGIONS_MGMT.length - 1) ? ' rounded-br-2xl' : '';
+          return `<td class="px-5 py-3 text-center ${baseClass}${lastExtra}">${fmt(regionMap[r] || 0)}</td>`;
+        }).join('');
         return `
           <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-            <td class="px-5 py-3 text-left ${baseClass} whitespace-nowrap">${label}</td>
+            <td class="px-5 py-3 text-left ${baseClass} whitespace-nowrap${firstExtra}">${label}</td>
             <td class="px-5 py-3 text-center ${baseClass} font-semibold">${fmt(totalVal)}</td>
-            ${REGIONS_MGMT.map(r => `<td class="px-5 py-3 text-center ${baseClass}">${fmt(regionMap[r] || 0)}</td>`).join('')}
+            ${regionCells}
           </tr>`;
       }
 
       function refreshManagementSummary() {
         // Use the same unified dataset as FTE (respects type filter + adhoc toggle + status filter)
-        const data = getFTEDataset();
-        if (!data) return;
+        const rawData = getFTEDataset();
+        if (!rawData) return;
+
+        // ── Deduplication: exclude child reports (those with a parentReport set) to avoid
+        //    double-counting when a sub-report and its parent both appear in the dataset.
+        //    Ad-hoc tasks are never child reports so they pass through unchanged.
+        const data = rawData.filter(r => r._isAdhoc || !(r.parentReport && r.parentReport.trim()));
 
         const total = data.length;
         const allRegCounts = mgmtReportsByRegion(data);
@@ -7246,28 +7307,36 @@
         document.getElementById('mgmt-kept-pct').textContent  = total > 0 ? Math.round(kept / total * 100) + '%' : '0%';
         document.getElementById('mgmt-killed-pct').textContent = total > 0 ? Math.round(killed / total * 100) + '%' : '0%';
 
-        // ── Build per-category subsets ──
-        const catSubsets = MGMT_CATEGORIES.map(c => ({
-          ...c,
-          reports: data.filter(r => {
-            const v = r.rationalizationCategory || '';
-            if (c.key === 'Retain')  return v === 'Retain';
-            if (c.key === 'Retire')  return v === 'Retire';
-            return v === c.key;
-          })
+        // ── Build per-category subsets dynamically from data values ──
+        // Only non-adhoc items get grouped by rationalizationCategory
+        const regularItems = data.filter(r => !r._isAdhoc);
+        const adhocItems   = data.filter(r =>  r._isAdhoc);
+
+        // Collect unique category values in the order they appear (blank/empty → "Uncategorised")
+        const catOrder = [];
+        const catSeen  = new Set();
+        regularItems.forEach(r => {
+          const v = (r.rationalizationCategory || '').trim() || 'Uncategorised';
+          if (!catSeen.has(v)) { catSeen.add(v); catOrder.push(v); }
+        });
+
+        // Build subset per category
+        const DYNAMIC_CAT_PALETTE = ["#3641f5", "#F59E0B", "#7592ff", "#8B5CF6", "#EF4444", "#6B7280", "#EC4899"];
+        const catSubsets = catOrder.map((key, i) => ({
+          key,
+          label: key,
+          reports: regularItems.filter(r => ((r.rationalizationCategory || '').trim() || 'Uncategorised') === key),
+          color: DYNAMIC_CAT_PALETTE[i % DYNAMIC_CAT_PALETTE.length]
         }));
 
-        // Split out adhoc items for separate rows/slices
-        const adhocItems = data.filter(r => r._isAdhoc);
-        const regularItems = data.filter(r => !r._isAdhoc);
         const adhocHoursTotal = adhocItems.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
-        const adhocRegCounts = mgmtReportsByRegion(adhocItems);
-        const adhocRegHours = mgmtHoursByRegion(adhocItems);
+        const adhocRegCounts  = mgmtReportsByRegion(adhocItems);
+        const adhocRegHours   = mgmtHoursByRegion(adhocItems);
 
         // ── Reports table ──
         const rTbody = document.getElementById('mgmt-reports-tbody');
         if (rTbody) {
-          let html = buildMgmtTableRow('Total # Reports Produced by LPTM', total, allRegCounts, v => v, true);
+          let html = '';
           catSubsets.forEach(c => {
             const regCounts = mgmtReportsByRegion(c.reports);
             html += buildMgmtTableRow(c.label, c.reports.length, regCounts, v => v, false);
@@ -7275,21 +7344,23 @@
           if (adhocItems.length > 0) {
             html += buildMgmtAdhocRow('Ad Hoc Tasks', adhocItems.length, adhocRegCounts, v => v);
           }
+          html += buildMgmtTableRow('Total # Reports Produced by LPTM', total, allRegCounts, v => v, true);
           rTbody.innerHTML = html;
         }
 
         // ── Hours table ──
         const hTbody = document.getElementById('mgmt-hours-tbody');
         if (hTbody) {
-          let html = buildMgmtTableRow('Initial Time Spent per month', Math.round(totalHours), allRegHours, v => Math.round(v), true);
+          let html = '';
           catSubsets.forEach(c => {
             const regH = mgmtHoursByRegion(c.reports);
             const subH = c.reports.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
-            html += buildMgmtTableRow(c.hoursLabel, Math.round(subH), regH, v => Math.round(v), false);
+            html += buildMgmtTableRow(c.label + ' (hrs)', Math.round(subH), regH, v => Math.round(v), false);
           });
           if (adhocItems.length > 0) {
-            html += buildMgmtAdhocRow('Ad Hoc Hours', Math.round(adhocHoursTotal), adhocRegHours, v => Math.round(v));
+            html += buildMgmtAdhocRow('Ad Hoc (hrs)', Math.round(adhocHoursTotal), adhocRegHours, v => Math.round(v));
           }
+          html += buildMgmtTableRow('Initial Time Spent per month', Math.round(totalHours), allRegHours, v => Math.round(v), true);
           hTbody.innerHTML = html;
         }
 
@@ -7298,27 +7369,27 @@
         if (fTbody) {
           const totalFTE = totalHours / 160;
           const allRegFte = mgmtFteByRegion(allRegHours);
-          let html = buildMgmtTableRow('FTE equivalent per month', Math.round(totalFTE * 10) / 10 || 0, allRegFte, v => Math.round(v * 10) / 10 || 0, true);
+          let html = '';
           catSubsets.forEach(c => {
-            const regH = mgmtHoursByRegion(c.reports);
-            const subH = c.reports.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
+            const regH   = mgmtHoursByRegion(c.reports);
+            const subH   = c.reports.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
             const subFTE = subH / 160;
             const regFte = mgmtFteByRegion(regH);
-            html += buildMgmtTableRow(c.fteLabel, Math.round(subFTE * 10) / 10 || 0, regFte, v => Math.round(v * 10) / 10 || 0, false);
+            html += buildMgmtTableRow(c.label + ' (FTE)', Math.round(subFTE * 10) / 10 || 0, regFte, v => Math.round(v * 10) / 10 || 0, false);
           });
           if (adhocItems.length > 0) {
-            const adhocFTE = adhocHoursTotal / 160;
+            const adhocFTE    = adhocHoursTotal / 160;
             const adhocRegFte = mgmtFteByRegion(adhocRegHours);
-            html += buildMgmtAdhocRow('Ad Hoc FTE', Math.round(adhocFTE * 10) / 10 || 0, adhocRegFte, v => Math.round(v * 10) / 10 || 0);
+            html += buildMgmtAdhocRow('Ad Hoc (FTE)', Math.round(adhocFTE * 10) / 10 || 0, adhocRegFte, v => Math.round(v * 10) / 10 || 0);
           }
+          html += buildMgmtTableRow('FTE equivalent per month', Math.round(totalFTE * 10) / 10 || 0, allRegFte, v => Math.round(v * 10) / 10 || 0, true);
           fTbody.innerHTML = html;
         }
 
-        // ── Shared chart config factory (matches FTE by Report Type style, right legend) ──
+        // ── Shared chart config factory ──
         const isDark = document.documentElement.classList.contains('dark');
-        // Same color palette as FTE Analysis donut charts
-        const FTE_COLORS = ["#3641f5", "#10B981", "#F59E0B", "#7592ff"];
-        const catColors = FTE_COLORS;
+        // Colors and labels come from the dynamic category list
+        const catColors = catSubsets.map(c => c.color);
         const catLabels = catSubsets.map(c => c.label);
 
         function buildMgmtDonutOptions(series, labels, colors, totalLabel, totalFormatter, tooltipFormatter) {
