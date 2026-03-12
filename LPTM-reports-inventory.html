@@ -1977,6 +1977,37 @@
       id="viewReportModal"
       style="background-color: var(--card-bg, white);"
     >
+      <!-- Edit / Save / Cancel Buttons (top-right, left of close button) -->
+      <div id="view-report-buttons" class="absolute top-3 right-14 sm:top-5 sm:right-20 z-[99999] flex items-center gap-2">
+        <button
+          id="view-report-edit-btn"
+          onclick="toggleReportEditMode()"
+          class="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 !text-base font-medium text-white shadow-sm hover:bg-brand-600 transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+          </svg>
+          Edit Report
+        </button>
+        <div id="view-report-save-cancel-btns" class="hidden flex gap-2">
+          <button
+            onclick="cancelReportEditMode()"
+            class="flex items-center gap-2 rounded-lg bg-gray-100 dark:bg-gray-700 px-4 py-2 !text-base font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onclick="saveReportFromView()"
+            class="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 !text-base font-medium text-white shadow-sm hover:bg-brand-600 transition-colors"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Save Changes
+          </button>
+        </div>
+      </div>
+
       <!-- Close button -->
       <button
         onclick="closeViewReportModal()"
@@ -2138,43 +2169,7 @@
 
           <!-- Report Details (Main Content) -->
           <div class="shadow-sm border border-gray-100 dark:border-gray-800 rounded-lg px-4 py-8 sm:px-8 sm:pb-14 lg:col-span-2 lg:row-span-2 lg:row-start-1 xl:px-16 xl:pt-16 xl:pb-20">
-            <div class="flex items-center justify-between mb-6">
-              <h2 class="!text-2xl font-semibold text-gray-900 dark:text-white/90" id="view-report-name">Report Details</h2>
-              
-              <!-- Edit Mode Buttons Container -->
-              <div id="view-report-buttons">
-                <!-- View Mode: Edit Button -->
-              <button
-                  id="view-report-edit-btn"
-                  onclick="toggleReportEditMode()"
-                class="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 !text-base font-medium text-white shadow-sm hover:bg-brand-600 transition-colors"
-              >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                </svg>
-                Edit Report
-                </button>
-                
-                <!-- Edit Mode: Save & Cancel Buttons -->
-                <div id="view-report-save-cancel-btns" class="hidden flex gap-2">
-                  <button
-                    onclick="cancelReportEditMode()"
-                    class="flex items-center gap-2 rounded-lg bg-gray-100 dark:bg-gray-700 px-4 py-2 !text-base font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onclick="saveReportFromView()"
-                    class="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 !text-base font-medium text-white shadow-sm hover:bg-brand-600 transition-colors"
-                  >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Save Changes
-              </button>
-                </div>
-              </div>
-            </div>
+            <h2 class="!text-2xl font-semibold text-gray-900 dark:text-white/90 mb-6" id="view-report-name">Report Details</h2>
 
             <!-- Report Name (Editable) -->
             <div class="mb-6">
@@ -3086,20 +3081,20 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <span class="!text-base font-medium text-gray-900 dark:text-white">${report.reportName || '-'}</span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="!text-base text-gray-700 dark:text-gray-300">${report.parentReport || '-'}</span>
+              <td class="px-6 py-4" style="max-width:160px;">
+                <span class="!text-base text-gray-700 dark:text-gray-300 block truncate">${report.parentReport || '-'}</span>
               </td>
-              <td class="px-6 py-4" style="min-width:260px;max-width:420px;">
+              <td class="px-6 py-4" style="max-width:200px;">
                 <span class="!text-base text-gray-700 dark:text-gray-300 line-clamp-2">${report.description || '-'}</span>
               </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
                 ${getReportTypeBadge(report.reportType)}
               </td>
-              <td class="px-6 py-4 text-center whitespace-nowrap">
-                <span class="!text-base text-gray-700 dark:text-gray-300">${report.category || '-'}</span>
+              <td class="px-6 py-4 text-center" style="max-width:140px;">
+                <span class="!text-base text-gray-700 dark:text-gray-300 block truncate">${report.category || '-'}</span>
               </td>
-              <td class="px-6 py-4 text-center whitespace-nowrap">
-                <span class="!text-base text-gray-700 dark:text-gray-300">${report.subCategory || '-'}</span>
+              <td class="px-6 py-4 text-center" style="max-width:140px;">
+                <span class="!text-base text-gray-700 dark:text-gray-300 block truncate">${report.subCategory || '-'}</span>
               </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
                 <span class="!text-base text-gray-700 dark:text-gray-300">${report.criticalReport || '-'}</span>
@@ -3140,17 +3135,17 @@
               <td class="px-6 py-4 text-center whitespace-nowrap">
                 <span class="!text-base text-gray-700 dark:text-gray-300">${report.euc || 'No'}</span>
               </td>
-              <td class="px-6 py-4 text-center whitespace-nowrap">
-                <span class="!text-base text-gray-700 dark:text-gray-300">${report.audience || '-'}</span>
+              <td class="px-6 py-4 text-center" style="max-width:140px;">
+                <span class="!text-base text-gray-700 dark:text-gray-300 block truncate">${report.audience || '-'}</span>
               </td>
-              <td class="px-6 py-4" style="min-width:180px;max-width:260px;">
-                <span class="!text-base text-gray-700 dark:text-gray-300 break-words whitespace-pre-wrap block">${report.nextSteps ? report.nextSteps.replace(/</g,'&lt;').replace(/>/g,'&gt;') : '<span class="text-gray-400">—</span>'}</span>
+              <td class="px-6 py-4" style="max-width:180px;">
+                <span class="!text-base text-gray-700 dark:text-gray-300 line-clamp-2">${report.nextSteps ? report.nextSteps.replace(/</g,'&lt;').replace(/>/g,'&gt;') : '<span class="text-gray-400">—</span>'}</span>
               </td>
-              <td class="px-6 py-4" style="min-width:180px;max-width:260px;">
-                <span class="!text-base text-gray-700 dark:text-gray-300 break-words whitespace-pre-wrap block">${report.additionalInfo ? report.additionalInfo.replace(/</g,'&lt;').replace(/>/g,'&gt;') : '<span class="text-gray-400">—</span>'}</span>
+              <td class="px-6 py-4" style="max-width:180px;">
+                <span class="!text-base text-gray-700 dark:text-gray-300 line-clamp-2">${report.additionalInfo ? report.additionalInfo.replace(/</g,'&lt;').replace(/>/g,'&gt;') : '<span class="text-gray-400">—</span>'}</span>
               </td>
-              <td class="px-6 py-4 text-center whitespace-nowrap">
-                ${report.rationalizationCategory ? `<span class="!text-base text-gray-700 dark:text-gray-300">${report.rationalizationCategory.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>` : '<span class="text-gray-400">—</span>'}
+              <td class="px-6 py-4 text-center" style="max-width:140px;">
+                ${report.rationalizationCategory ? `<span class="!text-base text-gray-700 dark:text-gray-300 block truncate">${report.rationalizationCategory.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>` : '<span class="text-gray-400">—</span>'}
               </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
                 ${getRationalizationStatusBadge(report.rationalizationStatus)}
