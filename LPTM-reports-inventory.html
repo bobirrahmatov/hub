@@ -1256,6 +1256,19 @@
 
                     </div>
 
+                    <!-- Rationalization Status Chart -->
+                    <div class="col-span-12">
+                      <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03] flex flex-col">
+                        <div class="mb-4 flex-shrink-0">
+                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Rationalization Status Overview</h3>
+                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Dynamic distribution by rationalization status</p>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center chartDarkStyle">
+                          <div id="mgmtStatusBarChart" class="w-full"></div>
+                        </div>
+                      </div>
+                    </div>
+
                     <!-- FTE Analysis Table (full width) -->
                     <div class="col-span-12">
                       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 overflow-hidden" style="background-color: var(--card-bg, white);">
@@ -3081,10 +3094,10 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <span class="!text-base font-medium text-gray-900 dark:text-white">${report.reportName || '-'}</span>
               </td>
-              <td class="px-6 py-4" style="max-width:160px;">
-                <span class="!text-base text-gray-700 dark:text-gray-300 block truncate">${report.parentReport || '-'}</span>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="!text-base font-medium text-gray-900 dark:text-white">${report.parentReport || '-'}</span>
               </td>
-              <td class="px-6 py-4" style="max-width:200px;">
+              <td class="px-6 py-4" style="max-width:500px;">
                 <span class="!text-base text-gray-700 dark:text-gray-300 line-clamp-2">${report.description || '-'}</span>
               </td>
               <td class="px-6 py-4 text-center whitespace-nowrap">
@@ -7220,6 +7233,7 @@
       // ─── Management Summary ────────────────────────────────────────────────────
       let mgmtReportsChartInstance = null;
       let mgmtHoursChartInstance = null;
+      let mgmtStatusChartInstance = null;
 
       const REGIONS_MGMT = ['Americas', 'EMEA', 'APAC'];
 
@@ -7277,6 +7291,38 @@
           </tr>`;
       }
 
+      function getMgmtRationalizationCategory(report) {
+        // Support both normalized and raw source keys from imported/fetched datasets.
+        return String(
+          report?.rationalizationCategory ??
+          report?.agreedRationalizationCategory ??
+          report?.['Agreed Rationalization Category'] ??
+          report?.['Rationalization Category'] ??
+          ''
+        ).trim();
+      }
+
+      function getMgmtRationalizationStatus(report) {
+        // Support both normalized and raw source keys from imported/fetched datasets.
+        return String(
+          report?.rationalizationStatus ??
+          report?.agreedRationalizationStatus ??
+          report?.['Agreed Rationalization Status'] ??
+          report?.['Rationalization Status'] ??
+          ''
+        ).trim();
+      }
+
+      function normalizeMgmtRationalizationCategory(catValue) {
+        const raw = String(catValue || '').trim();
+        if (!raw) return '';
+        const v = raw.toLowerCase();
+        // Treat business synonyms as the same agreed category.
+        if (v === 'retain' || v === 'keep' || v === 'kept') return 'Retain';
+        if (v === 'retire' || v === 'kill' || v === 'killed') return 'Retire';
+        return raw;
+      }
+
       function refreshManagementSummary() {
         // Use the same unified dataset as FTE (respects type filter + adhoc toggle + status filter)
         const rawData = getFTEDataset();
@@ -7292,9 +7338,9 @@
         const allRegHours = mgmtHoursByRegion(data);
         const totalHours = data.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
 
-        // ── Metric cards ──
-        const kept   = data.filter(r => r.rationalizationCategory === 'Retain').length;
-        const killed = data.filter(r => r.rationalizationCategory === 'Retire').length;
+        // ── Metric cards — driven by Agreed Rationalization Category (Retain / Retire) ──
+        const kept   = data.filter(r => normalizeMgmtRationalizationCategory(getMgmtRationalizationCategory(r)) === 'Retain').length;
+        const killed = data.filter(r => normalizeMgmtRationalizationCategory(getMgmtRationalizationCategory(r)) === 'Retire').length;
         document.getElementById('mgmt-total').textContent  = total;
         document.getElementById('mgmt-kept').textContent   = kept;
         document.getElementById('mgmt-killed').textContent = killed;
@@ -7311,7 +7357,7 @@
         const catOrder = [];
         const catSeen  = new Set();
         regularItems.forEach(r => {
-          const v = (r.rationalizationCategory || '').trim() || 'Uncategorised';
+          const v = getMgmtRationalizationCategory(r) || 'Uncategorised';
           if (!catSeen.has(v)) { catSeen.add(v); catOrder.push(v); }
         });
 
@@ -7320,7 +7366,7 @@
         const catSubsets = catOrder.map((key, i) => ({
           key,
           label: key,
-          reports: regularItems.filter(r => ((r.rationalizationCategory || '').trim() || 'Uncategorised') === key),
+          reports: regularItems.filter(r => (getMgmtRationalizationCategory(r) || 'Uncategorised') === key),
           color: DYNAMIC_CAT_PALETTE[i % DYNAMIC_CAT_PALETTE.length]
         }));
 
@@ -7469,6 +7515,83 @@
               }
             ]
           };
+        }
+
+        // ── Rationalization Status bubble chart ──
+        // Uses Agreed Rationalization Status (progress field: Done, In Progress, Pending…)
+        // — completely separate from Category. Raw values are used as-is, no normalization.
+        const statusCounts = new Map();
+        regularItems.forEach(r => {
+          const key = getMgmtRationalizationStatus(r) || '(Blanks)';
+          statusCounts.set(key, (statusCounts.get(key) || 0) + 1);
+        });
+        const sortedStatusEntries = Array.from(statusCounts.entries()).sort((a, b) => b[1] - a[1]);
+        const statusLabels = sortedStatusEntries.map(([k]) => k);
+        const statusSeries = sortedStatusEntries.map(([, v]) => v);
+        const statusColors = [
+          "#3641f5", "#7592ff", "#8B5CF6", "#10B981",
+          "#F59E0B", "#EF4444", "#14B8A6", "#6B7280", "#EC4899"
+        ];
+
+        if (mgmtStatusChartInstance) { mgmtStatusChartInstance.destroy(); mgmtStatusChartInstance = null; }
+        const sChartEl = document.getElementById('mgmtStatusBarChart');
+        if (sChartEl) {
+          sChartEl.innerHTML = '';
+          if (statusSeries.some(v => v > 0)) {
+            const bubbleSeries = statusLabels.map((label, i) => {
+              const count = statusSeries[i];
+              return {
+                name: label,
+                data: [{ x: label, y: count, z: Math.max(12, Math.round(Math.sqrt(count) * 12)) }]
+              };
+            });
+
+            mgmtStatusChartInstance = new ApexCharts(sChartEl, {
+              series: bubbleSeries,
+              chart: {
+                type: 'bubble',
+                height: 320,
+                toolbar: { show: false },
+                fontFamily: 'Outfit, sans-serif',
+                background: 'transparent'
+              },
+              colors: statusLabels.map((_, i) => statusColors[i % statusColors.length]),
+              dataLabels: { enabled: false },
+              fill: { opacity: 0.85 },
+              xaxis: {
+                type: 'category',
+                categories: statusLabels,
+                labels: {
+                  style: {
+                    colors: statusLabels.map(() => isDark ? '#9CA3AF' : '#6B7280'),
+                    fontSize: '12px'
+                  }
+                },
+                axisBorder: { show: false },
+                axisTicks: { show: false }
+              },
+              yaxis: {
+                min: 0,
+                forceNiceScale: true,
+                labels: {
+                  style: { colors: isDark ? '#9CA3AF' : '#6B7280', fontSize: '12px' }
+                }
+              },
+              grid: {
+                borderColor: isDark ? '#374151' : '#E5E7EB',
+                strokeDashArray: 4
+              },
+              legend: { show: false },
+              tooltip: {
+                x: { formatter: val => `Status: ${val}` },
+                y: { formatter: v => `${v} report${v === 1 ? '' : 's'}` },
+                z: { formatter: () => '' }
+              }
+            });
+            mgmtStatusChartInstance.render();
+          } else {
+            sChartEl.innerHTML = '<div class="flex items-center justify-center py-16 text-gray-400 dark:text-gray-500 !text-base">No data available</div>';
+          }
         }
 
         // Build chart labels/colors/series — append Ad Hoc slice when present
