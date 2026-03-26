@@ -335,6 +335,45 @@
                 Clear
               </button>
               
+              <!-- Summary Config Button (visible on Management Summary tab only) -->
+              <div class="relative" id="mgmtConfigToggleWrap" style="display:none;">
+                <button
+                  id="mgmtConfigToggle"
+                  onclick="toggleMgmtConfigPanel()"
+                  class="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 !text-base font-medium text-amber-800 hover:bg-amber-100 shadow-theme-xs transition-colors dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-300 dark:hover:bg-amber-900/30"
+                >
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  Summary Config
+                </button>
+
+                <!-- Summary Config Popover — anchored below the button -->
+                <div
+                  id="mgmtConfigPopover"
+                  class="hidden absolute left-0 top-full mt-2 w-[820px] max-w-[calc(100vw-2rem)] rounded-2xl border border-gray-200 bg-white shadow-theme-xl dark:border-gray-800 dark:bg-gray-900"
+                  style="z-index: 99999 !important;"
+                >
+                  <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-200 dark:border-gray-700">
+                    <h4 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Summary Config
+                      <span class="ml-2 !text-base font-normal text-gray-400 dark:text-gray-500">mgmt_config.json · Confluence</span>
+                    </h4>
+                    <button onclick="toggleMgmtConfigPanel()" class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                      <svg class="fill-current w-4 h-4" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z"/></svg>
+                    </button>
+                  </div>
+                  <div id="mgmtConfigBody" class="max-h-[560px] overflow-y-auto custom-scrollbar px-6 py-5 space-y-5">
+                    <!-- populated by populateMgmtConfigForm() -->
+                  </div>
+                  <div class="flex items-center gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+                    <button onclick="saveMgmtConfig()" class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 !text-base font-medium text-white hover:bg-brand-600 transition-colors">
+                      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                      Save &amp; Upload
+                    </button>
+                    <button onclick="toggleMgmtConfigPanel()" class="inline-flex items-center gap-2 rounded-lg bg-gray-100 dark:bg-gray-700 px-4 py-2.5 !text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">Cancel</button>
+                    <span id="mgmt-config-status" class="!text-base ml-auto"></span>
+                  </div>
+                </div>
+              </div>
+
               <!-- Advanced Filter Button -->
               <div class="relative">
                 <button
@@ -348,7 +387,7 @@
                   Filter
                   <span id="activeFilterCount" class="hidden ml-1 rounded-full bg-brand-500 px-1.5 py-0.5 !text-base font-medium text-white"></span>
                 </button>
-                
+
                 <!-- Advanced Filter Popover -->
                 <div
                   id="advancedFilterPopover"
@@ -550,7 +589,7 @@
           </div>
                   
             <!-- Tabs Navigation -->
-            <div class="mt-2" x-data="{ activeTab: 'table' }">
+            <div class="mt-2" x-data="{ activeTab: 'table' }" x-init="$watch('activeTab', t => { if (typeof showMgmtConfigButton === 'function') showMgmtConfigButton(t === 'mgmt'); })">
               <div class="border-b border-gray-200 dark:border-gray-800">
                 <nav class="-mb-px flex space-x-2 overflow-x-auto px-6 pt-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 dark:[&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5">
                   <button
@@ -1100,7 +1139,7 @@
 
                     <!-- Metric Cards Row -->
                     <div class="col-span-12">
-                      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4">
+                      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-5">
 
                         <!-- Total Reports -->
                         <div class="rounded-2xl border border-gray-200 bg-white px-6 pb-5 pt-6 dark:border-gray-800" style="background-color: var(--card-bg, white);">
@@ -1126,12 +1165,29 @@
                             </div>
                             <div>
                               <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Kept</h3>
-                              <span class="block !text-base text-gray-500 dark:text-gray-400">Retain</span>
+                              <span id="mgmt-kept-subtitle-text" class="block !text-base text-gray-500 dark:text-gray-400">Retain</span>
                             </div>
                           </div>
                           <div class="flex items-end justify-between gap-3">
                             <h4 id="mgmt-kept" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
                             <span id="mgmt-kept-pct" class="flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 !text-xl font-bold text-green-600 leading-none dark:bg-green-500/15 dark:text-green-500">0%</span>
+                          </div>
+                        </div>
+
+                        <!-- Sunset with Tech -->
+                        <div class="rounded-2xl border border-gray-200 bg-white px-6 pb-5 pt-6 dark:border-gray-800" style="background-color: var(--card-bg, white);">
+                          <div class="mb-6 flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/20">
+                              <svg class="h-6 w-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                            </div>
+                            <div>
+                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Sunset with Tech</h3>
+                              <span id="mgmt-sunset-subtitle" class="block !text-base text-gray-500 dark:text-gray-400">Pending Tech Release</span>
+                            </div>
+                          </div>
+                          <div class="flex items-end justify-between gap-3">
+                            <h4 id="mgmt-sunset" class="!text-3xl font-bold text-gray-800 leading-none dark:text-white/90">0</h4>
+                            <span id="mgmt-sunset-pct" class="flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 !text-xl font-bold text-amber-600 leading-none dark:bg-amber-500/15 dark:text-amber-500">0%</span>
                           </div>
                         </div>
 
@@ -1143,7 +1199,7 @@
                             </div>
                             <div>
                               <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Killed</h3>
-                              <span class="block !text-base text-gray-500 dark:text-gray-400">Retire</span>
+                              <span id="mgmt-killed-subtitle-text" class="block !text-base text-gray-500 dark:text-gray-400">Retire</span>
                             </div>
                           </div>
                           <div class="flex items-end justify-between gap-3">
@@ -1986,62 +2042,50 @@
     
     <!-- View Report Details Modal (Full Screen) -->
     <div
-      class="fixed left-0 top-0 z-[99999] hidden h-screen w-full flex-col overflow-y-auto overflow-x-hidden bg-white dark:bg-gray-900 p-6 lg:p-10"
+      class="fixed left-0 top-0 z-[99999] hidden h-screen w-full flex-col overflow-y-auto overflow-x-hidden overscroll-contain bg-white dark:bg-gray-900 px-6 pb-6 lg:px-10 lg:pb-10"
       id="viewReportModal"
       style="background-color: var(--card-bg, white);"
     >
-      <!-- Edit / Save / Cancel Buttons (top-right, left of close button) -->
-      <div id="view-report-buttons" class="absolute top-3 right-14 sm:top-5 sm:right-20 z-[99999] flex items-center gap-2">
-        <button
-          id="view-report-edit-btn"
-          onclick="toggleReportEditMode()"
-          class="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 !text-base font-medium text-white shadow-sm hover:bg-brand-600 transition-colors"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-          </svg>
-          Edit Report
-        </button>
-        <div id="view-report-save-cancel-btns" class="hidden flex gap-2">
+      <!-- Sticky header bar: Edit/Save/Cancel left · Close right -->
+      <div class="sticky top-0 z-[99999] flex items-center justify-between gap-4 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 py-3 -mx-6 lg:-mx-10 px-6 lg:px-10 mb-8">
+        <div id="view-report-buttons" class="flex items-center gap-2">
           <button
-            onclick="cancelReportEditMode()"
-            class="flex items-center gap-2 rounded-lg bg-gray-100 dark:bg-gray-700 px-4 py-2 !text-base font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onclick="saveReportFromView()"
+            id="view-report-edit-btn"
+            onclick="toggleReportEditMode()"
             class="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 !text-base font-medium text-white shadow-sm hover:bg-brand-600 transition-colors"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
             </svg>
-            Save Changes
+            Edit Report
           </button>
+          <div id="view-report-save-cancel-btns" class="hidden flex gap-2">
+            <button
+              onclick="cancelReportEditMode()"
+              class="flex items-center gap-2 rounded-lg bg-gray-100 dark:bg-gray-700 px-4 py-2 !text-base font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onclick="saveReportFromView()"
+              class="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 !text-base font-medium text-white shadow-sm hover:bg-brand-600 transition-colors"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Save Changes
+            </button>
+          </div>
         </div>
-      </div>
-
-      <!-- Close button -->
-      <button
-        onclick="closeViewReportModal()"
-        class="absolute right-3 top-3 z-[99999] flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white sm:right-6 sm:top-6 sm:h-11 sm:w-11"
-      >
-        <svg
-          class="fill-current"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+        <button
+          onclick="closeViewReportModal()"
+          class="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
         >
-          <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z"
-            fill=""
-          />
-        </svg>
-      </button>
+          <svg class="fill-current" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z" fill=""/>
+          </svg>
+        </button>
+      </div>
 
       <div class="mx-auto max-w-7xl w-full">
         <div class="grid max-w-full grid-cols-1 gap-x-8 gap-y-8 lg:grid-cols-3 lg:grid-rows-[auto_1fr]">
@@ -3815,6 +3859,7 @@
         const modal = document.getElementById('viewReportModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
       }
       
       function populateReportTimeline(report) {
@@ -4041,6 +4086,7 @@
         const modal = document.getElementById('viewReportModal');
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+        document.body.style.overflow = '';
         currentViewReportId = null;
       }
       
@@ -4490,8 +4536,7 @@
         const modal = document.getElementById('reportModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
-        
-        // Set up listeners for real-time calculation
+        document.body.style.overflow = 'hidden';
         setupCalculationListeners();
       }
       
@@ -4529,6 +4574,7 @@
         const modal = document.getElementById('reportModal');
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+        document.body.style.overflow = '';
         document.getElementById('reportForm').reset();
       }
       
@@ -4712,6 +4758,7 @@
         if (modal) {
           modal.classList.remove('hidden');
           modal.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
         }
       }
       
@@ -4721,6 +4768,7 @@
         if (modal) {
           modal.classList.add('hidden');
           modal.style.display = 'none';
+          document.body.style.overflow = '';
         }
         reportToDelete = null;
       }
@@ -5562,8 +5610,8 @@
       // Initialize on page load
       document.addEventListener('DOMContentLoaded', async function() {
         try {
-          // Fetch reports and ad hoc tasks in parallel
-          const [data, adhocData] = await Promise.all([fetchReports(), fetchAdhocTasks()]);
+          // Fetch reports, ad hoc tasks, and management config in parallel
+          const [data, adhocData] = await Promise.all([fetchReports(), fetchAdhocTasks(), fetchMgmtConfig()]);
           adhocTasks = adhocData || [];
           console.log('✅ Loaded', adhocTasks.length, 'ad hoc tasks from Confluence');
           if (data && data.length > 0) {
@@ -7230,15 +7278,213 @@
         reportFrequencyChartInstance.render();
       }
       
-      // ─── Management Summary ────────────────────────────────────────────────────
+      // ─── Management Summary Config ─────────────────────────────────────────────
+      //  Stored as mgmt_config.json in Confluence; falls back to DEFAULT_MGMT_CONFIG.
+      //  v1.1 – each KPI rule uses a conditions array with AND/OR logic.
+      //         Additional controls: hoursPerFTE, regions, groupBy, visibility.
+
+      const DEFAULT_MGMT_CONFIG = {
+        version: '1.2',
+        managementSummary: {
+          // ── Inclusion rules: report enters the summary only when ALL (AND) / ANY (OR) conditions pass
+          inclusionRules: {
+            logic: 'AND',
+            conditions: [
+              { field: 'activeStatus', operator: 'is', value: 'Active' }
+            ]
+          },
+          // ── Deduplication: a report is EXCLUDED when ALL excludeRules conditions match (it's a sub-report)
+          deduplication: {
+            enabled: true,
+            excludeRules: {
+              logic: 'AND',
+              conditions: [
+                { field: 'parentReport', operator: 'isNotEmpty', value: '' },
+                { field: 'parentReport', operator: 'notEqualsField', value: 'reportName' }
+              ]
+            }
+          },
+          hoursPerFTE: 160,
+          regions: ['Americas', 'EMEA', 'APAC'],
+          groupBy: 'rationalizationCategory',
+          visibility: {
+            reportsTable: true,
+            reportsDonut: true,
+            hoursTable: true,
+            hoursDonut: true,
+            fteTable: true,
+            statusBubble: true
+          },
+          kpiMatchRules: {
+            kept: {
+              subtitle: 'Retain',
+              logic: 'OR',
+              conditions: [
+                { field: 'rationalizationCategory', operator: 'is', value: 'Retain' },
+                { field: 'rationalizationCategory', operator: 'is', value: 'Keep' },
+                { field: 'rationalizationCategory', operator: 'is', value: 'Kept' }
+              ]
+            },
+            sunset: {
+              subtitle: 'Tech Dependent',
+              logic: 'OR',
+              conditions: [
+                { field: 'rationalizationCategory', operator: 'is', value: 'Sunset with Tech' },
+                { field: 'rationalizationCategory', operator: 'is', value: 'Pending Tech Release' },
+                { field: 'rationalizationCategory', operator: 'is', value: 'Dependent on One Wealth Go-Live' }
+              ]
+            },
+            killed: {
+              subtitle: 'Retire',
+              logic: 'OR',
+              conditions: [
+                { field: 'rationalizationCategory', operator: 'is', value: 'Retire' },
+                { field: 'rationalizationCategory', operator: 'is', value: 'Kill' },
+                { field: 'rationalizationCategory', operator: 'is', value: 'Killed' }
+              ]
+            }
+          }
+        }
+      };
+
+      // Metadata for the condition builder UI
+      const MGMT_CFG_FIELDS = [
+        { value: 'rationalizationCategory', label: 'Agreed Rationalization Category' },
+        { value: 'rationalizationStatus',   label: 'Agreed Rationalization Status' },
+        { value: 'activeStatus',            label: 'Active Status' },
+        { value: 'parentReport',            label: 'Parent Report Name' },
+        { value: 'reportName',              label: 'Report Name' },
+        { value: 'reportType',              label: 'Report Type' },
+        { value: 'category',               label: 'Category' },
+        { value: 'subCategory',            label: 'Sub Category' },
+        { value: 'criticalReport',         label: 'Critical Report' },
+        { value: 'reportComplexity',       label: 'Complexity' },
+        { value: 'reportRegion',           label: 'Region' },
+        { value: 'includePII',             label: 'Includes PII' },
+        { value: 'euc',                    label: 'EUC' },
+        { value: 'preparedBy',             label: 'Prepared By' }
+      ];
+      // 'needsValue': 'text' = free/datalist, 'field' = field selector, false = no input
+      const MGMT_CFG_OPS = [
+        { value: 'is',              label: '=',              needsValue: 'text'  },
+        { value: 'isNot',           label: '≠',              needsValue: 'text'  },
+        { value: 'contains',        label: 'contains',       needsValue: 'text'  },
+        { value: 'startsWith',      label: 'starts with',    needsValue: 'text'  },
+        { value: 'equalsField',     label: '= field',        needsValue: 'field' },
+        { value: 'notEqualsField',  label: '≠ field',        needsValue: 'field' },
+        { value: 'isEmpty',         label: 'is empty',       needsValue: false   },
+        { value: 'isNotEmpty',      label: 'is not empty',   needsValue: false   }
+      ];
+
+      // Build unique value map from loaded data (field → sorted unique values)
+      function _getCfgDataValues(fieldName) {
+        if (!reports || !reports.length) return [];
+        const vals = new Set();
+        reports.forEach(r => {
+          const v = getMgmtReportField(r, fieldName);
+          if (v) vals.add(v);
+          // also expand array fields (e.g. region)
+          if (Array.isArray(r[fieldName])) r[fieldName].forEach(x => x && vals.add(String(x).trim()));
+        });
+        return [...vals].sort((a, b) => a.localeCompare(b));
+      }
+
+      // In-editor working copy for KPI conditions (avoid mutating mgmtConfig until Save)
+      let _cfgEditorConditions = {};
+
+      let mgmtConfig = DEFAULT_MGMT_CONFIG;
+
+      async function fetchMgmtConfig() {
+        try {
+          const res = await fetch(
+            'https://cedt-confluence.net/confluence/download/attachments/2740868871/mgmt_config.json?api=v2'
+          );
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const remote = await res.json();
+          const rms = remote.managementSummary || {};
+          const dms = DEFAULT_MGMT_CONFIG.managementSummary;
+          mgmtConfig = {
+            ...DEFAULT_MGMT_CONFIG,
+            managementSummary: {
+              ...dms, ...rms,
+              inclusionRules: rms.inclusionRules   || dms.inclusionRules,
+              deduplication:  { ...dms.deduplication, ...(rms.deduplication || {}) },
+              visibility:     { ...dms.visibility,    ...(rms.visibility    || {}) },
+              kpiMatchRules:  { ...dms.kpiMatchRules, ...(rms.kpiMatchRules || {}) }
+            }
+          };
+          console.log('✅ Loaded mgmt_config.json from Confluence');
+        } catch (e) {
+          console.info('ℹ️ mgmt_config.json not found – using defaults');
+          mgmtConfig = DEFAULT_MGMT_CONFIG;
+        }
+      }
+
+      // Resolve a report field value from camelCase key or known aliases
+      function getMgmtReportField(report, fieldName) {
+        if (!report || !fieldName) return '';
+        if (fieldName === 'rationalizationCategory') return getMgmtRationalizationCategory(report);
+        if (fieldName === 'rationalizationStatus')   return getMgmtRationalizationStatus(report);
+        return String(report[fieldName] ?? '').trim();
+      }
+
+      // Evaluate a single condition { field, operator, value } against a report
+      function evalMgmtCondition(report, cond) {
+        const fv = getMgmtReportField(report, cond.field).toLowerCase();
+        // For equalsField / notEqualsField, 'value' is another field name
+        const cv = (cond.operator === 'equalsField' || cond.operator === 'notEqualsField')
+          ? getMgmtReportField(report, cond.value).toLowerCase()
+          : String(cond.value || '').trim().toLowerCase();
+        switch (cond.operator) {
+          case 'is':             return fv === cv;
+          case 'isNot':          return fv !== cv;
+          case 'contains':       return fv.includes(cv);
+          case 'startsWith':     return fv.startsWith(cv);
+          case 'equalsField':    return fv === cv;
+          case 'notEqualsField': return fv !== cv;
+          case 'isEmpty':        return fv === '';
+          case 'isNotEmpty':     return fv !== '';
+          default:               return fv === cv;
+        }
+      }
+
+      // Evaluate a condition group { conditions[], logic: 'AND'|'OR' } against a report
+      function evalMgmtConditions(report, conditions, logic) {
+        if (!conditions || !conditions.length) return true;
+        const results = conditions.map(c => evalMgmtCondition(report, c));
+        return (logic || 'AND').toUpperCase() === 'AND'
+          ? results.every(Boolean)
+          : results.some(Boolean);
+      }
+
+      // Check if a report matches a KPI rule (supports legacy values[] and new conditions[])
+      function matchesKpiRule(report, rule) {
+        if (!rule) return false;
+        // New format: conditions array with AND/OR logic
+        if (rule.conditions && rule.conditions.length > 0) {
+          const logic = (rule.logic || 'OR').toUpperCase();
+          const results = rule.conditions.map(c => evalMgmtCondition(report, c));
+          return logic === 'AND' ? results.every(Boolean) : results.some(Boolean);
+        }
+        // Legacy format: flat values array (case-insensitive match against rationalizationCategory)
+        const raw  = getMgmtRationalizationCategory(report);
+        const norm = normalizeMgmtRationalizationCategory(raw);
+        return (rule.values || []).some(v => {
+          const vl = v.toLowerCase();
+          return raw.toLowerCase() === vl || norm.toLowerCase() === vl;
+        });
+      }
+
+      // ─── Management Summary Charts ─────────────────────────────────────────────
       let mgmtReportsChartInstance = null;
       let mgmtHoursChartInstance = null;
       let mgmtStatusChartInstance = null;
 
-      const REGIONS_MGMT = ['Americas', 'EMEA', 'APAC'];
+      // Live list of regions used by the current config (refreshed at summary refresh time)
+      let REGIONS_MGMT = ['Americas', 'EMEA', 'APAC'];
 
       function mgmtReportsByRegion(subset) {
-        const counts = { Americas: 0, EMEA: 0, APAC: 0 };
+        const counts = Object.fromEntries(REGIONS_MGMT.map(r => [r, 0]));
         subset.forEach(r => {
           const regions = Array.isArray(r.reportRegion) ? r.reportRegion : (r.reportRegion ? [r.reportRegion] : []);
           REGIONS_MGMT.forEach(reg => { if (regions.includes(reg)) counts[reg]++; });
@@ -7247,7 +7493,7 @@
       }
 
       function mgmtHoursByRegion(subset) {
-        const hours = { Americas: 0, EMEA: 0, APAC: 0 };
+        const hours = Object.fromEntries(REGIONS_MGMT.map(r => [r, 0]));
         subset.forEach(r => {
           const regions = Array.isArray(r.reportRegion) ? r.reportRegion : (r.reportRegion ? [r.reportRegion] : []);
           const h = parseFloat(r.avgTimePerMonth) || 0;
@@ -7257,9 +7503,10 @@
         return hours;
       }
 
-      function mgmtFteByRegion(hoursMap) {
+      function mgmtFteByRegion(hoursMap, hoursPerFTE) {
+        const divisor = hoursPerFTE || 160;
         const fte = {};
-        Object.entries(hoursMap).forEach(([k, v]) => { fte[k] = v / 160; });
+        Object.entries(hoursMap).forEach(([k, v]) => { fte[k] = v / divisor; });
         return fte;
       }
 
@@ -7324,29 +7571,78 @@
       }
 
       function refreshManagementSummary() {
-        // Use the same unified dataset as FTE (respects type filter + adhoc toggle + status filter)
-        const rawData = getFTEDataset();
+        const cfg = (mgmtConfig || DEFAULT_MGMT_CONFIG).managementSummary;
+        // Apply config-driven regions and FTE divisor
+        REGIONS_MGMT = (cfg.regions && cfg.regions.length) ? cfg.regions : ['Americas', 'EMEA', 'APAC'];
+        const hoursPerFTE = cfg.hoursPerFTE || 160;
+
+        // ── Build dataset: inclusion rules decide which reports enter the summary ──
+        const inclRules = cfg.inclusionRules;
+        const rtFilter  = currentReportTypeFilter || 'All';
+
+        // Evaluate inclusion for each report (supports both v1.2 conditions and legacy activeStatusFilter)
+        let baseReports = filteredReports.filter(r => {
+          if (inclRules && inclRules.conditions && inclRules.conditions.length) {
+            return evalMgmtConditions(r, inclRules.conditions, inclRules.logic);
+          }
+          // Legacy fallback
+          const allowed = new Set((cfg.activeStatusFilter || ['Active']).map(s => s.toLowerCase()));
+          return allowed.has((r.activeStatus || '').toLowerCase());
+        });
+        if (rtFilter !== 'All' && rtFilter !== 'Ad Hoc') {
+          baseReports = baseReports.filter(r => r.reportType === rtFilter);
+        }
+
+        const adhocForSummary = includeAdhocInFTE ? getAdhocFTEReports() : [];
+        const rawData = rtFilter === 'Ad Hoc' ? getAdhocFTEReports() : baseReports.concat(adhocForSummary);
         if (!rawData) return;
 
-        // ── Deduplication: exclude child reports (those with a parentReport set) to avoid
-        //    double-counting when a sub-report and its parent both appear in the dataset.
-        //    Ad-hoc tasks are never child reports so they pass through unchanged.
-        const data = rawData.filter(r => r._isAdhoc || !(r.parentReport && r.parentReport.trim()));
+        // ── Deduplication: exclude reports that match ALL excludeRules conditions ──
+        const dedupCfg = cfg.deduplication || {};
+        const excludeRules = dedupCfg.excludeRules;
+        const data = rawData.filter(r => {
+          if (r._isAdhoc) return true;
+          if (!dedupCfg.enabled) return true;
+          // v1.2: condition-based exclude rules
+          if (excludeRules && excludeRules.conditions && excludeRules.conditions.length) {
+            const shouldExclude = evalMgmtConditions(r, excludeRules.conditions, excludeRules.logic || 'AND');
+            return !shouldExclude;
+          }
+          // Legacy fallback: exclude when parentReport is set and different from reportName
+          const parent = (r.parentReport || '').trim();
+          if (!parent) return true;
+          const self = (r.reportName || '').trim();
+          return parent === self;
+        });
 
         const total = data.length;
         const allRegCounts = mgmtReportsByRegion(data);
-        const allRegHours = mgmtHoursByRegion(data);
-        const totalHours = data.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
+        const allRegHours  = mgmtHoursByRegion(data);
+        const totalHours   = data.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
 
-        // ── Metric cards — driven by Agreed Rationalization Category (Retain / Retire) ──
-        const kept   = data.filter(r => normalizeMgmtRationalizationCategory(getMgmtRationalizationCategory(r)) === 'Retain').length;
-        const killed = data.filter(r => normalizeMgmtRationalizationCategory(getMgmtRationalizationCategory(r)) === 'Retire').length;
+        // ── Metric cards — driven by config kpiMatchRules ──
+        const rules  = cfg.kpiMatchRules || {};
+        const kept   = data.filter(r => matchesKpiRule(r, rules.kept)).length;
+        const sunset = data.filter(r => matchesKpiRule(r, rules.sunset)).length;
+        const killed = data.filter(r => matchesKpiRule(r, rules.killed)).length;
+
         document.getElementById('mgmt-total').textContent  = total;
         document.getElementById('mgmt-kept').textContent   = kept;
+        document.getElementById('mgmt-sunset').textContent = sunset;
         document.getElementById('mgmt-killed').textContent = killed;
         document.getElementById('mgmt-hours').textContent  = Math.round(totalHours);
-        document.getElementById('mgmt-kept-pct').textContent  = total > 0 ? Math.round(kept / total * 100) + '%' : '0%';
-        document.getElementById('mgmt-killed-pct').textContent = total > 0 ? Math.round(killed / total * 100) + '%' : '0%';
+        document.getElementById('mgmt-kept-pct').textContent    = total > 0 ? Math.round(kept   / total * 100) + '%' : '0%';
+        document.getElementById('mgmt-sunset-pct').textContent  = total > 0 ? Math.round(sunset / total * 100) + '%' : '0%';
+        document.getElementById('mgmt-killed-pct').textContent  = total > 0 ? Math.round(killed / total * 100) + '%' : '0%';
+
+        // ── KPI subtitle labels — use config subtitle (2-3 words) or fallback to first value ──
+        const updateKpiSubtitle = (elId, rule) => {
+          const el = document.getElementById(elId);
+          if (el && rule) el.textContent = (rule.subtitle || rule.values?.[0] || '').trim();
+        };
+        updateKpiSubtitle('mgmt-kept-subtitle-text',   rules.kept);
+        updateKpiSubtitle('mgmt-sunset-subtitle',      rules.sunset);
+        updateKpiSubtitle('mgmt-killed-subtitle-text', rules.killed);
 
         // ── Build per-category subsets dynamically from data values ──
         // Only non-adhoc items get grouped by rationalizationCategory
@@ -7408,19 +7704,19 @@
         // ── FTE table ──
         const fTbody = document.getElementById('mgmt-fte-tbody');
         if (fTbody) {
-          const totalFTE = totalHours / 160;
-          const allRegFte = mgmtFteByRegion(allRegHours);
+          const totalFTE  = totalHours / hoursPerFTE;
+          const allRegFte = mgmtFteByRegion(allRegHours, hoursPerFTE);
           let html = '';
           catSubsets.forEach(c => {
             const regH   = mgmtHoursByRegion(c.reports);
             const subH   = c.reports.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
-            const subFTE = subH / 160;
-            const regFte = mgmtFteByRegion(regH);
+            const subFTE = subH / hoursPerFTE;
+            const regFte = mgmtFteByRegion(regH, hoursPerFTE);
             html += buildMgmtTableRow(c.label + ' (FTE)', Math.round(subFTE * 10) / 10 || 0, regFte, v => Math.round(v * 10) / 10 || 0, false);
           });
           if (adhocItems.length > 0) {
-            const adhocFTE    = adhocHoursTotal / 160;
-            const adhocRegFte = mgmtFteByRegion(adhocRegHours);
+            const adhocFTE    = adhocHoursTotal / hoursPerFTE;
+            const adhocRegFte = mgmtFteByRegion(adhocRegHours, hoursPerFTE);
             html += buildMgmtAdhocRow('Ad Hoc (FTE)', Math.round(adhocFTE * 10) / 10 || 0, adhocRegFte, v => Math.round(v * 10) / 10 || 0);
           }
           html += buildMgmtTableRow('FTE equivalent per month', Math.round(totalFTE * 10) / 10 || 0, allRegFte, v => Math.round(v * 10) / 10 || 0, true);
@@ -7644,6 +7940,427 @@
       }
 
       window.refreshManagementSummary = refreshManagementSummary;
+
+      // ─── Summary Config Panel ─────────────────────────────────────────────────
+
+      function showMgmtConfigButton(show) {
+        const wrap = document.getElementById('mgmtConfigToggleWrap');
+        if (wrap) wrap.style.display = show ? '' : 'none';
+        if (!show) {
+          const popover = document.getElementById('mgmtConfigPopover');
+          if (popover) popover.classList.add('hidden');
+        }
+      }
+
+      function toggleMgmtConfigPanel() {
+        const popover = document.getElementById('mgmtConfigPopover');
+        if (!popover) return;
+        const isHidden = popover.classList.contains('hidden');
+        if (isHidden) {
+          populateMgmtConfigForm();
+          popover.classList.remove('hidden');
+          setTimeout(() => document.addEventListener('click', _closeMgmtConfigOutside), 0);
+        } else {
+          popover.classList.add('hidden');
+          document.removeEventListener('click', _closeMgmtConfigOutside);
+        }
+      }
+
+      function _closeMgmtConfigOutside(e) {
+        const popover = document.getElementById('mgmtConfigPopover');
+        const btn     = document.getElementById('mgmtConfigToggle');
+        if (popover && btn && !popover.contains(e.target) && !btn.contains(e.target)) {
+          popover.classList.add('hidden');
+          document.removeEventListener('click', _closeMgmtConfigOutside);
+        }
+      }
+
+      // ── Condition builder helpers ──────────────────────────────────────────────
+
+      const _inputCls  = 'rounded-lg border border-gray-300 bg-white px-2 py-1.5 !text-base text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-white/90 focus:border-brand-500 focus:outline-none';
+      const _selectCls = `${_inputCls} cursor-pointer`;
+
+      function _cfgFieldSelect(name, selected) {
+        return `<select name="${name}" onchange="refreshCfgConditionValue(this)" class="${_selectCls}">
+          ${MGMT_CFG_FIELDS.map(f => `<option value="${f.value}"${selected === f.value ? ' selected' : ''}>${f.label}</option>`).join('')}
+        </select>`;
+      }
+
+      function _cfgOpSelect(name, selected) {
+        return `<select name="${name}" onchange="refreshCfgConditionValue(this)" class="${_selectCls}">
+          ${MGMT_CFG_OPS.map(o => `<option value="${o.value}"${selected === o.value ? ' selected' : ''}>${o.label}</option>`).join('')}
+        </select>`;
+      }
+
+      // Called when field or operator changes — updates the value input/select visibility and datalist
+      function refreshCfgConditionValue(changedEl) {
+        const row      = changedEl.closest('.cfg-cond-row');
+        if (!row) return;
+        const fieldSel = row.querySelector('[name$="-field"]');
+        const opSel    = row.querySelector('[name$="-op"]');
+        const valTxt   = row.querySelector('.cfg-val-text');
+        const valFld   = row.querySelector('.cfg-val-field');
+        if (!fieldSel || !opSel) return;
+        const op        = opSel.value;
+        const fieldName = fieldSel.value;
+        const opMeta    = MGMT_CFG_OPS.find(o => o.value === op) || {};
+        const needsVal  = opMeta.needsValue;
+        // Toggle which input is visible
+        if (valTxt) valTxt.style.display  = (needsVal === 'text')  ? '' : 'none';
+        if (valFld) valFld.style.display  = (needsVal === 'field') ? '' : 'none';
+        // Refresh datalist for text inputs
+        if (needsVal === 'text' && valTxt) {
+          const listId  = valTxt.getAttribute('list');
+          const datalist = listId ? document.getElementById(listId) : null;
+          if (datalist) {
+            const vals = _getCfgDataValues(fieldName);
+            datalist.innerHTML = vals.map(v => `<option value="${v.replace(/"/g, '&quot;')}"/>`).join('');
+          }
+        }
+      }
+
+      function _buildConditionRow(cardKey, idx, cond) {
+        const op      = cond.operator || 'is';
+        const opMeta  = MGMT_CFG_OPS.find(o => o.value === op) || {};
+        const needsVal = opMeta.needsValue;
+        const dlId    = `dl-${cardKey}-${idx}`;
+        const vals    = (needsVal === 'text') ? _getCfgDataValues(cond.field) : [];
+        const txtDisp = needsVal === 'text'  ? '' : 'none';
+        const fldDisp = needsVal === 'field' ? '' : 'none';
+        const valHtml = `
+          <datalist id="${dlId}">${vals.map(v => `<option value="${v.replace(/"/g,'&quot;')}"/>`).join('')}</datalist>
+          <input name="cond-${cardKey}-${idx}-value" list="${dlId}" value="${(cond.value||'').replace(/"/g,'&quot;')}"
+            placeholder="value…" autocomplete="off"
+            style="display:${txtDisp}"
+            class="cfg-val-text flex-1 min-w-[110px] ${_inputCls} placeholder:text-gray-400"/>
+          <select name="cond-${cardKey}-${idx}-value-field"
+            style="display:${fldDisp}"
+            class="cfg-val-field ${_selectCls}">
+            ${MGMT_CFG_FIELDS.map(f => `<option value="${f.value}"${(cond.value||'')=== f.value?' selected':''}>${f.label}</option>`).join('')}
+          </select>`;
+        return `<div class="cfg-cond-row flex flex-wrap items-center gap-2 rounded-lg bg-white dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 px-3 py-2">
+          ${_cfgFieldSelect(`cond-${cardKey}-${idx}-field`, cond.field)}
+          ${_cfgOpSelect(`cond-${cardKey}-${idx}-op`, op)}
+          ${valHtml}
+          <button onclick="removeCfgCondition('${cardKey}',${idx})" class="flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-400 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-600 transition-colors">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>`;
+      }
+
+      function _renderConditionRows(cardKey, conditions, logic) {
+        const wrap = document.getElementById(`cfg-cond-${cardKey}`);
+        if (!wrap) return;
+        const logicBadgeCls = 'cfg-logic-badge cursor-pointer select-none inline-flex items-center justify-center rounded-full bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 px-2 py-0.5 !text-base font-semibold hover:bg-brand-200 transition-colors';
+        wrap.innerHTML = conditions.map((cond, idx) => {
+          const badge = idx > 0
+            ? `<span class="${logicBadgeCls}" onclick="toggleCfgLogic('${cardKey}')" title="Click to toggle AND / OR">${logic}</span>`
+            : '';
+          return badge + _buildConditionRow(cardKey, idx, cond);
+        }).join('');
+      }
+
+      function toggleCfgLogic(cardKey) {
+        const rule = _cfgEditorConditions[cardKey];
+        if (!rule) return;
+        rule.logic = rule.logic === 'OR' ? 'AND' : 'OR';
+        _renderConditionRows(cardKey, rule.conditions, rule.logic);
+        const badge = document.getElementById(`cfg-logic-${cardKey}`);
+        if (badge) badge.textContent = rule.logic;
+      }
+
+      function removeCfgCondition(cardKey, idx) {
+        const rule = _cfgEditorConditions[cardKey];
+        if (!rule) return;
+        rule.conditions.splice(idx, 1);
+        _renderConditionRows(cardKey, rule.conditions, rule.logic);
+      }
+
+      function addCfgCondition(cardKey) {
+        const rule = _cfgEditorConditions[cardKey];
+        if (!rule) return;
+        rule.conditions.push({ field: 'rationalizationCategory', operator: 'is', value: '' });
+        _renderConditionRows(cardKey, rule.conditions, rule.logic);
+      }
+
+      // Collect conditions from DOM back into a rule object
+      function _collectConditions(cardKey) {
+        const rule = _cfgEditorConditions[cardKey];
+        if (!rule) return { subtitle: '', logic: 'OR', conditions: [] };
+        const conditions = rule.conditions.map((_, idx) => {
+          const get = n => document.querySelector(`[name="cond-${cardKey}-${idx}-${n}"]`)?.value || '';
+          const op  = get('op');
+          // For field-ref operators, value comes from the field select; otherwise from the text input
+          const value = (op === 'equalsField' || op === 'notEqualsField')
+            ? (document.querySelector(`[name="cond-${cardKey}-${idx}-value-field"]`)?.value || '')
+            : get('value');
+          return { field: get('field'), operator: op, value };
+        }).filter(c => c.field);
+        const subtitle = document.getElementById(`cfg-subtitle-${cardKey}`)?.value?.trim() || '';
+        return { subtitle, logic: rule.logic, conditions };
+      }
+
+      // Collect a plain condition group (no subtitle) — used for inclusion/dedup groups
+      function _collectConditionGroup(groupKey) {
+        const rule = _cfgEditorConditions[groupKey];
+        if (!rule) return { logic: 'AND', conditions: [] };
+        const conditions = rule.conditions.map((_, idx) => {
+          const get = n => document.querySelector(`[name="cond-${groupKey}-${idx}-${n}"]`)?.value || '';
+          const op  = get('op');
+          const value = (op === 'equalsField' || op === 'notEqualsField')
+            ? (document.querySelector(`[name="cond-${groupKey}-${idx}-value-field"]`)?.value || '')
+            : get('value');
+          return { field: get('field'), operator: op, value };
+        }).filter(c => c.field);
+        return { logic: rule.logic, conditions };
+      }
+
+      // ── Main form population ────────────────────────────────────────────────────
+
+      function _toggleSwitch(id, checked) {
+        return `<label class="inline-flex items-center gap-2 cursor-pointer">
+          <div class="relative flex-shrink-0">
+            <input type="checkbox" id="${id}" class="sr-only peer" ${checked ? 'checked' : ''}>
+            <div class="w-9 h-5 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:bg-blue-500 transition-colors"></div>
+            <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
+          </div>`;
+      }
+
+      // Single unified card builder used for every rule group
+      function _ruleCard({ key, label, borderCls, dotCls, rule, subtitle, dedupToggle }) {
+        const logicBadgeCls = 'cursor-pointer select-none inline-flex items-center justify-center rounded-full bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 px-2 py-0.5 !text-base font-semibold hover:bg-brand-200 transition-colors';
+        const subtitleHtml = subtitle != null ? `
+          <span class="ml-auto !text-base text-gray-400 dark:text-gray-500">Subtitle:</span>
+          <input id="cfg-subtitle-${key}" type="text" value="${subtitle}" placeholder="2–3 words"
+            class="rounded-lg border border-gray-300 bg-white px-2 py-1.5 !text-base text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white/90 focus:border-brand-500 focus:outline-none w-28"/>` : '';
+        const toggleHtml = dedupToggle != null ? `
+          ${_toggleSwitch('cfg-dedup-enabled', dedupToggle)}
+            <span class="!text-base text-gray-500 dark:text-gray-400">On</span>
+          </label>` : '';
+        return `
+          <div class="rounded-xl border ${borderCls} p-4">
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <div class="h-2.5 w-2.5 rounded-full flex-shrink-0 ${dotCls}"></div>
+              <span class="!text-base font-semibold text-gray-800 dark:text-white/90">${label}</span>
+              <span id="cfg-logic-${key}" class="${logicBadgeCls}"
+                onclick="toggleCfgLogic('${key}')" title="Toggle AND / OR">${rule.logic}</span>
+              ${toggleHtml}${subtitleHtml}
+            </div>
+            <div id="cfg-cond-${key}" class="space-y-2"></div>
+            <button onclick="addCfgCondition('${key}')"
+              class="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-gray-300 dark:border-gray-600 px-3 py-1.5 !text-base text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Add condition
+            </button>
+          </div>`;
+      }
+
+      function populateMgmtConfigForm() {
+        const cfg  = (mgmtConfig || DEFAULT_MGMT_CONFIG).managementSummary;
+        const body = document.getElementById('mgmtConfigBody');
+        if (!body) return;
+
+        const dd         = cfg.deduplication  || {};
+        const vis        = cfg.visibility     || {};
+        const rules      = cfg.kpiMatchRules  || {};
+        const curRegions = cfg.regions        || ['Americas', 'EMEA', 'APAC'];
+        const inclR      = cfg.inclusionRules || DEFAULT_MGMT_CONFIG.managementSummary.inclusionRules;
+        const excl       = dd.excludeRules    || DEFAULT_MGMT_CONFIG.managementSummary.deduplication.excludeRules;
+
+        // All rule groups — flat ordered list
+        const allGroups = [
+          { key: 'inclusion', label: 'Include in Summary',  borderCls: 'border-blue-200   bg-blue-50   dark:border-blue-900/50   dark:bg-blue-900/10',   dotCls: 'bg-blue-500',   rule: inclR,          subtitle: undefined, dedupToggle: undefined },
+          { key: 'dedup',     label: 'Exclude (sub-report)', borderCls: 'border-orange-200 bg-orange-50 dark:border-orange-900/50 dark:bg-orange-900/10', dotCls: 'bg-orange-500', rule: excl,           subtitle: undefined, dedupToggle: dd.enabled !== false },
+          { key: 'kept',      label: 'Kept',                borderCls: 'border-green-200  bg-green-50  dark:border-green-900/50  dark:bg-green-900/10',  dotCls: 'bg-green-500',  rule: rules.kept   || {logic:'OR',conditions:[]}, subtitle: rules.kept?.subtitle   || '', dedupToggle: undefined },
+          { key: 'sunset',    label: 'Sunset with Tech',    borderCls: 'border-amber-200  bg-amber-50  dark:border-amber-900/50  dark:bg-amber-900/10',  dotCls: 'bg-amber-500',  rule: rules.sunset || {logic:'OR',conditions:[]}, subtitle: rules.sunset?.subtitle || '', dedupToggle: undefined },
+          { key: 'killed',    label: 'Killed',              borderCls: 'border-red-200    bg-red-50    dark:border-red-900/50    dark:bg-red-900/10',    dotCls: 'bg-red-500',    rule: rules.killed || {logic:'OR',conditions:[]}, subtitle: rules.killed?.subtitle || '', dedupToggle: undefined }
+        ];
+
+        // Seed editor state
+        allGroups.forEach(({ key, rule }) => {
+          _cfgEditorConditions[key] = { logic: rule.logic || 'AND', conditions: (rule.conditions || []).map(c => ({...c})) };
+        });
+
+        const groupByOptions = MGMT_CFG_FIELDS.map(f =>
+          `<option value="${f.value}"${(cfg.groupBy||'rationalizationCategory')===f.value?' selected':''}>${f.label}</option>`
+        ).join('');
+        const visKeys = [
+          ['reportsTable','Reports table'], ['reportsDonut','Reports donut'],
+          ['hoursTable','Hours table'],     ['hoursDonut','Hours donut'],
+          ['fteTable','FTE table'],         ['statusBubble','Status bubble']
+        ];
+
+        body.innerHTML = `
+          <!-- Settings bar -->
+          <div class="flex flex-wrap items-end gap-4 pb-1">
+            <div>
+              <label class="block !text-base text-gray-500 dark:text-gray-400 mb-1">Hours / FTE</label>
+              <input id="cfg-hours-fte" type="number" min="1" step="1" value="${cfg.hoursPerFTE || 160}"
+                class="w-24 ${_inputCls}"/>
+            </div>
+            <div>
+              <label class="block !text-base text-gray-500 dark:text-gray-400 mb-1">Group by</label>
+              <select id="cfg-group-by" class="${_selectCls}">${groupByOptions}</select>
+            </div>
+            <div class="flex-1 min-w-[160px]">
+              <label class="block !text-base text-gray-500 dark:text-gray-400 mb-1">Regions</label>
+              <div class="flex flex-wrap gap-1.5 items-center" id="cfg-regions-list">
+                ${curRegions.map((reg, i) => `
+                  <span class="inline-flex items-center rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-2.5 py-0.5 !text-base text-gray-700 dark:text-gray-300">
+                    ${reg}<button onclick="removeCfgRegion(${i})" class="ml-1 text-gray-400 hover:text-red-500 leading-none">×</button>
+                  </span>`).join('')}
+                <input id="cfg-region-input" placeholder="Add…"
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();addCfgRegion();}"
+                  class="rounded-lg border border-dashed border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-2 py-0.5 !text-base text-gray-800 dark:text-white/90 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none w-16"/>
+              </div>
+              <input type="hidden" id="cfg-regions-value" value="${JSON.stringify(curRegions)}"/>
+            </div>
+          </div>
+          <!-- Visibility toggles -->
+          <div class="flex flex-wrap gap-x-5 gap-y-2 py-1 border-t border-b border-gray-100 dark:border-gray-800">
+            ${visKeys.map(([k, lbl]) => `
+              ${_toggleSwitch(`cfg-vis-${k}`, vis[k] !== false)}
+                <span class="!text-base text-gray-600 dark:text-gray-400">${lbl}</span>
+              </label>`).join('')}
+          </div>
+          <!-- Rule cards -->
+          <div class="space-y-3">
+            ${allGroups.map(g => _ruleCard(g)).join('')}
+          </div>
+        `;
+
+        // Render all condition rows
+        allGroups.forEach(({ key }) => {
+          const r = _cfgEditorConditions[key];
+          if (r) _renderConditionRows(key, r.conditions, r.logic);
+        });
+
+        _cfgRegionsList = [...curRegions];
+      }
+
+      // ── Region helper (used by the inline add/remove buttons) ──────────────────
+      let _cfgRegionsList = [];
+
+      function removeCfgRegion(idx) {
+        _cfgRegionsList.splice(idx, 1);
+        _refreshRegionUI();
+      }
+
+      function addCfgRegion() {
+        const inp = document.getElementById('cfg-region-input');
+        const val = (inp?.value || '').trim();
+        if (val && !_cfgRegionsList.includes(val)) {
+          _cfgRegionsList.push(val);
+          _refreshRegionUI();
+        }
+        if (inp) inp.value = '';
+      }
+
+      function _refreshRegionUI() {
+        const list = document.getElementById('cfg-regions-list');
+        const hidden = document.getElementById('cfg-regions-value');
+        if (hidden) hidden.value = JSON.stringify(_cfgRegionsList);
+        if (!list) return;
+        const inp = list.querySelector('#cfg-region-input');
+        const inpHtml = inp ? inp.outerHTML : '';
+        list.innerHTML = _cfgRegionsList.map((reg, i) => `
+          <span class="inline-flex items-center gap-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-1 !text-base text-gray-700 dark:text-gray-300">
+            ${reg}
+            <button onclick="removeCfgRegion(${i})" class="ml-1 text-gray-400 hover:text-red-500 transition-colors">×</button>
+          </span>`).join('') + inpHtml;
+      }
+
+      // ── Save ───────────────────────────────────────────────────────────────────
+
+      async function saveMgmtConfig() {
+        const statusEl = document.getElementById('mgmt-config-status');
+        const setStatus = (msg, cls) => {
+          if (!statusEl) return;
+          statusEl.textContent = msg;
+          statusEl.className = `!text-base ${cls}`;
+        };
+        setStatus('Saving…', 'text-gray-500 dark:text-gray-400');
+
+        const inclusionRules = _collectConditionGroup('inclusion');
+        const hoursPerFTE    = parseInt(document.getElementById('cfg-hours-fte')?.value) || 160;
+        const regions        = _cfgRegionsList.length > 0 ? _cfgRegionsList : ['Americas', 'EMEA', 'APAC'];
+        const groupBy        = document.getElementById('cfg-group-by')?.value || 'rationalizationCategory';
+
+        const deduplication = {
+          enabled:      !!document.getElementById('cfg-dedup-enabled')?.checked,
+          excludeRules: _collectConditionGroup('dedup')
+        };
+
+        const visKeys = ['reportsTable','reportsDonut','hoursTable','hoursDonut','fteTable','statusBubble'];
+        const visibility = Object.fromEntries(
+          visKeys.map(k => [k, !!document.getElementById(`cfg-vis-${k}`)?.checked])
+        );
+
+        const kpiMatchRules = {
+          kept:   _collectConditions('kept'),
+          sunset: _collectConditions('sunset'),
+          killed: _collectConditions('killed')
+        };
+
+        const newConfig = {
+          version: '1.2',
+          managementSummary: {
+            inclusionRules, hoursPerFTE, regions, groupBy, deduplication, visibility, kpiMatchRules
+          }
+        };
+
+        try {
+          await uploadMgmtConfigToConfluence(newConfig);
+          mgmtConfig = newConfig;
+
+          // Live-update KPI subtitles
+          ['kept','sunset','killed'].forEach(key => {
+            const rule = kpiMatchRules[key];
+            const ids  = { kept: 'mgmt-kept-subtitle-text', sunset: 'mgmt-sunset-subtitle', killed: 'mgmt-killed-subtitle-text' };
+            const el   = document.getElementById(ids[key]);
+            if (el) el.textContent = (rule.subtitle || rule.conditions?.[0]?.value || '').trim();
+          });
+
+          refreshManagementSummary();
+          setStatus('✓ Saved to Confluence', 'text-green-600 dark:text-green-400');
+          setTimeout(() => { setStatus('', ''); toggleMgmtConfigPanel(); }, 1600);
+        } catch (err) {
+          console.error('saveMgmtConfig error:', err);
+          setStatus('✗ Upload failed – check console', 'text-red-600 dark:text-red-400');
+        }
+      }
+
+      async function uploadMgmtConfigToConfluence(configData) {
+        const PAGE_ID = '2740868871';
+        const FILENAME = 'mgmt_config.json';
+
+        let attachmentId = null;
+        try {
+          const res  = await fetch(`https://cedt-confluence.net/confluence/rest/api/content/${PAGE_ID}/child/attachment?filename=${FILENAME}`);
+          const data = await res.json();
+          if (data.results?.length > 0) attachmentId = data.results[0].id;
+        } catch (e) {
+          console.warn('Could not check for existing mgmt_config.json', e);
+        }
+
+        const blob     = new Blob([JSON.stringify(configData, null, 2)], { type: 'application/json' });
+        const formData = new FormData();
+        formData.append('file', blob, FILENAME);
+
+        const url = `https://cedt-confluence.net/confluence/rest/api/content/${PAGE_ID}/child/attachment${attachmentId ? `/${attachmentId}` : ''}`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'X-Atlassian-Token': 'no-check' },
+          body: formData
+        });
+
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(`HTTP ${res.status}: ${txt}`);
+        }
+        return res.json();
+      }
+
       // ─────────────────────────────────────────────────────────────────────────
 
       // Modal close event listeners for reportModal
