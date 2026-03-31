@@ -2123,6 +2123,8 @@
         let debounceTimer = null;
         let activeIndex = -1;
         let currentResults = [];
+        let selecting = false;   // prevents re-triggering search after programmatic value set
+        let pendingQuery = '';   // tracks the last query sent so stale results are discarded
 
         function renderDropdown(users, typedValue) {
           currentResults = users;
@@ -2176,8 +2178,12 @@
         }
 
         function selectUser(name) {
+          selecting = true;
+          pendingQuery = '';
           input.value = normalizeMakerName(name);
+          clearTimeout(debounceTimer);
           hideDropdown();
+          setTimeout(() => { selecting = false; }, 50);
         }
 
         function highlightItem(index) {
@@ -2188,12 +2194,17 @@
         }
 
         input.addEventListener('input', () => {
+          if (selecting) return;
           clearTimeout(debounceTimer);
           const val = input.value.trim();
           if (val.length < 1) { hideDropdown(); return; }
+          pendingQuery = val;
           debounceTimer = setTimeout(async () => {
-            const users = await searchConfluenceUsers(val);
-            renderDropdown(users, val);
+            const querySent = val;
+            const users = await searchConfluenceUsers(querySent);
+            // Discard if a newer query has been issued since this one was sent
+            if (querySent !== pendingQuery) return;
+            renderDropdown(users, querySent);
           }, 200);
         });
 
