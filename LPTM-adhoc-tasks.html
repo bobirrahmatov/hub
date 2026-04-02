@@ -432,7 +432,7 @@
                     id="searchInput"
                     placeholder="Search tasks..."
                     class="h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-[42px] !text-base text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:border-gray-700 dark:text-white dark:placeholder:text-gray-500"
-                    oninput="filterTasks()"
+                    oninput="debouncedFilterTasks()"
                   />
                 </div>
                 
@@ -666,7 +666,7 @@
           <div class="dark:border-gray-800">
             
             <!-- Tabs Navigation -->
-            <div class="dark:border-gray-800" x-data="{ activeTab: 'table' }">
+            <div class="dark:border-gray-800" x-data="{ activeTab: 'table' }" x-init="$watch('activeTab', val => { window.currentActiveTab = val; if (val === 'summary') { refreshSummary(); } if (val === 'kanban') { refreshKanbanBoard(); } })">
               <div class="border-b border-gray-200 dark:border-gray-800">
                 <nav class="-mb-px flex space-x-2 overflow-x-auto px-6 pt-4 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 dark:[&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5">
                   <button
@@ -2239,11 +2239,13 @@
       let taskToDelete = null;
       let currentPage = 1;
       let itemsPerPage = 25;
-      let lastKnownVersion = null; // Track version for concurrency control
-      let lastKnownTimestamp = null; // Track timestamp for concurrency control
       let expandedTasks = new Set();
       let kanbanSearchTerm = '';
       let kanbanStatusFilter = 'All';
+      // Performance caches
+      let cachedAttachmentId = null;
+      let currentActiveTab = 'table';
+      let filterDebounceTimer = null;
       
       // Fetch current user from Confluence API
       async function getCurrentUser() {
@@ -2366,11 +2368,6 @@
           
           const data = await response.json();
           
-          // Store version info for concurrency control
-          if (data.metadata) {
-            lastKnownVersion = data.metadata.version;
-            lastKnownTimestamp = data.metadata.lastUpdated;
-          }
           
           if (data.tasks && Array.isArray(data.tasks)) {
             return data.tasks;
@@ -2386,146 +2383,50 @@
         }
       }
       
-      // Update tasks in Confluence with conflict detection
-      // This function handles both creating a new adhoc_tasks.json file (if it doesn't exist)
-      // and updating an existing file. It automatically detects which operation to perform.
-      // It also implements optimistic locking to prevent concurrent update conflicts.
-      async function updateTasksFile(tasksData, retryCount = 0) {
-        const MAX_RETRIES = 3;
-        
+      // Save tasks to Confluence — 1 API call max (attachment ID cached after first lookup)
+      async function updateTasksFile(tasksData) {
         try {
-          let attachmentId = null;
-          let fileExists = false;
-          let currentServerVersion = null;
-          let currentServerTimestamp = null;
-          
-          // Check if the file already exists in Confluence attachments
-          try {
-            const attachmentsResponse = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment?filename=adhoc_tasks.json');
-            
-            if (attachmentsResponse.ok) {
-              const attachmentsData = await attachmentsResponse.json();
-              
-              if (attachmentsData.results && attachmentsData.results.length > 0) {
-                attachmentId = attachmentsData.results[0].id;
-                fileExists = true;
-                
-                // Fetch current file to check for conflicts
-                try {
-                  const currentFileResponse = await fetch('https://cedt-confluence.net/confluence/download/attachments/2740868871/adhoc_tasks.json?api=v2');
-                  if (currentFileResponse.ok) {
-                    const currentFileData = await currentFileResponse.json();
-                    if (currentFileData.metadata) {
-                      currentServerTimestamp = currentFileData.metadata.lastUpdated;
-                      
-                      // CONFLICT DETECTION: Check if file was modified since we last fetched it
-                      if (lastKnownTimestamp && currentServerTimestamp !== lastKnownTimestamp) {
-                        console.warn('⚠️ Conflict detected! File was modified by another user.');
-                        
-                        if (retryCount < MAX_RETRIES) {
-                          // Merge strategy: Fetch latest, apply our changes to the specific task, retry
-                          console.log(`🔄 Attempting to merge changes (retry ${retryCount + 1}/${MAX_RETRIES})...`);
-                          
-                          const latestTasks = currentFileData.tasks || [];
-                          
-                          // Find what changed in our local version vs server version
-                          // Merge our changes into the latest server data
-                          const mergedTasks = latestTasks.map(serverTask => {
-                            const ourTask = tasksData.find(t => t.id === serverTask.id);
-                            if (ourTask && ourTask.updatedAt > serverTask.updatedAt) {
-                              // Our version is newer for this specific task
-                              return ourTask;
-                            }
-                            return serverTask;
-                          });
-                          
-                          // Add any tasks that exist in our data but not on server
-                          tasksData.forEach(ourTask => {
-                            if (!mergedTasks.find(t => t.id === ourTask.id)) {
-                              mergedTasks.push(ourTask);
-                            }
-                          });
-                          
-                          // Update our global tasks array with merged data
-                          tasks = mergedTasks;
-                          lastKnownTimestamp = currentServerTimestamp;
-                          
-                          // Retry with merged data
-                          return await updateTasksFile(mergedTasks, retryCount + 1);
-                        } else {
-                          // Max retries exceeded - notify user
-                          showErrorToast('⚠️ Conflict: Another user modified the data. Please refresh and try again.');
-                          throw new Error('Concurrent modification conflict - max retries exceeded');
-                        }
-                      }
-                    }
-                  }
-                } catch (conflictCheckError) {
-                  console.warn('Could not check for conflicts:', conflictCheckError);
-                  // Continue with save if we can't check for conflicts
-                }
-              } else {
+          if (!cachedAttachmentId) {
+            try {
+              const r = await fetch('https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment?filename=adhoc_tasks.json');
+              if (r.ok) {
+                const d = await r.json();
+                if (d.results?.[0]?.id) cachedAttachmentId = d.results[0].id;
               }
-            }
-          } catch (checkError) {
-            console.warn('⚠️ Could not check for existing file (might be local dev):', checkError);
+            } catch (e) { /* first save — will create new */ }
           }
-          
-          const newTimestamp = new Date().toISOString();
-          const dataToSave = {
-            tasks: tasksData,
-            metadata: {
-              lastUpdated: newTimestamp,
-              totalTasks: tasksData.length,
-              version: '1.0',
-              lastModifiedBy: (await getCurrentUser())?.displayName || 'Unknown'
-            }
-          };
-          
+
           const formData = new FormData();
-          const blob = new Blob([JSON.stringify(dataToSave, null, 2)], { type: 'application/json' });
+          const blob = new Blob([JSON.stringify({ tasks: tasksData })], { type: 'application/json' });
           formData.append('file', blob, 'adhoc_tasks.json');
-          
-          // If file exists, update it (use /{attachmentId}), otherwise create new (no ID in URL)
-          const endpoint = attachmentId 
-            ? `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment/${attachmentId}/data`
+
+          const endpoint = cachedAttachmentId
+            ? `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment/${cachedAttachmentId}/data`
             : `https://cedt-confluence.net/confluence/rest/api/content/2740868871/child/attachment`;
-          
-          
+
           const response = await fetch(endpoint, {
             method: 'POST',
-            headers: {
-              'X-Atlassian-Token': 'no-check'
-            },
+            headers: { 'X-Atlassian-Token': 'no-check' },
             body: formData
           });
-          
+
           if (!response.ok) {
-            const errorText = await response.text();
-            console.error('❌ Server response:', response.status, errorText);
-            // Don't throw in local dev environment
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') {
-              console.warn('⚠️ Running in local dev mode. File update skipped.');
-              return true;
-            }
-            throw new Error(`Failed to ${fileExists ? 'update' : 'create'} tasks file: ${response.status} ${response.statusText}`);
+            if (['localhost', '127.0.0.1', ''].includes(window.location.hostname)) return true;
+            throw new Error(`Failed to save tasks: ${response.status} ${response.statusText}`);
           }
-          
-          // Update our known timestamp after successful save
-          lastKnownTimestamp = newTimestamp;
-          
-          if (retryCount > 0) {
-            showSuccessToast('✅ Changes merged and saved successfully!');
+
+          if (!cachedAttachmentId) {
+            try {
+              const d = await response.json();
+              const id = d?.results?.[0]?.id || d?.id;
+              if (id) cachedAttachmentId = id;
+            } catch (e) { /* ignore */ }
           }
-          
+
           return true;
         } catch (error) {
-          console.error('❌ Error updating tasks file:', error);
-          // Don't throw in local dev environment
-          if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '' || error.message.includes('Failed to fetch')) {
-            console.warn('⚠️ Running in local dev mode or network error. File update skipped.');
-            return true;
-          }
+          console.error('Error saving tasks:', error);
+          if (['localhost', '127.0.0.1', ''].includes(window.location.hostname) || error.message?.includes('Failed to fetch')) return true;
           throw error;
         }
       }
@@ -2566,18 +2467,29 @@
         return weekdays;
       }
       
-      // Get task numbering (e.g., "1", "1.1", "1.2", "2", etc.)
+      // Build a task-number map in O(n) — used by renderTasksTable instead of O(n²) per-row calls
+      function buildTaskNumberMap() {
+        const map = {};
+        const parentTasks = tasks.filter(t => !t.parentId);
+        parentTasks.forEach((parent, pIdx) => {
+          map[parent.id] = `${pIdx + 1}`;
+          const children = tasks.filter(t => t.parentId === parent.id);
+          children.forEach((child, cIdx) => {
+            map[child.id] = `${pIdx + 1}.${cIdx + 1}`;
+          });
+        });
+        return map;
+      }
+
+      // Keep getTaskNumber for backward compat (used in viewTicket etc.) but use the map when possible
       function getTaskNumber(task) {
         if (!task.parentId) {
-          // Parent task - find its index among all parent tasks
           const parentTasks = tasks.filter(t => !t.parentId);
           const index = parentTasks.findIndex(t => t.id === task.id);
           return `${index + 1}`;
         } else {
-          // Child task - find parent's number and child's index
           const parent = tasks.find(t => t.id === task.parentId);
           if (!parent) return '?';
-          
           const parentNumber = getTaskNumber(parent);
           const siblings = tasks.filter(t => t.parentId === task.parentId);
           const childIndex = siblings.findIndex(t => t.id === task.id);
@@ -2955,11 +2867,14 @@
         const start = (currentPage - 1) * itemsPerPage;
         const end = Math.min(start + itemsPerPage, parentTasks.length);
         const pageParentTasks = parentTasks.slice(start, end);
+
+        // Precompute task numbers once in O(n) instead of O(n²) via repeated getTaskNumber calls
+        const taskNumberMap = buildTaskNumberMap();
                 
         let html = '';
         
         pageParentTasks.forEach(task => {
-          const taskNumber = getTaskNumber(task);
+          const taskNumber = taskNumberMap[task.id] || getTaskNumber(task);
           const isExpanded = expandedTasks.has(task.id);
           const childTasks = tasks.filter(t => t.parentId === task.id);
           const hasChildren = childTasks.length > 0;
@@ -3048,7 +2963,7 @@
           // Child tasks (if expanded)
           if (isExpanded && hasChildren) {
             childTasks.forEach(childTask => {
-              const childNumber = getTaskNumber(childTask);
+              const childNumber = taskNumberMap[childTask.id] || getTaskNumber(childTask);
               
               // Calculate days to close for child (excluding weekends)
               const childDaysToClose = childTask.closeDate && childTask.dateReceived 
@@ -3131,9 +3046,17 @@
       // Render all views
       function renderAllViews(kanbanFilter = null) {
         updateGlobalFilterCounts();
-        renderTasksTable();
-        renderKanbanBoard(kanbanFilter || kanbanStatusFilter, kanbanSearchTerm);
-        refreshSummary();
+        // Only render the currently visible tab - skip the rest to avoid wasted work
+        if (currentActiveTab === 'table') {
+          renderTasksTable();
+        } else if (currentActiveTab === 'kanban') {
+          renderKanbanBoard(kanbanFilter || kanbanStatusFilter, kanbanSearchTerm);
+        } else if (currentActiveTab === 'summary') {
+          refreshSummary();
+        } else {
+          // Default fallback
+          renderTasksTable();
+        }
       }
       
       // Refresh all views (used by refresh button) - same as clear button behavior
@@ -3211,45 +3134,34 @@
         statusFilter = status;
         kanbanStatusFilter = status;
 
-        // Update Alpine.js state if component provided
         if (alpineComponent) {
           alpineComponent.selectedFilter = status;
         }
 
-        // Update counts
-        updateGlobalFilterCounts();
-
-        // Apply to all views
-        applyAllFilters(); // for table view
-        renderKanbanBoard(null, ''); // for kanban view (use global statusFilter)
-        refreshSummary(); // for summary view
+        // applyAllFilters handles table + kanban + summary based on active tab
+        applyAllFilters();
       }
       
       // Update global filter counts
       function updateGlobalFilterCounts() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchEl = document.getElementById('searchInput');
+        const searchTerm = searchEl ? searchEl.value.toLowerCase() : '';
 
-        // Filter tasks based on current filters (excluding status)
         const filteredParentTasks = tasks.filter(t => {
-          if (t.parentId) return false; // Only parent tasks
+          if (t.parentId) return false;
 
-          // Search filter
+          const makerStr = Array.isArray(t.maker) ? t.maker.join(', ') : (t.maker || '');
           const matchesSearch = !searchTerm ||
-            t.reportName.toLowerCase().includes(searchTerm) ||
+            (t.reportName && t.reportName.toLowerCase().includes(searchTerm)) ||
             (t.description && t.description.toLowerCase().includes(searchTerm)) ||
-            (t.maker && t.maker.toLowerCase().includes(searchTerm)) ||
+            (makerStr && makerStr.toLowerCase().includes(searchTerm)) ||
             (t.requestor && t.requestor.toLowerCase().includes(searchTerm)) ||
-            t.status.toLowerCase().includes(searchTerm) ||
-            (t.region && t.region.toLowerCase().includes(searchTerm));
+            (t.status && t.status.toLowerCase().includes(searchTerm)) ||
+            (t.region && String(t.region).toLowerCase().includes(searchTerm));
 
-          // Priority filter
           const matchesPriority = priorityFilter === 'All' || t.priority === priorityFilter;
-
-          // Region filter
           const matchesRegion = regionFilter === 'All' || t.region === regionFilter;
-
-          // Maker filter
-          const matchesMaker = makerFilter === 'All' || (t.maker && t.maker === makerFilter);
+          const matchesMaker = makerFilter === 'All' || makerStr === makerFilter || (Array.isArray(t.maker) && t.maker.includes(makerFilter));
 
           return matchesSearch && matchesPriority && matchesRegion && matchesMaker;
         });
@@ -3328,68 +3240,44 @@
         // Apply search filter if provided
         if (searchTerm && searchTerm.trim() !== '') {
           const search = searchTerm.toLowerCase().trim();
-          parentTasks = parentTasks.filter(t => 
-            t.reportName.toLowerCase().includes(search) ||
-            (t.description && t.description.toLowerCase().includes(search)) ||
-            (t.maker && t.maker.toLowerCase().includes(search)) ||
-            (t.requestor && t.requestor.toLowerCase().includes(search))
-          );
+          parentTasks = parentTasks.filter(t => {
+            const makerStr = Array.isArray(t.maker) ? t.maker.join(', ') : (t.maker || '');
+            return (t.reportName && t.reportName.toLowerCase().includes(search)) ||
+              (t.description && t.description.toLowerCase().includes(search)) ||
+              (makerStr && makerStr.toLowerCase().includes(search)) ||
+              (t.requestor && t.requestor.toLowerCase().includes(search));
+          });
         }
         
+        // Build HTML strings per column first, then set once (avoids O(n²) DOM re-parsing)
+        const columnHtml = { 'Pending': [], 'In Progress': [], 'Completed': [] };
+
+        // Pre-build child count lookup for O(1) access
+        const childCountMap = {};
+        tasks.forEach(t => {
+          if (t.parentId) childCountMap[t.parentId] = (childCountMap[t.parentId] || 0) + 1;
+        });
+
         parentTasks.forEach(task => {
-          const childTasks = tasks.filter(t => t.parentId === task.id);
-          const childCount = childTasks.length;
-          
-          displayedStatusCounts[task.status]++;
-          
-          // Get initials from maker name
-          const makerInitials = task.maker 
-            ? task.maker.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+          const childCount = childCountMap[task.id] || 0;
+          displayedStatusCounts[task.status] = (displayedStatusCounts[task.status] || 0) + 1;
+
+          const makerVal = Array.isArray(task.maker) ? task.maker[0] : (task.maker || '');
+          const makerInitials = makerVal
+            ? makerVal.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
             : '?';
-          
-          const card = `
-            <div draggable="true" 
-                 ondragstart="drag(event, '${task.id}')" 
-                 class="task rounded-xl border border-gray-200 bg-white p-5 shadow-theme-sm dark:border-gray-800 dark:bg-white/5 cursor-grab active:cursor-grabbing hover:shadow-md transition-all" 
-                 data-task-id="${task.id}">
-              <div class="flex items-start justify-between gap-6">
-                <div class="flex-1" onclick="viewTicket('${task.id}')" style="cursor: pointer;">
-                  <h4 class="mb-5 !text-base text-gray-800 dark:text-white/90">
-                    ${task.reportName}
-                  </h4>
-                  
-                  <div class="flex items-center gap-3">
-                    <span class="flex cursor-pointer items-center gap-1 !text-base text-gray-500 dark:text-gray-400">
-                      <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.33329 1.0835C5.74751 1.0835 6.08329 1.41928 6.08329 1.8335V2.25016L9.91663 2.25016V1.8335C9.91663 1.41928 10.2524 1.0835 10.6666 1.0835C11.0808 1.0835 11.4166 1.41928 11.4166 1.8335V2.25016L12.3333 2.25016C13.2998 2.25016 14.0833 3.03366 14.0833 4.00016V6.00016L14.0833 12.6668C14.0833 13.6333 13.2998 14.4168 12.3333 14.4168L3.66663 14.4168C2.70013 14.4168 1.91663 13.6333 1.91663 12.6668L1.91663 6.00016L1.91663 4.00016C1.91663 3.03366 2.70013 2.25016 3.66663 2.25016L4.58329 2.25016V1.8335C4.58329 1.41928 4.91908 1.0835 5.33329 1.0835ZM5.33329 3.75016L3.66663 3.75016C3.52855 3.75016 3.41663 3.86209 3.41663 4.00016V5.25016L12.5833 5.25016V4.00016C12.5833 3.86209 12.4714 3.75016 12.3333 3.75016L10.6666 3.75016L5.33329 3.75016ZM12.5833 6.75016L3.41663 6.75016L3.41663 12.6668C3.41663 12.8049 3.52855 12.9168 3.66663 12.9168L12.3333 12.9168C12.4714 12.9168 12.5833 12.8049 12.5833 12.6668L12.5833 6.75016Z" fill=""/>
-                      </svg>
-                      ${new Date(task.dateReceived).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </span>
-                    
-                    ${childCount > 0 ? `
-                    <span class="flex cursor-pointer items-center gap-1 !text-base text-gray-500 dark:text-gray-400">
-                      <svg class="stroke-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 15.6343C12.6244 15.6343 15.5625 12.6961 15.5625 9.07178C15.5625 5.44741 12.6244 2.50928 9 2.50928C5.37563 2.50928 2.4375 5.44741 2.4375 9.07178C2.4375 10.884 3.17203 12.5246 4.35961 13.7122L2.4375 15.6343H9Z" stroke="" stroke-width="1.5" stroke-linejoin="round"/>
-                      </svg>
-                      ${childCount}
-                    </span>
-                    ` : ''}
-                  </div>
-                  
-                  ${task.priority ? `<div class="mt-3">${getPriorityBadge(task.priority)}</div>` : ''}
-                </div>
-                
-                <div class="h-10 w-full max-w-10 overflow-hidden rounded-full border-[0.5px] border-gray-200 dark:border-gray-800">
-                  <div class="h-10 w-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-semibold !text-base dark:bg-brand-900/30 dark:text-brand-400">
-                    ${makerInitials}
-                  </div>
-                </div>
-              </div>
-            </div>
-          `;
-          
-          if (statusColumns[task.status]) {
-            statusColumns[task.status].innerHTML += card;
+
+          const card = `<div draggable="true" ondragstart="drag(event, '${task.id}')" class="task rounded-xl border border-gray-200 bg-white p-5 shadow-theme-sm dark:border-gray-800 dark:bg-white/5 cursor-grab active:cursor-grabbing hover:shadow-md transition-all" data-task-id="${task.id}"><div class="flex items-start justify-between gap-6"><div class="flex-1" onclick="viewTicket('${task.id}')" style="cursor: pointer;"><h4 class="mb-5 !text-base text-gray-800 dark:text-white/90">${task.reportName}</h4><div class="flex items-center gap-3"><span class="flex cursor-pointer items-center gap-1 !text-base text-gray-500 dark:text-gray-400"><svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.33329 1.0835C5.74751 1.0835 6.08329 1.41928 6.08329 1.8335V2.25016L9.91663 2.25016V1.8335C9.91663 1.41928 10.2524 1.0835 10.6666 1.0835C11.0808 1.0835 11.4166 1.41928 11.4166 1.8335V2.25016L12.3333 2.25016C13.2998 2.25016 14.0833 3.03366 14.0833 4.00016V6.00016L14.0833 12.6668C14.0833 13.6333 13.2998 14.4168 12.3333 14.4168L3.66663 14.4168C2.70013 14.4168 1.91663 13.6333 1.91663 12.6668L1.91663 6.00016L1.91663 4.00016C1.91663 3.03366 2.70013 2.25016 3.66663 2.25016L4.58329 2.25016V1.8335C4.58329 1.41928 4.91908 1.0835 5.33329 1.0835ZM5.33329 3.75016L3.66663 3.75016C3.52855 3.75016 3.41663 3.86209 3.41663 4.00016V5.25016L12.5833 5.25016V4.00016C12.5833 3.86209 12.4714 3.75016 12.3333 3.75016L10.6666 3.75016L5.33329 3.75016ZM12.5833 6.75016L3.41663 6.75016L3.41663 12.6668C3.41663 12.8049 3.52855 12.9168 3.66663 12.9168L12.3333 12.9168C12.4714 12.9168 12.5833 12.8049 12.5833 12.6668L12.5833 6.75016Z" fill=""/></svg>${task.dateReceived ? new Date(task.dateReceived).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}</span>${childCount > 0 ? `<span class="flex cursor-pointer items-center gap-1 !text-base text-gray-500 dark:text-gray-400"><svg class="stroke-current" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 15.6343C12.6244 15.6343 15.5625 12.6961 15.5625 9.07178C15.5625 5.44741 12.6244 2.50928 9 2.50928C5.37563 2.50928 2.4375 5.44741 2.4375 9.07178C2.4375 10.884 3.17203 12.5246 4.35961 13.7122L2.4375 15.6343H9Z" stroke="" stroke-width="1.5" stroke-linejoin="round"/></svg>${childCount}</span>` : ''}</div>${task.priority ? `<div class="mt-3">${getPriorityBadge(task.priority)}</div>` : ''}</div><div class="h-10 w-full max-w-10 overflow-hidden rounded-full border-[0.5px] border-gray-200 dark:border-gray-800"><div class="h-10 w-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-semibold !text-base dark:bg-brand-900/30 dark:text-brand-400">${makerInitials}</div></div></div></div>`;
+
+          if (columnHtml[task.status]) {
+            columnHtml[task.status].push(card);
+          }
+        });
+
+        // Set each column's HTML in one operation
+        Object.entries(columnHtml).forEach(([status, cards]) => {
+          if (statusColumns[status]) {
+            statusColumns[status].innerHTML = cards.join('');
           }
         });
         
@@ -3515,44 +3403,48 @@
       function applyAllFilters() {
         const searchInputEl = document.getElementById('searchInput');
         const searchTerm = (searchInputEl && searchInputEl.value) ? searchInputEl.value.trim().toLowerCase() : '';
-        
+
         filteredTasks = tasks.filter(task => {
-          // Search filter (safe for missing fields)
-          const matchesSearch = !searchTerm || 
-            (task.reportName && String(task.reportName).toLowerCase().includes(searchTerm)) ||
-            (task.description && String(task.description).toLowerCase().includes(searchTerm)) ||
-            (task.maker && String(task.maker).toLowerCase().includes(searchTerm)) ||
-            (task.requestor && String(task.requestor).toLowerCase().includes(searchTerm)) ||
-            (task.status && String(task.status).toLowerCase().includes(searchTerm)) ||
+          const makerStr = Array.isArray(task.maker) ? task.maker.join(', ') : (task.maker || '');
+
+          const matchesSearch = !searchTerm ||
+            (task.reportName && task.reportName.toLowerCase().includes(searchTerm)) ||
+            (task.description && task.description.toLowerCase().includes(searchTerm)) ||
+            (makerStr && makerStr.toLowerCase().includes(searchTerm)) ||
+            (task.requestor && task.requestor.toLowerCase().includes(searchTerm)) ||
+            (task.status && task.status.toLowerCase().includes(searchTerm)) ||
             (task.region && String(task.region).toLowerCase().includes(searchTerm));
-          
-          // Status filter
+
           const matchesStatus = statusFilter === 'All' || task.status === statusFilter;
-          
-          // Priority filter
           const matchesPriority = priorityFilter === 'All' || task.priority === priorityFilter;
-          
-          // Region filter
           const matchesRegion = regionFilter === 'All' || task.region === regionFilter;
-          
-          // Maker filter
-          const matchesMaker = makerFilter === 'All' || (task.maker && task.maker === makerFilter);
-          
+          const matchesMaker = makerFilter === 'All' || makerStr === makerFilter || (Array.isArray(task.maker) && task.maker.includes(makerFilter));
+
           return matchesSearch && matchesStatus && matchesPriority && matchesRegion && matchesMaker;
         });
 
-        // Update global filter counts based on current filters (excluding status)
         updateGlobalFilterCounts();
-
         currentPage = 1;
-        renderTasksTable();
-        refreshSummaryMetrics();
-        refreshKanbanBoard();
+
+        // Only render the active view to avoid unnecessary work
+        if (currentActiveTab === 'table') {
+          renderTasksTable();
+        } else if (currentActiveTab === 'kanban') {
+          refreshKanbanBoard();
+        } else if (currentActiveTab === 'summary') {
+          refreshSummaryMetrics();
+        }
       }
       
       // Filter tasks (called by search input)
       function filterTasks() {
         applyAllFilters();
+      }
+
+      // Debounced version for the search input — avoids re-rendering on every keystroke
+      function debouncedFilterTasks() {
+        clearTimeout(filterDebounceTimer);
+        filterDebounceTimer = setTimeout(filterTasks, 250);
       }
       
       // Pagination
@@ -3840,7 +3732,7 @@
           })
         };
         
-        const isUpdate = !taskId;
+        const isUpdate = !!taskId; // true = editing existing task, false = adding new task
         const actionText = isUpdate ? 'Task updated successfully' : 'Task added successfully';
         
         // INSTANT CLOSE: Close modal immediately
@@ -5090,6 +4982,8 @@
       let taskRegionChart = null;
       
       function initializeSummary() {
+        // Only run if summary tab is active to avoid expensive chart work in background
+        if (currentActiveTab !== 'summary') return;
         calculateAndDisplayMetrics();
         initializeTaskAgingChart();
         initializeTaskPriorityChart();
@@ -5635,8 +5529,10 @@
       function populateMakerFilter() {
         const makerSet = new Set();
         tasks.forEach(task => {
-          if (task.maker && task.maker.trim()) {
-            makerSet.add(task.maker.trim());
+          if (Array.isArray(task.maker)) {
+            task.maker.forEach(m => { if (m && m.trim()) makerSet.add(m.trim()); });
+          } else if (task.maker && task.maker.trim) {
+            if (task.maker.trim()) makerSet.add(task.maker.trim());
           }
         });
         
@@ -5674,56 +5570,52 @@
           'Completed': document.getElementById('completed-tasks')
         };
         
-        if (!statusColumns['Pending']) return; // Not in Kanban view
-        
-        // Clear all columns
-        Object.values(statusColumns).forEach(col => col.innerHTML = '');
-        
-        // Filter only parent tasks for Kanban from filtered tasks
+        if (!statusColumns['Pending']) return;
+
+        // Pre-build child count lookup for O(1) access
+        const childCountMap = {};
+        tasks.forEach(t => {
+          if (t.parentId) childCountMap[t.parentId] = (childCountMap[t.parentId] || 0) + 1;
+        });
+
         const parentTasks = filteredTasks.filter(t => !t.parentId);
-        
+
+        const priorityColorMap = {
+          'High': 'bg-error-50 text-error-700 dark:bg-error-900/20 dark:text-error-400',
+          'Medium': 'bg-warning-50 text-warning-700 dark:bg-warning-900/20 dark:text-warning-400',
+          'Low': 'bg-success-50 text-success-700 dark:bg-success-900/20 dark:text-success-400'
+        };
+
+        // Use DocumentFragments to batch DOM insertions
+        const fragments = {
+          'Pending': document.createDocumentFragment(),
+          'In Progress': document.createDocumentFragment(),
+          'Completed': document.createDocumentFragment()
+        };
+
         parentTasks.forEach(task => {
-          const childTasks = tasks.filter(t => t.parentId === task.id);
-          const childCount = childTasks.length;
-          
-          // Get initials from maker name
-          const makerInitials = task.maker 
-            ? task.maker.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+          const childCount = childCountMap[task.id] || 0;
+          const makerVal = Array.isArray(task.maker) ? task.maker[0] : (task.maker || '');
+          const makerInitials = makerVal
+            ? makerVal.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
             : '?';
-          
-          const priorityColorMap = {
-            'High': 'bg-error-50 text-error-700 dark:bg-error-900/20 dark:text-error-400',
-            'Medium': 'bg-warning-50 text-warning-700 dark:bg-warning-900/20 dark:text-warning-400',
-            'Low': 'bg-success-50 text-success-700 dark:bg-success-900/20 dark:text-success-400'
-          };
-          
+
           const taskCard = document.createElement('div');
           taskCard.className = 'task bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-lg transition-all';
           taskCard.draggable = true;
           taskCard.dataset.taskId = task.id;
-          
-          taskCard.innerHTML = `
-            <div class="flex items-start justify-between mb-3">
-              <h4 class="!text-base font-semibold text-gray-800 dark:text-white line-clamp-2 flex-1">${task.reportName}</h4>
-              ${childCount > 0 ? `<span class="ml-2 inline-flex items-center rounded-full bg-brand-50 px-2 py-0.5 !text-base font-medium text-brand-700 dark:bg-brand-900/20 dark:text-brand-400">${childCount}</span>` : ''}
-            </div>
-            ${task.description ? `<p class="!text-base text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">${task.description}</p>` : ''}
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-brand-100 text-brand-700 dark:bg-brand-900/20 dark:text-brand-400 !text-base font-medium">
-                  ${makerInitials}
-                </span>
-                ${task.priority ? `<span class="inline-flex items-center rounded-full px-2 py-0.5 !text-base font-medium ${priorityColorMap[task.priority] || 'bg-gray-100 text-gray-700'}">${task.priority}</span>` : ''}
-              </div>
-            </div>
-          `;
-          
+          taskCard.innerHTML = `<div class="flex items-start justify-between mb-3"><h4 class="!text-base font-semibold text-gray-800 dark:text-white line-clamp-2 flex-1">${task.reportName}</h4>${childCount > 0 ? `<span class="ml-2 inline-flex items-center rounded-full bg-brand-50 px-2 py-0.5 !text-base font-medium text-brand-700 dark:bg-brand-900/20 dark:text-brand-400">${childCount}</span>` : ''}</div>${task.description ? `<p class="!text-base text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">${task.description}</p>` : ''}<div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-brand-100 text-brand-700 dark:bg-brand-900/20 dark:text-brand-400 !text-base font-medium">${makerInitials}</span>${task.priority ? `<span class="inline-flex items-center rounded-full px-2 py-0.5 !text-base font-medium ${priorityColorMap[task.priority] || 'bg-gray-100 text-gray-700'}">${task.priority}</span>` : ''}</div></div>`;
           taskCard.addEventListener('click', () => viewTicket(task.id));
-          
-          // Add to appropriate column
-          if (statusColumns[task.status]) {
-            statusColumns[task.status].appendChild(taskCard);
+
+          if (fragments[task.status]) {
+            fragments[task.status].appendChild(taskCard);
           }
+        });
+
+        // Set each column once (clear + append fragment = 2 DOM ops per column vs N)
+        Object.entries(statusColumns).forEach(([status, col]) => {
+          col.innerHTML = '';
+          col.appendChild(fragments[status]);
         });
       }
       
