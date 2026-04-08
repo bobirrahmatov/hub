@@ -1693,7 +1693,7 @@
           <!-- Activity Timeline -->
           <div class="mt-8 lg:mt-0 lg:col-start-3 lg:row-start-2 flex flex-col" style="min-height: 600px;">
             <h2 class="!text-base font-semibold text-gray-900 dark:text-white/90 mb-4">Activity</h2>
-            <div class="rounded-lg bg-gray-50 dark:bg-gray-800/50 shadow-sm border border-gray-100 dark:border-gray-800 p-6 flex-1 flex flex-col">
+            <div class="rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 p-6 flex-1 flex flex-col">
               <div class="overflow-y-auto flex-1 custom-scrollbar pr-2" style="overflow-y: auto !important; scrollbar-width: thin; scrollbar-color: rgba(156, 163, 175, 0.5) transparent;" id="ticketTimelineContainer">
               <ul role="list" class="space-y-6" id="ticketTimeline">
                 <!-- Timeline items will be populated here -->
@@ -1751,7 +1751,7 @@
 
           <!-- Ticket ID (Editable) -->
           <div class="mb-6">
-            <dt class="!text-base font-semibold text-red-600 dark:text-red-400 mb-2">Ticket ID</dt>
+            <dt class="!text-base font-semibold text-gray-900 dark:text-white/90 mb-2">Ticket ID</dt>
             <div id="view-ticket-id-display" class="!text-base text-gray-600 dark:text-gray-400">-</div>
             <input 
               type="text" 
@@ -1763,7 +1763,7 @@
 
           <!-- Description -->
           <div class="mb-8 p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50">
-            <dt class="!text-base font-semibold text-red-600 dark:text-red-400 mb-2">Description <span class="text-red-500">*</span></dt>
+            <dt class="!text-base font-semibold text-gray-900 dark:text-white/90 mb-2">Description</dt>
             <div id="view-ticket-description-display" class="!text-base text-gray-600 dark:text-gray-400">No description provided</div>
             <textarea 
               id="view-ticket-description-edit" 
@@ -1776,7 +1776,7 @@
           <!-- Ticket Information Grid -->
           <dl class="grid grid-cols-1 gap-6 !text-base sm:grid-cols-2">
             <div class="border-b border-gray-100 dark:border-gray-800 pb-4">
-              <dt class="font-semibold text-red-600 dark:text-red-400">Submission Date <span class="text-red-500">*</span></dt>
+              <dt class="font-semibold text-gray-700 dark:text-gray-300">Submission Date</dt>
               <div id="view-ticket-submission-date-display" class="mt-2 text-gray-600 dark:text-gray-400">-</div>
               <input 
                 type="date" 
@@ -1796,7 +1796,7 @@
             </div>
 
             <div class="border-b border-gray-100 dark:border-gray-800 pb-4">
-              <dt class="font-semibold text-red-600 dark:text-red-400">Requested By <span class="text-red-500">*</span></dt>
+              <dt class="font-semibold text-gray-700 dark:text-gray-300">Requested By</dt>
               <div id="view-ticket-requested-by-display" class="mt-2 text-gray-600 dark:text-gray-400">-</div>
               <div class="hidden relative mt-2" id="view-ticket-requested-by-edit-wrapper">
                 <input 
@@ -1813,7 +1813,7 @@
             </div>
 
             <div class="border-b border-gray-100 dark:border-gray-800 pb-4">
-              <dt class="font-semibold text-red-600 dark:text-red-400">Status <span class="text-red-500">*</span></dt>
+              <dt class="font-semibold text-gray-700 dark:text-gray-300">Status</dt>
               <div id="view-ticket-status-display" class="mt-2 inline-flex items-center rounded-md px-2 py-1 !text-base font-medium"></div>
               <div id="view-ticket-status-edit-container" class="mt-2 hidden" x-data="{ open: false, selected: 'Select Status' }">
                 <div class="relative">
@@ -1903,7 +1903,7 @@
             </div>
 
             <div class="border-b border-gray-100 dark:border-gray-800 pb-4">
-              <dt class="font-semibold text-red-600 dark:text-red-400">Ticket Type <span class="text-red-500">*</span></dt>
+              <dt class="font-semibold text-gray-700 dark:text-gray-300">Ticket Type</dt>
               <div id="view-ticket-type-display" class="mt-2 inline-flex items-center"></div>
               <div id="view-ticket-type-edit-container" class="mt-2 hidden" x-data="{ open: false, selected: 'Select Ticket Type' }">
                 <div class="relative">
@@ -1938,7 +1938,7 @@
             </div>
 
             <div class="border-b border-gray-100 dark:border-gray-800 pb-4">
-              <dt class="font-semibold text-red-600 dark:text-red-400">Team <span class="text-red-500">*</span></dt>
+              <dt class="font-semibold text-gray-700 dark:text-gray-300">Team</dt>
               <div id="view-ticket-team-display" class="mt-2 text-gray-600 dark:text-gray-400">-</div>
               <input 
                 type="text" 
@@ -3498,6 +3498,8 @@
     }
 
     function addChildTask(parentId) {
+      const parent = tickets.find(t => t.id === parentId);
+
       const modalTitle = document.getElementById('ticketModalTitle');
       if (modalTitle) modalTitle.textContent = 'Add Update';
       
@@ -3510,10 +3512,35 @@
       const ticketParentId = document.getElementById('ticket-parent-id');
       if (ticketParentId) ticketParentId.value = parentId;
 
-      // Reset Alpine.js dropdowns
+      // Pre-populate with parent's common data
+      if (parent) {
+        const teamField = document.getElementById('ticket-team-in-charge');
+        if (teamField && parent.teamInCharge) teamField.value = parent.teamInCharge;
+
+        const requestedByField = document.getElementById('ticket-requested-by');
+        if (requestedByField && parent.requestedBy) requestedByField.value = parent.requestedBy;
+
+        const dateField = document.getElementById('ticket-submission-date');
+        if (dateField && parent.dateReceived) dateField.value = parent.dateReceived;
+      }
+
+      // Set Alpine.js dropdowns — inherit parent priority/type when available
       setTimeout(() => {
         updateAlpineDropdown('task-status', 'Open');
-        updateAlpineDropdown('task-priority', 'Select Priority');
+        if (parent?.priority) {
+          updateAlpineDropdown('task-priority', parent.priority);
+          const pf = document.getElementById('task-priority');
+          if (pf) pf.value = parent.priority;
+        } else {
+          updateAlpineDropdown('task-priority', 'Select Priority');
+        }
+        if (parent?.ticketType) {
+          updateAlpineDropdown('task-region', parent.ticketType);
+          const rf = document.getElementById('task-region');
+          if (rf) rf.value = parent.ticketType;
+        } else {
+          updateAlpineDropdown('task-region', 'Select Ticket Type');
+        }
       }, 50);
 
       const modal = document.getElementById('ticketModal');
