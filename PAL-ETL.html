@@ -525,7 +525,7 @@
               </div>
               
               <!-- Region Filter -->
-              <div x-data="{open:false,selectedRegions:['All'],regions:['Global','APAC','EMEA','LATAM','NAM'],getDisplayText:function(){if(this.selectedRegions.includes('All')||this.selectedRegions.length===0)return'All Regions';if(this.selectedRegions.length===1)return this.selectedRegions[0];return this.selectedRegions.length+' Selected';},toggleRegion:function(region){if(region==='All'){this.selectedRegions=['All'];filterByRegion(this.selectedRegions);this.open=false;}else{if(this.selectedRegions.includes('All')){this.selectedRegions=[region];}else{if(this.selectedRegions.includes(region)){this.selectedRegions=this.selectedRegions.filter(function(r){return r!==region;});if(this.selectedRegions.length===0){this.selectedRegions=['All'];this.open=false;}}else{this.selectedRegions.push(region);}}filterByRegion(this.selectedRegions);}},isSelected:function(region){return this.selectedRegions.includes(region);}}" class="relative" id="regionFilterDropdown">
+              <div x-data="{open:false,selectedRegions:['All'],regions:window.ALL_REPORT_REGIONS&&window.ALL_REPORT_REGIONS.length?window.ALL_REPORT_REGIONS:['Global','APAC','EMEA','LATAM','NAM'],init:function(){var self=this;self.regions=window.ALL_REPORT_REGIONS&&window.ALL_REPORT_REGIONS.length?window.ALL_REPORT_REGIONS:['Global','APAC','EMEA','LATAM','NAM'];document.addEventListener('regions-updated',function(){self.regions=window.ALL_REPORT_REGIONS;});},getDisplayText:function(){if(this.selectedRegions.includes('All')||this.selectedRegions.length===0)return'All Regions';if(this.selectedRegions.length===1)return this.selectedRegions[0];return this.selectedRegions.length+' Selected';},toggleRegion:function(region){if(region==='All'){this.selectedRegions=['All'];filterByRegion(this.selectedRegions);this.open=false;}else{if(this.selectedRegions.includes('All')){this.selectedRegions=[region];}else{if(this.selectedRegions.includes(region)){this.selectedRegions=this.selectedRegions.filter(function(r){return r!==region;});if(this.selectedRegions.length===0){this.selectedRegions=['All'];this.open=false;}}else{this.selectedRegions.push(region);}}filterByRegion(this.selectedRegions);}},isSelected:function(region){return this.selectedRegions.includes(region);}}" class="relative" id="regionFilterDropdown">
                 <button @click="open = !open" type="button"
                   class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800 min-w-[140px]">
                   <span x-text="getDisplayText()" class="truncate"></span>
@@ -1636,7 +1636,11 @@
             <div class="col-span-1" x-data="{
               open: false,
               selectedRegions: [],
-              regions: ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
+              regions: window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
+              init() {
+                this.regions = window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'];
+                document.addEventListener('regions-updated', () => { this.regions = window.ALL_REPORT_REGIONS; });
+              },
               getDisplayText() {
                 if (this.selectedRegions.length === 0) {
                   return 'Select Report Region';
@@ -1794,7 +1798,11 @@
             <div class="col-span-1" x-data="{
               open: false,
               selectedRegions: [],
-              regions: ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
+              regions: window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
+              init() {
+                this.regions = window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'];
+                document.addEventListener('regions-updated', () => { this.regions = window.ALL_REPORT_REGIONS; });
+              },
               getDisplayText() {
                 if (this.selectedRegions.length === 0) {
                   return 'Select Prepare Region';
@@ -2470,7 +2478,11 @@
                 <div id="view-report-region-edit-container" class="hidden mt-2" x-data="{
                   open: false,
                   selectedRegions: [],
-                  regions: ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
+                  regions: window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
+                  init() {
+                    this.regions = window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'];
+                    document.addEventListener('regions-updated', () => { this.regions = window.ALL_REPORT_REGIONS; });
+                  },
                   getDisplayText() {
                     if (this.selectedRegions.length === 0) {
                       return 'Select Report Region';
@@ -2593,7 +2605,11 @@
                 <div id="view-report-prepare-region-edit-container" class="hidden mt-2" x-data="{
                   open: false,
                   selectedRegions: [],
-                  regions: ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
+                  regions: window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
+                  init() {
+                    this.regions = window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'];
+                    document.addEventListener('regions-updated', () => { this.regions = window.ALL_REPORT_REGIONS; });
+                  },
                   getDisplayText() {
                     if (this.selectedRegions.length === 0) {
                       return 'Select Prepare Region';
@@ -2851,6 +2867,28 @@
     <script>
       // Global variables
       let reports = [];
+
+      // Dynamically derived from loaded data — Alpine dropdowns and the management summary both read this
+      window.ALL_REPORT_REGIONS = [];
+
+      function computeAllReportRegions() {
+        const _set = new Set();
+        reports.forEach(r => {
+          [r.reportRegion, r.prepareRegion].forEach(f => {
+            const arr = Array.isArray(f) ? f : (f ? [f] : []);
+            arr.forEach(v => { if (v && v.trim()) _set.add(v.trim()); });
+          });
+        });
+        if (_set.size > 0) {
+          const sorted = [..._set].sort();
+          const gIdx = sorted.findIndex(r => r.toLowerCase() === 'global');
+          if (gIdx > 0) { sorted.splice(gIdx, 1); sorted.unshift('Global'); }
+          window.ALL_REPORT_REGIONS = sorted;
+        } else {
+          window.ALL_REPORT_REGIONS = ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'];
+        }
+        document.dispatchEvent(new CustomEvent('regions-updated'));
+      }
       let filteredReports = [];
       let currentPage = 1;
       let itemsPerPage = 25;
@@ -5039,6 +5077,7 @@
           if (fetchedReports !== null) {
             // null = network error (keep existing data); [] = file deleted/404 (clear data)
             reports = fetchedReports;
+            computeAllReportRegions();
           }
           
           // Clear all filters
@@ -5676,6 +5715,7 @@
               return report;
             });
             filteredReports = [...reports];
+            computeAllReportRegions();
             renderReportsTable();
             console.log('✅ Loaded', reports.length, 'reports from Confluence');
           } else {
@@ -5953,6 +5993,7 @@
             });
             
             filteredReports = [...reports];
+            computeAllReportRegions();
             renderReportsTable();
             console.log('✅ Loaded', reports.length, 'dummy reports for testing');
           }
@@ -7530,7 +7571,7 @@
       let mgmtStatusChartInstance = null;
 
       // Live list of regions used by the current config (refreshed at summary refresh time)
-      let REGIONS_MGMT = ['Americas', 'EMEA', 'APAC'];
+      let REGIONS_MGMT = ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'];
 
       function mgmtReportsByRegion(subset) {
         const counts = Object.fromEntries(REGIONS_MGMT.map(r => [r, 0]));
@@ -7627,7 +7668,18 @@
           const regs = Array.isArray(r.reportRegion) ? r.reportRegion : (r.reportRegion ? [r.reportRegion] : []);
           regs.forEach(reg => { if (reg && reg.trim()) _regionSet.add(reg.trim()); });
         });
-        REGIONS_MGMT = _regionSet.size > 0 ? [..._regionSet].sort() : ['Americas', 'EMEA', 'APAC'];
+        if (_regionSet.size > 0) {
+          const _sortedRegions = [..._regionSet].sort();
+          // Always place "Global" first if present, then the rest alphabetically
+          const _globalIdx = _sortedRegions.findIndex(r => r.toLowerCase() === 'global');
+          if (_globalIdx > 0) {
+            _sortedRegions.splice(_globalIdx, 1);
+            _sortedRegions.unshift('Global');
+          }
+          REGIONS_MGMT = _sortedRegions;
+        } else {
+          REGIONS_MGMT = ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'];
+        }
 
         // Sync table headers to match dynamic REGIONS_MGMT (prevents extra unlabelled columns)
         const _regionThHtml = REGIONS_MGMT.map(r =>
