@@ -2401,14 +2401,14 @@
           
           if (!response.ok) {
             if (response.status === 404) {
+              console.info('ℹ️ adhoc_tasks.json not found (404) — clearing task list');
             } else {
               console.warn('⚠️ Could not fetch tasks file:', response.status, response.statusText);
             }
-            return [];
+            return []; // [] = file gone/empty → caller should clear the data
           }
           
           const data = await response.json();
-          
           
           if (data.tasks && Array.isArray(data.tasks)) {
             return data.tasks;
@@ -2419,8 +2419,8 @@
             return [];
           }
         } catch (error) {
-          console.error('❌ Error fetching tasks:', error);
-          return [];
+          console.error('❌ Error fetching tasks (network error):', error);
+          return null; // null = can't reach server → caller should keep existing data
         }
       }
       
@@ -3155,7 +3155,8 @@
         try {
           // Reload tasks from Confluence
           const fetchedTasks = await fetchTasks();
-          if (fetchedTasks && fetchedTasks.length > 0) {
+          if (fetchedTasks !== null) {
+            // null = network error (keep existing data); [] = file deleted/404 (clear data)
             tasks = fetchedTasks;
           }
 
@@ -4808,10 +4809,9 @@
         try {          
           // Re-fetch tasks from Confluence
           const fetchedTasks = await fetchTasks();
-          
-          if (fetchedTasks && fetchedTasks.length > 0) {
+          if (fetchedTasks !== null) {
+            // null = network error (keep existing data); [] = file deleted/404 (clear data)
             tasks = fetchedTasks;
-          } else {
           }
           
           // Keep current expansion state (don't auto-expand after refresh)
@@ -5732,8 +5732,8 @@
       // Initialize on page load
       document.addEventListener('DOMContentLoaded', async function() {
         try {
-          // Load tasks
-          tasks = await fetchTasks();
+          // Load tasks (null = network error → start with empty; [] = file not found → empty)
+          tasks = (await fetchTasks()) ?? [];
           // Normalize maker names from external sources
           tasks = tasks.map(task => ({
             ...task,
