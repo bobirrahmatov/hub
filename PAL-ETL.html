@@ -1267,12 +1267,9 @@
                         <div class="custom-scrollbar overflow-x-auto flex-1">
                           <table class="min-w-full h-full">
                             <thead>
-                              <tr class="bg-gray-50 dark:bg-gray-800/50">
+                              <tr id="mgmt-reports-thead-tr" class="bg-gray-50 dark:bg-gray-800/50">
                                 <th class="px-5 py-3 text-left !text-base font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap"></th>
                                 <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Total</th>
-                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Americas</th>
-                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">EMEA</th>
-                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">APAC</th>
                               </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="mgmt-reports-tbody">
@@ -1307,12 +1304,9 @@
                         <div class="custom-scrollbar overflow-x-auto flex-1">
                           <table class="min-w-full h-full">
                             <thead>
-                              <tr class="bg-gray-50 dark:bg-gray-800/50">
+                              <tr id="mgmt-hours-thead-tr" class="bg-gray-50 dark:bg-gray-800/50">
                                 <th class="px-5 py-3 text-left !text-base font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap"></th>
                                 <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Total</th>
-                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Americas</th>
-                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">EMEA</th>
-                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">APAC</th>
                               </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="mgmt-hours-tbody">
@@ -1358,12 +1352,9 @@
                         <div class="custom-scrollbar overflow-x-auto">
                           <table class="min-w-full">
                             <thead>
-                              <tr class="bg-gray-50 dark:bg-gray-800/50">
+                              <tr id="mgmt-fte-thead-tr" class="bg-gray-50 dark:bg-gray-800/50">
                                 <th class="px-5 py-3 text-left !text-base font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap"></th>
                                 <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Total</th>
-                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Americas</th>
-                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">EMEA</th>
-                                <th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">APAC</th>
                               </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="mgmt-fte-tbody">
@@ -7637,6 +7628,19 @@
           regs.forEach(reg => { if (reg && reg.trim()) _regionSet.add(reg.trim()); });
         });
         REGIONS_MGMT = _regionSet.size > 0 ? [..._regionSet].sort() : ['Americas', 'EMEA', 'APAC'];
+
+        // Sync table headers to match dynamic REGIONS_MGMT (prevents extra unlabelled columns)
+        const _regionThHtml = REGIONS_MGMT.map(r =>
+          `<th class="px-5 py-3 text-center !text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">${r}</th>`
+        ).join('');
+        ['mgmt-reports-thead-tr', 'mgmt-hours-thead-tr', 'mgmt-fte-thead-tr'].forEach(id => {
+          const tr = document.getElementById(id);
+          if (!tr) return;
+          // Remove any existing region <th> cells (keep first two: category + Total)
+          while (tr.children.length > 2) tr.removeChild(tr.lastChild);
+          tr.insertAdjacentHTML('beforeend', _regionThHtml);
+        });
+
         const hoursPerFTE = cfg.hoursPerFTE || 160;
 
         // ── Build dataset: inclusion rules decide which reports enter the summary ──
