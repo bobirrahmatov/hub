@@ -5040,16 +5040,17 @@
           const today = new Date();
           const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
           const headers = ['ID','Report Name','Report Type','Category','Prepare Region','Frequency','Avg Time Per Month (hrs)','Agreed Rationalization Category','Rationalization Status'];
+          const _asStr = v => Array.isArray(v) ? v.join('; ') : (v || '');
           const rows = data.map(r => ({
-            'ID': r.id || '',
+            'ID': r._mergedIds || r.id || '',
             'Report Name': r.reportName || '',
-            'Report Type': r.reportType || '',
+            'Report Type': r._export_reportType || _asStr(r.reportType),
             'Category': r.category || '',
-            'Prepare Region': Array.isArray(r.prepareRegion) ? r.prepareRegion.join(', ') : (r.prepareRegion || ''),
-            'Frequency': Array.isArray(r.frequency) ? r.frequency.join('; ') : (r.frequency || ''),
+            'Prepare Region': _asStr(r.prepareRegion),
+            'Frequency': r._export_frequency || _asStr(r.frequency),
             'Avg Time Per Month (hrs)': r.avgTimePerMonth || 0,
-            'Agreed Rationalization Category': r.rationalizationCategory || '',
-            'Rationalization Status': r.rationalizationStatus || ''
+            'Agreed Rationalization Category': r._export_rationalizationCategory || _asStr(r.rationalizationCategory),
+            'Rationalization Status': r._export_rationalizationStatus || _asStr(r.rationalizationStatus)
           }));
           const ws = XLSX.utils.json_to_sheet(rows, { header: headers });
           const wb = XLSX.utils.book_new();
@@ -5160,16 +5161,16 @@
             'ID': r._mergedIds || r.id || '',
             'Report Name': r.reportName || '',
             'Parent Report': r.parentReport || '',
-            'Report Type': _arrStr(r.reportType),
+            'Report Type': r._export_reportType || _arrStr(r.reportType),
             'Category': r.category || '',
             'Report Region': _arrStr(r.reportRegion),
             'Prepare Region': _arrStr(r.prepareRegion),
-            'Frequency': _arrStr(r.frequency),
+            'Frequency': r._export_frequency || _arrStr(r.frequency),
             'Prepared By': r.preparedBy || '',
             'Active Status': r.activeStatus || '',
             'Avg Time Per Month': r.avgTimePerMonth || 0,
-            'Agreed Rationalization Category': _arrStr(r.rationalizationCategory),
-            'Rationalization Status': _arrStr(r.rationalizationStatus)
+            'Agreed Rationalization Category': r._export_rationalizationCategory || _arrStr(r.rationalizationCategory),
+            'Rationalization Status': r._export_rationalizationStatus || _arrStr(r.rationalizationStatus)
           }));
           const wsDetail = XLSX.utils.json_to_sheet(detailRows, { header: detailHeaders });
           XLSX.utils.book_append_sheet(wb, wsDetail, 'Mgmt Summary Data');
@@ -8023,15 +8024,22 @@
           // Use the report whose reportName === parentReport as the base (root); else use first
           const root = group.find(r => (r.reportName || '').trim() === (r.parentReport || '').trim()) || group[0];
           const merged = Object.assign({}, root);
-          merged.reportType            = _joinArr(group.map(r => r.reportType));
-          merged.rationalizationCategory = _joinArr(group.map(r => r.rationalizationCategory));
-          merged.rationalizationStatus = _joinArr(group.map(r => r.rationalizationStatus));
-          merged.avgTimePerMonth       = group.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
-          // Frequencies: flatten all frequency arrays/strings and deduplicate
-          merged.frequency             = _flatUniq(group, 'frequency');
-          merged.prepareRegion         = _flatUniq(group, 'prepareRegion');
-          merged.reportRegion          = _flatUniq(group, 'reportRegion');
-          merged._mergedIds            = group.map(r => r.id).join(', ');
+
+          // ── Fields for CHARTS/TABLES: use root's value (clean, single category) ──
+          // avgTimePerMonth is summed so all group hours appear in the summary totals
+          merged.avgTimePerMonth = group.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
+          // Regions: union so all regions are represented
+          merged.frequency       = _flatUniq(group, 'frequency');
+          merged.prepareRegion   = _flatUniq(group, 'prepareRegion');
+          merged.reportRegion    = _flatUniq(group, 'reportRegion');
+
+          // ── Fields for DOWNLOAD only: deduplicated semicolon-delimited strings ──
+          // Stored in _export_* shadow fields; charts/tables read the root's plain values above
+          merged._export_reportType            = _joinArr(group.map(r => r.reportType));
+          merged._export_rationalizationCategory = _joinArr(group.map(r => r.rationalizationCategory));
+          merged._export_rationalizationStatus   = _joinArr(group.map(r => r.rationalizationStatus));
+          merged._export_frequency             = _flatUniq(group, 'frequency').join('; ');
+          merged._mergedIds                    = group.map(r => r.id).join(', ');
           _merged.push(merged);
         });
 
