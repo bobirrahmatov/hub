@@ -311,7 +311,7 @@
                   </button>
                   
                   <button
-                    onclick="exportToExcel()"
+                    onclick="currentActiveTab === 'mgmt' ? exportMgmtSummaryToExcel() : exportToExcel()"
                     class="flex items-center gap-1.5 rounded-lg bg-success-500 px-3 py-2 !text-base font-medium text-white hover:bg-success-600 transition-all duration-200"
                   >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -525,7 +525,7 @@
               </div>
               
               <!-- Region Filter -->
-              <div x-data="{open:false,selectedRegions:['All'],regions:window.ALL_REPORT_REGIONS&&window.ALL_REPORT_REGIONS.length?window.ALL_REPORT_REGIONS:['Global','APAC','EMEA','LATAM','NAM'],init:function(){var self=this;self.regions=window.ALL_REPORT_REGIONS&&window.ALL_REPORT_REGIONS.length?window.ALL_REPORT_REGIONS:['Global','APAC','EMEA','LATAM','NAM'];document.addEventListener('regions-updated',function(){self.regions=window.ALL_REPORT_REGIONS;});},getDisplayText:function(){if(this.selectedRegions.includes('All')||this.selectedRegions.length===0)return'All Regions';if(this.selectedRegions.length===1)return this.selectedRegions[0];return this.selectedRegions.length+' Selected';},toggleRegion:function(region){if(region==='All'){this.selectedRegions=['All'];filterByRegion(this.selectedRegions);this.open=false;}else{if(this.selectedRegions.includes('All')){this.selectedRegions=[region];}else{if(this.selectedRegions.includes(region)){this.selectedRegions=this.selectedRegions.filter(function(r){return r!==region;});if(this.selectedRegions.length===0){this.selectedRegions=['All'];this.open=false;}}else{this.selectedRegions.push(region);}}filterByRegion(this.selectedRegions);}},isSelected:function(region){return this.selectedRegions.includes(region);}}" class="relative" id="regionFilterDropdown">
+              <div x-data="regionFilter()" class="relative" id="regionFilterDropdown">
                 <button @click="open = !open" type="button"
                   class="inline-flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800 min-w-[140px]">
                   <span x-text="getDisplayText()" class="truncate"></span>
@@ -1187,7 +1187,7 @@
                               <svg class="h-6 w-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             </div>
                             <div>
-                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Kept</h3>
+                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Keep</h3>
                               <span id="mgmt-kept-subtitle-text" class="block !text-base text-gray-500 dark:text-gray-400">Retain</span>
                             </div>
                           </div>
@@ -1221,7 +1221,7 @@
                               <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             </div>
                             <div>
-                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Killed</h3>
+                              <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Kill</h3>
                               <span id="mgmt-killed-subtitle-text" class="block !text-base text-gray-500 dark:text-gray-400">Retire</span>
                             </div>
                           </div>
@@ -1260,12 +1260,17 @@
 
                       <!-- Number of Reports Table -->
                       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 flex flex-col overflow-hidden" style="background-color: var(--card-bg, white);">
-                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex-shrink-0">
-                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Number of Reports</h3>
-                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Report count by category and region</p>
+                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex-shrink-0 flex items-start justify-between gap-2">
+                          <div>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Number of Reports</h3>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Report count by category and region</p>
+                          </div>
+                          <button onclick="downloadTableAsCSV('mgmt-reports-table', 'number_of_reports.csv')" title="Download CSV" class="flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                          </button>
                         </div>
                         <div class="custom-scrollbar overflow-x-auto flex-1">
-                          <table class="min-w-full h-full">
+                          <table class="min-w-full h-full" id="mgmt-reports-table">
                             <thead>
                               <tr id="mgmt-reports-thead-tr" class="bg-gray-50 dark:bg-gray-800/50">
                                 <th class="px-5 py-3 text-left !text-base font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap"></th>
@@ -1281,9 +1286,14 @@
 
                       <!-- Global Overview – Reports Pie Chart -->
                       <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03] flex flex-col">
-                        <div class="mb-4 flex-shrink-0">
-                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Global Overview (# of Reports)</h3>
-                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Rationalization category breakdown</p>
+                        <div class="mb-4 flex-shrink-0 flex items-start justify-between gap-2">
+                          <div>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Global Overview (# of Reports)</h3>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Rationalization category breakdown</p>
+                          </div>
+                          <button onclick="downloadChartAsSVG(mgmtReportsChartInstance, 'reports_overview')" title="Download SVG" class="flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                          </button>
                         </div>
                         <div class="flex-1 flex items-center justify-center chartDarkStyle">
                           <div id="mgmtReportsDonutChart" class="w-full"></div>
@@ -1297,12 +1307,17 @@
 
                       <!-- Time Spent Table -->
                       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 flex flex-col overflow-hidden" style="background-color: var(--card-bg, white);">
-                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex-shrink-0">
-                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Time Spent (hours per month)</h3>
-                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Monthly hours by category and region</p>
+                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex-shrink-0 flex items-start justify-between gap-2">
+                          <div>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Time Spent (hours per month)</h3>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Monthly hours by category and region</p>
+                          </div>
+                          <button onclick="downloadTableAsCSV('mgmt-hours-table', 'time_spent_hours.csv')" title="Download CSV" class="flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                          </button>
                         </div>
                         <div class="custom-scrollbar overflow-x-auto flex-1">
-                          <table class="min-w-full h-full">
+                          <table class="min-w-full h-full" id="mgmt-hours-table">
                             <thead>
                               <tr id="mgmt-hours-thead-tr" class="bg-gray-50 dark:bg-gray-800/50">
                                 <th class="px-5 py-3 text-left !text-base font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap"></th>
@@ -1318,9 +1333,14 @@
 
                       <!-- Global Overview – Hours Pie Chart -->
                       <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03] flex flex-col">
-                        <div class="mb-4 flex-shrink-0">
-                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Global Overview (Hours per month)</h3>
-                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Hours distribution by category</p>
+                        <div class="mb-4 flex-shrink-0 flex items-start justify-between gap-2">
+                          <div>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Global Overview (Hours per month)</h3>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Hours distribution by category</p>
+                          </div>
+                          <button onclick="downloadChartAsSVG(mgmtHoursChartInstance, 'hours_overview')" title="Download SVG" class="flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                          </button>
                         </div>
                         <div class="flex-1 flex items-center justify-center chartDarkStyle">
                           <div id="mgmtHoursDonutChart" class="w-full"></div>
@@ -1332,9 +1352,14 @@
                     <!-- Rationalization Status Chart -->
                     <div class="col-span-12">
                       <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03] flex flex-col">
-                        <div class="mb-4 flex-shrink-0">
-                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Rationalization Status Overview</h3>
-                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Dynamic distribution by rationalization status</p>
+                        <div class="mb-4 flex-shrink-0 flex items-start justify-between gap-2">
+                          <div>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Rationalization Status Overview</h3>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Dynamic distribution by rationalization status</p>
+                          </div>
+                          <button onclick="downloadChartAsSVG(mgmtStatusChartInstance, 'rationalization_status')" title="Download SVG" class="flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                          </button>
                         </div>
                         <div class="flex-1 flex items-center justify-center chartDarkStyle">
                           <div id="mgmtStatusBarChart" class="w-full"></div>
@@ -1345,12 +1370,17 @@
                     <!-- FTE Analysis Table (full width) -->
                     <div class="col-span-12">
                       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 overflow-hidden" style="background-color: var(--card-bg, white);">
-                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-                          <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">FTE Analysis</h3>
-                          <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Full-time equivalent breakdown by category and region (Total Hours ÷ 160)</p>
+                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex items-start justify-between gap-2">
+                          <div>
+                            <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">FTE Analysis</h3>
+                            <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Full-time equivalent breakdown by category and region (Total Hours ÷ 160)</p>
+                          </div>
+                          <button onclick="downloadTableAsCSV('mgmt-fte-table', 'fte_analysis.csv')" title="Download CSV" class="flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                          </button>
                         </div>
                         <div class="custom-scrollbar overflow-x-auto">
-                          <table class="min-w-full">
+                          <table class="min-w-full" id="mgmt-fte-table">
                             <thead>
                               <tr id="mgmt-fte-thead-tr" class="bg-gray-50 dark:bg-gray-800/50">
                                 <th class="px-5 py-3 text-left !text-base font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap"></th>
@@ -1633,51 +1663,7 @@
             </div>
             
             <!-- Report Region -->
-            <div class="col-span-1" x-data="{
-              open: false,
-              selectedRegions: [],
-              regions: window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
-              init() {
-                this.regions = window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'];
-                document.addEventListener('regions-updated', () => { this.regions = window.ALL_REPORT_REGIONS; });
-              },
-              getDisplayText() {
-                if (this.selectedRegions.length === 0) {
-                  return 'Select Report Region';
-                }
-                if (this.selectedRegions.length === 1) {
-                  return this.selectedRegions[0];
-                }
-                return this.selectedRegions.length + ' Selected';
-              },
-              toggleRegion(region) {
-                if (this.selectedRegions.includes(region)) {
-                  this.selectedRegions = this.selectedRegions.filter(r => r !== region);
-                } else {
-                  this.selectedRegions.push(region);
-                }
-                document.getElementById('report-region').value = JSON.stringify(this.selectedRegions);
-              },
-              isSelected(region) {
-                return this.selectedRegions.includes(region);
-              },
-              init() {
-                // Initialize from existing value if editing
-                const existingValue = document.getElementById('report-region').value;
-                if (existingValue) {
-                  try {
-                    const parsed = JSON.parse(existingValue);
-                    if (Array.isArray(parsed)) {
-                      this.selectedRegions = parsed;
-                    } else if (typeof parsed === 'string') {
-                      this.selectedRegions = [parsed];
-                    }
-                  } catch (e) {
-                    this.selectedRegions = [existingValue];
-                  }
-                }
-              }
-            }" x-init="init()">
+            <div class="col-span-1" x-data="modalRegionSelect('report-region', 'Select Report Region')"
               <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                 Report Region <span class="text-error-500">*</span>
               </label>
@@ -1795,51 +1781,7 @@
             </div>
             
             <!-- Prepare Region -->
-            <div class="col-span-1" x-data="{
-              open: false,
-              selectedRegions: [],
-              regions: window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
-              init() {
-                this.regions = window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'];
-                document.addEventListener('regions-updated', () => { this.regions = window.ALL_REPORT_REGIONS; });
-              },
-              getDisplayText() {
-                if (this.selectedRegions.length === 0) {
-                  return 'Select Prepare Region';
-                }
-                if (this.selectedRegions.length === 1) {
-                  return this.selectedRegions[0];
-                }
-                return this.selectedRegions.length + ' Selected';
-              },
-              toggleRegion(region) {
-                if (this.selectedRegions.includes(region)) {
-                  this.selectedRegions = this.selectedRegions.filter(r => r !== region);
-                } else {
-                  this.selectedRegions.push(region);
-                }
-                document.getElementById('report-prepare-region').value = JSON.stringify(this.selectedRegions);
-              },
-              isSelected(region) {
-                return this.selectedRegions.includes(region);
-              },
-              init() {
-                // Initialize from existing value if editing
-                const existingValue = document.getElementById('report-prepare-region').value;
-                if (existingValue) {
-                  try {
-                    const parsed = JSON.parse(existingValue);
-                    if (Array.isArray(parsed)) {
-                      this.selectedRegions = parsed;
-                    } else if (typeof parsed === 'string') {
-                      this.selectedRegions = [parsed];
-                    }
-                  } catch (e) {
-                    this.selectedRegions = [existingValue];
-                  }
-                }
-              }
-            }" x-init="init()">
+            <div class="col-span-1" x-data="modalRegionSelect('report-prepare-region', 'Select Prepare Region')"
               <label class="mb-1.5 block !text-base font-medium text-gray-700 dark:text-gray-400">
                 Prepare Region
               </label>
@@ -2475,35 +2417,7 @@
               <div class="border-b border-gray-100 dark:border-gray-800 pb-4">
                 <dt class="font-semibold text-gray-900 dark:text-white/90">Report Region</dt>
                 <div id="view-report-region-display" class="mt-2 text-gray-600 dark:text-gray-400">-</div>
-                <div id="view-report-region-edit-container" class="hidden mt-2" x-data="{
-                  open: false,
-                  selectedRegions: [],
-                  regions: window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
-                  init() {
-                    this.regions = window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'];
-                    document.addEventListener('regions-updated', () => { this.regions = window.ALL_REPORT_REGIONS; });
-                  },
-                  getDisplayText() {
-                    if (this.selectedRegions.length === 0) {
-                      return 'Select Report Region';
-                    }
-                    if (this.selectedRegions.length === 1) {
-                      return this.selectedRegions[0];
-                    }
-                    return this.selectedRegions.length + ' Selected';
-                  },
-                  toggleRegion(region) {
-                    if (this.selectedRegions.includes(region)) {
-                      this.selectedRegions = this.selectedRegions.filter(r => r !== region);
-                    } else {
-                      this.selectedRegions.push(region);
-                    }
-                    document.getElementById('view-report-region-edit').value = JSON.stringify(this.selectedRegions);
-                  },
-                  isSelected(region) {
-                    return this.selectedRegions.includes(region);
-                  }
-                }">
+                <div id="view-report-region-edit-container" class="hidden mt-2" x-data="modalRegionSelect('view-report-region-edit', 'Select Report Region')"
                   <div class="relative">
                     <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
@@ -2602,35 +2516,7 @@
               <div class="border-b border-gray-100 dark:border-gray-800 pb-4">
                 <dt class="font-semibold text-gray-900 dark:text-white/90">Prepare Region</dt>
                 <div id="view-report-prepare-region-display" class="mt-2 text-gray-600 dark:text-gray-400">-</div>
-                <div id="view-report-prepare-region-edit-container" class="hidden mt-2" x-data="{
-                  open: false,
-                  selectedRegions: [],
-                  regions: window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'],
-                  init() {
-                    this.regions = window.ALL_REPORT_REGIONS && window.ALL_REPORT_REGIONS.length ? window.ALL_REPORT_REGIONS : ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'];
-                    document.addEventListener('regions-updated', () => { this.regions = window.ALL_REPORT_REGIONS; });
-                  },
-                  getDisplayText() {
-                    if (this.selectedRegions.length === 0) {
-                      return 'Select Prepare Region';
-                    }
-                    if (this.selectedRegions.length === 1) {
-                      return this.selectedRegions[0];
-                    }
-                    return this.selectedRegions.length + ' Selected';
-                  },
-                  toggleRegion(region) {
-                    if (this.selectedRegions.includes(region)) {
-                      this.selectedRegions = this.selectedRegions.filter(r => r !== region);
-                    } else {
-                      this.selectedRegions.push(region);
-                    }
-                    document.getElementById('view-report-prepare-region-edit').value = JSON.stringify(this.selectedRegions);
-                  },
-                  isSelected(region) {
-                    return this.selectedRegions.includes(region);
-                  }
-                }">
+                <div id="view-report-prepare-region-edit-container" class="hidden mt-2" x-data="modalRegionSelect('view-report-prepare-region-edit', 'Select Prepare Region')"
                   <div class="relative">
                     <button x-ref="trigger" @click="open = !open; if(open) $nextTick(() => positionModalDropdown($refs.trigger, $refs.panel))" type="button"
                       class="inline-flex items-center justify-between w-full h-11 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base font-medium text-gray-800 hover:bg-gray-50 shadow-theme-xs transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800">
@@ -2821,17 +2707,11 @@
                   <div x-ref="panel" x-show="open" @click.outside="open = false" x-cloak
                     class="modal-dropdown-panel max-h-60 overflow-auto space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-lg dark:border-gray-700 dark:bg-gray-800">
                     <button type="button" @click="selected = '— Select —'; open = false; document.getElementById('view-report-rationalization-category-edit').value = '';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">— Select —</button>
-                    <button type="button" @click="selected = 'Retain'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Retain';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Retain</button>
-                    <button type="button" @click="selected = 'Retire'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Retire';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Retire</button>
-                    <button type="button" @click="selected = 'Pending Tech Release'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Pending Tech Release';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Pending Tech Release</button>
-                    <button type="button" @click="selected = 'Dependent on One Wealth Go-Live'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Dependent on One Wealth Go-Live';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Dependent on One Wealth Go-Live</button>
-                    <button type="button" @click="selected = 'Other'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Other'; document.getElementById('view-report-rationalization-category-other').style.display='block';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Other</button>
+                    <button type="button" @click="selected = 'Keep'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Keep';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Keep</button>
+                    <button type="button" @click="selected = 'Kill'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Kill';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Kill</button>
+                    <button type="button" @click="selected = 'Sunset with Tech'; open = false; document.getElementById('view-report-rationalization-category-edit').value = 'Sunset with Tech';" class="flex w-full rounded-lg px-3 py-2 text-left !text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700">Sunset with Tech</button>
                   </div>
                   <input type="hidden" id="view-report-rationalization-category-edit" />
-                  <input type="text" id="view-report-rationalization-category-other" placeholder="Specify…"
-                    style="display:none;"
-                    class="mt-2 w-full h-11 rounded-lg border border-gray-300 bg-white px-4 py-2.5 !text-base text-gray-800 shadow-theme-xs focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
-                    onblur="if(this.value.trim()) document.getElementById('view-report-rationalization-category-edit').value = this.value.trim();" />
                 </div>
               </div>
 
@@ -2889,6 +2769,96 @@
         }
         document.dispatchEvent(new CustomEvent('regions-updated'));
       }
+
+      // ── Alpine.data components (registered before Alpine initialises) ──────────────
+      document.addEventListener('alpine:init', () => {
+
+        // Region filter pill in the main toolbar — supports multi-select + "All"
+        Alpine.data('regionFilter', () => ({
+          open: false,
+          selectedRegions: ['All'],
+          regions: [],
+          init() {
+            this.regions = window.ALL_REPORT_REGIONS || [];
+            document.addEventListener('regions-updated', () => {
+              this.regions = window.ALL_REPORT_REGIONS;
+            });
+          },
+          getDisplayText() {
+            if (!this.selectedRegions.length || this.selectedRegions.includes('All')) return 'All Regions';
+            if (this.selectedRegions.length === 1) return this.selectedRegions[0];
+            return this.selectedRegions.length + ' Selected';
+          },
+          toggleRegion(region) {
+            if (region === 'All') {
+              this.selectedRegions = ['All'];
+              filterByRegion(this.selectedRegions);
+              this.open = false;
+              return;
+            }
+            if (this.selectedRegions.includes('All')) {
+              this.selectedRegions = [region];
+            } else if (this.selectedRegions.includes(region)) {
+              this.selectedRegions = this.selectedRegions.filter(r => r !== region);
+              if (!this.selectedRegions.length) {
+                this.selectedRegions = ['All'];
+                this.open = false;
+              }
+            } else {
+              this.selectedRegions.push(region);
+            }
+            filterByRegion(this.selectedRegions);
+          },
+          isSelected(region) {
+            return this.selectedRegions.includes(region);
+          }
+        }));
+
+        // Modal multi-select for Report Region / Prepare Region fields.
+        // hiddenInputId — id of the <input type="hidden"> that stores the JSON value.
+        // placeholder   — button text shown when nothing is selected.
+        Alpine.data('modalRegionSelect', (hiddenInputId, placeholder) => ({
+          open: false,
+          selectedRegions: [],
+          regions: [],
+          init() {
+            this.regions = window.ALL_REPORT_REGIONS || [];
+            document.addEventListener('regions-updated', () => {
+              this.regions = window.ALL_REPORT_REGIONS;
+            });
+            // Pre-populate when the modal is opened in edit mode
+            const input = document.getElementById(hiddenInputId);
+            if (input && input.value) {
+              try {
+                const parsed = JSON.parse(input.value);
+                this.selectedRegions = Array.isArray(parsed) ? parsed : [String(parsed)];
+              } catch {
+                this.selectedRegions = input.value ? [input.value] : [];
+              }
+            }
+          },
+          getDisplayText() {
+            if (!this.selectedRegions.length) return placeholder;
+            if (this.selectedRegions.length === 1) return this.selectedRegions[0];
+            return this.selectedRegions.length + ' Selected';
+          },
+          toggleRegion(region) {
+            if (this.selectedRegions.includes(region)) {
+              this.selectedRegions = this.selectedRegions.filter(r => r !== region);
+            } else {
+              this.selectedRegions.push(region);
+            }
+            const input = document.getElementById(hiddenInputId);
+            if (input) input.value = JSON.stringify(this.selectedRegions);
+          },
+          isSelected(region) {
+            return this.selectedRegions.includes(region);
+          }
+        }));
+
+      });
+      // ── End Alpine.data components ────────────────────────────────────────────────
+
       let filteredReports = [];
       let currentPage = 1;
       let itemsPerPage = 25;
@@ -2992,48 +2962,70 @@
       window.onAdhocToggle = onAdhocToggle;
       window.onAdhocStatusFilter = onAdhocStatusFilter;
       
+      // Normalize a raw frequency string token to a known canonical value
+      function normalizeFrequencyToken(raw) {
+        const f = String(raw || '').trim();
+        if (!f) return null;
+        const fl = f.toLowerCase();
+        if (/bi.?weekly|every 2 weeks|every two weeks|biweekly/i.test(fl)) return 'Bi-Weekly';
+        if (/semi.?weekly|twice.{0,5}week|2.{0,5}week/i.test(fl)) return 'Semi-Weekly';
+        if (/^daily|per day/i.test(fl)) return 'Daily';
+        if (/^weekly|per week|once.{0,5}week/i.test(fl)) return 'Weekly';
+        if (/^monthly|per month|once.{0,5}month/i.test(fl)) return 'Monthly';
+        if (/^quarterly|per quarter/i.test(fl)) return 'Quarterly';
+        if (/half.?yearly|semi.?annual|every 6 months/i.test(fl)) return 'Half-Yearly';
+        if (/^annually|^annual|^yearly|per year|once.{0,5}year/i.test(fl)) return 'Annually';
+        return null;
+      }
+
+      // Extract all recognisable frequency tokens from a raw string
+      // Handles values like "Bi-Weekly (every 2 weeks)", "Weekly:#Monthly Monthly:#Weekly"
+      function extractFrequencyTokens(raw) {
+        const str = String(raw || '');
+        // First try to normalise the whole string as-is
+        const direct = normalizeFrequencyToken(str);
+        if (direct) return [direct];
+        // Otherwise split on common delimiters (#, ;, /, |, comma, whitespace runs)
+        // and try to normalise each part
+        const parts = str.split(/[#;/|,\s]+/).filter(Boolean);
+        const found = [];
+        parts.forEach(p => {
+          const n = normalizeFrequencyToken(p);
+          if (n && !found.includes(n)) found.push(n);
+        });
+        return found;
+      }
+
+      // Return the monthly multiplier for a canonical frequency name
+      function frequencyMultiplier(freq) {
+        switch (freq) {
+          case 'Daily':      return 365 / 12;        // ~30.42
+          case 'Semi-Weekly': return (52 * 2) / 12;  // ~8.67  (twice per week)
+          case 'Weekly':     return 52 / 12;          // ~4.33
+          case 'Bi-Weekly':  return (52 / 2) / 12;   // ~2.17  (every 2 weeks)
+          case 'Monthly':    return 1;
+          case 'Quarterly':  return 1 / 3;
+          case 'Half-Yearly': return 1 / 6;
+          case 'Annually':   return 1 / 12;
+          default:           return 0;
+        }
+      }
+
       // Calculate average time spent per month based on frequency and time per run
       function calculateAvgTimePerMonth(timeAvgPerRun, frequencies) {
         if (!timeAvgPerRun || timeAvgPerRun === 0) return 0;
         
-        // If frequencies is an array, calculate for each and sum
-        const freqArray = Array.isArray(frequencies) ? frequencies : [frequencies];
+        // Normalise to array of raw strings
+        const rawArray = Array.isArray(frequencies) ? frequencies : [frequencies];
         
         let totalMonthlyTime = 0;
         
-        freqArray.forEach(frequency => {
-          let multiplier = 0;
-          
-          switch(frequency) {
-            case 'Daily':
-              multiplier = 365 / 12; // ~30.42 days per month
-              break;
-            case 'Weekly':
-              multiplier = 52 / 12; // ~4.33 weeks per month
-              break;
-            case 'Semi-Weekly': // 2x per week
-              multiplier = (52 * 2) / 12; // ~8.67 times per month
-              break;
-            case 'Bi-Weekly': // Every 2 weeks
-              multiplier = (52 / 2) / 12; // ~2.17 times per month
-              break;
-            case 'Monthly':
-              multiplier = 1;
-              break;
-            case 'Quarterly':
-              multiplier = 1 / 3; // ~0.33 times per month
-              break;
-            case 'Half-Yearly':
-              multiplier = 1 / 6; // ~0.17 times per month
-              break;
-            case 'Annually':
-              multiplier = 1 / 12; // ~0.08 times per month
-              break;
-            default:
-              multiplier = 0;
-          }
-          
-          totalMonthlyTime += timeAvgPerRun * multiplier;
+        rawArray.forEach(rawFreq => {
+          // Extract all recognisable canonical tokens from this raw entry
+          const tokens = extractFrequencyTokens(rawFreq);
+          tokens.forEach(token => {
+            totalMonthlyTime += timeAvgPerRun * frequencyMultiplier(token);
+          });
         });
         
         // Round to 2 decimal places
@@ -3675,14 +3667,24 @@
           
           // Apply search filter
           if (searchTerm) {
+            const _s = v => (Array.isArray(v) ? v.join(' ') : String(v || '')).toLowerCase();
             return (
-              (report.id && String(report.id).toLowerCase().includes(searchTerm)) ||
-              (report.reportName && String(report.reportName).toLowerCase().includes(searchTerm)) ||
-              (report.parentReport && String(report.parentReport).toLowerCase().includes(searchTerm)) ||
-              (report.description && String(report.description).toLowerCase().includes(searchTerm)) ||
-              (report.reportType && String(report.reportType).toLowerCase().includes(searchTerm)) ||
-              (report.category && String(report.category).toLowerCase().includes(searchTerm)) ||
-              (report.preparedBy && String(report.preparedBy).toLowerCase().includes(searchTerm))
+              _s(report.id).includes(searchTerm) ||
+              _s(report.reportName).includes(searchTerm) ||
+              _s(report.parentReport).includes(searchTerm) ||
+              _s(report.description).includes(searchTerm) ||
+              _s(report.reportType).includes(searchTerm) ||
+              _s(report.category).includes(searchTerm) ||
+              _s(report.subCategory).includes(searchTerm) ||
+              _s(report.criticalReport).includes(searchTerm) ||
+              _s(report.reportComplexity).includes(searchTerm) ||
+              _s(report.reportRegion).includes(searchTerm) ||
+              _s(report.frequency).includes(searchTerm) ||
+              _s(report.preparedBy).includes(searchTerm) ||
+              _s(report.prepareRegion).includes(searchTerm) ||
+              _s(report.activeStatus).includes(searchTerm) ||
+              _s(report.rationalizationCategory).includes(searchTerm) ||
+              _s(report.rationalizationStatus).includes(searchTerm)
             );
           }
           
@@ -3932,6 +3934,8 @@
           updateViewModalAlpineDropdown('view-report-status-edit-container', report.activeStatus);
           updateViewModalAlpineDropdown('view-report-pii-edit-container', report.includePII);
           updateViewModalAlpineDropdown('view-report-euc-edit-container', report.euc);
+          updateViewModalAlpineDropdown('view-report-rationalization-category-edit-container', report.rationalizationCategory || '');
+          updateViewModalAlpineDropdown('view-report-rationalization-status-edit-container', report.rationalizationStatus || '');
           
           // Update multi-select dropdowns
           updateViewModalAlpineMultiSelect('view-report-region-edit-container', Array.isArray(report.reportRegion) ? report.reportRegion : (report.reportRegion ? [report.reportRegion] : []));
@@ -4414,6 +4418,8 @@
           updateViewModalAlpineDropdown('view-report-status-edit-container', originalReportData.activeStatus);
           updateViewModalAlpineDropdown('view-report-pii-edit-container', originalReportData.includePII);
           updateViewModalAlpineDropdown('view-report-euc-edit-container', originalReportData.euc);
+          updateViewModalAlpineDropdown('view-report-rationalization-category-edit-container', originalReportData.rationalizationCategory || '');
+          updateViewModalAlpineDropdown('view-report-rationalization-status-edit-container', originalReportData.rationalizationStatus || '');
           
           updateViewModalAlpineMultiSelect('view-report-region-edit-container', Array.isArray(originalReportData.reportRegion) ? originalReportData.reportRegion : (originalReportData.reportRegion ? [originalReportData.reportRegion] : []));
           updateViewModalAlpineMultiSelect('view-report-frequency-edit-container', Array.isArray(originalReportData.frequency) ? originalReportData.frequency : (originalReportData.frequency ? [originalReportData.frequency] : []));
@@ -4976,6 +4982,116 @@
         }
       }
       
+      // Download an HTML table as CSV
+      function downloadTableAsCSV(tableId, filename) {
+        const table = document.getElementById(tableId);
+        if (!table) return;
+        const rows = Array.from(table.querySelectorAll('tr'));
+        const csv = rows.map(row =>
+          Array.from(row.querySelectorAll('th, td'))
+            .map(cell => '"' + cell.innerText.replace(/"/g, '""') + '"')
+            .join(',')
+        ).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename || 'table.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      // Download an ApexCharts instance as SVG
+      function downloadChartAsSVG(chartInstance, filename) {
+        if (!chartInstance) { showWarningToast('Chart not ready yet'); return; }
+        chartInstance.exports.downloadSVG(filename || 'chart');
+      }
+
+      // Export Management Summary view data to Excel
+      function exportMgmtSummaryToExcel() {
+        try {
+          const data = mgmtSummaryViewData;
+          if (!data || data.length === 0) {
+            showInfoToast('No management summary data to export. Please load data first.');
+            return;
+          }
+          const wb = XLSX.utils.book_new();
+
+          // Sheet 1: Report-level detail (the rows that feed into the summary)
+          const detailHeaders = [
+            'ID', 'Report Name', 'Parent Report', 'Report Type', 'Category',
+            'Report Region', 'Prepare Region', 'Frequency', 'Prepared By',
+            'Active Status', 'Avg Time Per Month', 'Agreed Rationalization Category', 'Rationalization Status'
+          ];
+          const detailRows = data.map(r => ({
+            'ID': r.id || '',
+            'Report Name': r.reportName || '',
+            'Parent Report': r.parentReport || '',
+            'Report Type': r.reportType || '',
+            'Category': r.category || '',
+            'Report Region': Array.isArray(r.reportRegion) ? r.reportRegion.join(', ') : (r.reportRegion || ''),
+            'Prepare Region': Array.isArray(r.prepareRegion) ? r.prepareRegion.join(', ') : (r.prepareRegion || ''),
+            'Frequency': Array.isArray(r.frequency) ? r.frequency.join(', ') : (r.frequency || ''),
+            'Prepared By': r.preparedBy || '',
+            'Active Status': r.activeStatus || '',
+            'Avg Time Per Month': r.avgTimePerMonth || 0,
+            'Agreed Rationalization Category': r.rationalizationCategory || '',
+            'Rationalization Status': r.rationalizationStatus || ''
+          }));
+          const wsDetail = XLSX.utils.json_to_sheet(detailRows, { header: detailHeaders });
+          XLSX.utils.book_append_sheet(wb, wsDetail, 'Mgmt Summary Data');
+
+          // Sheet 2: Category × Region summary tables
+          const regularData = data.filter(r => !r._isAdhoc);
+          const cats = [...new Set(regularData.map(r => r.rationalizationCategory || 'Uncategorised'))];
+          const regions = REGIONS_MGMT;
+
+          const summaryRows = [];
+          // Header
+          summaryRows.push(['Number of Reports', 'Total', ...regions]);
+          cats.forEach(cat => {
+            const subset = regularData.filter(r => (r.rationalizationCategory || 'Uncategorised') === cat);
+            const regCounts = mgmtReportsByRegion(subset);
+            summaryRows.push([cat, subset.length, ...regions.map(rg => regCounts[rg] || 0)]);
+          });
+          const adhoc = data.filter(r => r._isAdhoc);
+          if (adhoc.length) {
+            const adhocReg = mgmtReportsByRegion(adhoc);
+            summaryRows.push(['Ad Hoc Tasks', adhoc.length, ...regions.map(rg => adhocReg[rg] || 0)]);
+          }
+          const allRegCounts = mgmtReportsByRegion(data);
+          summaryRows.push(['Total', data.length, ...regions.map(rg => allRegCounts[rg] || 0)]);
+
+          summaryRows.push([]);
+          summaryRows.push(['Hours per Month', 'Total', ...regions]);
+          cats.forEach(cat => {
+            const subset = regularData.filter(r => (r.rationalizationCategory || 'Uncategorised') === cat);
+            const subH = subset.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
+            const regH = mgmtHoursByRegion(subset);
+            summaryRows.push([cat + ' (hrs)', Math.round(subH), ...regions.map(rg => Math.round(regH[rg] || 0))]);
+          });
+          if (adhoc.length) {
+            const adhocH = adhoc.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
+            const adhocRegH = mgmtHoursByRegion(adhoc);
+            summaryRows.push(['Ad Hoc (hrs)', Math.round(adhocH), ...regions.map(rg => Math.round(adhocRegH[rg] || 0))]);
+          }
+          const totalHours = data.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
+          const allRegHours = mgmtHoursByRegion(data);
+          summaryRows.push(['Total Hours', Math.round(totalHours), ...regions.map(rg => Math.round(allRegHours[rg] || 0))]);
+
+          const wsSummary = XLSX.utils.aoa_to_sheet(summaryRows);
+          XLSX.utils.book_append_sheet(wb, wsSummary, 'Regional Summary');
+
+          const today = new Date();
+          const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+          XLSX.writeFile(wb, `mgmt_summary_${dateStr}.xlsx`);
+          showSuccessToast(`Exported management summary (${data.length} reports)`);
+        } catch (error) {
+          console.error('Error exporting management summary:', error);
+          showErrorToast('Failed to export. Please try again.');
+        }
+      }
+
       // Import from Excel
       async function importFromExcel(event) {
         const file = event.target.files[0];
@@ -5450,11 +5566,24 @@
         filteredReports = reports.filter(report => {
           // First apply search term if exists
           if (searchTerm) {
-            const matchesSearch = 
-              report.reportName.toLowerCase().includes(searchTerm) ||
-              (report.parentReport && report.parentReport.toLowerCase().includes(searchTerm)) ||
-              report.id.toLowerCase().includes(searchTerm) ||
-              (report.description && report.description.toLowerCase().includes(searchTerm));
+            const _s = v => (Array.isArray(v) ? v.join(' ') : String(v || '')).toLowerCase();
+            const matchesSearch =
+              _s(report.id).includes(searchTerm) ||
+              _s(report.reportName).includes(searchTerm) ||
+              _s(report.parentReport).includes(searchTerm) ||
+              _s(report.description).includes(searchTerm) ||
+              _s(report.reportType).includes(searchTerm) ||
+              _s(report.category).includes(searchTerm) ||
+              _s(report.subCategory).includes(searchTerm) ||
+              _s(report.criticalReport).includes(searchTerm) ||
+              _s(report.reportComplexity).includes(searchTerm) ||
+              _s(report.reportRegion).includes(searchTerm) ||
+              _s(report.frequency).includes(searchTerm) ||
+              _s(report.preparedBy).includes(searchTerm) ||
+              _s(report.prepareRegion).includes(searchTerm) ||
+              _s(report.activeStatus).includes(searchTerm) ||
+              _s(report.rationalizationCategory).includes(searchTerm) ||
+              _s(report.rationalizationStatus).includes(searchTerm);
             
             if (!matchesSearch) return false;
           }
@@ -7569,6 +7698,7 @@
       let mgmtReportsChartInstance = null;
       let mgmtHoursChartInstance = null;
       let mgmtStatusChartInstance = null;
+      let mgmtSummaryViewData = [];
 
       // Live list of regions used by the current config (refreshed at summary refresh time)
       let REGIONS_MGMT = ['Global', 'APAC', 'EMEA', 'LATAM', 'NAM'];
@@ -7576,7 +7706,7 @@
       function mgmtReportsByRegion(subset) {
         const counts = Object.fromEntries(REGIONS_MGMT.map(r => [r, 0]));
         subset.forEach(r => {
-          const regions = Array.isArray(r.reportRegion) ? r.reportRegion : (r.reportRegion ? [r.reportRegion] : []);
+          const regions = Array.isArray(r.prepareRegion) ? r.prepareRegion : (r.prepareRegion ? [r.prepareRegion] : []);
           REGIONS_MGMT.forEach(reg => { if (regions.includes(reg)) counts[reg]++; });
         });
         return counts;
@@ -7585,7 +7715,7 @@
       function mgmtHoursByRegion(subset) {
         const hours = Object.fromEntries(REGIONS_MGMT.map(r => [r, 0]));
         subset.forEach(r => {
-          const regions = Array.isArray(r.reportRegion) ? r.reportRegion : (r.reportRegion ? [r.reportRegion] : []);
+          const regions = Array.isArray(r.prepareRegion) ? r.prepareRegion : (r.prepareRegion ? [r.prepareRegion] : []);
           const h = parseFloat(r.avgTimePerMonth) || 0;
           const share = regions.length > 0 ? h / regions.length : 0;
           REGIONS_MGMT.forEach(reg => { if (regions.includes(reg)) hours[reg] += share; });
@@ -7662,10 +7792,10 @@
 
       function refreshManagementSummary() {
         const cfg = (mgmtConfig || DEFAULT_MGMT_CONFIG).managementSummary;
-        // Derive regions dynamically from all report data (no longer config-driven)
+        // Derive regions dynamically from Prepare Region (not Report Region)
         const _regionSet = new Set();
         reports.forEach(r => {
-          const regs = Array.isArray(r.reportRegion) ? r.reportRegion : (r.reportRegion ? [r.reportRegion] : []);
+          const regs = Array.isArray(r.prepareRegion) ? r.prepareRegion : (r.prepareRegion ? [r.prepareRegion] : []);
           regs.forEach(reg => { if (reg && reg.trim()) _regionSet.add(reg.trim()); });
         });
         if (_regionSet.size > 0) {
@@ -7733,6 +7863,8 @@
           const self = (r.reportName || '').trim();
           return parent === self;
         });
+
+        mgmtSummaryViewData = data;
 
         const total = data.length;
         const allRegCounts = mgmtReportsByRegion(data);
@@ -8309,9 +8441,9 @@
         const allGroups = [
           { key: 'inclusion', label: 'Include in Summary',  borderCls: 'border-blue-200   bg-blue-50   dark:border-blue-900/50   dark:bg-blue-900/10',   dotCls: 'bg-blue-500',   rule: inclR,          subtitle: undefined, dedupToggle: undefined },
           { key: 'dedup',     label: 'Exclude (sub-report)', borderCls: 'border-orange-200 bg-orange-50 dark:border-orange-900/50 dark:bg-orange-900/10', dotCls: 'bg-orange-500', rule: excl,           subtitle: undefined, dedupToggle: dd.enabled !== false },
-          { key: 'kept',      label: 'Kept',                borderCls: 'border-green-200  bg-green-50  dark:border-green-900/50  dark:bg-green-900/10',  dotCls: 'bg-green-500',  rule: rules.kept   || {logic:'OR',conditions:[]}, subtitle: rules.kept?.subtitle   || '', dedupToggle: undefined },
+          { key: 'kept',      label: 'Keep',                borderCls: 'border-green-200  bg-green-50  dark:border-green-900/50  dark:bg-green-900/10',  dotCls: 'bg-green-500',  rule: rules.kept   || {logic:'OR',conditions:[]}, subtitle: rules.kept?.subtitle   || '', dedupToggle: undefined },
           { key: 'sunset',    label: 'Sunset with Tech',    borderCls: 'border-amber-200  bg-amber-50  dark:border-amber-900/50  dark:bg-amber-900/10',  dotCls: 'bg-amber-500',  rule: rules.sunset || {logic:'OR',conditions:[]}, subtitle: rules.sunset?.subtitle || '', dedupToggle: undefined },
-          { key: 'killed',    label: 'Killed',              borderCls: 'border-red-200    bg-red-50    dark:border-red-900/50    dark:bg-red-900/10',    dotCls: 'bg-red-500',    rule: rules.killed || {logic:'OR',conditions:[]}, subtitle: rules.killed?.subtitle || '', dedupToggle: undefined }
+          { key: 'killed',    label: 'Kill',                borderCls: 'border-red-200    bg-red-50    dark:border-red-900/50    dark:bg-red-900/10',    dotCls: 'bg-red-500',    rule: rules.killed || {logic:'OR',conditions:[]}, subtitle: rules.killed?.subtitle || '', dedupToggle: undefined }
         ];
 
         // Seed editor state
