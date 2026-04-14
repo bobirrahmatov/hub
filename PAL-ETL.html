@@ -1270,7 +1270,7 @@
                               <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.2441 6C10.2441 5.0335 11.0276 4.25 11.9941 4.25H12.0041C12.9706 4.25 13.7541 5.0335 13.7541 6C13.7541 6.9665 12.9706 7.75 12.0041 7.75H11.9941C11.0276 7.75 10.2441 6.9665 10.2441 6ZM10.2441 18C10.2441 17.0335 11.0276 16.25 11.9941 16.25H12.0041C12.9706 16.25 13.7541 17.0335 13.7541 18C13.7541 18.9665 12.9706 19.75 12.0041 19.75H11.9941C11.0276 19.75 10.2441 18.9665 10.2441 18ZM11.9941 10.25C11.0276 10.25 10.2441 11.0335 10.2441 12C10.2441 12.9665 11.0276 13.75 11.9941 13.75H12.0041C12.9706 13.75 13.7541 12.9665 13.7541 12C13.7541 11.0335 12.9706 10.25 12.0041 10.25H11.9941Z" fill=""/></svg>
                             </button>
                             <div x-show="open" @click.outside="open=false" x-cloak class="absolute right-0 z-40 w-48 p-2 space-y-1 bg-white border border-gray-200 shadow-theme-lg dark:bg-gray-800 top-full rounded-2xl dark:border-gray-800">
-                              <button @click="downloadChartAsSVG(mgmtReportsChartInstance,'reports_overview'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Image</button>
+                              <button @click="downloadTableAsSVG('mgmt-reports-table','number_of_reports'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Image</button>
                               <button @click="downloadMgmtUnderlying('Number of Reports','number_of_reports'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Data</button>
                             </div>
                           </div>
@@ -1329,7 +1329,7 @@
                               <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.2441 6C10.2441 5.0335 11.0276 4.25 11.9941 4.25H12.0041C12.9706 4.25 13.7541 5.0335 13.7541 6C13.7541 6.9665 12.9706 7.75 12.0041 7.75H11.9941C11.0276 7.75 10.2441 6.9665 10.2441 6ZM10.2441 18C10.2441 17.0335 11.0276 16.25 11.9941 16.25H12.0041C12.9706 16.25 13.7541 17.0335 13.7541 18C13.7541 18.9665 12.9706 19.75 12.0041 19.75H11.9941C11.0276 19.75 10.2441 18.9665 10.2441 18ZM11.9941 10.25C11.0276 10.25 10.2441 11.0335 10.2441 12C10.2441 12.9665 11.0276 13.75 11.9941 13.75H12.0041C12.9706 13.75 13.7541 12.9665 13.7541 12C13.7541 11.0335 12.9706 10.25 12.0041 10.25H11.9941Z" fill=""/></svg>
                             </button>
                             <div x-show="open" @click.outside="open=false" x-cloak class="absolute right-0 z-40 w-48 p-2 space-y-1 bg-white border border-gray-200 shadow-theme-lg dark:bg-gray-800 top-full rounded-2xl dark:border-gray-800">
-                              <button @click="downloadChartAsSVG(mgmtHoursChartInstance,'hours_overview'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Image</button>
+                              <button @click="downloadTableAsSVG('mgmt-hours-table','time_spent'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Image</button>
                               <button @click="downloadMgmtUnderlying('Time Spent','time_spent'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Data</button>
                             </div>
                           </div>
@@ -1410,7 +1410,7 @@
                               <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.2441 6C10.2441 5.0335 11.0276 4.25 11.9941 4.25H12.0041C12.9706 4.25 13.7541 5.0335 13.7541 6C13.7541 6.9665 12.9706 7.75 12.0041 7.75H11.9941C11.0276 7.75 10.2441 6.9665 10.2441 6ZM10.2441 18C10.2441 17.0335 11.0276 16.25 11.9941 16.25H12.0041C12.9706 16.25 13.7541 17.0335 13.7541 18C13.7541 18.9665 12.9706 19.75 12.0041 19.75H11.9941C11.0276 19.75 10.2441 18.9665 10.2441 18ZM11.9941 10.25C11.0276 10.25 10.2441 11.0335 10.2441 12C10.2441 12.9665 11.0276 13.75 11.9941 13.75H12.0041C12.9706 13.75 13.7541 12.9665 13.7541 12C13.7541 11.0335 12.9706 10.25 12.0041 10.25H11.9941Z" fill=""/></svg>
                             </button>
                             <div x-show="open" @click.outside="open=false" x-cloak class="absolute right-0 z-40 w-48 p-2 space-y-1 bg-white border border-gray-200 shadow-theme-lg dark:bg-gray-800 top-full rounded-2xl dark:border-gray-800">
-                              <button @click="downloadChartAsSVG(mgmtStatusChartInstance,'rationalization_status'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Image</button>
+                              <button @click="downloadTableAsSVG('mgmt-fte-table','fte_analysis'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Image</button>
                               <button @click="downloadMgmtUnderlying('FTE Analysis','fte_analysis'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Data</button>
                             </div>
                           </div>
@@ -3223,8 +3223,8 @@
         let html = '';
         
         pageReports.forEach(report => {
-          const reportId = report.id || '';
-          const escapedId = String(reportId).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          const reportId = String(report.id || '').trim();
+          const escapedId = reportId.replace(/'/g, "\\'").replace(/"/g, '&quot;');
           html += `
             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer" data-report-id="${escapedId}">
               <td class="px-6 py-4 whitespace-nowrap">
@@ -3834,9 +3834,15 @@
       
       function viewReport(reportId) {
         console.log('viewReport called with reportId:', reportId);
-        // Unescape the ID if it was escaped for HTML
-        const unescapedId = reportId.replace(/\\'/g, "'").replace(/&quot;/g, '"');
-        const report = reports.find(r => String(r.id) === String(reportId) || String(r.id) === String(unescapedId));
+        // Unescape the ID if it was escaped for HTML and trim any stray whitespace
+        const cleanId = String(reportId || '').trim();
+        const unescapedId = cleanId.replace(/\\'/g, "'").replace(/&quot;/g, '"').trim();
+        // Search filteredReports first (what's actually displayed), then fall back to full reports array
+        const idMatch = r => {
+          const rid = String(r.id || '').trim();
+          return rid === cleanId || rid === unescapedId;
+        };
+        const report = filteredReports.find(idMatch) || reports.find(idMatch);
         if (!report) {
           console.warn('Report not found for ID:', reportId);
           return;
@@ -5076,9 +5082,61 @@
       }
 
       // Download an ApexCharts instance as SVG
+      function downloadTableAsSVG(tableId, filename) {
+        const table = document.getElementById(tableId);
+        if (!table) { showWarningToast('Table not found'); return; }
+        // Capture the full scrollable wrapper so all columns are included
+        const wrapper = table.closest('.custom-scrollbar') || table.parentElement;
+        const targetEl = wrapper || table;
+        const rect = targetEl.getBoundingClientRect();
+        const w = Math.max(targetEl.scrollWidth || rect.width, 400);
+        const h = Math.max(targetEl.scrollHeight || rect.height, 100);
+        // Inline computed styles so the SVG looks right outside the page
+        const cloned = targetEl.cloneNode(true);
+        const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Inter,ui-sans-serif,sans-serif;font-size:13px;background:#fff;padding:8px;">
+      ${cloned.outerHTML}
+    </div>
+  </foreignObject>
+</svg>`;
+        const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = (filename || 'table') + '.svg';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
       function downloadChartAsSVG(chartInstance, filename) {
         if (!chartInstance) { showWarningToast('Chart not ready yet'); return; }
-        chartInstance.exports.downloadSVG(filename || 'chart');
+        try {
+          // Find the SVG element in the chart's DOM container
+          const chartEl = chartInstance.el || (chartInstance.opts && chartInstance.opts.chart && chartInstance.opts.chart.parentNode);
+          const svg = chartEl ? chartEl.querySelector('svg') : null;
+          if (svg) {
+            const serializer = new XMLSerializer();
+            const svgStr = serializer.serializeToString(svg);
+            const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = (filename || 'chart') + '.svg';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          } else {
+            // Fallback to ApexCharts built-in export
+            chartInstance.exports.downloadSVG();
+          }
+        } catch (e) {
+          console.error('SVG download error:', e);
+          showWarningToast('Could not download chart image');
+        }
       }
 
       // Export Management Summary view data to Excel
@@ -5097,20 +5155,21 @@
             'Report Region', 'Prepare Region', 'Frequency', 'Prepared By',
             'Active Status', 'Avg Time Per Month', 'Agreed Rationalization Category', 'Rationalization Status'
           ];
+          const _arrStr = v => Array.isArray(v) ? v.join('; ') : (v || '');
           const detailRows = data.map(r => ({
-            'ID': r.id || '',
+            'ID': r._mergedIds || r.id || '',
             'Report Name': r.reportName || '',
             'Parent Report': r.parentReport || '',
-            'Report Type': r.reportType || '',
+            'Report Type': _arrStr(r.reportType),
             'Category': r.category || '',
-            'Report Region': Array.isArray(r.reportRegion) ? r.reportRegion.join(', ') : (r.reportRegion || ''),
-            'Prepare Region': Array.isArray(r.prepareRegion) ? r.prepareRegion.join(', ') : (r.prepareRegion || ''),
-            'Frequency': Array.isArray(r.frequency) ? r.frequency.join(', ') : (r.frequency || ''),
+            'Report Region': _arrStr(r.reportRegion),
+            'Prepare Region': _arrStr(r.prepareRegion),
+            'Frequency': _arrStr(r.frequency),
             'Prepared By': r.preparedBy || '',
             'Active Status': r.activeStatus || '',
             'Avg Time Per Month': r.avgTimePerMonth || 0,
-            'Agreed Rationalization Category': r.rationalizationCategory || '',
-            'Rationalization Status': r.rationalizationStatus || ''
+            'Agreed Rationalization Category': _arrStr(r.rationalizationCategory),
+            'Rationalization Status': _arrStr(r.rationalizationStatus)
           }));
           const wsDetail = XLSX.utils.json_to_sheet(detailRows, { header: detailHeaders });
           XLSX.utils.book_append_sheet(wb, wsDetail, 'Mgmt Summary Data');
@@ -7924,23 +7983,59 @@
         const rawData = rtFilter === 'Ad Hoc' ? getAdhocFTEReports() : baseReports.concat(adhocForSummary);
         if (!rawData) return;
 
-        // ── Deduplication: exclude reports that match ALL excludeRules conditions ──
-        const dedupCfg = cfg.deduplication || {};
-        const excludeRules = dedupCfg.excludeRules;
-        const data = rawData.filter(r => {
-          if (r._isAdhoc) return true;
-          if (!dedupCfg.enabled) return true;
-          // v1.2: condition-based exclude rules
-          if (excludeRules && excludeRules.conditions && excludeRules.conditions.length) {
-            const shouldExclude = evalMgmtConditions(r, excludeRules.conditions, excludeRules.logic || 'AND');
-            return !shouldExclude;
-          }
-          // Legacy fallback: exclude when parentReport is set and different from reportName
-          const parent = (r.parentReport || '').trim();
-          if (!parent) return true;
-          const self = (r.reportName || '').trim();
-          return parent === self;
+        // ── Aggregation: group reports sharing the same parentReport into one merged row ──
+        // Reports without a parentReport, or whose parentReport equals their own name, are treated
+        // as group "roots". All siblings sharing the same parentReport value are merged:
+        //   • reportType, frequency, rationalizationCategory, rationalizationStatus → unique values joined with "; "
+        //   • avgTimePerMonth → summed
+        //   • prepareRegion, reportRegion → union of unique region values
+        //   • all other fields → taken from the first (root) report in the group
+        const _uniq = arr => [...new Set(arr.filter(Boolean))];
+        const _joinArr = arr => _uniq(arr).join('; ');
+        const _flatUniq = (reports, field) => {
+          const vals = [];
+          reports.forEach(r => {
+            const v = Array.isArray(r[field]) ? r[field] : (r[field] ? [r[field]] : []);
+            v.forEach(x => { if (x && !vals.includes(x)) vals.push(x); });
+          });
+          return vals;
+        };
+
+        // Separate ad-hoc entries (never merged) from regular reports
+        const _adhocItems = rawData.filter(r => r._isAdhoc);
+        const _regularRaw = rawData.filter(r => !r._isAdhoc);
+
+        // Group regular reports by parentReport key
+        const _groups = new Map();
+        _regularRaw.forEach(r => {
+          const key = (r.parentReport || '').trim() || ('__solo__' + r.id);
+          if (!_groups.has(key)) _groups.set(key, []);
+          _groups.get(key).push(r);
         });
+
+        // Merge each group into one row
+        const _merged = [];
+        _groups.forEach((group) => {
+          if (group.length === 1) {
+            _merged.push(group[0]);
+            return;
+          }
+          // Use the report whose reportName === parentReport as the base (root); else use first
+          const root = group.find(r => (r.reportName || '').trim() === (r.parentReport || '').trim()) || group[0];
+          const merged = Object.assign({}, root);
+          merged.reportType            = _joinArr(group.map(r => r.reportType));
+          merged.rationalizationCategory = _joinArr(group.map(r => r.rationalizationCategory));
+          merged.rationalizationStatus = _joinArr(group.map(r => r.rationalizationStatus));
+          merged.avgTimePerMonth       = group.reduce((s, r) => s + (parseFloat(r.avgTimePerMonth) || 0), 0);
+          // Frequencies: flatten all frequency arrays/strings and deduplicate
+          merged.frequency             = _flatUniq(group, 'frequency');
+          merged.prepareRegion         = _flatUniq(group, 'prepareRegion');
+          merged.reportRegion          = _flatUniq(group, 'reportRegion');
+          merged._mergedIds            = group.map(r => r.id).join(', ');
+          _merged.push(merged);
+        });
+
+        const data = _merged.concat(_adhocItems);
 
         mgmtSummaryViewData = data;
 
