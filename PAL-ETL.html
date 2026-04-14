@@ -3014,14 +3014,17 @@
       }
 
       // Extract all recognisable frequency tokens from a raw string
-      // Handles values like "Bi-Weekly (every 2 weeks)", "Weekly:#Monthly Monthly:#Weekly"
+      // Handles values like "Bi-Weekly (every 2 weeks)", "Weekly;#Monthly Monthly:#Weekly"
       function extractFrequencyTokens(raw) {
         const str = String(raw || '');
-        // First try to normalise the whole string as-is
-        const direct = normalizeFrequencyToken(str);
-        if (direct) return [direct];
-        // Otherwise split on common delimiters (#, ;, /, |, comma, whitespace runs)
-        // and try to normalise each part
+        // Only try the whole string if it contains no delimiter characters
+        // (e.g. "Weekly;#Monthly" must NOT match as just "Weekly")
+        if (!/[#;/|,]/.test(str)) {
+          const direct = normalizeFrequencyToken(str);
+          if (direct) return [direct];
+        }
+        // Split on common delimiters (#, ;, /, |, comma, whitespace runs)
+        // and try to normalise each part independently
         const parts = str.split(/[#;/|,\s]+/).filter(Boolean);
         const found = [];
         parts.forEach(p => {
