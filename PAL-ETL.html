@@ -1265,9 +1265,15 @@
                             <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Number of Reports</h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Report count by category and region</p>
                           </div>
-                          <button onclick="downloadTableAsCSV('mgmt-reports-table', 'number_of_reports.csv')" title="Download CSV" class="flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                          </button>
+                          <div x-data="{open:false}" class="relative flex-shrink-0">
+                            <button @click="open=!open" :class="open?'text-gray-700 dark:text-white':'text-gray-400 hover:text-gray-700 dark:hover:text-white'" class="transition-colors" title="Options">
+                              <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.2441 6C10.2441 5.0335 11.0276 4.25 11.9941 4.25H12.0041C12.9706 4.25 13.7541 5.0335 13.7541 6C13.7541 6.9665 12.9706 7.75 12.0041 7.75H11.9941C11.0276 7.75 10.2441 6.9665 10.2441 6ZM10.2441 18C10.2441 17.0335 11.0276 16.25 11.9941 16.25H12.0041C12.9706 16.25 13.7541 17.0335 13.7541 18C13.7541 18.9665 12.9706 19.75 12.0041 19.75H11.9941C11.0276 19.75 10.2441 18.9665 10.2441 18ZM11.9941 10.25C11.0276 10.25 10.2441 11.0335 10.2441 12C10.2441 12.9665 11.0276 13.75 11.9941 13.75H12.0041C12.9706 13.75 13.7541 12.9665 13.7541 12C13.7541 11.0335 12.9706 10.25 12.0041 10.25H11.9941Z" fill=""/></svg>
+                            </button>
+                            <div x-show="open" @click.outside="open=false" x-cloak class="absolute right-0 z-40 w-48 p-2 space-y-1 bg-white border border-gray-200 shadow-theme-lg dark:bg-gray-800 top-full rounded-2xl dark:border-gray-800">
+                              <button @click="downloadChartAsSVG(mgmtReportsChartInstance,'reports_overview'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Image</button>
+                              <button @click="downloadMgmtUnderlying('Number of Reports','number_of_reports'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Data</button>
+                            </div>
+                          </div>
                         </div>
                         <div class="custom-scrollbar overflow-x-auto flex-1">
                           <table class="min-w-full h-full" id="mgmt-reports-table">
@@ -1291,9 +1297,15 @@
                             <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Global Overview (# of Reports)</h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Rationalization category breakdown</p>
                           </div>
-                          <button onclick="downloadChartAsSVG(mgmtReportsChartInstance, 'reports_overview')" title="Download SVG" class="flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                          </button>
+                          <div x-data="{open:false}" class="relative flex-shrink-0">
+                            <button @click="open=!open" :class="open?'text-gray-700 dark:text-white':'text-gray-400 hover:text-gray-700 dark:hover:text-white'" class="transition-colors" title="Options">
+                              <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.2441 6C10.2441 5.0335 11.0276 4.25 11.9941 4.25H12.0041C12.9706 4.25 13.7541 5.0335 13.7541 6C13.7541 6.9665 12.9706 7.75 12.0041 7.75H11.9941C11.0276 7.75 10.2441 6.9665 10.2441 6ZM10.2441 18C10.2441 17.0335 11.0276 16.25 11.9941 16.25H12.0041C12.9706 16.25 13.7541 17.0335 13.7541 18C13.7541 18.9665 12.9706 19.75 12.0041 19.75H11.9941C11.0276 19.75 10.2441 18.9665 10.2441 18ZM11.9941 10.25C11.0276 10.25 10.2441 11.0335 10.2441 12C10.2441 12.9665 11.0276 13.75 11.9941 13.75H12.0041C12.9706 13.75 13.7541 12.9665 13.7541 12C13.7541 11.0335 12.9706 10.25 12.0041 10.25H11.9941Z" fill=""/></svg>
+                            </button>
+                            <div x-show="open" @click.outside="open=false" x-cloak class="absolute right-0 z-40 w-48 p-2 space-y-1 bg-white border border-gray-200 shadow-theme-lg dark:bg-gray-800 top-full rounded-2xl dark:border-gray-800">
+                              <button @click="downloadChartAsSVG(mgmtReportsChartInstance,'reports_overview'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Image</button>
+                              <button @click="downloadMgmtUnderlying('Number of Reports','number_of_reports'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Data</button>
+                            </div>
+                          </div>
                         </div>
                         <div class="flex-1 flex items-center justify-center chartDarkStyle">
                           <div id="mgmtReportsDonutChart" class="w-full"></div>
@@ -1312,9 +1324,15 @@
                             <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Time Spent (hours per month)</h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Monthly hours by category and region</p>
                           </div>
-                          <button onclick="downloadTableAsCSV('mgmt-hours-table', 'time_spent_hours.csv')" title="Download CSV" class="flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                          </button>
+                          <div x-data="{open:false}" class="relative flex-shrink-0">
+                            <button @click="open=!open" :class="open?'text-gray-700 dark:text-white':'text-gray-400 hover:text-gray-700 dark:hover:text-white'" class="transition-colors" title="Options">
+                              <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.2441 6C10.2441 5.0335 11.0276 4.25 11.9941 4.25H12.0041C12.9706 4.25 13.7541 5.0335 13.7541 6C13.7541 6.9665 12.9706 7.75 12.0041 7.75H11.9941C11.0276 7.75 10.2441 6.9665 10.2441 6ZM10.2441 18C10.2441 17.0335 11.0276 16.25 11.9941 16.25H12.0041C12.9706 16.25 13.7541 17.0335 13.7541 18C13.7541 18.9665 12.9706 19.75 12.0041 19.75H11.9941C11.0276 19.75 10.2441 18.9665 10.2441 18ZM11.9941 10.25C11.0276 10.25 10.2441 11.0335 10.2441 12C10.2441 12.9665 11.0276 13.75 11.9941 13.75H12.0041C12.9706 13.75 13.7541 12.9665 13.7541 12C13.7541 11.0335 12.9706 10.25 12.0041 10.25H11.9941Z" fill=""/></svg>
+                            </button>
+                            <div x-show="open" @click.outside="open=false" x-cloak class="absolute right-0 z-40 w-48 p-2 space-y-1 bg-white border border-gray-200 shadow-theme-lg dark:bg-gray-800 top-full rounded-2xl dark:border-gray-800">
+                              <button @click="downloadChartAsSVG(mgmtHoursChartInstance,'hours_overview'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Image</button>
+                              <button @click="downloadMgmtUnderlying('Time Spent','time_spent'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Data</button>
+                            </div>
+                          </div>
                         </div>
                         <div class="custom-scrollbar overflow-x-auto flex-1">
                           <table class="min-w-full h-full" id="mgmt-hours-table">
@@ -1338,9 +1356,15 @@
                             <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Global Overview (Hours per month)</h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Hours distribution by category</p>
                           </div>
-                          <button onclick="downloadChartAsSVG(mgmtHoursChartInstance, 'hours_overview')" title="Download SVG" class="flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                          </button>
+                          <div x-data="{open:false}" class="relative flex-shrink-0">
+                            <button @click="open=!open" :class="open?'text-gray-700 dark:text-white':'text-gray-400 hover:text-gray-700 dark:hover:text-white'" class="transition-colors" title="Options">
+                              <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.2441 6C10.2441 5.0335 11.0276 4.25 11.9941 4.25H12.0041C12.9706 4.25 13.7541 5.0335 13.7541 6C13.7541 6.9665 12.9706 7.75 12.0041 7.75H11.9941C11.0276 7.75 10.2441 6.9665 10.2441 6ZM10.2441 18C10.2441 17.0335 11.0276 16.25 11.9941 16.25H12.0041C12.9706 16.25 13.7541 17.0335 13.7541 18C13.7541 18.9665 12.9706 19.75 12.0041 19.75H11.9941C11.0276 19.75 10.2441 18.9665 10.2441 18ZM11.9941 10.25C11.0276 10.25 10.2441 11.0335 10.2441 12C10.2441 12.9665 11.0276 13.75 11.9941 13.75H12.0041C12.9706 13.75 13.7541 12.9665 13.7541 12C13.7541 11.0335 12.9706 10.25 12.0041 10.25H11.9941Z" fill=""/></svg>
+                            </button>
+                            <div x-show="open" @click.outside="open=false" x-cloak class="absolute right-0 z-40 w-48 p-2 space-y-1 bg-white border border-gray-200 shadow-theme-lg dark:bg-gray-800 top-full rounded-2xl dark:border-gray-800">
+                              <button @click="downloadChartAsSVG(mgmtHoursChartInstance,'hours_overview'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Image</button>
+                              <button @click="downloadMgmtUnderlying('Time Spent','time_spent'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Data</button>
+                            </div>
+                          </div>
                         </div>
                         <div class="flex-1 flex items-center justify-center chartDarkStyle">
                           <div id="mgmtHoursDonutChart" class="w-full"></div>
@@ -1357,9 +1381,15 @@
                             <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">Rationalization Status Overview</h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Dynamic distribution by rationalization status</p>
                           </div>
-                          <button onclick="downloadChartAsSVG(mgmtStatusChartInstance, 'rationalization_status')" title="Download SVG" class="flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                          </button>
+                          <div x-data="{open:false}" class="relative flex-shrink-0">
+                            <button @click="open=!open" :class="open?'text-gray-700 dark:text-white':'text-gray-400 hover:text-gray-700 dark:hover:text-white'" class="transition-colors" title="Options">
+                              <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.2441 6C10.2441 5.0335 11.0276 4.25 11.9941 4.25H12.0041C12.9706 4.25 13.7541 5.0335 13.7541 6C13.7541 6.9665 12.9706 7.75 12.0041 7.75H11.9941C11.0276 7.75 10.2441 6.9665 10.2441 6ZM10.2441 18C10.2441 17.0335 11.0276 16.25 11.9941 16.25H12.0041C12.9706 16.25 13.7541 17.0335 13.7541 18C13.7541 18.9665 12.9706 19.75 12.0041 19.75H11.9941C11.0276 19.75 10.2441 18.9665 10.2441 18ZM11.9941 10.25C11.0276 10.25 10.2441 11.0335 10.2441 12C10.2441 12.9665 11.0276 13.75 11.9941 13.75H12.0041C12.9706 13.75 13.7541 12.9665 13.7541 12C13.7541 11.0335 12.9706 10.25 12.0041 10.25H11.9941Z" fill=""/></svg>
+                            </button>
+                            <div x-show="open" @click.outside="open=false" x-cloak class="absolute right-0 z-40 w-48 p-2 space-y-1 bg-white border border-gray-200 shadow-theme-lg dark:bg-gray-800 top-full rounded-2xl dark:border-gray-800">
+                              <button @click="downloadChartAsSVG(mgmtStatusChartInstance,'rationalization_status'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Image</button>
+                              <button @click="downloadMgmtUnderlying('Rationalization Status','rationalization_status'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Data</button>
+                            </div>
+                          </div>
                         </div>
                         <div class="flex-1 flex items-center justify-center chartDarkStyle">
                           <div id="mgmtStatusBarChart" class="w-full"></div>
@@ -1375,9 +1405,15 @@
                             <h3 class="!text-lg font-semibold text-gray-800 dark:text-white/90">FTE Analysis</h3>
                             <p class="mt-1 !text-base text-gray-500 dark:text-gray-400">Full-time equivalent breakdown by category and region (Total Hours ÷ 160)</p>
                           </div>
-                          <button onclick="downloadTableAsCSV('mgmt-fte-table', 'fte_analysis.csv')" title="Download CSV" class="flex-shrink-0 mt-0.5 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                          </button>
+                          <div x-data="{open:false}" class="relative flex-shrink-0">
+                            <button @click="open=!open" :class="open?'text-gray-700 dark:text-white':'text-gray-400 hover:text-gray-700 dark:hover:text-white'" class="transition-colors" title="Options">
+                              <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.2441 6C10.2441 5.0335 11.0276 4.25 11.9941 4.25H12.0041C12.9706 4.25 13.7541 5.0335 13.7541 6C13.7541 6.9665 12.9706 7.75 12.0041 7.75H11.9941C11.0276 7.75 10.2441 6.9665 10.2441 6ZM10.2441 18C10.2441 17.0335 11.0276 16.25 11.9941 16.25H12.0041C12.9706 16.25 13.7541 17.0335 13.7541 18C13.7541 18.9665 12.9706 19.75 12.0041 19.75H11.9941C11.0276 19.75 10.2441 18.9665 10.2441 18ZM11.9941 10.25C11.0276 10.25 10.2441 11.0335 10.2441 12C10.2441 12.9665 11.0276 13.75 11.9941 13.75H12.0041C12.9706 13.75 13.7541 12.9665 13.7541 12C13.7541 11.0335 12.9706 10.25 12.0041 10.25H11.9941Z" fill=""/></svg>
+                            </button>
+                            <div x-show="open" @click.outside="open=false" x-cloak class="absolute right-0 z-40 w-48 p-2 space-y-1 bg-white border border-gray-200 shadow-theme-lg dark:bg-gray-800 top-full rounded-2xl dark:border-gray-800">
+                              <button @click="downloadChartAsSVG(mgmtStatusChartInstance,'rationalization_status'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Image</button>
+                              <button @click="downloadMgmtUnderlying('FTE Analysis','fte_analysis'); open=false" class="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">Data</button>
+                            </div>
+                          </div>
                         </div>
                         <div class="custom-scrollbar overflow-x-auto">
                           <table class="min-w-full" id="mgmt-fte-table">
@@ -1403,8 +1439,7 @@
               <!-- End Tab Content -->
             </div>
             <!-- End Tabs -->
-            
-          </div>
+
         </div>
       </div>
     </main>
@@ -2999,15 +3034,15 @@
       // Return the monthly multiplier for a canonical frequency name
       function frequencyMultiplier(freq) {
         switch (freq) {
-          case 'Daily':      return 365 / 12;        // ~30.42
-          case 'Semi-Weekly': return (52 * 2) / 12;  // ~8.67  (twice per week)
-          case 'Weekly':     return 52 / 12;          // ~4.33
-          case 'Bi-Weekly':  return (52 / 2) / 12;   // ~2.17  (every 2 weeks)
-          case 'Monthly':    return 1;
-          case 'Quarterly':  return 1 / 3;
+          case 'Daily':       return 365 / 12;  // ~30.42 days/month
+          case 'Semi-Weekly': return 8;          // 2× per week × 4 weeks = 8/month
+          case 'Weekly':      return 4;          // 4 weeks/month
+          case 'Bi-Weekly':   return 2;          // every 2 weeks = 2/month
+          case 'Monthly':     return 1;
+          case 'Quarterly':   return 1 / 3;
           case 'Half-Yearly': return 1 / 6;
-          case 'Annually':   return 1 / 12;
-          default:           return 0;
+          case 'Annually':    return 1 / 12;
+          default:            return 0;
         }
       }
 
@@ -3683,6 +3718,9 @@
               _s(report.preparedBy).includes(searchTerm) ||
               _s(report.prepareRegion).includes(searchTerm) ||
               _s(report.activeStatus).includes(searchTerm) ||
+              _s(report.nextSteps).includes(searchTerm) ||
+              _s(report.additionalInfo).includes(searchTerm) ||
+              _s(report.audience).includes(searchTerm) ||
               _s(report.rationalizationCategory).includes(searchTerm) ||
               _s(report.rationalizationStatus).includes(searchTerm)
             );
@@ -4982,6 +5020,39 @@
         }
       }
       
+      // Download underlying mgmt summary data as Excel, filtered by rationalization category if provided
+      function downloadMgmtUnderlying(context, filename) {
+        try {
+          const data = mgmtSummaryViewData;
+          if (!data || data.length === 0) {
+            showInfoToast('No data available. Load reports first.');
+            return;
+          }
+          const today = new Date();
+          const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+          const headers = ['ID','Report Name','Report Type','Category','Prepare Region','Frequency','Avg Time Per Month (hrs)','Agreed Rationalization Category','Rationalization Status'];
+          const rows = data.map(r => ({
+            'ID': r.id || '',
+            'Report Name': r.reportName || '',
+            'Report Type': r.reportType || '',
+            'Category': r.category || '',
+            'Prepare Region': Array.isArray(r.prepareRegion) ? r.prepareRegion.join(', ') : (r.prepareRegion || ''),
+            'Frequency': Array.isArray(r.frequency) ? r.frequency.join('; ') : (r.frequency || ''),
+            'Avg Time Per Month (hrs)': r.avgTimePerMonth || 0,
+            'Agreed Rationalization Category': r.rationalizationCategory || '',
+            'Rationalization Status': r.rationalizationStatus || ''
+          }));
+          const ws = XLSX.utils.json_to_sheet(rows, { header: headers });
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, context || 'Data');
+          XLSX.writeFile(wb, (filename || ('mgmt_data_' + (context||'export'))) + '_' + dateStr + '.xlsx');
+          showSuccessToast(`Exported ${rows.length} records`);
+        } catch(e) {
+          console.error(e);
+          showErrorToast('Export failed. Please try again.');
+        }
+      }
+
       // Download an HTML table as CSV
       function downloadTableAsCSV(tableId, filename) {
         const table = document.getElementById(tableId);
@@ -5582,6 +5653,9 @@
               _s(report.preparedBy).includes(searchTerm) ||
               _s(report.prepareRegion).includes(searchTerm) ||
               _s(report.activeStatus).includes(searchTerm) ||
+              _s(report.nextSteps).includes(searchTerm) ||
+              _s(report.additionalInfo).includes(searchTerm) ||
+              _s(report.audience).includes(searchTerm) ||
               _s(report.rationalizationCategory).includes(searchTerm) ||
               _s(report.rationalizationStatus).includes(searchTerm);
             
@@ -5833,9 +5907,10 @@
           // data !== null means we got a real response (even if empty — file was deleted)
           // data === null means network error — fall through to dummy data for development
           if (data !== null) {
-            // Calculate avgTimePerMonth for reports that don't have it
+            // Always recalculate avgTimePerMonth from frequency + timeAvgPerRun
+            // (ensures compound frequencies like "Weekly;#Monthly" are handled correctly)
             reports = data.map(report => {
-              if (!report.avgTimePerMonth && report.timeAvgPerRun && report.frequency) {
+              if (report.timeAvgPerRun && report.frequency) {
                 report.avgTimePerMonth = calculateAvgTimePerMonth(report.timeAvgPerRun, report.frequency);
               }
               if (report.preparedBy) {
@@ -6113,9 +6188,9 @@
               }
             ];
             
-            // Calculate avgTimePerMonth for dummy data
+            // Always recalculate avgTimePerMonth for consistency
             reports = reports.map(report => {
-              if (!report.avgTimePerMonth && report.timeAvgPerRun && report.frequency) {
+              if (report.timeAvgPerRun && report.frequency) {
                 report.avgTimePerMonth = calculateAvgTimePerMonth(report.timeAvgPerRun, report.frequency);
               }
               return report;
@@ -6395,9 +6470,9 @@
               }
             ];
             
-            // Calculate avgTimePerMonth for dummy data
+            // Always recalculate avgTimePerMonth for consistency
             reports = reports.map(report => {
-              if (!report.avgTimePerMonth && report.timeAvgPerRun && report.frequency) {
+              if (report.timeAvgPerRun && report.frequency) {
                 report.avgTimePerMonth = calculateAvgTimePerMonth(report.timeAvgPerRun, report.frequency);
               }
               return report;
