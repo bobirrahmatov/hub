@@ -2689,30 +2689,36 @@
                 };
         window.closeModal = closeModal;
 
-                // Close modal when clicking outside of it
-                window.onclick = function (event) {
-            const modal = document.getElementById("eventModal");
-                    if (event.target === modal) {
-                        closeModal();
-                    }
-                };
+                // Close modal when clicking outside of it - removed window.onclick to prevent conflicts
+                // The modal close on outside click is handled by Alpine.js @click.outside directive
 
                 /*=====================*/
                 // Calendar Select fn.
                 /*=====================*/
                 const calendarSelect = (info) => {
+                    // Query modal elements fresh to ensure they exist
+                    const modalStartDateEl = document.querySelector("#event-start-date") || getModalStartDateEl;
+                    const modalEndDateEl = document.querySelector("#event-end-date") || getModalEndDateEl;
+                    const modalAddBtnEl = document.querySelector(".btn-add-event") || getModalAddBtnEl;
+                    const modalUpdateBtnEl = document.querySelector(".btn-update-event") || getModalUpdateBtnEl;
+                    
+                    if (!modalStartDateEl || !modalEndDateEl || !modalAddBtnEl) {
+                      console.error('Modal elements not found');
+                      return;
+                    }
+                    
                     resetModalFields();
 
-            getModalAddBtnEl.style.display = "flex";
-            getModalUpdateBtnEl.style.display = "none";
+            modalAddBtnEl.style.display = "flex";
+            modalUpdateBtnEl.style.display = "none";
                     openModal();
                     // Set start date from the selection
-                    getModalStartDateEl.value = info.startStr.slice(0, 10);
+                    modalStartDateEl.value = info.startStr.slice(0, 10);
                     // Set end date (subtract 1 day because FullCalendar's endStr is exclusive)
                     const endDate = new Date(info.end);
                     endDate.setDate(endDate.getDate() - 1);
                     const endDateStr = endDate.toISOString().slice(0, 10);
-                    getModalEndDateEl.value = endDateStr;
+                    modalEndDateEl.value = endDateStr;
             document.getElementById('event-team-member').value = "";
                 };
         window.calendarSelect = calendarSelect;
@@ -2722,6 +2728,19 @@
                 /*=====================*/
                 const calendarAddEvent = (info) => {
           console.log('📅 calendarAddEvent called', info);
+          
+                    // Query modal elements fresh to ensure they exist
+                    const modalStartDateEl = document.querySelector("#event-start-date") || getModalStartDateEl;
+                    const modalEndDateEl = document.querySelector("#event-end-date") || getModalEndDateEl;
+                    const modalAddBtnEl = document.querySelector(".btn-add-event") || getModalAddBtnEl;
+                    const modalUpdateBtnEl = document.querySelector(".btn-update-event") || getModalUpdateBtnEl;
+                    const modalDeleteBtnEl = document.querySelector(".btn-delete-event") || getModalDeleteBtnEl;
+                    
+                    if (!modalStartDateEl || !modalEndDateEl || !modalAddBtnEl) {
+                      console.error('Modal elements not found');
+                      return;
+                    }
+                    
                     let startDate;
                     
                     // If info is provided (clicked on calendar), use the clicked date
@@ -2739,12 +2758,12 @@
                     }
 
           console.log('   Opening modal...');
-            getModalAddBtnEl.style.display = "flex";
-            getModalUpdateBtnEl.style.display = "none";
-            getModalDeleteBtnEl.style.display = "none";
+            modalAddBtnEl.style.display = "flex";
+            modalUpdateBtnEl.style.display = "none";
+            modalDeleteBtnEl.style.display = "none";
                     openModal();
-                    getModalStartDateEl.value = startDate;
-                    getModalEndDateEl.value = startDate;
+                    modalStartDateEl.value = startDate;
+                    modalEndDateEl.value = startDate;
             
             // Pre-select current user if they exist in team members
             const teamMemberDropdown = document.getElementById('event-team-member');
@@ -2778,8 +2797,20 @@
 
                     if (eventObj.url) {
                         window.open(eventObj.url);
-                        info.jsEvent.preventDefault();
+                        if (info.jsEvent) info.jsEvent.preventDefault();
                     } else {
+                        // Query modal elements fresh to ensure they exist
+                        const modalStartDateEl = document.querySelector("#event-start-date") || getModalStartDateEl;
+                        const modalEndDateEl = document.querySelector("#event-end-date") || getModalEndDateEl;
+                        const modalAddBtnEl = document.querySelector(".btn-add-event") || getModalAddBtnEl;
+                        const modalUpdateBtnEl = document.querySelector(".btn-update-event") || getModalUpdateBtnEl;
+                        const modalDeleteBtnEl = document.querySelector(".btn-delete-event") || getModalDeleteBtnEl;
+                        
+                        if (!modalStartDateEl || !modalEndDateEl || !modalUpdateBtnEl) {
+                          console.error('Modal elements not found');
+                          return;
+                        }
+                        
                         const getModalEventId = eventObj._def.publicId;
                         const getModalEventLevel = eventObj._def.extendedProps.calendar;
               const teamMemberId = eventObj._def.extendedProps.teamMember;
@@ -2791,7 +2822,9 @@
               const teamMemberDropdown = document.getElementById('event-team-member');
               if (teamMemberId && teamMemberDropdown) {
                 teamMemberDropdown.value = teamMemberId;
-                updateDelegateOptions(teamMemberId);
+                if (typeof updateDelegateOptions === 'function') {
+                  updateDelegateOptions(teamMemberId);
+                }
               }
 
               // Set delegate
@@ -2801,18 +2834,21 @@
                 delegateDropdown.value = delegateId || "";
               }
 
-                        getModalStartDateEl.value = eventObj.startStr.slice(0, 10);
-                        getModalEndDateEl.value = eventObj.endStr
-                            ? eventObj.endStr.slice(0, 10)
-                            : "";
+                        // Handle both string and Date object formats
+                        const startStr = typeof eventObj.startStr === 'string' ? eventObj.startStr : eventObj.startStr.slice(0, 10);
+                        const endStr = eventObj.endStr ? (typeof eventObj.endStr === 'string' ? eventObj.endStr : eventObj.endStr.slice(0, 10)) : startStr;
+                        
+                        modalStartDateEl.value = startStr.slice(0, 10);
+                        modalEndDateEl.value = endStr.slice(0, 10);
+                        
                         if (getModalCheckedRadioBtnEl) {
                             getModalCheckedRadioBtnEl.checked = true;
                         }
-                        getModalUpdateBtnEl.dataset.fcEventPublicId = getModalEventId;
-              getModalDeleteBtnEl.dataset.fcEventPublicId = getModalEventId;
-              getModalAddBtnEl.style.display = "none";
-              getModalUpdateBtnEl.style.display = "block";
-              getModalDeleteBtnEl.style.display = "block";
+                        modalUpdateBtnEl.dataset.fcEventPublicId = getModalEventId;
+              modalDeleteBtnEl.dataset.fcEventPublicId = getModalEventId;
+              modalAddBtnEl.style.display = "none";
+              modalUpdateBtnEl.style.display = "block";
+              modalDeleteBtnEl.style.display = "block";
                         openModal();
                     }
                 };
@@ -3229,10 +3265,17 @@
                 });
 
                 function resetModalFields() {
+                    // Query modal elements fresh
+                    const modalStartDateEl = document.querySelector("#event-start-date");
+                    const modalEndDateEl = document.querySelector("#event-end-date");
+                    const modalAddBtnEl = document.querySelector(".btn-add-event");
+                    const modalUpdateBtnEl = document.querySelector(".btn-update-event");
+                    const modalDeleteBtnEl = document.querySelector(".btn-delete-event");
+                    
             document.getElementById('event-team-member').value = "";
             document.getElementById('event-delegate').value = "";
-                    getModalStartDateEl.value = "";
-                    getModalEndDateEl.value = "";
+                    if (modalStartDateEl) modalStartDateEl.value = "";
+                    if (modalEndDateEl) modalEndDateEl.value = "";
                     const getModalIfCheckedRadioBtnEl = document.querySelector(
               'input[name="event-level"]:checked',
                     );
@@ -3240,9 +3283,9 @@
                         getModalIfCheckedRadioBtnEl.checked = false;
                     }
                     // Reset button visibility
-                    getModalAddBtnEl.style.display = "flex";
-                    getModalUpdateBtnEl.style.display = "none";
-                    getModalDeleteBtnEl.style.display = "none";
+                    if (modalAddBtnEl) modalAddBtnEl.style.display = "flex";
+                    if (modalUpdateBtnEl) modalUpdateBtnEl.style.display = "none";
+                    if (modalDeleteBtnEl) modalDeleteBtnEl.style.display = "none";
                 }
 
                 document
@@ -3256,9 +3299,24 @@
                     btn.addEventListener("click", closeModal);
                 });
 
+                // Consolidated window click handler for all modals (prevents conflicts with timeline cell clicks)
                 window.addEventListener("click", (event) => {
-                    if (event.target === document.getElementById("eventModal")) {
-                        closeModal();
+                    // Close modals when clicking on their backdrop
+                    const modalHandlers = {
+                      'eventModal': closeModal,
+                      'teamManagementModal': closeTeamManagementModal,
+                      'teamMemberModal': closeTeamMemberModal,
+                      'deleteConfirmationModal': closeDeleteConfirmationModal,
+                      'deleteLeaveConfirmationModal': closeDeleteLeaveConfirmationModal,
+                      'fetchHolidaysConfirmModal': closeFetchHolidaysModal,
+                      'myLeavesModal': closeMyLeavesModal
+                    };
+                    
+                    for (const [modalId, handler] of Object.entries(modalHandlers)) {
+                      if (event.target === document.getElementById(modalId)) {
+                        handler();
+                        break;
+                      }
                     }
                 });
 
@@ -3270,21 +3328,9 @@
             btn.addEventListener("click", closeTeamManagementModal);
           });
 
-          window.addEventListener("click", (event) => {
-            if (event.target === document.getElementById("teamManagementModal")) {
-              closeTeamManagementModal();
-            }
-          });
-
           // Close team member modal on button click
           document.querySelectorAll(".modal-close-member-btn").forEach((btn) => {
             btn.addEventListener("click", closeTeamMemberModal);
-          });
-
-          window.addEventListener("click", (event) => {
-            if (event.target === document.getElementById("teamMemberModal")) {
-              closeTeamMemberModal();
-            }
           });
 
           // Close delete confirmation modal on button click
@@ -3292,21 +3338,9 @@
             btn.addEventListener("click", closeDeleteConfirmationModal);
           });
 
-          window.addEventListener("click", (event) => {
-            if (event.target === document.getElementById("deleteConfirmationModal")) {
-              closeDeleteConfirmationModal();
-            }
-          });
-
           // Close delete leave confirmation modal on button click
           document.querySelectorAll(".modal-close-delete-leave-btn").forEach((btn) => {
             btn.addEventListener("click", closeDeleteLeaveConfirmationModal);
-          });
-
-          window.addEventListener("click", (event) => {
-            if (event.target === document.getElementById("deleteLeaveConfirmationModal")) {
-              closeDeleteLeaveConfirmationModal();
-            }
           });
 
           // Close fetch holidays confirmation modal on button click
@@ -3314,21 +3348,9 @@
             btn.addEventListener("click", closeFetchHolidaysModal);
           });
 
-          window.addEventListener("click", (event) => {
-            if (event.target === document.getElementById("fetchHolidaysConfirmModal")) {
-              closeFetchHolidaysModal();
-            }
-          });
-
           // Close my leaves modal on button click
           document.querySelectorAll(".modal-close-my-leaves-btn").forEach((btn) => {
             btn.addEventListener("click", closeMyLeavesModal);
-          });
-
-          window.addEventListener("click", (event) => {
-            if (event.target === document.getElementById("myLeavesModal")) {
-              closeMyLeavesModal();
-            }
           });
 
         // Load team members and calendar events on page load
@@ -4769,7 +4791,10 @@
             }
           }
           
-          bodyHTML += `<td class="${cellClass}" ${cellStyle ? `style="${cellStyle}"` : ''} data-date="${dateStr}" data-member-id="${member.id}" ${publicHoliday || isWeekend ? '' : 'onclick="handleTimelineCellClick(event)"'}>`;
+          // Determine if cell should be clickable (not public holidays or weekends)
+          const isClickable = !publicHoliday && !isWeekend;
+          
+          bodyHTML += `<td class="${cellClass}" ${cellStyle ? `style="${cellStyle}"` : ''} data-date="${dateStr}" data-member-id="${member.id}" ${isClickable ? 'data-clickable="true"' : ''}>`;
           bodyHTML += cellContent;
           bodyHTML += '</td>';
         });
@@ -4781,9 +4806,18 @@
     }
 
     function handleTimelineCellClick(event) {
+      // Find the clicked cell (might be the td or a child element)
+      let cell = event.target;
+      while (cell && cell.tagName !== 'TD') {
+        cell = cell.parentElement;
+      }
+      
+      if (!cell || !cell.dataset.clickable) {
+        return; // Not a clickable cell
+      }
+      
       event.stopPropagation(); // Prevent event bubbling
       
-      const cell = event.currentTarget;
       const date = cell.dataset.date;
       const memberId = cell.dataset.memberId;
       
@@ -4924,6 +4958,25 @@
 
     // Make function globally accessible
     window.handleTimelineCellClick = handleTimelineCellClick;
+    
+    // Set up event delegation for timeline cell clicks
+    function setupTimelineCellClickHandler() {
+      const tbody = document.getElementById('timelineTableBody');
+      if (tbody) {
+        // Remove any existing listener to avoid duplicates
+        tbody.removeEventListener('click', handleTimelineCellClick);
+        // Add event listener using delegation
+        tbody.addEventListener('click', handleTimelineCellClick);
+        console.log('✅ Timeline cell click handler attached');
+      }
+    }
+    
+    // Initialize the click handler
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupTimelineCellClickHandler);
+    } else {
+      setupTimelineCellClickHandler();
+    }
 
     // ============================================
     // PUBLIC HOLIDAYS TABLE WITH PAGINATION
